@@ -14,7 +14,7 @@ __email__ = "oriol@nyu.edu"
 
 import argparse
 import csv
-import jams
+import pyjams
 import json
 import logging
 import os
@@ -69,8 +69,9 @@ def parse_annotation_level(annot, path, annotation_id, level):
     }
 
     # File to open
-    file_path = os.path.join(path, "parsed",
-        "textfile" + str(annotation_id + 1) + level_dict[level] + ".txt")
+    file_path = os.path.join(path, "parsed", "data", os.path.basename(path),
+                             "parsed", "textfile" + str(annotation_id + 1) +
+                             level_dict[level] + ".txt")
 
     # Open file
     try:
@@ -86,15 +87,16 @@ def parse_annotation_level(annot, path, annotation_id, level):
         end_time = lines[i + 1].split("\t")[0]
         if float(start_time) - float(end_time) == 0:
             continue
-        section = annot.create_datapoint()
-        section.start.value = float(start_time)
-        section.start.confidence = 1.0
-        section.end.value = float(end_time)
-        section.end.confidence = 1.0
-        section.label.value = label
-        section.label.confidence = 1.0
-        section.label.context = level
+        segment = annot.create_datapoint()
+        segment.start.value = float(start_time)
+        segment.start.confidence = 1.0
+        segment.end.value = float(end_time)
+        segment.end.confidence = 1.0
+        segment.label.value = label
+        segment.label.confidence = 1.0
+        segment.label.context = level
         #print start_time, end_time, label
+        #print segment
 
     f.close()
 
@@ -103,12 +105,12 @@ def fill_global_metadata(jam, metadata):
     """Fills the global metada into the JAMS jam."""
     if metadata[5] == "":
         metadata[5] = -1
-    jam.metadata.artist = metadata[8]
-    jam.metadata.duration = float(metadata[5])  # In seconds
-    jam.metadata.title = metadata[7]
+    jam.file_metadata.artist = metadata[8]
+    jam.file_metadata.duration = float(metadata[5])  # In seconds
+    jam.file_metadata.title = metadata[7]
 
     # TODO: extra info
-    #jam.metadata.genre = metadata[14]
+    #jam.file_metadata.genre = metadata[14]
 
 
 def fill_annotation(path, annot, annotation_id, metadata):
@@ -125,7 +127,7 @@ def fill_annotation(path, annot, annotation_id, metadata):
     """
 
     # Annotation Metadata
-    annot.annotation_metadata.attribute = "sections"
+    annot.annotation_metadata.attribute = "segments"
     annot.annotation_metadata.corpus = "SALAMI"
     annot.annotation_metadata.version = "1.2"
     annot.annotation_metadata.annotation_tools = "Sonic Visualizer"
@@ -155,19 +157,15 @@ def create_JAMS(in_dir, metadata, out_file):
     out_file : str
         Output JAMS file
     """
-    path = os.path.join(in_dir, "data", metadata[0])
+    path = os.path.join(in_dir, "data", metadata[0], )
 
     # Sanity check
     if not os.path.exists(path):
         logging.warning("Path not found %s", path)
         return
 
-    # Do not parse Isophonics data
-    if metadata[1] == "Isophonics":
-        return
-
     # New JAMS and annotation
-    jam = jams.Jams()
+    jam = pyjams.JAMS()
 
     # Global file metadata
     fill_global_metadata(jam, metadata)
@@ -175,9 +173,10 @@ def create_JAMS(in_dir, metadata, out_file):
     # Create Annotations if they exist
     # Maximum 3 annotations per file
     for possible_annot in xrange(3):
-        if os.path.isfile(os.path.join(path,
-                "textfile" + str(possible_annot + 1) + ".txt")):
-            annot = jam.sections.create_annotation()
+        if os.path.isfile(
+            os.path.join(path, "data", metadata[0],
+                         "textfile" + str(possible_annot + 1) + ".txt")):
+            annot = jam.segment.create_annotation()
             fill_annotation(path, annot, possible_annot, metadata)
 
     # Save JAMS
@@ -224,7 +223,7 @@ def main():
     parser.add_argument("-o",
                         action="store",
                         dest="out_dir",
-                        default="outJAMS",
+                        default="SalamiJAMS",
                         help="Output JAMS folder")
     args = parser.parse_args()
     start_time = time.time()
