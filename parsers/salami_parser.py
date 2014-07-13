@@ -14,7 +14,7 @@ __email__ = "oriol@nyu.edu"
 
 import argparse
 import csv
-import jams2
+import jams
 import json
 import logging
 import os
@@ -167,7 +167,7 @@ def create_JAMS(in_dir, metadata, out_file):
         return
 
     # New JAMS and annotation
-    jam = jams2.Jams()
+    jam = jams.Jams()
 
     # Global file metadata
     fill_global_metadata(jam, metadata)
