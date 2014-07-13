@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 """
- TODO: Write me, I'm a lonely docstring!
+This script parses the SALAMI v1.2 dataset into the JAMS format.
+
+Usage:
+    ./salami_parser.py SALAMIv1.2/ [-o SalamiJAMS/]
 """
 
 __author__ = "Oriol Nieto"
@@ -16,6 +19,34 @@ import json
 import logging
 import os
 import time
+import zipfile
+
+
+def unzip(source_filename, dest_dir):
+    """Unzips a zip file and puts it into the dest_dir. Copied from:
+        http://stackoverflow.com/questions/12886768/
+            simple-way-to-unzip-file-in-python-on-all-oses
+
+    Parameters
+    ----------
+    source_filename : str
+        Path to the zip file.
+    dest_dir : str
+        Output directory to save the contents of the zipped file.
+    """
+    with zipfile.ZipFile(source_filename) as zf:
+        for member in zf.infolist():
+            # Path traversal defense copied from
+            # http://hg.python.org/cpython/file/tip/Lib/http/server.py#l789
+            words = member.filename.split('/')
+            path = dest_dir
+            for word in words[:-1]:
+                drive, word = os.path.splitdrive(word)
+                head, word = os.path.split(word)
+                if word in (os.curdir, os.pardir, ''):
+                    continue
+                path = os.path.join(path, word)
+            zf.extract(member, path)
 
 
 def parse_annotation_level(annot, path, annotation_id, level):
@@ -23,7 +54,6 @@ def parse_annotation_level(annot, path, annotation_id, level):
 
     Parameters
     ----------
-
     annot: Annotation
     path: str
         path to the track in the SALAMI dataset
@@ -114,7 +144,17 @@ def fill_annotation(path, annot, annotation_id, metadata):
 
 
 def create_JAMS(in_dir, metadata, out_file):
-    """Creates a JAMS file given the path to a SALAMI track."""
+    """Creates a JAMS file given the path to a SALAMI track.
+
+    Parameters
+    ----------
+    in_dir : str
+        Path to the input directory
+    metadata : str
+        Metadata read from the CSV file
+    out_file : str
+        Output JAMS file
+    """
     path = os.path.join(in_dir, "data", metadata[0])
 
     # Sanity check
@@ -153,17 +193,24 @@ def process(in_dir, out_dir):
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
-    # Open CSV with metadata
-    fh = open(os.path.join(in_dir, "metadata.csv"))
-    csv_reader = csv.reader(fh)
+    # Check if the "data" folder exists. If not, unzip the data.zip.
+    if not os.path.exists(os.path.join(in_dir, "data")):
+        data_zip = os.path.join(in_dir, "data.zip")
+        if not os.path.exists(data_zip):
+            raise Exception("Data folder and data.zip not found! Make sure "
+                            "you are trying to parse SALAMIv1.2")
+        logging.info("Unzipping the data.zip file...")
+        unzip(data_zip, in_dir)
 
-    for metadata in csv_reader:
-        # Create a JAMS file for this track
-        create_JAMS(in_dir, metadata,
-                    os.path.join(out_dir,
-                        os.path.basename(metadata[0]) + ".jams"))
-    # Close metadata
-    fh.close()
+    # Open CSV with metadata
+    with open(os.path.join(in_dir, "metadata.csv")) as fh:
+        csv_reader = csv.reader(fh)
+
+        for metadata in csv_reader:
+            # Create a JAMS file for this track
+            create_JAMS(in_dir, metadata,
+                        os.path.join(out_dir,
+                            os.path.basename(metadata[0]) + ".jams"))
 
 
 def main():
