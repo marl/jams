@@ -74,11 +74,11 @@ def fill_annoatation_metadata(annot, attribute):
     #time = "TODO"
 
 
-def fill_section_annotation(lab_file, annot):
-    """Fills the JAMS annot annotation given a lab file."""
+def fill_range_annotation(lab_file, annot, attribute, context=""):
+    """Fills the range JAMS annot annotation given a lab file."""
 
     # Annotation Metadata
-    fill_annoatation_metadata(annot, "segments")
+    fill_annoatation_metadata(annot, attribute)
 
     # Open lab file
     try:
@@ -90,10 +90,17 @@ def fill_section_annotation(lab_file, annot):
     # Convert to JAMS
     lines = f.readlines()
     for line in lines:
-        section_raw = line.strip("\n").split("\t")
-        start_time = section_raw[0]
-        end_time = section_raw[1]
-        label = section_raw[3]
+        try:
+            section_raw = line.strip("\n").split("\t")
+            start_time = section_raw[0]
+            end_time = section_raw[1]
+            label = section_raw[-1]
+        except:
+            # Some lab files are spaced (" ") separated instead of tab ("\t")
+            section_raw = line.strip("\n").split(" ")
+            start_time = section_raw[0]
+            end_time = section_raw[1]
+            label = section_raw[-1]
         segments = annot.create_datapoint()
         segments.start.value = float(start_time)
         segments.start.confidence = 1.0
@@ -101,7 +108,7 @@ def fill_section_annotation(lab_file, annot):
         segments.end.confidence = 1.0
         segments.label.value = label
         segments.label.confidence = 1.0
-        segments.label.context = "function"  # Only function level
+        segments.label.context = context
         if float(end_time) < float(start_time):
             logging.warning("Start time is after end time in file %s" %
                             lab_file)
@@ -148,7 +155,8 @@ def fill_beat_annotation(txt_file, annot):
     f.close()
 
 
-def create_JAMS(lab_file, out_file, parse_beats=False):
+def create_JAMS(lab_file, out_file, parse_beats=False, parse_chords=False,
+                parse_keys=False):
     """Creates a JAMS file given the Isophonics lab file."""
 
     # New JAMS and annotation
@@ -159,7 +167,7 @@ def create_JAMS(lab_file, out_file, parse_beats=False):
 
     # Create Section annotations
     annot = jam.segment.create_annotation()
-    fill_section_annotation(lab_file, annot)
+    fill_range_annotation(lab_file, annot, "segment", "function")
 
     # Create Beat annotations if needed
     if parse_beats:
@@ -167,7 +175,17 @@ def create_JAMS(lab_file, out_file, parse_beats=False):
         txt_file = lab_file.replace("seglab", "beat").replace(".lab", ".txt")
         fill_beat_annotation(txt_file, annot)
 
-    # TODO: Create Chord and Key annotations
+    # Create Chord annotations if needed
+    if parse_chords:
+        annot = jam.chord.create_annotation()
+        chord_lab = lab_file.replace("seglab", "chordlab")
+        fill_range_annotation(chord_lab, annot, "chord")
+
+    # Create Key annotations if needed
+    if parse_keys:
+        annot = jam.key.create_annotation()
+        key_lab = lab_file.replace("seglab", "keylab")
+        fill_range_annotation(key_lab, annot, "key")
 
     # Save JAMS
     with open(out_file, "w") as f:
@@ -192,8 +210,10 @@ def process(in_dir, out_dir):
         if os.path.basename(annot_folder) == "audio":
             continue
 
-        # Check whether we need to parse the beats
+        # Check whether we need to parse other features
         parse_beats = os.path.isdir(os.path.join(annot_folder, "beat"))
+        parse_chords = os.path.isdir(os.path.join(annot_folder, "chordlab"))
+        parse_keys = os.path.isdir(os.path.join(annot_folder, "keylab"))
 
         # Step into the segments folder
         annot_folder = os.path.join(annot_folder, "seglab")
@@ -220,7 +240,7 @@ def process(in_dir, out_dir):
                             os.path.join(out_dir,
                                 os.path.basename(lab_file).replace(".lab", "")
                                          + ".jams"),
-                            parse_beats)
+                            parse_beats, parse_chords, parse_keys)
 
 
 def main():
