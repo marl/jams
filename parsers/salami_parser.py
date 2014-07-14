@@ -14,12 +14,15 @@ __email__ = "oriol@nyu.edu"
 
 import argparse
 import csv
-import pyjams
 import json
 import logging
 import os
+import sys
 import time
 import zipfile
+
+sys.path.append("..")
+import pyjams
 
 
 def unzip(source_filename, dest_dir):
