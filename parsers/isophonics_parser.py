@@ -39,21 +39,24 @@ __email__ = "oriol@nyu.edu"
 
 import argparse
 import glob
-import jams2
 import json
 import logging
 import os
+import sys
 import time
+
+sys.path.append("..")
+import pyjams
 
 
 def fill_global_metadata(jam, lab_file):
     """Fills the global metada into the JAMS jam."""
-    jam.metadata.artist = lab_file.split("/")[-3]
-    jam.metadata.duration = -1  # In seconds
-    jam.metadata.title = os.path.basename(lab_file).replace(".lab", "")
+    jam.file_metadata.artist = lab_file.split("/")[-3]
+    jam.file_metadata.duration = -1  # In seconds
+    jam.file_metadata.title = os.path.basename(lab_file).replace(".lab", "")
 
     # TODO: extra info
-    #jam.metadata.genre = metadata[14]
+    #jam.file_metadata.genre = metadata[14]
 
 
 def fill_annoatation_metadata(annot, attribute):
@@ -75,7 +78,7 @@ def fill_section_annotation(lab_file, annot):
     """Fills the JAMS annot annotation given a lab file."""
 
     # Annotation Metadata
-    fill_annoatation_metadata(annot, "sections")
+    fill_annoatation_metadata(annot, "segments")
 
     # Open lab file
     try:
@@ -91,14 +94,14 @@ def fill_section_annotation(lab_file, annot):
         start_time = section_raw[0]
         end_time = section_raw[1]
         label = section_raw[3]
-        section = annot.create_datapoint()
-        section.start.value = float(start_time)
-        section.start.confidence = 1.0
-        section.end.value = float(end_time)
-        section.end.confidence = 1.0
-        section.label.value = label
-        section.label.confidence = 1.0
-        section.label.context = "function"  # Only function level of annotation
+        segments = annot.create_datapoint()
+        segments.start.value = float(start_time)
+        segments.start.confidence = 1.0
+        segments.end.value = float(end_time)
+        segments.end.confidence = 1.0
+        segments.label.value = label
+        segments.label.confidence = 1.0
+        segments.label.context = "function"  # Only function level
         if float(end_time) < float(start_time):
             logging.warning("Start time is after end time in file %s" %
                             lab_file)
@@ -149,18 +152,18 @@ def create_JAMS(lab_file, out_file, parse_beats=False):
     """Creates a JAMS file given the Isophonics lab file."""
 
     # New JAMS and annotation
-    jam = jams2.Jams()
+    jam = pyjams.JAMS()
 
     # Global file metadata
     fill_global_metadata(jam, lab_file)
 
     # Create Section annotations
-    annot = jam.sections.create_annotation()
+    annot = jam.segment.create_annotation()
     fill_section_annotation(lab_file, annot)
 
     # Create Beat annotations if needed
     if parse_beats:
-        annot = jam.beats.create_annotation()
+        annot = jam.beat.create_annotation()
         txt_file = lab_file.replace("seglab", "beat").replace(".lab", ".txt")
         fill_beat_annotation(txt_file, annot)
 
