@@ -8,12 +8,16 @@
             "type": "object",
             "title": "File metadata",
             "properties": {
-                "echonest_id": { "type": "string", "pattern": "[A-Z]+[0-9]+"},
-                "musicbrainz_id": { "type": "string"},
+                "identifiers": {
+                    "type": "object",
+                    "title": "Annotator",
+                    "description": "Sandbox for information about the annotator.",
+                },
                 "artist": { "type": "string"},
                 "title": { "type": "string"},
-                "album": { "type": "string"},
-                "duration": { "type": "string", "pattern": "[0-9][0-9]:[0-9][0-9]:[0-9][0-9]"}
+                "release": { "type": "string"},
+                "duration": { "type": "string", "pattern": "[0-9][0-9]:[0-9][0-9]:[0-9][0-9]"},
+                "jams_version" : { "type": "string", "pattern": "[0-9].[0-9].[0-9]"}
             }
         },
 
@@ -25,21 +29,26 @@
                 "task": { "type": "string" },
                 "corpus": { "type": "string" },
                 "version": { "type": "string" },
-                "annotator": {
+                "curator": {
                     "type": "object",
-                    "title": "Annotator",
-                    "description": "Annotator name and email",
+                    "title": "Curator",
+                    "description": "Curator name and email",
                     "properties": {
                         "name": { "type": "string"},
                         "email": { "type": "string", "format": "email" }
                     }
                 },
+                "annotator": {
+                    "type": "object",
+                    "title": "Annotator",
+                    "description": "Sandbox for information about the annotator.",
+                },
                 "annotation_tools": { "type": "string"},
                 "annotation_rules": { "type": "string"},
-                "validation_and_reliability": { "type": "string"},
-                "origin": { "type": "string"}
+                "validation": { "type": "string"},
+                "data_source": { "type": "string"}
             },
-            "required": ["task", "version", "annotator"]
+            "required": ["version", "curator"]
         },
 
         "observation": {
@@ -186,7 +195,7 @@
     "title": "JAMS file",
     "description": "JSON Annotated Music Specification",
     "properties": {
-        
+
         "file_metadata": { "$ref": "#/definitions/file_metadata" },
 
         "genre": {
