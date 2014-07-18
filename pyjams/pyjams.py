@@ -504,20 +504,20 @@ class RangeAnnotation(BaseAnnotation):
         return [(obj.start.value, obj.end.value) for obj in self.data]
 
 
-class Annotator(JObject):
-    """Annotator
+class Curator(JObject):
+    """Curator
 
-    Container object for annotator metadata.
+    Container object for curator metadata.
     """
     def __init__(self, name='', email=''):
-        """Create an Annotator.
+        """Create an Curator.
 
         Parameters
         ----------
         name: str, default=''
-            Common name of the annotator.
+            Common name of the curator.
         email: str, default=''
-            An email address corresponding to the annotator.
+            An email address corresponding to the curator.
         """
         self.name = name
         self.email = email
@@ -531,50 +531,48 @@ class AnnotationMetadata(JObject):
     Note: We *desperately* need to rename some of these properties; certain
     names are far too verbose.
     """
-    def __init__(self, attribute='', corpus='', version='', annotator=None,
-                 annotation_tools='', annotation_rules='',
-                 validation_and_reliability='', origin=''):
+    def __init__(self, curator, version='0.0.1', corpus='', annotator=None,
+                 annotation_tools='', annotation_rules='', validation='',
+                 data_source=''):
         """Create an AnnotationMetadata object.
 
         Parameters
         ----------
-        attribute: str, default=''
-            Attribute type, e.g. beats, chords, etc. *Needed?
+        curator: Curator
+            Object documenting a name and email address for the person of
+            correspondence.
+        version: string, default=0.0.1
+            Version of this annotation.
+        annotator: dict, default=None
+            Sandbox for information about the specific annotator, such as
+            musical experience, skill level, principal instrument, etc.
         corpus: str, default=''
             Collection assignment.
-        version: string, default=''
-            Version of this annotation.
-        annotator: Annotator, default=None
-            Annotator object, empty if none is specified.
         annotation_tools: str, default=''
             Description of the tools used to create the annotation.
         annotation_rules: str, default=''
             Description of the rules provided to the annotator.
-        validation_and_reliability: str, default=''
-            TODO(justin.salamon@nyu.edu): What is this?
-        origin: str, default=''
-            From whence it came.
-
-        -- Also add? --
-        if timestamp is None:
-            timestamp = asctime()
+        validation: str, default=''
+            Methods for validating the integrity of the data.
+        data_source: str, default=''
+            Description of where the data originated, e.g. 'Manual Annotation'.
         """
-        if annotator is None:
-            annotator = Annotator()
-        self.attribute = attribute
-        self.corpus = corpus
+        annotator = JObject() if annotator is None else annotator
+
+        self.curator = Curator(**curator)
         self.version = version
-        self.annotator = Annotator(**annotator)
+        self.corpus = corpus
+        self.annotator = JObject(**annotator)
         self.annotation_tools = annotation_tools
         self.annotation_rules = annotation_rules
-        self.validation_and_reliability = validation_and_reliability
-        self.origin = origin
+        self.validation = validation
+        self.data_source = data_source
 
 
 class FileMetadata(JObject):
     """Metadata for a given audio file."""
     def __init__(self, title='', artist='', release='', duration='',
-                 identifiers=None, version=None):
+                 identifiers=None, jams_version=None):
         """Create a file-level Metadata object.
 
         Parameters
@@ -594,7 +592,7 @@ class FileMetadata(JObject):
         version: str, or default=None
             Version of the JAMS Schema.
         """
-        version = __VERSION__ if version is None else version
+        jams_version = __VERSION__ if jams_version is None else jams_version
         identifiers = JObject() if identifiers is None else identifiers
 
         self.title = title
@@ -602,7 +600,7 @@ class FileMetadata(JObject):
         self.release = release
         self.duration = duration
         self.identifiers = JObject(**identifiers)
-        self.version = version
+        self.jams_version = jams_version
 
 
 class AnnotationList(list):
@@ -646,9 +644,10 @@ class AnnotationList(list):
 class JAMS(JObject):
     """Top-level Jams Object"""
 
-    def __init__(self, beat=None, chord=None, key=None, melody=None, note=None,
-                 pitch=None, segment=None, source=None, tag=None,
-                 file_metadata=None, sandbox=None):
+    def __init__(self, beat=None, chord=None, genre=None, key=None, mood=None,
+                 melody=None, note=None, onset=None, pattern=None, pitch=None,
+                 segment=None, source=None, tag=None, file_metadata=None,
+                 sandbox=None):
         """Create a Jams object.
 
         Parameters
@@ -677,12 +676,20 @@ class JAMS(JObject):
             [] if beat is None else beat, EventAnnotation)
         self.chord = AnnotationList(
             [] if chord is None else chord, RangeAnnotation)
+        self.genre = AnnotationList(
+            [] if genre is None else genre, ObservationAnnotation)
         self.key = AnnotationList(
             [] if key is None else key, RangeAnnotation)
         self.melody = AnnotationList(
             [] if melody is None else melody, TimeSeriesAnnotation)
+        self.mood = AnnotationList(
+            [] if mood is None else mood, ObservationAnnotation)
         self.note = AnnotationList(
             [] if note is None else note, RangeAnnotation)
+        self.onset = AnnotationList(
+            [] if onset is None else onset, EventAnnotation)
+        self.pattern = AnnotationList(
+            [] if pattern is None else pattern, TimeSeriesAnnotation)
         self.pitch = AnnotationList(
             [] if pitch is None else pitch, TimeSeriesAnnotation)
         self.segment = AnnotationList(

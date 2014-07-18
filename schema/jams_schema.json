@@ -26,7 +26,6 @@
             "title": "Annotation metadata",
             "description": "All metadata required to describe an annotation",
             "properties": {
-                "task": { "type": "string" },
                 "corpus": { "type": "string" },
                 "version": { "type": "string" },
                 "curator": {
