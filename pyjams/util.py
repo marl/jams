@@ -80,3 +80,24 @@ def fill_range_annotation_data(start_times, end_times, labels,
         data.start.value = t0
         data.end.value = t1
         data.label.value = l
+
+
+def fill_timeseries_annotation_data(times, values, confidences,
+                                    timeseries_annotation):
+    """Add a collection of data to a time-series annotation (in-place).
+
+    Parameters
+    ----------
+    times: list of scalars
+        Time points in seconds.
+    values: list
+        The corresponding values for each time point.
+    confidences: list
+        The corresponding confidence for each time point.
+    timeseries_annotation: TimeSeriesAnnotation
+        An instantiated event annotation to populate.
+    """
+    data = timeseries_annotation.create_datapoint()
+    data.value = values
+    data.time = times
+    data.confidence = confidences
