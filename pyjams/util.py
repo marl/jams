@@ -1,10 +1,11 @@
 """Utility functions for parsing datasets."""
 
 import os
+import glob
 
 
-def read_lab(filename, num_columns, comment='#'):
-    """Read the columns of a labfile into memory.
+def read_lab(filename, num_columns, delimiter=None, comment='#'):
+    """Read the rows of a labfile into memory.
 
     An effort is made to infer datatypes, and therefore numerical values will
     be mapped to ints / floats accordingly.
@@ -13,28 +14,25 @@ def read_lab(filename, num_columns, comment='#'):
     ----------
     filename : str
         Path to a labfile.
-    num_columns : int
-        Number of data columns in the file.
 
     Returns
     -------
-    columns : tuple
+    columns : list of lists
         Columns of data in the labfile.
     """
-    columns = [list() for _ in range(num_columns)]
+    data = [list() for _ in range(num_columns)]
     with open(filename, 'r') as input_file:
         for row_idx, line in enumerate(input_file, 1):
             if line == '\n':
                 continue
             if line.startswith(comment):
                 continue
-            # By default, split cuts at any / all whitespace.
-            data = line.split()
-            if len(data) != num_columns:
+            values = line.strip().split(delimiter, num_columns - 1)
+            if len(values) != num_columns:
                 raise ValueError(
-                    "Expected %d columns, received %d at line %d." %
-                    (num_columns, len(data), row_idx))
-            for col_idx, value in enumerate(data):
+                    "Expected %d columns, received %d at line %d: %s" %
+                    (num_columns, len(values), row_idx, line))
+            for idx, value in enumerate(values):
                 try:
                     if "." in value:
                         value = float(value)
@@ -42,9 +40,9 @@ def read_lab(filename, num_columns, comment='#'):
                         value = int(value)
                 except ValueError:
                     pass
-                columns[col_idx].append(value)
+                data[idx].append(value)
 
-    return tuple(columns)
+    return data
 
 
 def load_textlist(filename):
@@ -62,6 +60,39 @@ def smkdirs(dpath):
     """Safely make a directory path if it doesn't exist."""
     if not os.path.exists(dpath):
         os.makedirs(dpath)
+
+
+def filebase(filepath):
+    """Return the extension-less basename of a file path."""
+    return os.path.splitext(os.path.basename(filepath))[0]
+
+
+def find_with_extension(in_dir, ext, depth=3):
+    """Naive depth-search into a directory for files with a given extension.
+
+    Parameters
+    ----------
+    in_dir : str
+        Path to search.
+    ext : str
+        File extension to match.
+    depth : int
+        Depth of directories to search.
+
+    Returns
+    -------
+    matched : list
+        Collection of matching file paths.
+    """
+    assert depth >= 1
+    ext = ext.strip('.')
+    match = list()
+    for n in range(1, depth+1):
+        wildcard = "/".join(["*"]*n)
+        search_path = os.path.join(in_dir, "%s.%s" % (wildcard, ext))
+        match += glob.glob(search_path)
+
+    return match
 
 
 def fill_event_annotation_data(times, labels, event_annotation):
