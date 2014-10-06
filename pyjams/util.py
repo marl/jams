@@ -1,5 +1,7 @@
 """Utility functions for parsing datasets."""
 
+import os
+
 
 def read_lab(filename, num_columns, comment='#'):
     """Read the columns of a labfile into memory.
@@ -43,6 +45,23 @@ def read_lab(filename, num_columns, comment='#'):
                 columns[col_idx].append(value)
 
     return tuple(columns)
+
+
+def load_textlist(filename):
+    """Return a list of lines in a text file."""
+    with open(filename, 'r') as fp:
+        return [line.strip("\n") for line in fp]
+
+
+def expand_filepaths(base_dir, rel_paths):
+    """Expand a list of relative paths to a give base directory."""
+    return [os.path.join(base_dir, rp.strip("./")) for rp in rel_paths]
+
+
+def smkdirs(dpath):
+    """Safely make a directory path if it doesn't exist."""
+    if not os.path.exists(dpath):
+        os.makedirs(dpath)
 
 
 def fill_event_annotation_data(times, labels, event_annotation):

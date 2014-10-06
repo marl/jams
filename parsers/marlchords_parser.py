@@ -45,11 +45,11 @@ def fill_annotation_metadata(annot):
     annot.annotation_metadata.corpus = "MARL-Chords"
     annot.annotation_metadata.version = "1.0"
     annot.annotation_metadata.annotation_tools = "Sonic Visualizer"
-    annot.annotation_metadata.annotation_rules = ""  # TODO
-    annot.annotation_metadata.validation_and_reliability = "TODO"  # TODO
-    annot.annotation_metadata.origin = "MARL@NYU"
-    annot.annotation_metadata.curator = dict(name="Tae Min Cho",
-                                             email='tmc323@nyu.edu')
+    annot.annotation_metadata.annotation_rules = ""
+    annot.annotation_metadata.validation = "TODO"
+    annot.annotation_metadata.data_source = "Undergraduate music students"
+    annot.annotation_metadata.curator = pyjams.Curator(name="Tae Min Cho",
+                                                       email='tmc323@nyu.edu')
     annot.annotation_metadata.annotator = {}
 
 
@@ -63,33 +63,16 @@ def create_JAMS(lab_file, out_file):
     fill_file_metadata(jam, lab_file)
 
     # Create Chord annotation
-    starts, ends, labels = pyjams.util.loadlab(lab_file, 3)
+    start_times, end_times, chord_labels = pyjams.util.read_lab(lab_file, 3)
     chord_annot = jam.chord.create_annotation()
-    pyjams.util.fill_range_annotation_data(starts, ends, labels, chord_annot)
+    pyjams.util.fill_range_annotation_data(
+        start_times, end_times, chord_labels, chord_annot)
     fill_annotation_metadata(chord_annot)
-    jam.file_metadata.duration = ends[-1]
+    jam.file_metadata.duration = end_times[-1]
 
     # Save JAMS
-    with open(out_file, "w") as f:
-        json.dump(jam, f, indent=2)
-
-
-def load_textlist(filename):
-    with open(filename, 'r') as fp:
-        filelist = [line.strip("\n") for line in fp]
-
-    return filelist
-
-
-def expand_filepaths(base_dir, rel_paths):
-    return [os.path.join(base_dir, rp.strip("./")) for rp in rel_paths]
-
-
-def create_output_dir(filename):
-    # Check if output folder and create it if needed:
-    out_dir = os.path.split(filename)[0]
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
+    with open(out_file, "w") as fp:
+        json.dump(jam, fp, indent=2)
 
 
 def process(in_dir, out_dir):
@@ -99,12 +82,12 @@ def process(in_dir, out_dir):
     # Collect all chord labfiles.
     lab_files = list()
     for dset in RWC_MANIFEST, USPOP_MANIFEST:
-        lab_files += expand_filepaths(
-            in_dir, load_textlist(os.path.join(in_dir, dset)))
+        lab_files += pyjams.util.expand_filepaths(
+            in_dir, pyjams.util.load_textlist(os.path.join(in_dir, dset)))
 
     for lab_file in lab_files:
         jams_file = lab_file.replace(in_dir, out_dir).replace('.lab', '.jams')
-        create_output_dir(jams_file)
+        pyjams.util.smkdirs(os.path.split(jams_file)[0])
         #Create a JAMS file for this track
         create_JAMS(lab_file, jams_file)
 
