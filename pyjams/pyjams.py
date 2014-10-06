@@ -4,28 +4,28 @@ This library provides an interface for reading JAMS into Python, or creating
 them programatically.
 
 
-1. Creating a JAMS Annotation from scratch
-------------------------------------------
-First, create an object-speficic annotation. Here, we'll create an
-EventAnnotation and use it to record beats:
+1. Creating a JAMS data structure from scratch
+----------------------------------------------
+First, create the top-level JAMS container:
 
   >>> import pyjams
-  >>> annot = pyjams.EventAnnotationJams()
+  >>> jam = pyjams.JAMS()
 
-Then, we'll update the annotation's metadata by directly setting its fields:
+ Now we can create a beat annotation:
 
-  >>> annot.annotation_metadata.attribute = 'beats'
-  >>> annot.annotation_metadata.origin = "Earth"
-  >>> annot.annotation_metadata.annotator.email = "grandma@aol.com"
-
-
-That's not all that interesting though. Now we can populate the annotation:
-
+  >>> annot = jam.beat.create_annotation()
   >>> beat = annot.create_datapoint()
   >>> beat.time.value = 0.33
   >>> beat.time.confidence = 1.0
   >>> beat.label.value = "1"
   >>> beat.label.confidence = 0.75
+
+
+Then, we'll update the annotation's metadata by directly setting its fields:
+
+  >>> annot.annotation_metadata.data_source = "Poorly paid students"
+  >>> annot.annotation_metadata.curator.name = "My Name"
+  >>> annot.annotation_metadata.curator.email = "somebody@aol.com"
 
 
 And now a second time, cause this is our house (and we can do what we want):
