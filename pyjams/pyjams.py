@@ -527,21 +527,18 @@ class AnnotationMetadata(JObject):
     """AnnotationMetadata
 
     Data structure for metadata corresponding to a specific annotation.
-
-    Note: We *desperately* need to rename some of these properties; certain
-    names are far too verbose.
     """
-    def __init__(self, curator, version='0.0.1', corpus='', annotator=None,
+    def __init__(self, curator=None, version='', corpus='', annotator=None,
                  annotation_tools='', annotation_rules='', validation='',
                  data_source=''):
         """Create an AnnotationMetadata object.
 
         Parameters
         ----------
-        curator: Curator
+        curator: Curator, default=None
             Object documenting a name and email address for the person of
             correspondence.
-        version: string, default=0.0.1
+        version: string, default=''
             Version of this annotation.
         annotator: dict, default=None
             Sandbox for information about the specific annotator, such as
@@ -557,6 +554,7 @@ class AnnotationMetadata(JObject):
         data_source: str, default=''
             Description of where the data originated, e.g. 'Manual Annotation'.
         """
+        curator = JObject() if curator is None else curator
         annotator = JObject() if annotator is None else annotator
 
         self.curator = Curator(**curator)
