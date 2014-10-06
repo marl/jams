@@ -1,21 +1,22 @@
 """Utility functions for parsing datasets."""
 
 
-def loadlab(filename, num_columns):
-    """Load the columns of a labfile.
+def read_lab(filename, num_columns, comment='#'):
+    """Read the columns of a labfile into memory.
 
-    Note: Any data that can be interpreted as integer / float values will be.
+    An effort is made to infer datatypes, and therefore numerical values will
+    be mapped to ints / floats accordingly.
 
     Parameters
     ----------
-    filename: str
+    filename : str
         Path to a labfile.
-    num_columns: int
+    num_columns : int
         Number of data columns in the file.
 
     Returns
     -------
-    columns: tuple
+    columns : tuple
         Columns of data in the labfile.
     """
     columns = [list() for _ in range(num_columns)]
@@ -23,21 +24,23 @@ def loadlab(filename, num_columns):
         for row_idx, line in enumerate(input_file, 1):
             if line == '\n':
                 continue
-            # By default, split cuts at all whitespace.
+            if line.startswith(comment):
+                continue
+            # By default, split cuts at any / all whitespace.
             data = line.split()
             if len(data) != num_columns:
                 raise ValueError(
                     "Expected %d columns, received %d at line %d." %
                     (num_columns, len(data), row_idx))
-            for col_idx, col in enumerate(data):
+            for col_idx, value in enumerate(data):
                 try:
-                    if "." in col:
-                        col = float(col)
+                    if "." in value:
+                        value = float(value)
                     else:
-                        col = int(col)
+                        value = int(value)
                 except ValueError:
                     pass
-                columns[col_idx].append(col)
+                columns[col_idx].append(value)
 
     return tuple(columns)
 
