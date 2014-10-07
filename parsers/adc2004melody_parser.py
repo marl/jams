@@ -84,7 +84,8 @@ def process_folder(in_dir, out_dir):
     f0_files += pyjams.util.find_with_extension(in_dir, '.txt', depth=1)
 
     for f0_file in f0_files:
-        jams_file = f0_file.replace(in_dir, out_dir).replace('.txt', '.jams')
+        jams_file = os.path.join(out_dir,
+                            os.path.basename(f0_file).replace('.txt', '.jams'))
         pyjams.util.smkdirs(os.path.split(jams_file)[0])
         # Create a JAMS file for this track
         create_JAMS(f0_file, jams_file)
