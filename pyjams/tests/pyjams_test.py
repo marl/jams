@@ -17,13 +17,17 @@ from pyjams.pyjams import ObservationAnnotation
 from pyjams.pyjams import EventAnnotation
 from pyjams.pyjams import RangeAnnotation
 from pyjams.pyjams import TimeSeriesAnnotation
+from pyjams.pyjams import JAMS
 
 
 class JamsTests(unittest.TestCase):
 
     def setUp(self):
         self.jobj = JObject(a=1, b=None, _c='a', d='')
-        self.obs = Observation('monkey', 1.0, 7)
+        self.obs = Observation(value='monkey',
+                               confidence=1.0,
+                               secondary_value=7)
+
         self.event = Event(time=Observation(0.5, 1.0),
                            label=Observation('dog bark', 0.5))
         self.chord = Range(start=Observation(0.0, 1.0),
@@ -113,6 +117,11 @@ class JamsTests(unittest.TestCase):
             "Failed to properly recreate the object."
             "Expected: %s\nReceived: %s" % (self.obs, obs2))
 
+    def test_Observation_invalid_attr(self):
+        obs = Observation()
+        with self.assertRaises(ValueError):
+            obs.bad_attr = 'some value'
+
     def test_Event_init(self):
         self.assertEqual(
             self.event.time.value,
@@ -142,6 +151,11 @@ class JamsTests(unittest.TestCase):
             event2,
             "Failed to properly recreate the object."
             "Expected: %s\nReceived: %s" % (self.event, event2))
+
+    def test_Event_invalid_attr(self):
+        event = Event()
+        with self.assertRaises(ValueError):
+            event.bad_attr = 'some value'
 
     def test_Range_init(self):
         self.assertEqual(
@@ -176,11 +190,13 @@ class JamsTests(unittest.TestCase):
 
     def test_Range_inc_monotonic(self):
         # Start / End times should be monotonically increasing.
-        self.assertRaises(
-            ValueError,
-            Range,
-            Observation(1.0),
-            Observation(0.0))
+        with self.assertRaises(ValueError):
+            Range(Observation(1.0), Observation(0.0))
+
+    def test_Range_invalid_attr(self):
+        arange = Range()
+        with self.assertRaises(ValueError):
+            arange.bad_attr = 'some value'
 
     def test_TimeSeries_init(self):
         value = [x for x in 'abc']
@@ -213,6 +229,11 @@ class JamsTests(unittest.TestCase):
             TimeSeries,
             range(3),
             range(2))
+
+    def test_TimeSeries_invalid_attr(self):
+        tseries = TimeSeries()
+        with self.assertRaises(ValueError):
+            tseries.bad_attr = 'some value'
 
     def test_ObservationAnnotation_init(self):
         self.assertEqual(
@@ -265,6 +286,11 @@ class JamsTests(unittest.TestCase):
             TypeError,
             ObservationAnnotation,
             [self.series])
+
+    def test_ObservationAnnotation_invalid_attr(self):
+        annot = ObservationAnnotation()
+        with self.assertRaises(ValueError):
+            annot.bad_attr = 'some value'
 
     def test_EventAnnotation_init(self):
         self.assertEqual(
@@ -336,6 +362,11 @@ class JamsTests(unittest.TestCase):
             "Failed to collect all label fields properly. \n"
             "Expected:\n%s\nReceived:\n%s" % (expected_times,
                                               self.event_annot.times))
+
+    def test_EventAnnotation_invalid_attr(self):
+        annot = EventAnnotation()
+        with self.assertRaises(ValueError):
+            annot.bad_attr = 'some value'
 
     def test_RangeAnnotation_init(self):
         self.assertEqual(
@@ -427,6 +458,11 @@ class JamsTests(unittest.TestCase):
             "Expected: %s\nReceived: %s" % (expected_intervals,
                                             self.range_annot.intervals))
 
+    def test_RangeAnnotation_invalid_attr(self):
+        annot = RangeAnnotation()
+        with self.assertRaises(ValueError):
+            annot.bad_attr = 'some value'
+
     def test_TimeSeriesAnnotation_init(self):
         self.assertEqual(
             self.series_annot.data,
@@ -469,6 +505,16 @@ class JamsTests(unittest.TestCase):
             TypeError,
             TimeSeriesAnnotation,
             [Range(Observation(1.0))])
+
+    def test_TimeSeriesAnnotation_invalid_attr(self):
+        annot = TimeSeriesAnnotation()
+        with self.assertRaises(ValueError):
+            annot.bad_attr = 'some value'
+
+    def test_JAMS_invalid_attr(self):
+        jam = JAMS()
+        with self.assertRaises(ValueError):
+            jam.bad_attr = 'some value'
 
 
 if __name__ == "__main__":

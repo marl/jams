@@ -4,14 +4,14 @@
 
     "definitions": {
 
-        "file_metadata": {
+        "FileMetadata": {
             "type": "object",
-            "title": "File metadata",
+            "title": "File Metadata",
             "properties": {
                 "identifiers": {
                     "type": "object",
                     "title": "Annotator",
-                    "description": "Sandbox for information about the annotator.",
+                    "description": "Sandbox for information about the annotator."
                 },
                 "artist": { "type": "string"},
                 "title": { "type": "string"},
@@ -21,26 +21,29 @@
             }
         },
 
-        "annotation_metadata": {
+        "Curator": {
+            "type": "object",
+            "title": "Curator",
+            "description": "Curator contact information: name and email",
+            "properties": {
+                "name": { "type": "string"},
+                "email": { "type": "string", "format": "email" }
+            },
+            "required": ["name", "email"]
+        },
+
+        "AnnotationMetadata": {
             "type": "object",
             "title": "Annotation metadata",
             "description": "All metadata required to describe an annotation",
             "properties": {
                 "corpus": { "type": "string" },
                 "version": { "type": "string" },
-                "curator": {
-                    "type": "object",
-                    "title": "Curator",
-                    "description": "Curator name and email",
-                    "properties": {
-                        "name": { "type": "string"},
-                        "email": { "type": "string", "format": "email" }
-                    }
-                },
+                "curator": { "$ref": "#/definitions/Curator" },
                 "annotator": {
                     "type": "object",
                     "title": "Annotator",
-                    "description": "Sandbox for information about the annotator.",
+                    "description": "Sandbox for information about the annotator."
                 },
                 "annotation_tools": { "type": "string"},
                 "annotation_rules": { "type": "string"},
@@ -50,42 +53,42 @@
             "required": ["version", "curator"]
         },
 
-        "observation": {
+        "Observation": {
             "type": "object",
             "title": "Observation",
             "description": "An observation with a single value and confidence, e.g. a time, a frequency value, or a chord label",
             "properties": {
-                "value": { "type": ["number","string","boolean"] },
+                "value": { "type": ["number", "string", "boolean"] },
                 "confidence": { "type": "number" },
-                "secondary_value": { "type": ["number","string","boolean"] }
+                "secondary_value": { "type": ["number", "string", "boolean"] }
             },
             "required": ["value"]
         },
 
-        "event": {
+        "Event": {
             "type": "object",
             "title": "Event",
             "description": "An event that occurs in a single point in time, e.g. an onset",
             "properties": {
-                "time": { "$ref": "#/definitions/observation" },
-                "label": { "$ref": "#/definitions/observation" }
+                "time": { "$ref": "#/definitions/Observation" },
+                "label": { "$ref": "#/definitions/Observation" }
             },
             "required": ["time"]
         },
 
-        "range": {
+        "Range": {
             "type": "object",
             "title": "Range",
             "description": "A concept that spans a certain time range, e.g. a chord",
             "properties": {
-                "start": { "$ref": "#/definitions/observation" },
-                "end": { "$ref": "#/definitions/observation" },
-                "label": { "$ref": "#/definitions/observation" }
+                "start": { "$ref": "#/definitions/Observation" },
+                "end": { "$ref": "#/definitions/Observation" },
+                "label": { "$ref": "#/definitions/Observation" }
             },
-            "required": ["start","end"]
+            "required": ["start", "end"]
         },
 
-        "time_series": {
+        "TimeSeries": {
             "type": "object",
             "title": "Time Series",
             "description": "A sequence of values with corresponding timestamps and confidence esitmates",
@@ -113,80 +116,76 @@
             "required": ["value", "time"]
         },
 
-        "observation_annotation": {
+        "ObservationAnnotation": {
             "id": "#observation-annotation",
             "type": "object",
             "title": "Observation Annotation",
             "description": "An annotation of a single observation, e.g. tags",
             "properties": {
-                "annotation_type" : { "type": "string" },
                 "annotation_metadata": { "$ref": "#/definitions/annotation_metadata" },
                 "data": {
                     "type": "array",
                     "title": "Data",
                     "description": "An array of observations",
-                    "items": { "$ref": "#/definitions/observation" }
+                    "items": { "$ref": "#/definitions/Observation" }
                 },
                 "sandbox": { "type": "object"}
             },
-            "required": ["annotation_type","annotation_metadata","file_metadata","data"]
+            "required": ["annotation_metadata","file_metadata","data"]
         },
 
-        "event_annotation" : {
+        "EventAnnotation" : {
             "id": "#event-annotation",
             "type": "object",
             "title": "Event Annotation",
             "description": "An annotation of events, e.g. beats, onsets",
             "properties": {
-                "annotation_type" : { "type": "string" },
-                "annotation_metadata": { "$ref": "#/definitions/annotation_metadata" },
+                "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
                 "data": {
                     "type": "array",
                     "title": "Data",
                     "description": "An array of events",
-                    "items": { "$ref": "#/definitions/event" }
+                    "items": { "$ref": "#/definitions/Event" }
                 },
                 "sandbox": { "type": "object"}
             },
-            "required": ["annotation_type","annotation_metadata","file_metadata","data"]
+            "required": ["annotation_metadata","file_metadata","data"]
         },
 
-        "range_annotation" : {
+        "RangeAnnotation" : {
             "id": "#range-annotation",
             "type": "object",
             "title": "Range Annotation",
             "description": "An annotation of ranges, e.g. chords, sections",
             "properties": {
-                "annotation_type" : { "type": "string" },
-                "annotation_metadata": { "$ref": "#/definitions/annotation_metadata" },
+                "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
                 "data": {
                     "type": "array",
                     "title": "Data",
                     "description": "An array of ranges",
-                    "items": { "$ref": "#/definitions/range" }
+                    "items": { "$ref": "#/definitions/Range" }
                 },
                 "sandbox": { "type": "object"}
             },
-            "required": ["annotation_type","annotation_metadata","file_metadata","data"]
+            "required": ["annotation_metadata", "file_metadata", "data"]
         },
 
-        "time_series_annotation" : {
+        "TimeSeriesAnnotation" : {
             "id": "#time-series-annotation",
             "type": "object",
             "title": "Time Series Annotation",
             "description": "An annotation of a time series, e.g. melody (f0)",
             "properties": {
-                "annotation_type" : { "type": "string" },
-                "annotation_metadata": { "$ref": "#/definitions/annotation_metadata" },
+                "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
                 "data": {
                     "type": "array",
                     "title": "Data",
                     "description": "An array of time series",
-                    "items": { "$ref": "#/definitions/time_series" }
+                    "items": { "$ref": "#/definitions/TimeSeries" }
                 },
                 "sandbox": { "type": "object"}
             },
-            "required": ["annotation_type","annotation_metadata","file_metadata","data"]
+            "required": ["annotation_metadata", "file_metadata", "data"]
         }
     },
 
@@ -195,83 +194,97 @@
     "description": "JSON Annotated Music Specification",
     "properties": {
 
-        "file_metadata": { "$ref": "#/definitions/file_metadata" },
+        "file_metadata": { "$ref": "#/definitions/FileMetadata" },
 
         "genre": {
             "type": "array",
             "title": "Genre",
             "description": "Genre annotations",
-            "items": { "$ref": "#/definitions/observation_annotation" }
+            "items": { "$ref": "#/definitions/ObservationAnnotation" }
         },
 
         "mood": {
             "type": "array",
             "title": "Mood",
             "description": "Mood annotations",
-            "items": { "$ref": "#/definitions/observation_annotation" }
+            "items": { "$ref": "#/definitions/ObservationAnnotation" }
         },
 
         "tag": {
             "type": "array",
             "title": "Tag",
             "description": "Semantic tag annotations",
-            "items": { "$ref": "#/definitions/observation_annotation" }
+            "items": { "$ref": "#/definitions/ObservationAnnotation" }
         },
 
         "beat": {
             "type": "array",
             "title": "Beats",
             "description": "Beat annotations",
-            "items": { "$ref": "#/definitions/event_annotation" }
+            "items": { "$ref": "#/definitions/EventAnnotation" }
         },
 
         "onset": {
             "type": "array",
             "title": "Onsets",
             "description": "Onset annotations",
-            "items": { "$ref": "#/definitions/event_annotation" }
+            "items": { "$ref": "#/definitions/EventAnnotation" }
         },
 
         "chord": {
             "type": "array",
             "title": "Chords",
             "description": "Chord annotations",
-            "items": { "$ref": "#/definitions/range_annotation" }
+            "items": { "$ref": "#/definitions/RangeAnnotation" }
         },
 
-        "section": {
+        "key": {
             "type": "array",
-            "title": "Sections",
-            "description": "Section annotations",
-            "items": { "$ref": "#/definitions/range_annotation" }
+            "title": "key",
+            "description": "Key annotations",
+            "items": { "$ref": "#/definitions/RangeAnnotation" }
+        },
+
+        "segment": {
+            "type": "array",
+            "title": "Segment",
+            "description": "Structural segmentation annotations",
+            "items": { "$ref": "#/definitions/RangeAnnotation" }
+        },
+
+        "source": {
+            "type": "array",
+            "title": "Source",
+            "description": "Source activation annotations",
+            "items": { "$ref": "#/definitions/RangeAnnotation" }
         },
 
         "note": {
             "type": "array",
             "title": "Notes",
             "description": "Notes (symbolic) annotations",
-            "items": { "$ref": "#/definitions/range_annotation" }
+            "items": { "$ref": "#/definitions/RangeAnnotation" }
         },
 
         "melody": {
             "type": "array",
             "title": "Melody",
             "description": "Melody (continuous predominant f0) annotations",
-            "items": { "$ref": "#/definitions/time_series_annotation" }
+            "items": { "$ref": "#/definitions/TimeSeriesAnnotation" }
         },
 
         "pitch": {
             "type": "array",
             "title": "Pitch",
             "description": "Pitch (continuous f0) annotations",
-            "items": { "$ref": "#/definitions/time_series_annotation" }
+            "items": { "$ref": "#/definitions/TimeSeriesAnnotation" }
         },
 
         "pattern": {
             "type": "array",
             "title": "Patterns",
             "description": "Pattern annotations",
-            "items": { "$ref": "#/definitions/time_series_annotation" }
+            "items": { "$ref": "#/definitions/TimeSeriesAnnotation" }
         },
 
         "sandbox": { "type": "object" }

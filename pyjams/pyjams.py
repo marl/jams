@@ -59,10 +59,15 @@ And that's it!
   >>> print annot2
 """
 
+import json
+import os.path as path
+
 __VERSION__ = "0.0.1"
 __OBJECT_TYPE__ = 'object_type'
 
-import json
+# TODO: This is super fragile; migrate toward pkg_resources.
+__SCHEMA__ = json.load(open(path.join(path.split(__file__)[0],
+                                      '../schema/jams_schema.json')))
 
 
 def load(filepath):
@@ -107,7 +112,11 @@ class JObject(object):
     def __init__(self, **kwargs):
         object.__init__(self)
         for name, value in kwargs.iteritems():
-            self.__dict__[name] = value
+            setattr(self, name, value)
+
+    @property
+    def __schema__(self):
+        return __SCHEMA__['definitions'].get(self.type, None)
 
     @property
     def __json__(self):
@@ -144,6 +153,15 @@ class JObject(object):
     def __getitem__(self, key):
         """TODO(ejhumphrey@nyu.edu): writeme."""
         return self.__dict__[key]
+
+    def __setattr__(self, name, value):
+        if not self.__schema__ is None:
+            props = self.__schema__['properties']
+            if not name in props:
+                raise ValueError(
+                    "Invalid attribute: %s\n"
+                    "\t Should be one of %s." % (name, props.keys()))
+        self.__dict__[name] = value
 
     def __len__(self):
         return len(self.keys())
@@ -186,6 +204,7 @@ class Observation(JObject):
             Degree of confidence for the value, in the range [0, 1].
         secondary_value: obj, default=None
         """
+        JObject.__init__(self)
         self.value = value
         self.confidence = confidence
         self.secondary_value = secondary_value
@@ -212,6 +231,7 @@ class Event(Observation):
         label: Observation (or dict), default=None
             A semantic concept for this event, as an Observation.
         """
+        JObject.__init__(self)
         if time is None:
             time = Observation()
         if label is None:
@@ -243,6 +263,7 @@ class Range(Observation):
         label: Observation (or dict)
             Label over this time interval.
         """
+        JObject.__init__(self)
         # input checks
         start = Observation() if start is None else start
         end = Observation() if end is None else end
@@ -289,6 +310,8 @@ class TimeSeries(Observation):
         confidence: list or serializable 1D-array
             Confidence values corresponding to the value series.
         """
+        JObject.__init__(self)
+
         # input checks
         value = list() if value is None else value
         time = list() if time is None else time
@@ -338,6 +361,8 @@ class BaseAnnotation(JObject):
         # TODO(ejhumphrey@nyu.edu): We may want to subclass list here to turn
         #   'data' into a special container with convenience methods to more
         #   easily unpack sparse events, among other things.
+        JObject.__init__(self)
+
         if data is None:
             data = list()
         if annotation_metadata is None:
@@ -519,6 +544,7 @@ class Curator(JObject):
         email: str, default=''
             An email address corresponding to the curator.
         """
+        JObject.__init__(self)
         self.name = name
         self.email = email
 
@@ -663,7 +689,6 @@ class JAMS(JObject):
         file_metadata: FileMetadata
             Metadata corresponding to the audio file.
         """
-
         if file_metadata is None:
             file_metadata = FileMetadata()
 
@@ -698,6 +723,10 @@ class JAMS(JObject):
             [] if tag is None else tag, ObservationAnnotation)
         self.file_metadata = FileMetadata(**file_metadata)
         self.sandbox = JObject(**sandbox)
+
+    @property
+    def __schema__(self):
+        return __SCHEMA__
 
     def add(self, jam, on_conflict='fail'):
         """Add the contents of another jam to this object.
