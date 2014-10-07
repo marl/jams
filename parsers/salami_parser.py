@@ -80,7 +80,7 @@ def parse_annotation_level(annot, path, annotation_id, level):
     try:
         f = open(file_path, "r")
     except IOError:
-        logging.warning("Annotation doesn't exist: %s", file_path)
+        logging.warning("Annotation missing in %s", file_path)
         return
 
     # Parse file
