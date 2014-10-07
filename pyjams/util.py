@@ -151,7 +151,7 @@ def fill_timeseries_annotation_data(times, values, confidences,
         An instantiated event annotation to populate.
     """
     data = timeseries_annotation.create_datapoint()
-    data.time = times
     data.value = values
+    data.time = times
     if confidences is not None:
         data.confidence = confidences
