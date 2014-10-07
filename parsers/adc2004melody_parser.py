@@ -9,7 +9,7 @@ To parse the entire dataset, you simply need to provide the path to the
 unarchived folder.
 
 Example:
-./adc2004_parser.py ~/FullSet -o ~/datasets/adc2004/
+./adc2004melody_parser.py ~/FullSet -o ~/adc2004_jams/
 
 """
 
