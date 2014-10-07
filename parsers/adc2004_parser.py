@@ -100,7 +100,7 @@ def main():
     parser.add_argument("-o",
                         action="store",
                         dest="out_dir",
-                        default="ADC2004JAMS",
+                        default="adc2004_jams",
                         help="Output JAMS folder")
     args = parser.parse_args()
     start_time = time.time()
