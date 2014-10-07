@@ -11,7 +11,7 @@
                 "identifiers": {
                     "type": "object",
                     "title": "Annotator",
-                    "description": "Sandbox for information about the annotator.",
+                    "description": "Sandbox for file ID information (e.g. echonest ID, musicbrainz ID, etc.).",
                 },
                 "artist": { "type": "string"},
                 "title": { "type": "string"},
