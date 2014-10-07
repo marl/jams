@@ -45,13 +45,14 @@ def fill_annotation_metadata(annot):
     annot.annotation_metadata.validation = "TODO"
     annot.annotation_metadata.data_source = ""
     annot.annotation_metadata.curator = pyjams.Curator(name="Emilia Gomez",
-                                                       email='emilia.gomez@upf.edu')
+                                                       email="emilia.gomez"
+                                                             "@upf.edu")
     annot.annotation_metadata.annotator = {}
 
 
 def create_JAMS(lab_file, out_file):
     """
-    Creates a JAMS file given the adc2004 lab file (*.REF.txt).
+    Creates a JAMS file given the adc2004 annotation file (*.REF.txt).
     Note: the melody f0 annotations are provided in the *REF.txt files,
     not the .lab files (which contain quantized note annotations).
     """
@@ -85,7 +86,7 @@ def process_folder(in_dir, out_dir):
     for f0_file in f0_files:
         jams_file = f0_file.replace(in_dir, out_dir).replace('.txt', '.jams')
         pyjams.util.smkdirs(os.path.split(jams_file)[0])
-        #Create a JAMS file for this track
+        # Create a JAMS file for this track
         create_JAMS(f0_file, jams_file)
 
 
