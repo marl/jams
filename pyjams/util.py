@@ -153,4 +153,5 @@ def fill_timeseries_annotation_data(times, values, confidences,
     data = timeseries_annotation.create_datapoint()
     data.value = values
     data.time = times
-    data.confidence = confidences
+    if confidences is not None:
+        data.confidence = confidences

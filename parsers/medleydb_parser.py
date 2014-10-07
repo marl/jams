@@ -101,7 +101,8 @@ def process(in_dir, out_dir):
             in_dir, load_textlist(os.path.join(in_dir, dset)))
 
     for lab_file in lab_files:
-        jams_file = lab_file.replace(in_dir, out_dir).replace('.lab', '.jams')
+        jams_file = os.path.join(out_dir,
+                            os.path.basename(lab_file).replace('.txt', '.jams'))
         create_output_dir(jams_file)
         #Create a JAMS file for this track
         create_JAMS(lab_file, jams_file)
