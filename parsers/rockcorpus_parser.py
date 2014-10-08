@@ -62,6 +62,14 @@ import pyjams
 AUDIO_SOURCES_FILE = 'audio_sources.txt'
 ANNOTATORS = { 'dt' : 'David Temperley', 'tdc' : 'Trevor de Clercq' }
 
+MELODY_DIR = 'rs200_melody_nlt'
+HARMONY_DIR = 'rs200_harmony_clt'
+TIMING_DATA_DIR = 'timing_data'
+
+
+def fill_file_metadata(jam):
+    """ add file-level metadata """
+    pass
 
 def fill_annotation_metadata(annot):
     """Fills the annotation metadata."""
@@ -133,8 +141,7 @@ def parse_harmony_clt_file(harmony_file, jam, annotator, timing_added):
 
     jam.file_metadata.duration = end_times[-1]
 
-    print '*** NEED TO ADD KEY INFORMATION ***'
-
+    #TODO: add key as secondary_values
     pyjams.util.fill_range_annotation_data(start_times=start_times,end_times=end_times, labels=chord_labels,range_annotation=chord_annot)
     fill_annotation_metadata(chord_annot)
 
@@ -148,12 +155,9 @@ def parse_melody_nlt_file(melody_file, jam, annotator, timing_added):
         times, note_events, _  = pyjams.util.read_lab(melody_file, 3)        
 
     end_times = times[1:]
-    # hack -- just guess duration of last note from previous note duration
-    # if final_t is None:
-    #     dt = end_times[-1] - end_times[-2]
-    #     final_t = end_times[-1] + dt
     end_times.append(jam.file_metadata.duration)
 
+    #TODO: add scale degree as secondary_values
     note_annot = jam.note.create_annotation()
     note_annot.annotation_metadata.annotator = annotator
     pyjams.util.fill_range_annotation_data(start_times=times, end_times=end_times, labels=note_events, range_annotation=note_annot)
@@ -167,21 +171,38 @@ def parse_timing_file(timing_file, jam):
     # represent measures as beat annotation. this means that all labels are "1.0", since all events indicate start of measure
     labels = len(times)*[1.0]
 
+    #TODO: add measure numbers as secondary_values
     beat_annot = jam.beat.create_annotation()
     pyjams.util.fill_event_annotation_data(times=times, labels=labels, event_annotation=beat_annot)
 
 
-def create_JAMS(melody_file, harmony_file, timing_file, out_file, annotator, timing_added=True):
-    """ convert a JAMS file """
+def create_JAMS(in_dir, filebase, out_file, timing_added=True):
+    """ add all annotations for given song to a JAMS file """
 
     jam = pyjams.JAMS()
-    parse_harmony_clt_file(harmony_file=harmony_file, jam=jam, annotator=annotator, timing_added=timing_added)
-    parse_melody_nlt_file(melody_file=melody_file, jam=jam, annotator=annotator, timing_added=timing_added)
-    parse_timing_file(timing_file=timing_file, jam=jam)
+
+    fill_file_metadata(jam)
+
+    for a in ANNOTATORS.keys():
+
+        # two harmony annotations
+        harmony_file = os.path.join(in_dir,HARMONY_DIR,filebase+'_'+a+'.clt')
+        parse_harmony_clt_file(harmony_file=harmony_file, jam=jam, annotator=ANNOTATORS[a], timing_added=timing_added)
+
+        # one melody annotation (with annotator indicated in file name)
+        melody_file = os.path.join(in_dir,MELODY_DIR,filebase+'_'+a+'.nlt')
+        if os.path.exists(melody_file):
+            parse_melody_nlt_file(melody_file=melody_file, jam=jam, annotator=ANNOTATORS[a], timing_added=timing_added)
+    
+        # one timing file (no indication of annotator)
+        timing_file = os.path.join(in_dir,TIMING_DATA_DIR,filebase+'.tim')
+        parse_timing_file(timing_file=timing_file, jam=jam)
 
     # Save JAMS
     with open(out_file, "w") as fp:
         json.dump(jam, fp, indent=2)
+
+
 
 def process(in_dir, out_dir):
     """ do the conversion """
