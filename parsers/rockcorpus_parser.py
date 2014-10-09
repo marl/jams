@@ -263,7 +263,7 @@ def process(in_dir, out_dir):
 
     for songname,info in song_map.items():
         logging.info('processing '+songname)
-        create_JAMS(in_dir=in_dir,out_dir=out_dir,filebase=str(songname),artist=info['artist'],album=info['album'])
+        create_JAMS(in_dir=in_dir,out_dir=out_dir,filebase=songname,artist=info['artist'],album=info['album'])
 
 
 def main():
