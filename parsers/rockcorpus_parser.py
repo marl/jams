@@ -66,17 +66,18 @@ HARMONY_DIR = 'rs200_harmony_clt'
 TIMING_DATA_DIR = 'timing_data'
 
 
-def fill_annotation_metadata(annot,annotator):
+def fill_annotation_metadata(annot,annotator,sandbox_text=None):
     """Fills the annotation metadata."""
     annot.annotation_metadata.corpus = "Rock Corpus"
     annot.annotation_metadata.version = "2.1"
     annot.annotation_metadata.annotation_rules = ""
-    annot.annotation_metadata.data_source = ""
+    annot.annotation_metadata.data_source = "music faculty"
     annot.annotation_metadata.curator = pyjams.Curator(name="David Temperley, Trevor de Clercq",
                                                        email="dtemperley@esm.rochester.edu, trevor.declercq@gmail.com")
     annot.annotation_metadata.annotator = annotator
-
-
+    if not sandbox_text is None:
+        annot.sandbox = sandbox_text
+ 
 def fill_event_annotation_data(times, labels, secondary_values, event_annotation):
     """Add a collection of data to an event annotation with secondary values (in-place).
 
@@ -182,7 +183,7 @@ def parse_harmony_clt_file(harmony_file, jam, annotator, timing_added):
     jam.file_metadata.duration = end_times[-1]
 
     fill_range_annotation_data(start_times=start_times,end_times=end_times, labels=chord_labels, secondary_values=keys, range_annotation=chord_annot)
-    fill_annotation_metadata(chord_annot,annotator)
+    fill_annotation_metadata(chord_annot,annotator,sandbox_text="chord label secondary value indicates pitch class of current key. time units are measures.")
 
 
 def parse_melody_nlt_file(melody_file, jam, annotator, timing_added):
@@ -193,13 +194,16 @@ def parse_melody_nlt_file(melody_file, jam, annotator, timing_added):
     else:
         times, note_events, scale_degrees  = pyjams.util.read_lab(melody_file, 3)        
 
+    if len(times) == 0:
+        logging.warning('skipping:'+melody_file+' (no melody transcription available).')
+        return
     end_times = times[1:]
     end_times.append(jam.file_metadata.duration)
 
     note_annot = jam.note.create_annotation()
     note_annot.annotation_metadata.annotator = annotator
     fill_range_annotation_data(start_times=times, end_times=end_times, labels=note_events, secondary_values=scale_degrees, range_annotation=note_annot)
-    fill_annotation_metadata(note_annot,annotator)
+    fill_annotation_metadata(note_annot,annotator,sandbox_text="note label secondary value indicates scale degree of melody note. time units are measures.")
 
 
 def parse_timing_file(timing_file, jam):
@@ -212,7 +216,7 @@ def parse_timing_file(timing_file, jam):
 
     beat_annot = jam.beat.create_annotation()
     fill_event_annotation_data(times=times, labels=labels, secondary_values=measures, event_annotation=beat_annot)
-    fill_annotation_metadata(beat_annot,'')
+    fill_annotation_metadata(beat_annot,"",sandbox_text="beat label secondary value indicates measure number.")
 
 
 def create_JAMS(in_dir, out_dir, filebase, artist, album, timing_added=True):
@@ -222,15 +226,15 @@ def create_JAMS(in_dir, out_dir, filebase, artist, album, timing_added=True):
 
     # add file level metadata
     jam.file_metadata.artist = artist
-    jam.file_metadata.title = filebase.replace('_',' ')
-    jam.file_metadata.release = album
+    jam.file_metadata.title = filebase.replace('_',' ').title()
+    jam.file_metadata.release = album.replace('\t',' ')
 
     for a in ANNOTATORS.keys():
 
         # two harmony annotations
         harmony_file = os.path.join(in_dir,HARMONY_DIR,filebase+'_'+a+'.clt')
         if not os.path.exists(harmony_file):
-            print '*** error *** file:',harmony_file,'not found. Skipping!'
+            logging.error('file:'+harmony_file+'not found. Skipping!')
             return
         else:
             parse_harmony_clt_file(harmony_file=harmony_file, jam=jam, annotator=ANNOTATORS[a], timing_added=timing_added)
@@ -258,8 +262,8 @@ def process(in_dir, out_dir):
     song_map = get_audio_sources_info(os.path.join(in_dir,AUDIO_SOURCES_FILE))
 
     for songname,info in song_map.items():
-        print 'processing:',songname
-        create_JAMS(in_dir=in_dir,out_dir=out_dir,filebase=str(songname),artist=info['artist'],album=info['album'])
+        logging.info('processing '+songname)
+        create_JAMS(in_dir=in_dir,out_dir=out_dir,filebase=songname,artist=info['artist'],album=info['album'])
 
 
 def main():
@@ -280,7 +284,7 @@ def main():
     start_time = time.time()
 
     # Setup the logger
-    logging.basicConfig(format='%(asctime)s: %(message)s', level=logging.INFO)
+    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO)
 
     # Run the parser
     process(args.in_dir, args.out_dir)
