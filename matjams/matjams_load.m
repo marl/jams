@@ -59,10 +59,12 @@ function value = matjams_load(str, varargin)
 %
 % See also json.dump json.read
 
+%     'MergeCell', true,...
+
 %   json.startup('WarnOnAddpath', true);
   matjams_startup('WarnOnAddpath', true);
   options = get_options_(struct(...
-    'MergeCell', true,...
+    'MergeCell', false,...
     'ColMajor', false...
     ), varargin{:});
 
@@ -85,28 +87,44 @@ function value = parse_data_(node, options)
   if isa(node, 'char')
     value = char(node);
   elseif isa(node, 'double')
-    value = double(node);
+      value = double(node);
   elseif isa(node, 'logical')
     value = logical(node);
   elseif isa(node, 'org.json.JSONArray')
-    value = cell(node.length() > 0, node.length());
-    for i = 1:node.length()
-      value{i} = parse_data_(node.get(i-1), options);
-    end
-    if options.MergeCell
-      value = merge_cell_(value, options);
-    end
+      node.debug = 0;
+      if isa(node.get(0),'double')
+          value = double(node.toDouble());
+          return;
+      end
+        value = cell(node.length() > 0, node.length());
+        for i = 1:node.length()
+%             if isfloat(node.get(i-1))
+%             double(node.getDouble(i-1))
+%             end
+            value{i} = parse_data_(node.get(i-1), options);
+        end
+        if options.MergeCell
+          value = merge_cell_(value, options);  
+        end
   elseif isa(node, 'org.json.JSONObject')
     value = struct;
     itr = node.keys();
     while itr.hasNext()
       key = itr.next();
       field = char(key);
-      safe_field = genvarname(char(key), fieldnames(value));
-      if ~strcmp(field, safe_field)
-        warning('json:fieldNameConflict', ...
-                'Field %s renamed to %s', field, safe_field);
+      safe_field = field;
+      if strcmp(field,'start') || strcmp(field,'end') %|| strcmp(field,'value')
+          safe_field = strcat(field,'_t');
       end
+%       safe_field = genvarname(char(key), fieldnames(value));
+%       if ~strcmp(field, safe_field)
+%         warning('json:fieldNameConflict', ...
+%                 'Field %s renamed to %s', field, safe_field);
+%       end
+%     v = node.get(java.lang.String(key))
+    
+% node.get(java.lang.String(key));
+
       value.(safe_field) = parse_data_(node.get(java.lang.String(key)), ...
                                        options);
     end
