@@ -1,0 +1,1176 @@
+{
+  "genre": [
+    {
+      "annotation_metadata": {
+        "data_source": "Manual Annotation", 
+        "corpus": "MedleyDB", 
+        "version": "1.0", 
+        "curator": {
+          "name": "Rachel Bittner", 
+          "email": "rachel.bittner@nyu.edu"
+        }, 
+        "validation": "None"
+      }, 
+      "data": [
+        {
+          "confidence": 1, 
+          "value": "Electronic/Fusion"
+        }
+      ]
+    }
+  ], 
+  "source": [
+    {
+      "annotation_metadata": {
+        "data_source": "Automatic Annotation", 
+        "corpus": "MedleyDB", 
+        "version": "1.0", 
+        "curator": {
+          "name": "Juan P. Bello", 
+          "email": "jpbello@nyu.edu"
+        }, 
+        "validation": "None"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 17.0899
+          }, 
+          "end": {
+            "value": 492.681
+          }, 
+          "label": {
+            "value": "auxiliary percussion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 493.3776
+          }, 
+          "end": {
+            "value": 493.7027
+          }, 
+          "label": {
+            "value": "auxiliary percussion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 33.1117
+          }, 
+          "end": {
+            "value": 450.978
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 8.0805
+          }, 
+          "end": {
+            "value": 117.2608
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 133.2825
+          }, 
+          "end": {
+            "value": 317.6025
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 333.6243
+          }, 
+          "end": {
+            "value": 467.8821
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 118.1896
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 150.3724
+          }, 
+          "end": {
+            "value": 318.5313
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 350.7142
+          }, 
+          "end": {
+            "value": 502.1547
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 1.3003
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 1.7647
+          }, 
+          "end": {
+            "value": 3.3901
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 3.8545
+          }, 
+          "end": {
+            "value": 5.4799
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 5.9443
+          }, 
+          "end": {
+            "value": 7.5233
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 8.0805
+          }, 
+          "end": {
+            "value": 9.6595
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 10.1239
+          }, 
+          "end": {
+            "value": 11.7493
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 12.2137
+          }, 
+          "end": {
+            "value": 13.8391
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 14.3035
+          }, 
+          "end": {
+            "value": 15.8824
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 16.3933
+          }, 
+          "end": {
+            "value": 17.9722
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 18.4831
+          }, 
+          "end": {
+            "value": 20.062
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 20.5729
+          }, 
+          "end": {
+            "value": 22.1518
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 22.6627
+          }, 
+          "end": {
+            "value": 24.2416
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 24.7525
+          }, 
+          "end": {
+            "value": 26.3314
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 26.8423
+          }, 
+          "end": {
+            "value": 28.4212
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 28.9321
+          }, 
+          "end": {
+            "value": 30.511
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 31.0219
+          }, 
+          "end": {
+            "value": 32.6008
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 33.1117
+          }, 
+          "end": {
+            "value": 501.5975
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 1.4861
+          }, 
+          "end": {
+            "value": 6.8731
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 7.3839
+          }, 
+          "end": {
+            "value": 36.2696
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 37.0126
+          }, 
+          "end": {
+            "value": 48.2046
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 48.9941
+          }, 
+          "end": {
+            "value": 114.7995
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 115.8211
+          }, 
+          "end": {
+            "value": 136.1154
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 136.9513
+          }, 
+          "end": {
+            "value": 186.0383
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 186.224
+          }, 
+          "end": {
+            "value": 190.3107
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 190.9609
+          }, 
+          "end": {
+            "value": 199.7845
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 200.0167
+          }, 
+          "end": {
+            "value": 223.9332
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 224.2583
+          }, 
+          "end": {
+            "value": 307.4322
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 307.6644
+          }, 
+          "end": {
+            "value": 502.5727
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 507.6811
+          }, 
+          "end": {
+            "value": 508.3777
+          }, 
+          "label": {
+            "value": "clean electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 39.3346
+          }, 
+          "end": {
+            "value": 42.6783
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 43.0962
+          }, 
+          "end": {
+            "value": 46.8579
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 47.2758
+          }, 
+          "end": {
+            "value": 50.9446
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 51.7341
+          }, 
+          "end": {
+            "value": 63.4369
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 63.9478
+          }, 
+          "end": {
+            "value": 66.5948
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 67.988
+          }, 
+          "end": {
+            "value": 123.623
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 124.784
+          }, 
+          "end": {
+            "value": 148.7006
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 149.3507
+          }, 
+          "end": {
+            "value": 265.4041
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 268.562
+          }, 
+          "end": {
+            "value": 481.8141
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 483.3466
+          }, 
+          "end": {
+            "value": 493.099
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 493.424
+          }, 
+          "end": {
+            "value": 496.6284
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 499.1361
+          }, 
+          "end": {
+            "value": 503.5479
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 504.3839
+          }, 
+          "end": {
+            "value": 506.3808
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 249.5681
+          }, 
+          "label": {
+            "value": "mandolin"
+          }
+        }, 
+        {
+          "start": {
+            "value": 249.9396
+          }, 
+          "end": {
+            "value": 500.9009
+          }, 
+          "label": {
+            "value": "mandolin"
+          }
+        }, 
+        {
+          "start": {
+            "value": 4.9226
+          }, 
+          "end": {
+            "value": 5.4799
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 21.5017
+          }, 
+          "end": {
+            "value": 21.7339
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 26.4707
+          }, 
+          "end": {
+            "value": 26.6565
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 32.6473
+          }, 
+          "end": {
+            "value": 33.4832
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 35.6659
+          }, 
+          "end": {
+            "value": 36.1767
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 39.6132
+          }, 
+          "end": {
+            "value": 108.9016
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 109.2731
+          }, 
+          "end": {
+            "value": 217.9425
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 219.5679
+          }, 
+          "end": {
+            "value": 219.5679
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 220.1716
+          }, 
+          "end": {
+            "value": 225.9302
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 228.9023
+          }, 
+          "end": {
+            "value": 231.1779
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 233.8714
+          }, 
+          "end": {
+            "value": 234.3358
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 236.0541
+          }, 
+          "end": {
+            "value": 241.534
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 242.1841
+          }, 
+          "end": {
+            "value": 244.0417
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 244.8312
+          }, 
+          "end": {
+            "value": 251.9365
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 252.0758
+          }, 
+          "end": {
+            "value": 258.2059
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 258.4381
+          }, 
+          "end": {
+            "value": 268.7942
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 269.305
+          }, 
+          "end": {
+            "value": 271.0698
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 271.9057
+          }, 
+          "end": {
+            "value": 278.2215
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 279.3825
+          }, 
+          "end": {
+            "value": 282.6333
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 283.5156
+          }, 
+          "end": {
+            "value": 298.8873
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 300.0947
+          }, 
+          "end": {
+            "value": 307.2929
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 308.779
+          }, 
+          "end": {
+            "value": 504.8483
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 506.1021
+          }, 
+          "end": {
+            "value": 506.4272
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 507.9597
+          }, 
+          "end": {
+            "value": 508.1919
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 509.7244
+          }, 
+          "end": {
+            "value": 510.4675
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.3251
+          }, 
+          "end": {
+            "value": 2.6935
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 4.0403
+          }, 
+          "end": {
+            "value": 6.7338
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 7.8019
+          }, 
+          "end": {
+            "value": 8.7307
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 9.5666
+          }, 
+          "end": {
+            "value": 9.7059
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 10.9598
+          }, 
+          "end": {
+            "value": 16.0218
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 16.7184
+          }, 
+          "end": {
+            "value": 17.8794
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 18.5295
+          }, 
+          "end": {
+            "value": 22.1054
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 22.4305
+          }, 
+          "end": {
+            "value": 24.3345
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 24.9847
+          }, 
+          "end": {
+            "value": 27.5853
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 28.2355
+          }, 
+          "end": {
+            "value": 28.8392
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.0714
+          }, 
+          "end": {
+            "value": 29.35
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.9537
+          }, 
+          "end": {
+            "value": 31.9507
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 32.4615
+          }, 
+          "end": {
+            "value": 36.2696
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 36.8733
+          }, 
+          "end": {
+            "value": 218.7784
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 219.1499
+          }, 
+          "end": {
+            "value": 230.2491
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 230.5277
+          }, 
+          "end": {
+            "value": 232.3853
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 233.4999
+          }, 
+          "end": {
+            "value": 240.8838
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 241.1624
+          }, 
+          "end": {
+            "value": 241.534
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 242.0912
+          }, 
+          "end": {
+            "value": 255.7446
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 256.209
+          }, 
+          "end": {
+            "value": 277.6178
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 277.9429
+          }, 
+          "end": {
+            "value": 297.7727
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 298.0049
+          }, 
+          "end": {
+            "value": 299.2123
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 299.8625
+          }, 
+          "end": {
+            "value": 307.6644
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 308.5003
+          }, 
+          "end": {
+            "value": 507.356
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 507.7275
+          }, 
+          "end": {
+            "value": 511.3034
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "title": "Vger", 
+    "jams_version": "0.0.1", 
+    "artist": "Tabla Breakbeat Science"
+  }
+}

@@ -1,0 +1,1275 @@
+{
+  "genre": [
+    {
+      "annotation_metadata": {
+        "data_source": "Manual Annotation", 
+        "corpus": "MedleyDB", 
+        "version": "1.0", 
+        "curator": {
+          "name": "Rachel Bittner", 
+          "email": "rachel.bittner@nyu.edu"
+        }, 
+        "validation": "None"
+      }, 
+      "data": [
+        {
+          "confidence": 1, 
+          "value": "Electronic/Fusion"
+        }
+      ]
+    }
+  ], 
+  "source": [
+    {
+      "annotation_metadata": {
+        "data_source": "Automatic Annotation", 
+        "corpus": "MedleyDB", 
+        "version": "1.0", 
+        "curator": {
+          "name": "Juan P. Bello", 
+          "email": "jpbello@nyu.edu"
+        }, 
+        "validation": "None"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 49.8765
+          }, 
+          "end": {
+            "value": 50.6659
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 50.8981
+          }, 
+          "end": {
+            "value": 54.8455
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 55.2635
+          }, 
+          "end": {
+            "value": 58.9787
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 59.3038
+          }, 
+          "end": {
+            "value": 63.2047
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 63.6227
+          }, 
+          "end": {
+            "value": 250.4504
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 266.9366
+          }, 
+          "end": {
+            "value": 484.1825
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 8.1734
+          }, 
+          "end": {
+            "value": 83.6383
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 99.9851
+          }, 
+          "end": {
+            "value": 167.1372
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 183.4841
+          }, 
+          "end": {
+            "value": 501.0402
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 33.994
+          }, 
+          "end": {
+            "value": 35.573
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 36.0838
+          }, 
+          "end": {
+            "value": 37.6628
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 38.1736
+          }, 
+          "end": {
+            "value": 39.7526
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 40.2634
+          }, 
+          "end": {
+            "value": 41.8424
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 42.3532
+          }, 
+          "end": {
+            "value": 43.9322
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 44.443
+          }, 
+          "end": {
+            "value": 45.9755
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 46.5328
+          }, 
+          "end": {
+            "value": 48.0653
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 48.6226
+          }, 
+          "end": {
+            "value": 51.1768
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 52.0591
+          }, 
+          "end": {
+            "value": 53.2666
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 54.1489
+          }, 
+          "end": {
+            "value": 55.3564
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 56.1923
+          }, 
+          "end": {
+            "value": 57.4462
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 58.2821
+          }, 
+          "end": {
+            "value": 59.536
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 60.3719
+          }, 
+          "end": {
+            "value": 61.6258
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 62.4617
+          }, 
+          "end": {
+            "value": 63.7156
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 64.5515
+          }, 
+          "end": {
+            "value": 65.8054
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 66.6413
+          }, 
+          "end": {
+            "value": 67.8951
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 68.7311
+          }, 
+          "end": {
+            "value": 69.9385
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 70.8209
+          }, 
+          "end": {
+            "value": 72.0283
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 72.9107
+          }, 
+          "end": {
+            "value": 74.1181
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 75.0005
+          }, 
+          "end": {
+            "value": 76.2079
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 77.0902
+          }, 
+          "end": {
+            "value": 78.2977
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 79.18
+          }, 
+          "end": {
+            "value": 80.3875
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 81.2698
+          }, 
+          "end": {
+            "value": 82.4773
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 83.2668
+          }, 
+          "end": {
+            "value": 151.0226
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 152.0907
+          }, 
+          "end": {
+            "value": 155.1557
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 156.2703
+          }, 
+          "end": {
+            "value": 159.3353
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 160.4499
+          }, 
+          "end": {
+            "value": 163.5149
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 164.6295
+          }, 
+          "end": {
+            "value": 167.1372
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 200.2489
+          }, 
+          "end": {
+            "value": 201.4563
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 202.4316
+          }, 
+          "end": {
+            "value": 203.4997
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 204.5214
+          }, 
+          "end": {
+            "value": 207.9579
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 208.701
+          }, 
+          "end": {
+            "value": 209.8155
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 210.7907
+          }, 
+          "end": {
+            "value": 211.8589
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 212.8341
+          }, 
+          "end": {
+            "value": 216.3171
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 217.0137
+          }, 
+          "end": {
+            "value": 218.1747
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 219.1035
+          }, 
+          "end": {
+            "value": 220.218
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 221.1933
+          }, 
+          "end": {
+            "value": 224.6298
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 225.3729
+          }, 
+          "end": {
+            "value": 226.4874
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 227.4627
+          }, 
+          "end": {
+            "value": 228.5308
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 229.5525
+          }, 
+          "end": {
+            "value": 232.989
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 233.4999
+          }, 
+          "end": {
+            "value": 536.1488
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 16.7184
+          }, 
+          "end": {
+            "value": 18.8546
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 20.7586
+          }, 
+          "end": {
+            "value": 23.0342
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 24.9382
+          }, 
+          "end": {
+            "value": 27.446
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.1178
+          }, 
+          "end": {
+            "value": 31.672
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 33.2974
+          }, 
+          "end": {
+            "value": 35.7587
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 37.477
+          }, 
+          "end": {
+            "value": 39.9848
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 41.6566
+          }, 
+          "end": {
+            "value": 44.1644
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 45.8362
+          }, 
+          "end": {
+            "value": 48.3904
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 49.9693
+          }, 
+          "end": {
+            "value": 52.5235
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 54.1489
+          }, 
+          "end": {
+            "value": 56.5638
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 58.3285
+          }, 
+          "end": {
+            "value": 60.7898
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 62.5081
+          }, 
+          "end": {
+            "value": 65.1088
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 66.502
+          }, 
+          "end": {
+            "value": 201.8743
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 400.5442
+          }, 
+          "end": {
+            "value": 529.74
+          }, 
+          "label": {
+            "value": "accordion"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 1.579
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 4.0403
+          }, 
+          "end": {
+            "value": 5.7585
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 8.2199
+          }, 
+          "end": {
+            "value": 9.9381
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 12.3995
+          }, 
+          "end": {
+            "value": 14.1177
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 16.5326
+          }, 
+          "end": {
+            "value": 18.2509
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 20.7122
+          }, 
+          "end": {
+            "value": 22.4305
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 24.8918
+          }, 
+          "end": {
+            "value": 26.6101
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.0714
+          }, 
+          "end": {
+            "value": 30.7897
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 33.251
+          }, 
+          "end": {
+            "value": 34.9693
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 37.4306
+          }, 
+          "end": {
+            "value": 39.1488
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 41.6102
+          }, 
+          "end": {
+            "value": 46.4863
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 49.9693
+          }, 
+          "end": {
+            "value": 54.3811
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 58.3285
+          }, 
+          "end": {
+            "value": 63.4834
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 66.6877
+          }, 
+          "end": {
+            "value": 84.1956
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 302.5096
+          }, 
+          "end": {
+            "value": 303.9956
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 306.7356
+          }, 
+          "end": {
+            "value": 310.3115
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 311.2403
+          }, 
+          "end": {
+            "value": 317.6954
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 319.2279
+          }, 
+          "end": {
+            "value": 321.8286
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 323.4075
+          }, 
+          "end": {
+            "value": 325.9617
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 327.5871
+          }, 
+          "end": {
+            "value": 330.1413
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 331.7203
+          }, 
+          "end": {
+            "value": 367.479
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 383.9187
+          }, 
+          "end": {
+            "value": 387.8197
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 388.5627
+          }, 
+          "end": {
+            "value": 396.1789
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 396.8755
+          }, 
+          "end": {
+            "value": 401.4266
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 402.5411
+          }, 
+          "end": {
+            "value": 405.5133
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 406.7207
+          }, 
+          "end": {
+            "value": 409.6929
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 410.9003
+          }, 
+          "end": {
+            "value": 413.8725
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 415.0799
+          }, 
+          "end": {
+            "value": 418.0521
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 419.2595
+          }, 
+          "end": {
+            "value": 422.1852
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 423.4391
+          }, 
+          "end": {
+            "value": 426.3648
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 427.6187
+          }, 
+          "end": {
+            "value": 430.5444
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 431.7983
+          }, 
+          "end": {
+            "value": 501.6439
+          }, 
+          "label": {
+            "value": "synthesizer"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.3251
+          }, 
+          "end": {
+            "value": 66.5484
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 100.0316
+          }, 
+          "end": {
+            "value": 270.6518
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 270.8376
+          }, 
+          "end": {
+            "value": 272.6951
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 273.0202
+          }, 
+          "end": {
+            "value": 274.8778
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 275.0171
+          }, 
+          "end": {
+            "value": 276.8747
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 277.1534
+          }, 
+          "end": {
+            "value": 279.011
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 279.1503
+          }, 
+          "end": {
+            "value": 281.1008
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 281.2865
+          }, 
+          "end": {
+            "value": 283.2834
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 283.7478
+          }, 
+          "end": {
+            "value": 367.2932
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 368.5007
+          }, 
+          "end": {
+            "value": 454.1823
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 454.461
+          }, 
+          "end": {
+            "value": 458.4083
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 458.5941
+          }, 
+          "end": {
+            "value": 462.5415
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 462.8201
+          }, 
+          "end": {
+            "value": 466.6746
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 466.9068
+          }, 
+          "end": {
+            "value": 514.5078
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 24.9382
+          }, 
+          "end": {
+            "value": 117.9109
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 133.4219
+          }, 
+          "end": {
+            "value": 517.805
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "title": "Scorpio", 
+    "jams_version": "0.0.1", 
+    "artist": "Tabla Breakbeat Science"
+  }
+}
