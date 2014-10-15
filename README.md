@@ -8,19 +8,19 @@ What
 JAMS is a JSON-based music annotation format. 
 
 We provide:
-*A formal JSON schema
-*Python and MATLAB software libraries
-*Popular datasets in JAMS format
-*Python scripts for converting datasets to JAMS format
+* A formal JSON schema
+* Python and MATLAB software libraries
+* Popular datasets in JAMS format
+* Python scripts for converting datasets to JAMS format
 
 Why
 ----
 JAMS provides a simple, structured, and sustainable format that allows rich annotations to live in a single file.
 
 The JAMS format supports:
-*multiple types annotations
-*multiple annotations for a given task
-*rich file level and annotation level metadata
+* multiple types annotations
+* multiple annotations for a given task
+* rich file level and annotation level metadata
 
 Details
 -------
