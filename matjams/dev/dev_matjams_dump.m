@@ -1,4 +1,4 @@
-function str = dump(value, varargin)
+function str = matjams_dump(value, varargin)
 %DUMP Encode matlab value into a JSON string.
 %
 % SYNOPSIS
