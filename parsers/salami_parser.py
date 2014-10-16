@@ -97,7 +97,7 @@ def parse_annotation_level(annot, path, annotation_id, level):
         segment.end.confidence = 1.0
         segment.label.value = label
         segment.label.confidence = 1.0
-        segment.label.context = level
+        segment.label.secondary_value = level
         #print start_time, end_time, label
         #print segment
 
@@ -130,13 +130,11 @@ def fill_annotation(path, annot, annotation_id, metadata):
     """
 
     # Annotation Metadata
-    annot.annotation_metadata.attribute = "segments"
     annot.annotation_metadata.corpus = "SALAMI"
     annot.annotation_metadata.version = "1.2"
     annot.annotation_metadata.annotation_tools = "Sonic Visualizer"
     annot.annotation_metadata.annotation_rules = "TODO"  # TODO
-    annot.annotation_metadata.validation_and_reliability = "TODO"  # TODO
-    annot.annotation_metadata.origin = metadata[1]
+    annot.annotation_metadata.data_source = metadata[1]
     annot.annotation_metadata.annotator.name = metadata[annotation_id + 2]
     annot.annotation_metadata.annotator.email = "TODO"  # TODO
     #TODO:
