@@ -1,0 +1,160 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.21
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.21
+          }, 
+          "end": {
+            "value": 5.788
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 5.788
+          }, 
+          "end": {
+            "value": 29.245
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.245
+          }, 
+          "end": {
+            "value": 65.785
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 65.785
+          }, 
+          "end": {
+            "value": 97.061
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 97.061
+          }, 
+          "end": {
+            "value": 104.84
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 104.84
+          }, 
+          "end": {
+            "value": 128.337
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 128.337
+          }, 
+          "end": {
+            "value": 157.044
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 157.044
+          }, 
+          "end": {
+            "value": 193.546
+          }, 
+          "label": {
+            "value": "refrain_(with_instrumental_solo)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 193.546
+          }, 
+          "end": {
+            "value": 228.814
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 228.814
+          }, 
+          "end": {
+            "value": 291.855
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 291.855
+          }, 
+          "end": {
+            "value": 294.907
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 294.907
+    }, 
+    "title": "11 The Miracle", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

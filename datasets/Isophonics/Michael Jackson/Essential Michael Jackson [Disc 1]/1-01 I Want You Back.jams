@@ -1,0 +1,138 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.385
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.385
+          }, 
+          "end": {
+            "value": 30.408
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 30.408
+          }, 
+          "end": {
+            "value": 49.903
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 49.903
+          }, 
+          "end": {
+            "value": 68.352
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 68.352
+          }, 
+          "end": {
+            "value": 77.944
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 77.944
+          }, 
+          "end": {
+            "value": 97.426
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 97.426
+          }, 
+          "end": {
+            "value": 114.567
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 114.567
+          }, 
+          "end": {
+            "value": 134.152
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 134.152
+          }, 
+          "end": {
+            "value": 177.825
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 177.825
+          }, 
+          "end": {
+            "value": 178.76
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 178.76
+    }, 
+    "title": "1-01 I Want You Back", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

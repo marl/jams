@@ -1,0 +1,215 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.405
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.405
+          }, 
+          "end": {
+            "value": 30.934
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 30.934
+          }, 
+          "end": {
+            "value": 39.039
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 39.039
+          }, 
+          "end": {
+            "value": 47.168
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 47.168
+          }, 
+          "end": {
+            "value": 63.416
+          }, 
+          "label": {
+            "value": "bridgea"
+          }
+        }, 
+        {
+          "start": {
+            "value": 63.416
+          }, 
+          "end": {
+            "value": 79.642
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 79.642
+          }, 
+          "end": {
+            "value": 95.864
+          }, 
+          "label": {
+            "value": "bridgeb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 95.864
+          }, 
+          "end": {
+            "value": 104.022
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 104.022
+          }, 
+          "end": {
+            "value": 112.135
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 112.135
+          }, 
+          "end": {
+            "value": 128.386
+          }, 
+          "label": {
+            "value": "bridgea"
+          }
+        }, 
+        {
+          "start": {
+            "value": 128.386
+          }, 
+          "end": {
+            "value": 144.603
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 144.603
+          }, 
+          "end": {
+            "value": 152.741
+          }, 
+          "label": {
+            "value": "half_bridgeb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 152.741
+          }, 
+          "end": {
+            "value": 185.209
+          }, 
+          "label": {
+            "value": "instrumental"
+          }
+        }, 
+        {
+          "start": {
+            "value": 185.209
+          }, 
+          "end": {
+            "value": 201.455
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 201.455
+          }, 
+          "end": {
+            "value": 217.728
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 217.728
+          }, 
+          "end": {
+            "value": 256.275
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 256.275
+          }, 
+          "end": {
+            "value": 257.24
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 257.24
+    }, 
+    "title": "2-06 Smooth Criminal", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

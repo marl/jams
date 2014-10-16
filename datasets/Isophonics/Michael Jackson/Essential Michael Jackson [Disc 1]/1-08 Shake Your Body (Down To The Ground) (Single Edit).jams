@@ -1,0 +1,193 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.08
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.08
+          }, 
+          "end": {
+            "value": 17.575
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 17.575
+          }, 
+          "end": {
+            "value": 33.824
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 33.824
+          }, 
+          "end": {
+            "value": 50.164
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 50.164
+          }, 
+          "end": {
+            "value": 58.298
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 58.298
+          }, 
+          "end": {
+            "value": 74.617
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 74.617
+          }, 
+          "end": {
+            "value": 90.959
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 90.959
+          }, 
+          "end": {
+            "value": 107.289
+          }, 
+          "label": {
+            "value": "instrumentala"
+          }
+        }, 
+        {
+          "start": {
+            "value": 107.289
+          }, 
+          "end": {
+            "value": 123.597
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 123.597
+          }, 
+          "end": {
+            "value": 139.95
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 139.95
+          }, 
+          "end": {
+            "value": 156.218
+          }, 
+          "label": {
+            "value": "instrumentalb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 156.218
+          }, 
+          "end": {
+            "value": 172.5
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 172.5
+          }, 
+          "end": {
+            "value": 188.854
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 188.854
+          }, 
+          "end": {
+            "value": 224.485
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 224.485
+          }, 
+          "end": {
+            "value": 225.72
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 225.72
+    }, 
+    "title": "1-08 Shake Your Body (Down To The Ground) (Single Edit)", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.2
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.2
+          }, 
+          "end": {
+            "value": 18.613
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 18.613
+          }, 
+          "end": {
+            "value": 36.721
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 36.721
+          }, 
+          "end": {
+            "value": 54.845
+          }, 
+          "label": {
+            "value": "versea"
+          }
+        }, 
+        {
+          "start": {
+            "value": 54.845
+          }, 
+          "end": {
+            "value": 68.422
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 68.422
+          }, 
+          "end": {
+            "value": 109.188
+          }, 
+          "label": {
+            "value": "verseb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 109.188
+          }, 
+          "end": {
+            "value": 122.767
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 122.767
+          }, 
+          "end": {
+            "value": 140.89
+          }, 
+          "label": {
+            "value": "versea"
+          }
+        }, 
+        {
+          "start": {
+            "value": 140.89
+          }, 
+          "end": {
+            "value": 159.012
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 159.012
+          }, 
+          "end": {
+            "value": 186.183
+          }, 
+          "label": {
+            "value": "versec"
+          }
+        }, 
+        {
+          "start": {
+            "value": 186.183
+          }, 
+          "end": {
+            "value": 213.356
+          }, 
+          "label": {
+            "value": "versed"
+          }
+        }, 
+        {
+          "start": {
+            "value": 213.356
+          }, 
+          "end": {
+            "value": 260.84
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 260.84
+          }, 
+          "end": {
+            "value": 260.84
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 260.84
+    }, 
+    "title": "14 Another One Bites The Dust", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

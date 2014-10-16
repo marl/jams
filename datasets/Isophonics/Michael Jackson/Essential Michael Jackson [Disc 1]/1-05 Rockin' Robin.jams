@@ -1,0 +1,193 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.21
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.21
+          }, 
+          "end": {
+            "value": 11.495
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 11.495
+          }, 
+          "end": {
+            "value": 22.486
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 22.486
+          }, 
+          "end": {
+            "value": 33.47
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 33.47
+          }, 
+          "end": {
+            "value": 44.559
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 44.559
+          }, 
+          "end": {
+            "value": 55.548
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 55.548
+          }, 
+          "end": {
+            "value": 71.989
+          }, 
+          "label": {
+            "value": "instrumental"
+          }
+        }, 
+        {
+          "start": {
+            "value": 71.989
+          }, 
+          "end": {
+            "value": 83.187
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 83.187
+          }, 
+          "end": {
+            "value": 94.337
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 94.337
+          }, 
+          "end": {
+            "value": 105.426
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 105.426
+          }, 
+          "end": {
+            "value": 116.59
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 116.59
+          }, 
+          "end": {
+            "value": 127.757
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 127.757
+          }, 
+          "end": {
+            "value": 138.864
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 138.864
+          }, 
+          "end": {
+            "value": 150.79
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 150.79
+          }, 
+          "end": {
+            "value": 152.827
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 152.827
+    }, 
+    "title": "1-05 Rockin' Robin", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

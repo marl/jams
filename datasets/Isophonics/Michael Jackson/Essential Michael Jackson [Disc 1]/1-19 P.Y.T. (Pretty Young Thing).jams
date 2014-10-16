@@ -1,0 +1,171 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.115
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.115
+          }, 
+          "end": {
+            "value": 15.235
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 15.235
+          }, 
+          "end": {
+            "value": 30.325
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 30.325
+          }, 
+          "end": {
+            "value": 45.393
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 45.393
+          }, 
+          "end": {
+            "value": 75.56
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 75.56
+          }, 
+          "end": {
+            "value": 90.635
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 90.635
+          }, 
+          "end": {
+            "value": 105.694
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 105.694
+          }, 
+          "end": {
+            "value": 132.059
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 132.059
+          }, 
+          "end": {
+            "value": 167.839
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 167.839
+          }, 
+          "end": {
+            "value": 181.016
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 181.016
+          }, 
+          "end": {
+            "value": 194.23
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 194.23
+          }, 
+          "end": {
+            "value": 237.85
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 237.85
+          }, 
+          "end": {
+            "value": 238.733
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 238.733
+    }, 
+    "title": "1-19 P.Y.T. (Pretty Young Thing)", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.185
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.185
+          }, 
+          "end": {
+            "value": 44.348
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 44.348
+          }, 
+          "end": {
+            "value": 59.148
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 59.148
+          }, 
+          "end": {
+            "value": 70.912
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 70.912
+          }, 
+          "end": {
+            "value": 85.656
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 85.656
+          }, 
+          "end": {
+            "value": 88.64
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 88.64
+          }, 
+          "end": {
+            "value": 109.296
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 109.296
+          }, 
+          "end": {
+            "value": 156.563
+          }, 
+          "label": {
+            "value": "section_y"
+          }
+        }, 
+        {
+          "start": {
+            "value": 156.563
+          }, 
+          "end": {
+            "value": 186.319
+          }, 
+          "label": {
+            "value": "section_z"
+          }
+        }, 
+        {
+          "start": {
+            "value": 186.319
+          }, 
+          "end": {
+            "value": 210.39
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 210.39
+          }, 
+          "end": {
+            "value": 211.627
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 211.627
+    }, 
+    "title": "13 Princes Of The Universe", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

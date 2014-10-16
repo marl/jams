@@ -1,0 +1,182 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.215
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.215
+          }, 
+          "end": {
+            "value": 29.382
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.382
+          }, 
+          "end": {
+            "value": 58.623
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 58.623
+          }, 
+          "end": {
+            "value": 73.236
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 73.236
+          }, 
+          "end": {
+            "value": 87.853
+          }, 
+          "label": {
+            "value": "breaka"
+          }
+        }, 
+        {
+          "start": {
+            "value": 87.853
+          }, 
+          "end": {
+            "value": 117.086
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 117.086
+          }, 
+          "end": {
+            "value": 131.683
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 131.683
+          }, 
+          "end": {
+            "value": 160.978
+          }, 
+          "label": {
+            "value": "refrain_(extended)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 160.978
+          }, 
+          "end": {
+            "value": 175.559
+          }, 
+          "label": {
+            "value": "breakb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 175.559
+          }, 
+          "end": {
+            "value": 204.796
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 204.796
+          }, 
+          "end": {
+            "value": 219.402
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 219.402
+          }, 
+          "end": {
+            "value": 234.027
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 234.027
+          }, 
+          "end": {
+            "value": 279.735
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 279.735
+          }, 
+          "end": {
+            "value": 280.76
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 280.76
+    }, 
+    "title": "2-04 Dirty Diana", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

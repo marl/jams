@@ -1,0 +1,204 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.03
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.03
+          }, 
+          "end": {
+            "value": 38.015
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 38.015
+          }, 
+          "end": {
+            "value": 51.82
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 51.82
+          }, 
+          "end": {
+            "value": 65.644
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 65.644
+          }, 
+          "end": {
+            "value": 86.387
+          }, 
+          "label": {
+            "value": "refraina"
+          }
+        }, 
+        {
+          "start": {
+            "value": 86.387
+          }, 
+          "end": {
+            "value": 100.189
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 100.189
+          }, 
+          "end": {
+            "value": 114.009
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 114.009
+          }, 
+          "end": {
+            "value": 127.838
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 127.838
+          }, 
+          "end": {
+            "value": 141.628
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 141.628
+          }, 
+          "end": {
+            "value": 169.287
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 169.287
+          }, 
+          "end": {
+            "value": 196.912
+          }, 
+          "label": {
+            "value": "instrumental_solo"
+          }
+        }, 
+        {
+          "start": {
+            "value": 196.912
+          }, 
+          "end": {
+            "value": 210.767
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 210.767
+          }, 
+          "end": {
+            "value": 224.568
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 224.568
+          }, 
+          "end": {
+            "value": 238.387
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 238.387
+          }, 
+          "end": {
+            "value": 257.045
+          }, 
+          "label": {
+            "value": "refrainb_(fade-out)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 257.045
+          }, 
+          "end": {
+            "value": 258.04
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 258.04
+    }, 
+    "title": "1-16 Beat It", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

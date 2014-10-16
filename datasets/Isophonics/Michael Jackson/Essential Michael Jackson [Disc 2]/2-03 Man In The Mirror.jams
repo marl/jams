@@ -1,0 +1,182 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.46
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.46
+          }, 
+          "end": {
+            "value": 10.008
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 10.008
+          }, 
+          "end": {
+            "value": 48.298
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 48.298
+          }, 
+          "end": {
+            "value": 67.435
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 67.435
+          }, 
+          "end": {
+            "value": 86.565
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 86.565
+          }, 
+          "end": {
+            "value": 96.141
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 96.141
+          }, 
+          "end": {
+            "value": 115.279
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 115.279
+          }, 
+          "end": {
+            "value": 134.413
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 134.413
+          }, 
+          "end": {
+            "value": 153.552
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 153.552
+          }, 
+          "end": {
+            "value": 172.691
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 172.691
+          }, 
+          "end": {
+            "value": 196.594
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 196.594
+          }, 
+          "end": {
+            "value": 215.763
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 215.763
+          }, 
+          "end": {
+            "value": 318.74
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 318.74
+          }, 
+          "end": {
+            "value": 318.96
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 318.96
+    }, 
+    "title": "2-03 Man In The Mirror", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

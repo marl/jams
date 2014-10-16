@@ -1,0 +1,138 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.05
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.05
+          }, 
+          "end": {
+            "value": 8.589
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 8.589
+          }, 
+          "end": {
+            "value": 47.015
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 47.015
+          }, 
+          "end": {
+            "value": 79.003
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 79.003
+          }, 
+          "end": {
+            "value": 117.381
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 117.381
+          }, 
+          "end": {
+            "value": 151.509
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 151.509
+          }, 
+          "end": {
+            "value": 192.042
+          }, 
+          "label": {
+            "value": "instrumental_solo"
+          }
+        }, 
+        {
+          "start": {
+            "value": 192.042
+          }, 
+          "end": {
+            "value": 221.916
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 221.916
+          }, 
+          "end": {
+            "value": 252.62
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 252.62
+          }, 
+          "end": {
+            "value": 262.2
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 262.2
+    }, 
+    "title": "16 These Are The Days Of Our Lives", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

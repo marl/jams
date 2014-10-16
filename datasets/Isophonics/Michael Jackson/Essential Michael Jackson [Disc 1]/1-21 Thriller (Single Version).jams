@@ -1,0 +1,204 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.1
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.1
+          }, 
+          "end": {
+            "value": 12.303
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 12.303
+          }, 
+          "end": {
+            "value": 28.541
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 28.541
+          }, 
+          "end": {
+            "value": 44.79
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 44.79
+          }, 
+          "end": {
+            "value": 61.014
+          }, 
+          "label": {
+            "value": "refraina"
+          }
+        }, 
+        {
+          "start": {
+            "value": 61.014
+          }, 
+          "end": {
+            "value": 69.131
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 69.131
+          }, 
+          "end": {
+            "value": 85.351
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 85.351
+          }, 
+          "end": {
+            "value": 101.568
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 101.568
+          }, 
+          "end": {
+            "value": 117.792
+          }, 
+          "label": {
+            "value": "refraina"
+          }
+        }, 
+        {
+          "start": {
+            "value": 117.792
+          }, 
+          "end": {
+            "value": 140.083
+          }, 
+          "label": {
+            "value": "build"
+          }
+        }, 
+        {
+          "start": {
+            "value": 140.083
+          }, 
+          "end": {
+            "value": 156.277
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 156.277
+          }, 
+          "end": {
+            "value": 172.49
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 172.49
+          }, 
+          "end": {
+            "value": 192.709
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 192.709
+          }, 
+          "end": {
+            "value": 208.953
+          }, 
+          "label": {
+            "value": "refraina"
+          }
+        }, 
+        {
+          "start": {
+            "value": 208.953
+          }, 
+          "end": {
+            "value": 312.145
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 312.145
+          }, 
+          "end": {
+            "value": 314.533
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 314.533
+    }, 
+    "title": "1-21 Thriller (Single Version)", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

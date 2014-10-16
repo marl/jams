@@ -1,0 +1,286 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.435
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.435
+          }, 
+          "end": {
+            "value": 30.3
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 30.3
+          }, 
+          "end": {
+            "value": 55.773
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 55.773
+          }, 
+          "end": {
+            "value": 72.792
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 72.792
+          }, 
+          "end": {
+            "value": 81.247
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 81.247
+          }, 
+          "end": {
+            "value": 106.679
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 106.679
+          }, 
+          "end": {
+            "value": 125.841
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 125.841
+          }, 
+          "end": {
+            "value": 157.623
+          }, 
+          "label": {
+            "value": "section_y"
+          }
+        }, 
+        {
+          "start": {
+            "value": 157.623
+          }, 
+          "end": {
+            "value": 207.974
+          }, 
+          "label": {
+            "value": "section_z"
+          }
+        }, 
+        {
+          "start": {
+            "value": 207.974
+          }, 
+          "end": {
+            "value": 234.75
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 234.75
+          }, 
+          "end": {
+            "value": 236.76
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }, 
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.06
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.06
+          }, 
+          "end": {
+            "value": 52.873
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 52.873
+          }, 
+          "end": {
+            "value": 76.887
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 76.887
+          }, 
+          "end": {
+            "value": 92.852
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 92.852
+          }, 
+          "end": {
+            "value": 104.824
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 104.824
+          }, 
+          "end": {
+            "value": 128.766
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 128.766
+          }, 
+          "end": {
+            "value": 144.826
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 144.826
+          }, 
+          "end": {
+            "value": 176.774
+          }, 
+          "label": {
+            "value": "section_y"
+          }
+        }, 
+        {
+          "start": {
+            "value": 176.774
+          }, 
+          "end": {
+            "value": 192.842
+          }, 
+          "label": {
+            "value": "section_z"
+          }
+        }, 
+        {
+          "start": {
+            "value": 192.842
+          }, 
+          "end": {
+            "value": 247.635
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 247.635
+          }, 
+          "end": {
+            "value": 248.667
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 248.667
+    }, 
+    "title": "02 Under Pressure", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

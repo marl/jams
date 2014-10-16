@@ -1,0 +1,182 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.185
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.185
+          }, 
+          "end": {
+            "value": 12.591
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 12.591
+          }, 
+          "end": {
+            "value": 29.177
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.177
+          }, 
+          "end": {
+            "value": 49.878
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 49.878
+          }, 
+          "end": {
+            "value": 76.775
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 76.775
+          }, 
+          "end": {
+            "value": 80.967
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 80.967
+          }, 
+          "end": {
+            "value": 97.528
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 97.528
+          }, 
+          "end": {
+            "value": 118.235
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 118.235
+          }, 
+          "end": {
+            "value": 145.123
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 145.123
+          }, 
+          "end": {
+            "value": 178.303
+          }, 
+          "label": {
+            "value": "instrumental_solo"
+          }
+        }, 
+        {
+          "start": {
+            "value": 178.303
+          }, 
+          "end": {
+            "value": 199.003
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 199.003
+          }, 
+          "end": {
+            "value": 230.061
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 230.061
+          }, 
+          "end": {
+            "value": 245.715
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 245.715
+          }, 
+          "end": {
+            "value": 247.96
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 247.96
+    }, 
+    "title": "12 I'm Going Slightly Mad", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}
