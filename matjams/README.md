@@ -14,9 +14,9 @@ The output `jam_data` will be a struct with the same tree-structure as the
 original JAMS file. Converting this into a more Matlab-friendly format requires
 unpacking.
 
-For example, to access the data for a annotation 2 for a particular annotation task:
+For example, to access the data for a particular annotation task:
 ```
-chord_data = jam_data.chords(2).data %2 indicates the second chord annotation
+chord_data = jam_data.chords(1).data
 n = size(chord_data, 2)
 chord_array = cell(n, 3)
 for i=1:n
