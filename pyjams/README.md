@@ -38,7 +38,7 @@ beat_annot.annotation_metadata.curator.email = "somebody@aol.com"
 To see what's there:
 ```
 print jam
-```v
+```
 To save the new jam to a file:
 ```
 pyjams.save(jam, "these_are_still_my.jams")
