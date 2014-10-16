@@ -59,8 +59,8 @@ def fill_annotation_metadata(annot):
     annot.annotation_metadata.version = "1.0"
     annot.annotation_metadata.annotation_tools = "Sonic Visualizer"
     annot.annotation_metadata.annotation_rules = "TODO"  # TODO
-    annot.annotation_metadata.validation_and_reliability = "TODO"  # TODO
-    annot.annotation_metadata.origin = "Centre for Digital Music"
+    annot.annotation_metadata.validation = "TODO"  # TODO
+    annot.annotation_metadata.data_source = "Centre for Digital Music"
     annot.annotation_metadata.annotator.name = "TODO"
     annot.annotation_metadata.annotator.email = "TODO"  # TODO
 
