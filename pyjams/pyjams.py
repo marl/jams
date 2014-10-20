@@ -120,7 +120,11 @@ class JObject(object):
 
     @property
     def __json__(self):
-        """TODO(ejhumphrey@nyu.edu): writeme."""
+        """Return the object as a set of native datatypes for serialization.
+
+        Note: Empty strings / lists / dicts, None, and attributes beginning
+        with underscores are suppressed.
+        """
         filtered_dict = dict()
         for k, v in self.__dict__.iteritems():
             if v in [None, '', list(), dict()] or k.startswith('_'):
@@ -175,7 +179,7 @@ class JObject(object):
         return json.dumps(self, indent=2)
 
     def keys(self):
-        """TODO(ejhumphrey@nyu.edu): writeme."""
+        """Return the fields of the object."""
         return self.__dict__.keys()
 
     def update(self, **kwargs):
@@ -363,7 +367,7 @@ class BaseAnnotation(JObject):
             Collection of Observations
         annotation_metadata: AnnotationMetadata (or dict), default=None.
             Metadata corresponding to this Annotation.
-        sandbox: dict
+        sandbox: Sandbox (dict), default=None
             Miscellaneous information; keep to native datatypes if possible.
         """
         # TODO(ejhumphrey@nyu.edu): We may want to subclass list here to turn
