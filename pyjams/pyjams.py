@@ -722,8 +722,10 @@ class JAMS(JObject):
             Used for source activations.
         tag : list of Annotations
             Used for music tagging and semantic descriptors.
-        file_metadata : FileMetadata
+        file_metadata : FileMetadata (or dict), default=None
             Metadata corresponding to the audio file.
+        sandbox : Sandbox (or dict), default=None
+            Unconstrained global sandbox for additional information.
         """
         if file_metadata is None:
             file_metadata = FileMetadata()
