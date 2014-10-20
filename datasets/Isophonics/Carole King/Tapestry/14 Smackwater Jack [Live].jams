@@ -1,0 +1,204 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.64
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.64
+          }, 
+          "end": {
+            "value": 19.043
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 19.043
+          }, 
+          "end": {
+            "value": 33.367
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 33.367
+          }, 
+          "end": {
+            "value": 48.818
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 48.818
+          }, 
+          "end": {
+            "value": 57.943
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 57.943
+          }, 
+          "end": {
+            "value": 65.138
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 65.138
+          }, 
+          "end": {
+            "value": 79.598
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 79.598
+          }, 
+          "end": {
+            "value": 95.747
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 95.747
+          }, 
+          "end": {
+            "value": 104.621
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 104.621
+          }, 
+          "end": {
+            "value": 121.884
+          }, 
+          "label": {
+            "value": "instrumental"
+          }
+        }, 
+        {
+          "start": {
+            "value": 121.884
+          }, 
+          "end": {
+            "value": 129.237
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 129.237
+          }, 
+          "end": {
+            "value": 145.002
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 145.002
+          }, 
+          "end": {
+            "value": 160.819
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 160.819
+          }, 
+          "end": {
+            "value": 169.756
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 169.756
+          }, 
+          "end": {
+            "value": 198.585
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 198.585
+          }, 
+          "end": {
+            "value": 199.493
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 199.493
+    }, 
+    "title": "14 Smackwater Jack [Live]", 
+    "jams_version": "0.0.1", 
+    "artist": "Carole King"
+  }
+}

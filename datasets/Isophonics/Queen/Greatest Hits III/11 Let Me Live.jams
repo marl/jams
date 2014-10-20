@@ -1,0 +1,171 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.185
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.185
+          }, 
+          "end": {
+            "value": 26.521
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 26.521
+          }, 
+          "end": {
+            "value": 51.145
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 51.145
+          }, 
+          "end": {
+            "value": 63.307
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 63.307
+          }, 
+          "end": {
+            "value": 87.907
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 87.907
+          }, 
+          "end": {
+            "value": 100.07
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 100.07
+          }, 
+          "end": {
+            "value": 116.844
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 116.844
+          }, 
+          "end": {
+            "value": 141.323
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 141.323
+          }, 
+          "end": {
+            "value": 153.648
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 153.648
+          }, 
+          "end": {
+            "value": 178.076
+          }, 
+          "label": {
+            "value": "instrumental_solo"
+          }
+        }, 
+        {
+          "start": {
+            "value": 178.076
+          }, 
+          "end": {
+            "value": 193.416
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 193.416
+          }, 
+          "end": {
+            "value": 284.44
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 284.44
+          }, 
+          "end": {
+            "value": 285.773
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 285.773
+    }, 
+    "title": "11 Let Me Live", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.26
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.26
+          }, 
+          "end": {
+            "value": 24.205
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 24.205
+          }, 
+          "end": {
+            "value": 39.741
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 39.741
+          }, 
+          "end": {
+            "value": 55.247
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 55.247
+          }, 
+          "end": {
+            "value": 70.837
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 70.837
+          }, 
+          "end": {
+            "value": 86.36
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 86.36
+          }, 
+          "end": {
+            "value": 94.123
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 94.123
+          }, 
+          "end": {
+            "value": 109.662
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 109.662
+          }, 
+          "end": {
+            "value": 125.164
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 125.164
+          }, 
+          "end": {
+            "value": 140.753
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 140.753
+          }, 
+          "end": {
+            "value": 156.285
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 156.285
+          }, 
+          "end": {
+            "value": 187.333
+          }, 
+          "label": {
+            "value": "instrumental"
+          }
+        }, 
+        {
+          "start": {
+            "value": 187.333
+          }, 
+          "end": {
+            "value": 202.893
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 202.893
+          }, 
+          "end": {
+            "value": 218.438
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 218.438
+          }, 
+          "end": {
+            "value": 233.962
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 233.962
+          }, 
+          "end": {
+            "value": 277.68
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 277.68
+          }, 
+          "end": {
+            "value": 279.88
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 279.88
+    }, 
+    "title": "2-07 Leave Me Alone", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

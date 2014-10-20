@@ -1,0 +1,193 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.13
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.13
+          }, 
+          "end": {
+            "value": 18.789
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 18.789
+          }, 
+          "end": {
+            "value": 37.429
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 37.429
+          }, 
+          "end": {
+            "value": 56.02
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 56.02
+          }, 
+          "end": {
+            "value": 74.709
+          }, 
+          "label": {
+            "value": "refraina"
+          }
+        }, 
+        {
+          "start": {
+            "value": 74.709
+          }, 
+          "end": {
+            "value": 93.349
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 93.349
+          }, 
+          "end": {
+            "value": 111.992
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 111.992
+          }, 
+          "end": {
+            "value": 130.6
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 130.6
+          }, 
+          "end": {
+            "value": 149.27
+          }, 
+          "label": {
+            "value": "refraina"
+          }
+        }, 
+        {
+          "start": {
+            "value": 149.27
+          }, 
+          "end": {
+            "value": 167.912
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 167.912
+          }, 
+          "end": {
+            "value": 186.547
+          }, 
+          "label": {
+            "value": "instrumental"
+          }
+        }, 
+        {
+          "start": {
+            "value": 186.547
+          }, 
+          "end": {
+            "value": 205.176
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 205.176
+          }, 
+          "end": {
+            "value": 223.799
+          }, 
+          "label": {
+            "value": "refraina"
+          }
+        }, 
+        {
+          "start": {
+            "value": 223.799
+          }, 
+          "end": {
+            "value": 239.275
+          }, 
+          "label": {
+            "value": "refraina_(fade-out)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 239.275
+          }, 
+          "end": {
+            "value": 239.56
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 239.56
+    }, 
+    "title": "2-11 Who Is It (7_ Edit)", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

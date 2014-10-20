@@ -1,0 +1,171 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.16
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.16
+          }, 
+          "end": {
+            "value": 16.877
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 16.877
+          }, 
+          "end": {
+            "value": 32.58
+          }, 
+          "label": {
+            "value": "refraina"
+          }
+        }, 
+        {
+          "start": {
+            "value": 32.58
+          }, 
+          "end": {
+            "value": 48.294
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 48.294
+          }, 
+          "end": {
+            "value": 71.869
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 71.869
+          }, 
+          "end": {
+            "value": 87.572
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 87.572
+          }, 
+          "end": {
+            "value": 103.285
+          }, 
+          "label": {
+            "value": "refraina"
+          }
+        }, 
+        {
+          "start": {
+            "value": 103.285
+          }, 
+          "end": {
+            "value": 118.989
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 118.989
+          }, 
+          "end": {
+            "value": 142.543
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 142.543
+          }, 
+          "end": {
+            "value": 158.251
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 158.251
+          }, 
+          "end": {
+            "value": 197.518
+          }, 
+          "label": {
+            "value": "refrainc"
+          }
+        }, 
+        {
+          "start": {
+            "value": 197.518
+          }, 
+          "end": {
+            "value": 255.84
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 255.84
+          }, 
+          "end": {
+            "value": 257.4
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 257.4
+    }, 
+    "title": "1-17 Wanna Be Startin' Somethin' (Single Version)", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

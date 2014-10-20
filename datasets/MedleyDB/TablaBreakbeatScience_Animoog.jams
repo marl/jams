@@ -1,0 +1,428 @@
+{
+  "genre": [
+    {
+      "annotation_metadata": {
+        "data_source": "Manual Annotation", 
+        "corpus": "MedleyDB", 
+        "version": "1.0", 
+        "curator": {
+          "name": "Rachel Bittner", 
+          "email": "rachel.bittner@nyu.edu"
+        }, 
+        "validation": "None"
+      }, 
+      "data": [
+        {
+          "confidence": 1, 
+          "value": "Electronic/Fusion"
+        }
+      ]
+    }
+  ], 
+  "source": [
+    {
+      "annotation_metadata": {
+        "data_source": "Automatic Annotation", 
+        "corpus": "MedleyDB", 
+        "version": "1.0", 
+        "curator": {
+          "name": "Juan P. Bello", 
+          "email": "jpbello@nyu.edu"
+        }, 
+        "validation": "None"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 7.8019
+          }, 
+          "end": {
+            "value": 8.3127
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 9.0558
+          }, 
+          "end": {
+            "value": 10.3097
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 11.0527
+          }, 
+          "end": {
+            "value": 12.3066
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 13.0496
+          }, 
+          "end": {
+            "value": 14.3035
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 15.093
+          }, 
+          "end": {
+            "value": 288.1596
+          }, 
+          "label": {
+            "value": "drum machine"
+          }
+        }, 
+        {
+          "start": {
+            "value": 5.2013
+          }, 
+          "end": {
+            "value": 14.8143
+          }, 
+          "label": {
+            "value": "electric bass"
+          }
+        }, 
+        {
+          "start": {
+            "value": 15.4645
+          }, 
+          "end": {
+            "value": 105.14
+          }, 
+          "label": {
+            "value": "electric bass"
+          }
+        }, 
+        {
+          "start": {
+            "value": 105.4186
+          }, 
+          "end": {
+            "value": 108.0192
+          }, 
+          "label": {
+            "value": "electric bass"
+          }
+        }, 
+        {
+          "start": {
+            "value": 108.1121
+          }, 
+          "end": {
+            "value": 120.0936
+          }, 
+          "label": {
+            "value": "electric bass"
+          }
+        }, 
+        {
+          "start": {
+            "value": 120.976
+          }, 
+          "end": {
+            "value": 183.2983
+          }, 
+          "label": {
+            "value": "electric bass"
+          }
+        }, 
+        {
+          "start": {
+            "value": 183.6698
+          }, 
+          "end": {
+            "value": 190.9609
+          }, 
+          "label": {
+            "value": "electric bass"
+          }
+        }, 
+        {
+          "start": {
+            "value": 191.4717
+          }, 
+          "end": {
+            "value": 241.6733
+          }, 
+          "label": {
+            "value": "electric bass"
+          }
+        }, 
+        {
+          "start": {
+            "value": 242.4628
+          }, 
+          "end": {
+            "value": 245.5278
+          }, 
+          "label": {
+            "value": "electric bass"
+          }
+        }, 
+        {
+          "start": {
+            "value": 246.0386
+          }, 
+          "end": {
+            "value": 247.8962
+          }, 
+          "label": {
+            "value": "electric bass"
+          }
+        }, 
+        {
+          "start": {
+            "value": 248.4535
+          }, 
+          "end": {
+            "value": 251.7507
+          }, 
+          "label": {
+            "value": "electric bass"
+          }
+        }, 
+        {
+          "start": {
+            "value": 252.4009
+          }, 
+          "end": {
+            "value": 294.4755
+          }, 
+          "label": {
+            "value": "electric bass"
+          }
+        }, 
+        {
+          "start": {
+            "value": 95.852
+          }, 
+          "end": {
+            "value": 144.4281
+          }, 
+          "label": {
+            "value": "distorted electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 144.7996
+          }, 
+          "end": {
+            "value": 146.3786
+          }, 
+          "label": {
+            "value": "distorted electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 146.9359
+          }, 
+          "end": {
+            "value": 160.357
+          }, 
+          "label": {
+            "value": "distorted electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 160.9607
+          }, 
+          "end": {
+            "value": 164.3973
+          }, 
+          "label": {
+            "value": "distorted electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 165.001
+          }, 
+          "end": {
+            "value": 291.782
+          }, 
+          "label": {
+            "value": "distorted electric guitar"
+          }
+        }, 
+        {
+          "start": {
+            "value": 19.9227
+          }, 
+          "end": {
+            "value": 288.624
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 63.9942
+          }, 
+          "end": {
+            "value": 73.4679
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 74.954
+          }, 
+          "end": {
+            "value": 75.3255
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 75.6042
+          }, 
+          "end": {
+            "value": 78.019
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 79.9695
+          }, 
+          "end": {
+            "value": 131.4714
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 131.7965
+          }, 
+          "end": {
+            "value": 205.543
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 205.9146
+          }, 
+          "end": {
+            "value": 237.5401
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 237.9117
+          }, 
+          "end": {
+            "value": 239.4442
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 239.6764
+          }, 
+          "end": {
+            "value": 260.2493
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 260.4815
+          }, 
+          "end": {
+            "value": 284.4909
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 285.0946
+          }, 
+          "end": {
+            "value": 286.3485
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 287.463
+          }, 
+          "end": {
+            "value": 288.8098
+          }, 
+          "label": {
+            "value": "tabla"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 96.2235
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }, 
+        {
+          "start": {
+            "value": 159.8462
+          }, 
+          "end": {
+            "value": 256.209
+          }, 
+          "label": {
+            "value": "fx/processed sound"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "title": "Animoog", 
+    "jams_version": "0.0.1", 
+    "artist": "Tabla Breakbeat Science"
+  }
+}

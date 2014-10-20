@@ -1,0 +1,193 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.165
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.165
+          }, 
+          "end": {
+            "value": 44.078
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 44.078
+          }, 
+          "end": {
+            "value": 64.287
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 64.287
+          }, 
+          "end": {
+            "value": 84.504
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 84.504
+          }, 
+          "end": {
+            "value": 104.694
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 104.694
+          }, 
+          "end": {
+            "value": 124.918
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 124.918
+          }, 
+          "end": {
+            "value": 145.135
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 145.135
+          }, 
+          "end": {
+            "value": 165.345
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 165.345
+          }, 
+          "end": {
+            "value": 185.549
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 185.549
+          }, 
+          "end": {
+            "value": 205.763
+          }, 
+          "label": {
+            "value": "middle_8"
+          }
+        }, 
+        {
+          "start": {
+            "value": 205.763
+          }, 
+          "end": {
+            "value": 225.977
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 225.977
+          }, 
+          "end": {
+            "value": 246.18
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 246.18
+          }, 
+          "end": {
+            "value": 286.603
+          }, 
+          "label": {
+            "value": "build"
+          }
+        }, 
+        {
+          "start": {
+            "value": 286.603
+          }, 
+          "end": {
+            "value": 305.95
+          }, 
+          "label": {
+            "value": "refrain_(with_complete_ending)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 305.95
+          }, 
+          "end": {
+            "value": 308.333
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 308.333
+    }, 
+    "title": "2-17 You Rock My World", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

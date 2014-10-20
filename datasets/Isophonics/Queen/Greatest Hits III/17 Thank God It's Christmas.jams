@@ -1,0 +1,182 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.175
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.175
+          }, 
+          "end": {
+            "value": 1.029
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 1.029
+          }, 
+          "end": {
+            "value": 27.741
+          }, 
+          "label": {
+            "value": "versea"
+          }
+        }, 
+        {
+          "start": {
+            "value": 27.741
+          }, 
+          "end": {
+            "value": 51.122
+          }, 
+          "label": {
+            "value": "verseb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 51.122
+          }, 
+          "end": {
+            "value": 77.829
+          }, 
+          "label": {
+            "value": "versea"
+          }
+        }, 
+        {
+          "start": {
+            "value": 77.829
+          }, 
+          "end": {
+            "value": 101.218
+          }, 
+          "label": {
+            "value": "verseb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 101.218
+          }, 
+          "end": {
+            "value": 114.545
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 114.545
+          }, 
+          "end": {
+            "value": 137.932
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 137.932
+          }, 
+          "end": {
+            "value": 164.659
+          }, 
+          "label": {
+            "value": "versea"
+          }
+        }, 
+        {
+          "start": {
+            "value": 164.659
+          }, 
+          "end": {
+            "value": 188.036
+          }, 
+          "label": {
+            "value": "verseb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 188.036
+          }, 
+          "end": {
+            "value": 201.327
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 201.327
+          }, 
+          "end": {
+            "value": 224.732
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 224.732
+          }, 
+          "end": {
+            "value": 256.96
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 256.96
+          }, 
+          "end": {
+            "value": 259.227
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 259.227
+    }, 
+    "title": "17 Thank God It's Christmas", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

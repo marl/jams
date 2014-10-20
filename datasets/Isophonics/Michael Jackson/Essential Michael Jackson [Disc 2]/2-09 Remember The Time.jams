@@ -1,0 +1,171 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.175
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.175
+          }, 
+          "end": {
+            "value": 19.664
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 19.664
+          }, 
+          "end": {
+            "value": 37.464
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 37.464
+          }, 
+          "end": {
+            "value": 55.261
+          }, 
+          "label": {
+            "value": "build"
+          }
+        }, 
+        {
+          "start": {
+            "value": 55.261
+          }, 
+          "end": {
+            "value": 73.055
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 73.055
+          }, 
+          "end": {
+            "value": 90.852
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 90.852
+          }, 
+          "end": {
+            "value": 108.651
+          }, 
+          "label": {
+            "value": "build"
+          }
+        }, 
+        {
+          "start": {
+            "value": 108.651
+          }, 
+          "end": {
+            "value": 126.445
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 126.445
+          }, 
+          "end": {
+            "value": 144.244
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 144.244
+          }, 
+          "end": {
+            "value": 162.04
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 162.04
+          }, 
+          "end": {
+            "value": 179.837
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 179.837
+          }, 
+          "end": {
+            "value": 238.745
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 238.745
+          }, 
+          "end": {
+            "value": 239.893
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 239.893
+    }, 
+    "title": "2-09 Remember The Time", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

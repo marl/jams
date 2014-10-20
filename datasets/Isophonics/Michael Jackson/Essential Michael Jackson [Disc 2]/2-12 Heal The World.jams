@@ -1,0 +1,204 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.14
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.14
+          }, 
+          "end": {
+            "value": 69.792
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 69.792
+          }, 
+          "end": {
+            "value": 93.509
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 93.509
+          }, 
+          "end": {
+            "value": 105.358
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 105.358
+          }, 
+          "end": {
+            "value": 132.047
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 132.047
+          }, 
+          "end": {
+            "value": 155.772
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 155.772
+          }, 
+          "end": {
+            "value": 167.619
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 167.619
+          }, 
+          "end": {
+            "value": 191.329
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 191.329
+          }, 
+          "end": {
+            "value": 215.048
+          }, 
+          "label": {
+            "value": "middle_8"
+          }
+        }, 
+        {
+          "start": {
+            "value": 215.048
+          }, 
+          "end": {
+            "value": 238.762
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 238.762
+          }, 
+          "end": {
+            "value": 250.628
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 250.628
+          }, 
+          "end": {
+            "value": 274.387
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 274.387
+          }, 
+          "end": {
+            "value": 298.07
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 298.07
+          }, 
+          "end": {
+            "value": 321.78
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 321.78
+          }, 
+          "end": {
+            "value": 384.33
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 384.33
+          }, 
+          "end": {
+            "value": 384.933
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 384.933
+    }, 
+    "title": "2-12 Heal The World", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

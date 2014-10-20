@@ -4,7 +4,7 @@ import os
 import glob
 
 
-def read_lab(filename, num_columns, delimiter=None, comment='#'):
+def read_lab(filename, num_columns, delimiter=None, comment='#', header=False):
     """Read the rows of a labfile into memory.
 
     An effort is made to infer datatypes, and therefore numerical values will
@@ -14,6 +14,14 @@ def read_lab(filename, num_columns, delimiter=None, comment='#'):
     ----------
     filename : str
         Path to a labfile.
+    num_columns : int
+        Number of columns in lab file.
+    delimiter : str
+        lab file delimiter
+    comment : str
+        lab file comment character
+    header : bool
+        if true, the first line will be skipped
 
     Returns
     -------
@@ -21,6 +29,7 @@ def read_lab(filename, num_columns, delimiter=None, comment='#'):
         Columns of data in the labfile.
     """
     data = [list() for _ in range(num_columns)]
+    first_row = True
     with open(filename, 'r') as input_file:
         for row_idx, line in enumerate(input_file, 1):
             if line == '\n':
@@ -32,6 +41,9 @@ def read_lab(filename, num_columns, delimiter=None, comment='#'):
                 raise ValueError(
                     "Expected %d columns, received %d at line %d: %s" %
                     (num_columns, len(values), row_idx, line))
+            if header and first_row:
+                first_row = False
+                continue
             for idx, value in enumerate(values):
                 try:
                     if "." in value:
@@ -93,6 +105,28 @@ def find_with_extension(in_dir, ext, depth=3):
         match += glob.glob(search_path)
 
     return match
+
+
+def fill_observation_annotation_data(value, confidence, secondary_value,
+                                     observation_annotation):
+    """Add a collection of data to an event annotation (in-place).
+
+    Parameters
+    ----------
+    value: list of values
+        Obervation values.
+    confidence: list
+        The corresponding confidence values for each event.
+    secondary_value: list of values
+        Secondary observation values.
+    observation_annotation: ObservationAnnotation
+        An instantiated observation annotation to populate.
+    """
+    for v, c, sv in zip(value, confidence, secondary_value):
+        data = observation_annotation.create_datapoint()
+        data.value = v
+        data.confidence = c
+        data.secondary_value = sv
 
 
 def fill_event_annotation_data(times, labels, event_annotation):

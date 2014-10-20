@@ -1,0 +1,182 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.195
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.195
+          }, 
+          "end": {
+            "value": 19.01
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 19.01
+          }, 
+          "end": {
+            "value": 35.008
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 35.008
+          }, 
+          "end": {
+            "value": 53.011
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 53.011
+          }, 
+          "end": {
+            "value": 59.011
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 59.011
+          }, 
+          "end": {
+            "value": 75.005
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 75.005
+          }, 
+          "end": {
+            "value": 93.019
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 93.019
+          }, 
+          "end": {
+            "value": 107.012
+          }, 
+          "label": {
+            "value": "section_y"
+          }
+        }, 
+        {
+          "start": {
+            "value": 107.012
+          }, 
+          "end": {
+            "value": 125.024
+          }, 
+          "label": {
+            "value": "section_z"
+          }
+        }, 
+        {
+          "start": {
+            "value": 125.024
+          }, 
+          "end": {
+            "value": 153.035
+          }, 
+          "label": {
+            "value": "instrumental_solo"
+          }
+        }, 
+        {
+          "start": {
+            "value": 153.035
+          }, 
+          "end": {
+            "value": 169.01
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 169.01
+          }, 
+          "end": {
+            "value": 187.026
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 187.026
+          }, 
+          "end": {
+            "value": 234.655
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 234.655
+          }, 
+          "end": {
+            "value": 238.6
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 238.6
+    }, 
+    "title": "13 The Invisible Man", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

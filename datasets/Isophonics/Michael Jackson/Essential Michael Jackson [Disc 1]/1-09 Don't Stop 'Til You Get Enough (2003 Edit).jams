@@ -1,0 +1,215 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.32
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.32
+          }, 
+          "end": {
+            "value": 9.589
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 9.589
+          }, 
+          "end": {
+            "value": 25.718
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 25.718
+          }, 
+          "end": {
+            "value": 41.847
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 41.847
+          }, 
+          "end": {
+            "value": 57.972
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 57.972
+          }, 
+          "end": {
+            "value": 74.122
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 74.122
+          }, 
+          "end": {
+            "value": 90.242
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 90.242
+          }, 
+          "end": {
+            "value": 106.378
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 106.378
+          }, 
+          "end": {
+            "value": 122.52
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 122.52
+          }, 
+          "end": {
+            "value": 138.661
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 138.661
+          }, 
+          "end": {
+            "value": 153.531
+          }, 
+          "label": {
+            "value": "instrumental"
+          }
+        }, 
+        {
+          "start": {
+            "value": 153.531
+          }, 
+          "end": {
+            "value": 162.842
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 162.842
+          }, 
+          "end": {
+            "value": 178.991
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 178.991
+          }, 
+          "end": {
+            "value": 195.109
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 195.109
+          }, 
+          "end": {
+            "value": 219.32
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 219.32
+          }, 
+          "end": {
+            "value": 235.045
+          }, 
+          "label": {
+            "value": "refrain_(fade-out)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 235.045
+          }, 
+          "end": {
+            "value": 236.467
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 236.467
+    }, 
+    "title": "1-09 Don't Stop 'Til You Get Enough (2003 Edit)", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

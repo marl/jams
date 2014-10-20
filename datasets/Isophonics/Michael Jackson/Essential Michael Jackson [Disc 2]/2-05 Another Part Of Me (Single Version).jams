@@ -1,0 +1,193 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.095
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.095
+          }, 
+          "end": {
+            "value": 24.203
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 24.203
+          }, 
+          "end": {
+            "value": 41.568
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 41.568
+          }, 
+          "end": {
+            "value": 59.005
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 59.005
+          }, 
+          "end": {
+            "value": 69.9
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 69.9
+          }, 
+          "end": {
+            "value": 87.375
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 87.375
+          }, 
+          "end": {
+            "value": 104.788
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 104.788
+          }, 
+          "end": {
+            "value": 115.684
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 115.684
+          }, 
+          "end": {
+            "value": 124.407
+          }, 
+          "label": {
+            "value": "instrumental"
+          }
+        }, 
+        {
+          "start": {
+            "value": 124.407
+          }, 
+          "end": {
+            "value": 130.948
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 130.948
+          }, 
+          "end": {
+            "value": 148.397
+          }, 
+          "label": {
+            "value": "instrumental"
+          }
+        }, 
+        {
+          "start": {
+            "value": 148.397
+          }, 
+          "end": {
+            "value": 165.825
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 165.825
+          }, 
+          "end": {
+            "value": 176.733
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 176.733
+          }, 
+          "end": {
+            "value": 225.025
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 225.025
+          }, 
+          "end": {
+            "value": 226.613
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 226.613
+    }, 
+    "title": "2-05 Another Part Of Me (Single Version)", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

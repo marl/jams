@@ -9,7 +9,7 @@ To parse the entire dataset, you simply need to provide the path to the
 unarchived folder.
 
 Example:
-./adc2004melody_parser.py ~/FullSet -o ~/adc2004_jams/
+./adc2004melody_parser.py ~/FullSet -o ~/ADC2004_jams/
 
 """
 
@@ -102,7 +102,7 @@ def main():
     parser.add_argument("-o",
                         action="store",
                         dest="out_dir",
-                        default="adc2004_jams",
+                        default="ADC2004_jams",
                         help="Output JAMS folder")
     args = parser.parse_args()
     start_time = time.time()

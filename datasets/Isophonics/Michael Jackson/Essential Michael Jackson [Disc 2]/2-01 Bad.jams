@@ -1,0 +1,226 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.365
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.365
+          }, 
+          "end": {
+            "value": 18.825
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 18.825
+          }, 
+          "end": {
+            "value": 35.648
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 35.648
+          }, 
+          "end": {
+            "value": 44.059
+          }, 
+          "label": {
+            "value": "breaka"
+          }
+        }, 
+        {
+          "start": {
+            "value": 44.059
+          }, 
+          "end": {
+            "value": 60.883
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 60.883
+          }, 
+          "end": {
+            "value": 69.295
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 69.295
+          }, 
+          "end": {
+            "value": 86.118
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 86.118
+          }, 
+          "end": {
+            "value": 94.529
+          }, 
+          "label": {
+            "value": "breakb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 94.529
+          }, 
+          "end": {
+            "value": 119.765
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 119.765
+          }, 
+          "end": {
+            "value": 128.177
+          }, 
+          "label": {
+            "value": "birdge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 128.177
+          }, 
+          "end": {
+            "value": 144.999
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 144.999
+          }, 
+          "end": {
+            "value": 170.233
+          }, 
+          "label": {
+            "value": "instrumental"
+          }
+        }, 
+        {
+          "start": {
+            "value": 170.233
+          }, 
+          "end": {
+            "value": 178.641
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 178.641
+          }, 
+          "end": {
+            "value": 195.463
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 195.463
+          }, 
+          "end": {
+            "value": 212.286
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 212.286
+          }, 
+          "end": {
+            "value": 229.108
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 229.108
+          }, 
+          "end": {
+            "value": 246.695
+          }, 
+          "label": {
+            "value": "refrain_(with_complete_ending)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 246.695
+          }, 
+          "end": {
+            "value": 246.693
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 246.693
+    }, 
+    "title": "2-01 Bad", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

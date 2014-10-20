@@ -1,0 +1,149 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.155
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.155
+          }, 
+          "end": {
+            "value": 12.087
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 12.087
+          }, 
+          "end": {
+            "value": 26.315
+          }, 
+          "label": {
+            "value": "refraina"
+          }
+        }, 
+        {
+          "start": {
+            "value": 26.315
+          }, 
+          "end": {
+            "value": 40.204
+          }, 
+          "label": {
+            "value": "refraina"
+          }
+        }, 
+        {
+          "start": {
+            "value": 40.204
+          }, 
+          "end": {
+            "value": 79.487
+          }, 
+          "label": {
+            "value": "versea"
+          }
+        }, 
+        {
+          "start": {
+            "value": 79.487
+          }, 
+          "end": {
+            "value": 104.058
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 104.058
+          }, 
+          "end": {
+            "value": 129.5
+          }, 
+          "label": {
+            "value": "verseb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 129.5
+          }, 
+          "end": {
+            "value": 154.081
+          }, 
+          "label": {
+            "value": "refrainb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 154.081
+          }, 
+          "end": {
+            "value": 165.2
+          }, 
+          "label": {
+            "value": "verseb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 165.2
+          }, 
+          "end": {
+            "value": 201.6
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 201.6
+          }, 
+          "end": {
+            "value": 205.027
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 205.027
+    }, 
+    "title": "1-04 Got To Be There (Single Version)", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

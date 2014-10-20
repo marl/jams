@@ -1,0 +1,149 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.26
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.26
+          }, 
+          "end": {
+            "value": 34.378
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 34.378
+          }, 
+          "end": {
+            "value": 51.156
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 51.156
+          }, 
+          "end": {
+            "value": 68.197
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 68.197
+          }, 
+          "end": {
+            "value": 101.771
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 101.771
+          }, 
+          "end": {
+            "value": 118.217
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 118.217
+          }, 
+          "end": {
+            "value": 135.432
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 135.432
+          }, 
+          "end": {
+            "value": 168.759
+          }, 
+          "label": {
+            "value": "pre-chorus"
+          }
+        }, 
+        {
+          "start": {
+            "value": 168.759
+          }, 
+          "end": {
+            "value": 202.403
+          }, 
+          "label": {
+            "value": "refrain_(extended)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 202.403
+          }, 
+          "end": {
+            "value": 226.975
+          }, 
+          "label": {
+            "value": "refrain_(with_complete_ending)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 226.975
+          }, 
+          "end": {
+            "value": 238.907
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 238.907
+    }, 
+    "title": "12 Feel Like A Natural Woman", 
+    "jams_version": "0.0.1", 
+    "artist": "Carole King"
+  }
+}

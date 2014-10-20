@@ -1,0 +1,138 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.21
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.21
+          }, 
+          "end": {
+            "value": 6.912
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 6.912
+          }, 
+          "end": {
+            "value": 34.599
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 34.599
+          }, 
+          "end": {
+            "value": 62.287
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 62.287
+          }, 
+          "end": {
+            "value": 77.927
+          }, 
+          "label": {
+            "value": "bridgea"
+          }
+        }, 
+        {
+          "start": {
+            "value": 77.927
+          }, 
+          "end": {
+            "value": 109.284
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 109.284
+          }, 
+          "end": {
+            "value": 129.431
+          }, 
+          "label": {
+            "value": "bridgeb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 129.431
+          }, 
+          "end": {
+            "value": 172.074
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 172.074
+          }, 
+          "end": {
+            "value": 204.585
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 204.585
+          }, 
+          "end": {
+            "value": 206.0
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 206.0
+    }, 
+    "title": "12 The Great Pretender", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

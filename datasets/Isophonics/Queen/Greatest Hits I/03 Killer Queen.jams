@@ -1,0 +1,149 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.245
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.245
+          }, 
+          "end": {
+            "value": 3.424
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 3.424
+          }, 
+          "end": {
+            "value": 27.753
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 27.753
+          }, 
+          "end": {
+            "value": 52.156
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 52.156
+          }, 
+          "end": {
+            "value": 75.851
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 75.851
+          }, 
+          "end": {
+            "value": 100.386
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 100.386
+          }, 
+          "end": {
+            "value": 122.004
+          }, 
+          "label": {
+            "value": "verse_(instrumental)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 122.004
+          }, 
+          "end": {
+            "value": 137.268
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 137.268
+          }, 
+          "end": {
+            "value": 161.414
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 161.414
+          }, 
+          "end": {
+            "value": 179.425
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 179.425
+          }, 
+          "end": {
+            "value": 182.0
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 182.0
+    }, 
+    "title": "03 Killer Queen", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

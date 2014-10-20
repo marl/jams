@@ -1,0 +1,259 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.485
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.485
+          }, 
+          "end": {
+            "value": 17.69
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 17.69
+          }, 
+          "end": {
+            "value": 34.888
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 34.888
+          }, 
+          "end": {
+            "value": 52.081
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 52.081
+          }, 
+          "end": {
+            "value": 69.28
+          }, 
+          "label": {
+            "value": "breaka"
+          }
+        }, 
+        {
+          "start": {
+            "value": 69.28
+          }, 
+          "end": {
+            "value": 82.173
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 82.173
+          }, 
+          "end": {
+            "value": 90.763
+          }, 
+          "label": {
+            "value": "breakb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 90.763
+          }, 
+          "end": {
+            "value": 99.345
+          }, 
+          "label": {
+            "value": "mini_intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 99.345
+          }, 
+          "end": {
+            "value": 116.56
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 116.56
+          }, 
+          "end": {
+            "value": 133.755
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 133.755
+          }, 
+          "end": {
+            "value": 150.952
+          }, 
+          "label": {
+            "value": "breaka"
+          }
+        }, 
+        {
+          "start": {
+            "value": 150.952
+          }, 
+          "end": {
+            "value": 163.848
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 163.848
+          }, 
+          "end": {
+            "value": 172.439
+          }, 
+          "label": {
+            "value": "breakb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 172.439
+          }, 
+          "end": {
+            "value": 193.945
+          }, 
+          "label": {
+            "value": "instrumental"
+          }
+        }, 
+        {
+          "start": {
+            "value": 193.945
+          }, 
+          "end": {
+            "value": 211.135
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 211.135
+          }, 
+          "end": {
+            "value": 228.33
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 228.33
+          }, 
+          "end": {
+            "value": 241.221
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 241.221
+          }, 
+          "end": {
+            "value": 249.817
+          }, 
+          "label": {
+            "value": "breakb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 249.817
+          }, 
+          "end": {
+            "value": 258.415
+          }, 
+          "label": {
+            "value": "mini_intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 258.415
+          }, 
+          "end": {
+            "value": 286.25
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 286.25
+          }, 
+          "end": {
+            "value": 288.813
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 288.813
+    }, 
+    "title": "2-10 In The Closet (Single Version)", 
+    "jams_version": "0.0.1", 
+    "artist": "Michael Jackson"
+  }
+}

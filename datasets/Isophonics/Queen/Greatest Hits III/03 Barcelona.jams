@@ -1,0 +1,127 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.055
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.055
+          }, 
+          "end": {
+            "value": 37.703
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 37.703
+          }, 
+          "end": {
+            "value": 70.851
+          }, 
+          "label": {
+            "value": "versea"
+          }
+        }, 
+        {
+          "start": {
+            "value": 70.851
+          }, 
+          "end": {
+            "value": 103.085
+          }, 
+          "label": {
+            "value": "versea"
+          }
+        }, 
+        {
+          "start": {
+            "value": 103.085
+          }, 
+          "end": {
+            "value": 147.314
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 147.314
+          }, 
+          "end": {
+            "value": 189.074
+          }, 
+          "label": {
+            "value": "verseb"
+          }
+        }, 
+        {
+          "start": {
+            "value": 189.074
+          }, 
+          "end": {
+            "value": 234.819
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 234.819
+          }, 
+          "end": {
+            "value": 263.595
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 263.595
+          }, 
+          "end": {
+            "value": 265.44
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 265.44
+    }, 
+    "title": "03 Barcelona", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

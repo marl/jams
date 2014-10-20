@@ -1,0 +1,394 @@
+{
+  "chord": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.232
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.232
+          }, 
+          "end": {
+            "value": 92.016
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 92.016
+          }, 
+          "end": {
+            "value": 94.925
+          }, 
+          "label": {
+            "value": "C"
+          }
+        }, 
+        {
+          "start": {
+            "value": 94.925
+          }, 
+          "end": {
+            "value": 98.545
+          }, 
+          "label": {
+            "value": "A"
+          }
+        }, 
+        {
+          "start": {
+            "value": 98.545
+          }, 
+          "end": {
+            "value": 99.331
+          }, 
+          "label": {
+            "value": "D"
+          }
+        }, 
+        {
+          "start": {
+            "value": 99.331
+          }, 
+          "end": {
+            "value": 100.821
+          }, 
+          "label": {
+            "value": "A"
+          }
+        }, 
+        {
+          "start": {
+            "value": 100.821
+          }, 
+          "end": {
+            "value": 102.343
+          }, 
+          "label": {
+            "value": "D"
+          }
+        }, 
+        {
+          "start": {
+            "value": 102.343
+          }, 
+          "end": {
+            "value": 104.559
+          }, 
+          "label": {
+            "value": "A"
+          }
+        }, 
+        {
+          "start": {
+            "value": 104.559
+          }, 
+          "end": {
+            "value": 105.241
+          }, 
+          "label": {
+            "value": "A:sus4"
+          }
+        }, 
+        {
+          "start": {
+            "value": 105.241
+          }, 
+          "end": {
+            "value": 106.667
+          }, 
+          "label": {
+            "value": "D"
+          }
+        }, 
+        {
+          "start": {
+            "value": 106.667
+          }, 
+          "end": {
+            "value": 108.915
+          }, 
+          "label": {
+            "value": "A"
+          }
+        }, 
+        {
+          "start": {
+            "value": 108.915
+          }, 
+          "end": {
+            "value": 109.63
+          }, 
+          "label": {
+            "value": "A:sus4"
+          }
+        }, 
+        {
+          "start": {
+            "value": 109.63
+          }, 
+          "end": {
+            "value": 121.142
+          }, 
+          "label": {
+            "value": "A"
+          }
+        }, 
+        {
+          "start": {
+            "value": 121.142
+          }, 
+          "end": {
+            "value": 122.773
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }
+      ]
+    }
+  ], 
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.255
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.255
+          }, 
+          "end": {
+            "value": 12.269
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 12.269
+          }, 
+          "end": {
+            "value": 24.114
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 24.114
+          }, 
+          "end": {
+            "value": 35.978
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 35.978
+          }, 
+          "end": {
+            "value": 47.691
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 47.691
+          }, 
+          "end": {
+            "value": 59.529
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 59.529
+          }, 
+          "end": {
+            "value": 71.383
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 71.383
+          }, 
+          "end": {
+            "value": 83.195
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 83.195
+          }, 
+          "end": {
+            "value": 94.943
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 94.943
+          }, 
+          "end": {
+            "value": 120.98
+          }, 
+          "label": {
+            "value": "instrumental_solo"
+          }
+        }, 
+        {
+          "start": {
+            "value": 120.98
+          }, 
+          "end": {
+            "value": 122.773
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "key": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.289
+          }, 
+          "label": {
+            "value": "Silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.289
+          }, 
+          "end": {
+            "value": 12.266
+          }, 
+          "label": {
+            "value": "Key\tN"
+          }
+        }, 
+        {
+          "start": {
+            "value": 12.266
+          }, 
+          "end": {
+            "value": 94.86
+          }, 
+          "label": {
+            "value": "Key\tE:minor"
+          }
+        }, 
+        {
+          "start": {
+            "value": 94.86
+          }, 
+          "end": {
+            "value": 120.923
+          }, 
+          "label": {
+            "value": "Key\tA"
+          }
+        }, 
+        {
+          "start": {
+            "value": 120.923
+          }, 
+          "end": {
+            "value": 122.773
+          }, 
+          "label": {
+            "value": "Silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 122.773
+    }, 
+    "title": "16 We Will Rock You", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "segment": [
+    {
+      "annotation_metadata": {
+        "annotation_tools": "Sonic Visualizer", 
+        "annotator": {
+          "name": "TODO", 
+          "email": "TODO"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "Isophonics", 
+        "annotation_rules": "TODO", 
+        "data_source": "Centre for Digital Music"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.2
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.2
+          }, 
+          "end": {
+            "value": 76.986
+          }, 
+          "label": {
+            "value": "intro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 76.986
+          }, 
+          "end": {
+            "value": 92.729
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 92.729
+          }, 
+          "end": {
+            "value": 108.453
+          }, 
+          "label": {
+            "value": "verse"
+          }
+        }, 
+        {
+          "start": {
+            "value": 108.453
+          }, 
+          "end": {
+            "value": 124.201
+          }, 
+          "label": {
+            "value": "bridge"
+          }
+        }, 
+        {
+          "start": {
+            "value": 124.201
+          }, 
+          "end": {
+            "value": 139.933
+          }, 
+          "label": {
+            "value": "refrain"
+          }
+        }, 
+        {
+          "start": {
+            "value": 139.933
+          }, 
+          "end": {
+            "value": 195.049
+          }, 
+          "label": {
+            "value": "instrumental_solo"
+          }
+        }, 
+        {
+          "start": {
+            "value": 195.049
+          }, 
+          "end": {
+            "value": 210.808
+          }, 
+          "label": {
+            "value": "break"
+          }
+        }, 
+        {
+          "start": {
+            "value": 210.808
+          }, 
+          "end": {
+            "value": 226.512
+          }, 
+          "label": {
+            "value": "ad_lib"
+          }
+        }, 
+        {
+          "start": {
+            "value": 226.512
+          }, 
+          "end": {
+            "value": 322.56
+          }, 
+          "label": {
+            "value": "outro"
+          }
+        }, 
+        {
+          "start": {
+            "value": 322.56
+          }, 
+          "end": {
+            "value": 322.667
+          }, 
+          "label": {
+            "value": "silence"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": {
+      "value": 322.667
+    }, 
+    "title": "06 You Don't Fool Me", 
+    "jams_version": "0.0.1", 
+    "artist": "Queen"
+  }
+}
