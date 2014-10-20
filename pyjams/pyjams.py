@@ -696,17 +696,33 @@ class JAMS(JObject):
 
         Parameters
         ----------
-        beat: list of EventAnnotations
+        beat : list of EventAnnotations
             Used for beat-tracking.
-        chord: list of RangeAnnotations
-            Used for chord recognition.
-        melody: list of TimeSeriesAnnotations
+        chord : list of RangeAnnotations
+            Used for chord estimation.
+        genre : list of ObservationAnnotations
+            Used for genre tagging.
+        key : list of RangeAnnotations
+            Used for key estimation.
+        mood : list of ObservationAnnotations
+            Used for mood estimation.
+        melody : list of TimeSeriesAnnotations
             Used for continuous-f0 melody.
-        segment: list of RangeAnnotations
+        note : list of RangeAnnotations
+            Used for estimated note transcription.
+        onset : list of EventAnnotations
+            Used for onset detection.
+        pattern : list of TimeSeriesAnnotations
+            Used for pattern discovery.
+        pitch : list of TimeSeriesAnnotations
+            Used for pitch estimation.
+        segment : list of RangeAnnotations
             Used for music segmentation.
-        tag: list of Annotations
+        source : list of RangeAnnotations
+            Used for source activations.
+        tag : list of Annotations
             Used for music tagging and semantic descriptors.
-        file_metadata: FileMetadata
+        file_metadata : FileMetadata
             Metadata corresponding to the audio file.
         """
         if file_metadata is None:
