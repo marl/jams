@@ -32,6 +32,7 @@ class UtilTests(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             util.read_lab(fpath, 4, delimiter='\t', comment='#')
+        os.remove(fpath)
 
 if __name__ == "__main__":
     unittest.main()
