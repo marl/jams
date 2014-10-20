@@ -187,8 +187,16 @@ class JObject(object):
         return self.__class__.__name__
 
 
+class Sandbox(JObject):
+    """Sandbox (unconstrained)
+
+    Functionally identitical to JObjects, but the class hierarchy might be
+    confusing if all objects inherit from Sandboxes."""
+    pass
+
+
 class Observation(JObject):
-    """Observation
+    """Observation (global)
 
     Smallest observable concept (value) with a confidence interval. Used for
     almost anything, from observed times to semantic tags.
@@ -211,7 +219,7 @@ class Observation(JObject):
 
 
 class Event(Observation):
-    """Event (Sparse)
+    """Event (sparse, instantaneous)
 
     Instantaneous time event, consisting of two Observations (time and label).
     Used for such ideas like beats or onsets.
@@ -368,11 +376,11 @@ class BaseAnnotation(JObject):
         if annotation_metadata is None:
             annotation_metadata = AnnotationMetadata()
         if sandbox is None:
-            sandbox = JObject()
+            sandbox = Sandbox()
 
         self.annotation_metadata = AnnotationMetadata(**annotation_metadata)
         self.data = self.__parse_data__(data)
-        self.sandbox = JObject(**sandbox)
+        self.sandbox = Sandbox(**sandbox)
 
     def __parse_data__(self, data):
         """This method unpacks data as a specific type of objects, defined by
@@ -389,7 +397,15 @@ class BaseAnnotation(JObject):
         objects: list
             Collection of _DefaultTypes.
         """
-        return [self._DefaultType(**obj) for obj in data]
+        objects = list()
+        for idx, obj in enumerate(data):
+            try:
+                objects.append(self._DefaultType(**obj))
+            except TypeError:
+                raise TypeError(
+                    "Invalid data at position %d for %s: "
+                    "%s" % (idx, self.type, obj))
+        return objects
 
     def create_datapoint(self):
         """Factory method to create an empty Data object based on this type of
@@ -693,7 +709,7 @@ class JAMS(JObject):
             file_metadata = FileMetadata()
 
         if sandbox is None:
-            sandbox = JObject()
+            sandbox = Sandbox()
 
         self.beat = AnnotationList(
             [] if beat is None else beat, EventAnnotation)
@@ -722,7 +738,7 @@ class JAMS(JObject):
         self.tag = AnnotationList(
             [] if tag is None else tag, ObservationAnnotation)
         self.file_metadata = FileMetadata(**file_metadata)
-        self.sandbox = JObject(**sandbox)
+        self.sandbox = Sandbox(**sandbox)
 
     @property
     def __schema__(self):

@@ -17,6 +17,7 @@ from pyjams.pyjams import ObservationAnnotation
 from pyjams.pyjams import EventAnnotation
 from pyjams.pyjams import RangeAnnotation
 from pyjams.pyjams import TimeSeriesAnnotation
+from pyjams.pyjams import Sandbox
 from pyjams.pyjams import JAMS
 
 
@@ -47,8 +48,9 @@ class JamsTests(unittest.TestCase):
         self.event_annot = EventAnnotation(data=[self.event])
         self.range_annot = RangeAnnotation(data=[self.chord])
         self.series_annot = TimeSeriesAnnotation(data=[self.series])
-        self.fmeta = FileMetadata(
-            title='Pachuca Sunrise', artist='Minus the Bear')
+        self.fmeta = FileMetadata(title='Pachuca Sunrise',
+                                  artist='Minus the Bear')
+        self.sandbox = Sandbox(a=1, b=None, _c='a', d='')
 
     def tearDown(self):
         pass
@@ -511,10 +513,36 @@ class JamsTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             annot.bad_attr = 'some value'
 
+    # TODO(ejhumphrey): This is too implicit a test for my tastes, but it's
+    #   not obvious at the moment how to ensure that the tasks receive the
+    #   proper annotation types.
+    def test_JAMS_invalid_annotations(self):
+        with self.assertRaises(TypeError):
+            JAMS(beat=[self.range_annot])
+
+        with self.assertRaises(TypeError):
+            JAMS(chord=[self.obs_annot])
+
+        with self.assertRaises(TypeError):
+            JAMS(genre=[self.event_annot])
+
     def test_JAMS_invalid_attr(self):
         jam = JAMS()
         with self.assertRaises(ValueError):
             jam.bad_attr = 'some value'
+
+    def test_JAMS_serialization(self):
+        jam = JAMS(beat=[self.event_annot],
+                   chord=[self.range_annot],
+                   tag=[self.obs_annot],
+                   melody=[self.series_annot],
+                   file_metadata=self.fmeta,
+                   sandbox=self.sandbox)
+        jam2 = JAMS(**_loads(_dumps(jam)))
+        self.assertEqual(
+            jam, jam2,
+            "Failed to properly recreate the JAMS object."
+            "Expected: %s\nReceived: %s" % (jam, jam2))
 
 
 if __name__ == "__main__":
