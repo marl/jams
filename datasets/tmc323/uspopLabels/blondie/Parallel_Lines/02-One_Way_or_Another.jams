@@ -1,0 +1,1224 @@
+{
+  "chord": [
+    {
+      "annotation_metadata": {
+        "data_source": "Undergraduate music students", 
+        "curator": {
+          "name": "Tae Min Cho", 
+          "email": "tmc323@nyu.edu"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "MARL-Chords", 
+        "annotation_tools": "Sonic Visualizer"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.445
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.445
+          }, 
+          "end": {
+            "value": 5.83
+          }, 
+          "label": {
+            "value": "D:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 5.83
+          }, 
+          "end": {
+            "value": 6.001
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 6.001
+          }, 
+          "end": {
+            "value": 6.15
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 6.15
+          }, 
+          "end": {
+            "value": 11.703
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 11.703
+          }, 
+          "end": {
+            "value": 11.889
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 11.889
+          }, 
+          "end": {
+            "value": 12.051
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 12.051
+          }, 
+          "end": {
+            "value": 17.531
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 17.531
+          }, 
+          "end": {
+            "value": 17.705
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 17.705
+          }, 
+          "end": {
+            "value": 17.911
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 17.911
+          }, 
+          "end": {
+            "value": 23.29
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 23.29
+          }, 
+          "end": {
+            "value": 23.475
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 23.475
+          }, 
+          "end": {
+            "value": 23.633
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 23.633
+          }, 
+          "end": {
+            "value": 29.164
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.164
+          }, 
+          "end": {
+            "value": 29.327
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.327
+          }, 
+          "end": {
+            "value": 29.519
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.519
+          }, 
+          "end": {
+            "value": 35.039
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 35.039
+          }, 
+          "end": {
+            "value": 35.201
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 35.201
+          }, 
+          "end": {
+            "value": 35.401
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 35.401
+          }, 
+          "end": {
+            "value": 40.914
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 40.914
+          }, 
+          "end": {
+            "value": 41.099
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 41.099
+          }, 
+          "end": {
+            "value": 41.263
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 41.263
+          }, 
+          "end": {
+            "value": 47.379
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 47.379
+          }, 
+          "end": {
+            "value": 48.84
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 48.84
+          }, 
+          "end": {
+            "value": 50.354
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 50.354
+          }, 
+          "end": {
+            "value": 50.934
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 50.934
+          }, 
+          "end": {
+            "value": 51.499
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 51.499
+          }, 
+          "end": {
+            "value": 51.852
+          }, 
+          "label": {
+            "value": "A:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 51.852
+          }, 
+          "end": {
+            "value": 53.356
+          }, 
+          "label": {
+            "value": "F#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 53.356
+          }, 
+          "end": {
+            "value": 54.857
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 54.857
+          }, 
+          "end": {
+            "value": 56.368
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 56.368
+          }, 
+          "end": {
+            "value": 56.924
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 56.924
+          }, 
+          "end": {
+            "value": 57.426
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 57.426
+          }, 
+          "end": {
+            "value": 57.821
+          }, 
+          "label": {
+            "value": "A:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 57.821
+          }, 
+          "end": {
+            "value": 59.367
+          }, 
+          "label": {
+            "value": "F#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 59.367
+          }, 
+          "end": {
+            "value": 59.91
+          }, 
+          "label": {
+            "value": "G:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 59.91
+          }, 
+          "end": {
+            "value": 60.456
+          }, 
+          "label": {
+            "value": "A:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 60.456
+          }, 
+          "end": {
+            "value": 60.876
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 60.876
+          }, 
+          "end": {
+            "value": 62.346
+          }, 
+          "label": {
+            "value": "E:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 62.346
+          }, 
+          "end": {
+            "value": 65.331
+          }, 
+          "label": {
+            "value": "F#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 65.331
+          }, 
+          "end": {
+            "value": 70.682
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 70.682
+          }, 
+          "end": {
+            "value": 70.867
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 70.867
+          }, 
+          "end": {
+            "value": 71.03
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 71.03
+          }, 
+          "end": {
+            "value": 76.585
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 76.585
+          }, 
+          "end": {
+            "value": 76.754
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 76.754
+          }, 
+          "end": {
+            "value": 76.892
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 76.892
+          }, 
+          "end": {
+            "value": 82.5
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 82.5
+          }, 
+          "end": {
+            "value": 82.698
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 82.698
+          }, 
+          "end": {
+            "value": 82.86
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 82.86
+          }, 
+          "end": {
+            "value": 88.957
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 88.957
+          }, 
+          "end": {
+            "value": 90.452
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 90.452
+          }, 
+          "end": {
+            "value": 91.965
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 91.965
+          }, 
+          "end": {
+            "value": 92.56
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 92.56
+          }, 
+          "end": {
+            "value": 93.086
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 93.086
+          }, 
+          "end": {
+            "value": 93.418
+          }, 
+          "label": {
+            "value": "A:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 93.418
+          }, 
+          "end": {
+            "value": 94.942
+          }, 
+          "label": {
+            "value": "F#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 94.942
+          }, 
+          "end": {
+            "value": 96.411
+          }, 
+          "label": {
+            "value": "G:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 96.411
+          }, 
+          "end": {
+            "value": 97.9
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 97.9
+          }, 
+          "end": {
+            "value": 98.494
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 98.494
+          }, 
+          "end": {
+            "value": 99.001
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 99.001
+          }, 
+          "end": {
+            "value": 99.402
+          }, 
+          "label": {
+            "value": "A:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 99.402
+          }, 
+          "end": {
+            "value": 100.884
+          }, 
+          "label": {
+            "value": "F#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 100.884
+          }, 
+          "end": {
+            "value": 101.415
+          }, 
+          "label": {
+            "value": "G:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 101.415
+          }, 
+          "end": {
+            "value": 101.932
+          }, 
+          "label": {
+            "value": "A:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 101.932
+          }, 
+          "end": {
+            "value": 102.305
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 102.305
+          }, 
+          "end": {
+            "value": 103.81
+          }, 
+          "label": {
+            "value": "E:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 103.81
+          }, 
+          "end": {
+            "value": 109.51
+          }, 
+          "label": {
+            "value": "F#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 109.51
+          }, 
+          "end": {
+            "value": 112.223
+          }, 
+          "label": {
+            "value": "F#:maj/5"
+          }
+        }, 
+        {
+          "start": {
+            "value": 112.223
+          }, 
+          "end": {
+            "value": 113.678
+          }, 
+          "label": {
+            "value": "A:maj/3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 113.678
+          }, 
+          "end": {
+            "value": 115.077
+          }, 
+          "label": {
+            "value": "C#:min7/b7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 115.077
+          }, 
+          "end": {
+            "value": 117.934
+          }, 
+          "label": {
+            "value": "F#:maj/5"
+          }
+        }, 
+        {
+          "start": {
+            "value": 117.934
+          }, 
+          "end": {
+            "value": 119.403
+          }, 
+          "label": {
+            "value": "A:maj/3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 119.403
+          }, 
+          "end": {
+            "value": 121.033
+          }, 
+          "label": {
+            "value": "C#:min7/b7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 121.033
+          }, 
+          "end": {
+            "value": 122.323
+          }, 
+          "label": {
+            "value": "B:maj/3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 122.323
+          }, 
+          "end": {
+            "value": 123.821
+          }, 
+          "label": {
+            "value": "E:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 123.821
+          }, 
+          "end": {
+            "value": 126.764
+          }, 
+          "label": {
+            "value": "F#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 126.764
+          }, 
+          "end": {
+            "value": 129.629
+          }, 
+          "label": {
+            "value": "A:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 129.629
+          }, 
+          "end": {
+            "value": 132.148
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 132.148
+          }, 
+          "end": {
+            "value": 132.354
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 132.354
+          }, 
+          "end": {
+            "value": 132.534
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 132.534
+          }, 
+          "end": {
+            "value": 138.14
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 138.14
+          }, 
+          "end": {
+            "value": 138.286
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 138.286
+          }, 
+          "end": {
+            "value": 138.499
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 138.499
+          }, 
+          "end": {
+            "value": 143.968
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 143.968
+          }, 
+          "end": {
+            "value": 144.126
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 144.126
+          }, 
+          "end": {
+            "value": 144.293
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 144.293
+          }, 
+          "end": {
+            "value": 149.84
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 149.84
+          }, 
+          "end": {
+            "value": 150.024
+          }, 
+          "label": {
+            "value": "C#:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 150.024
+          }, 
+          "end": {
+            "value": 150.179
+          }, 
+          "label": {
+            "value": "C:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 150.179
+          }, 
+          "end": {
+            "value": 156.204
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 156.204
+          }, 
+          "end": {
+            "value": 159.193
+          }, 
+          "label": {
+            "value": "D:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 159.193
+          }, 
+          "end": {
+            "value": 162.112
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 162.112
+          }, 
+          "end": {
+            "value": 165.041
+          }, 
+          "label": {
+            "value": "D:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 165.041
+          }, 
+          "end": {
+            "value": 167.959
+          }, 
+          "label": {
+            "value": "B:maj(*3)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 167.959
+          }, 
+          "end": {
+            "value": 170.93
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 170.93
+          }, 
+          "end": {
+            "value": 173.831
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 173.831
+          }, 
+          "end": {
+            "value": 176.808
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 176.808
+          }, 
+          "end": {
+            "value": 179.727
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 179.727
+          }, 
+          "end": {
+            "value": 182.676
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 182.676
+          }, 
+          "end": {
+            "value": 185.552
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 185.552
+          }, 
+          "end": {
+            "value": 188.479
+          }, 
+          "label": {
+            "value": "D:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 188.479
+          }, 
+          "end": {
+            "value": 191.339
+          }, 
+          "label": {
+            "value": "B:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 191.339
+          }, 
+          "end": {
+            "value": 194.218
+          }, 
+          "label": {
+            "value": "D:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 194.218
+          }, 
+          "end": {
+            "value": 197.079
+          }, 
+          "label": {
+            "value": "B:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 197.079
+          }, 
+          "end": {
+            "value": 199.984
+          }, 
+          "label": {
+            "value": "D:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 199.984
+          }, 
+          "end": {
+            "value": 202.846
+          }, 
+          "label": {
+            "value": "B:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 202.846
+          }, 
+          "end": {
+            "value": 205.717
+          }, 
+          "label": {
+            "value": "D:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 205.717
+          }, 
+          "end": {
+            "value": 208.63
+          }, 
+          "label": {
+            "value": "B:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 208.63
+          }, 
+          "end": {
+            "value": 215.0
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": 215.0, 
+    "title": "02-One_Way_or_Another", 
+    "jams_version": "0.0.1", 
+    "artist": "blondie"
+  }
+}

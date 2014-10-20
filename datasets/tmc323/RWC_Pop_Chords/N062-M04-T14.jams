@@ -1,0 +1,465 @@
+{
+  "chord": [
+    {
+      "annotation_metadata": {
+        "data_source": "Undergraduate music students", 
+        "curator": {
+          "name": "Tae Min Cho", 
+          "email": "tmc323@nyu.edu"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "MARL-Chords", 
+        "annotation_tools": "Sonic Visualizer"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 1.533
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 1.533
+          }, 
+          "end": {
+            "value": 7.454
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 7.454
+          }, 
+          "end": {
+            "value": 13.386
+          }, 
+          "label": {
+            "value": "D:maj9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 13.386
+          }, 
+          "end": {
+            "value": 19.307
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 19.307
+          }, 
+          "end": {
+            "value": 25.228
+          }, 
+          "label": {
+            "value": "D:maj9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 25.228
+          }, 
+          "end": {
+            "value": 31.161
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 31.161
+          }, 
+          "end": {
+            "value": 37.082
+          }, 
+          "label": {
+            "value": "D:maj9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 37.082
+          }, 
+          "end": {
+            "value": 43.027
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 43.027
+          }, 
+          "end": {
+            "value": 48.948
+          }, 
+          "label": {
+            "value": "D:maj9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 48.948
+          }, 
+          "end": {
+            "value": 54.869
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 54.869
+          }, 
+          "end": {
+            "value": 60.79
+          }, 
+          "label": {
+            "value": "D:maj9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 60.79
+          }, 
+          "end": {
+            "value": 66.734
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 66.734
+          }, 
+          "end": {
+            "value": 72.655
+          }, 
+          "label": {
+            "value": "D:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 72.655
+          }, 
+          "end": {
+            "value": 78.576
+          }, 
+          "label": {
+            "value": "C:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 78.576
+          }, 
+          "end": {
+            "value": 84.497
+          }, 
+          "label": {
+            "value": "B:min7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 84.497
+          }, 
+          "end": {
+            "value": 90.43
+          }, 
+          "label": {
+            "value": "C:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 90.43
+          }, 
+          "end": {
+            "value": 96.34
+          }, 
+          "label": {
+            "value": "B:min7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 96.34
+          }, 
+          "end": {
+            "value": 99.272
+          }, 
+          "label": {
+            "value": "A:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 99.272
+          }, 
+          "end": {
+            "value": 100.751
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 100.751
+          }, 
+          "end": {
+            "value": 102.247
+          }, 
+          "label": {
+            "value": "D:maj/5"
+          }
+        }, 
+        {
+          "start": {
+            "value": 102.247
+          }, 
+          "end": {
+            "value": 102.644
+          }, 
+          "label": {
+            "value": "A:min7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 102.644
+          }, 
+          "end": {
+            "value": 103.015
+          }, 
+          "label": {
+            "value": "B:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 103.015
+          }, 
+          "end": {
+            "value": 104.076
+          }, 
+          "label": {
+            "value": "C:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 104.076
+          }, 
+          "end": {
+            "value": 107.474
+          }, 
+          "label": {
+            "value": "D:sus4(b7)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 107.474
+          }, 
+          "end": {
+            "value": 108.193
+          }, 
+          "label": {
+            "value": "Db:9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 108.193
+          }, 
+          "end": {
+            "value": 114.126
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 114.126
+          }, 
+          "end": {
+            "value": 120.059
+          }, 
+          "label": {
+            "value": "D:maj9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 120.059
+          }, 
+          "end": {
+            "value": 125.968
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 125.968
+          }, 
+          "end": {
+            "value": 131.901
+          }, 
+          "label": {
+            "value": "D:maj9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 131.901
+          }, 
+          "end": {
+            "value": 137.834
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 137.834
+          }, 
+          "end": {
+            "value": 143.743
+          }, 
+          "label": {
+            "value": "D:maj9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 143.743
+          }, 
+          "end": {
+            "value": 149.676
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 149.676
+          }, 
+          "end": {
+            "value": 155.609
+          }, 
+          "label": {
+            "value": "D:maj9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 155.609
+          }, 
+          "end": {
+            "value": 161.53
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 161.53
+          }, 
+          "end": {
+            "value": 167.451
+          }, 
+          "label": {
+            "value": "D:maj9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 167.451
+          }, 
+          "end": {
+            "value": 173.383
+          }, 
+          "label": {
+            "value": "G:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 173.383
+          }, 
+          "end": {
+            "value": 179.339
+          }, 
+          "label": {
+            "value": "D:maj9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 179.339
+          }, 
+          "end": {
+            "value": 182.23
+          }, 
+          "label": {
+            "value": "G:min9"
+          }
+        }, 
+        {
+          "start": {
+            "value": 182.23
+          }, 
+          "end": {
+            "value": 187.385
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 187.385
+          }, 
+          "end": {
+            "value": 191.107
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": 191.107, 
+    "title": "N062-M04-T14", 
+    "jams_version": "0.0.1", 
+    "artist": "RWC-Pop"
+  }
+}

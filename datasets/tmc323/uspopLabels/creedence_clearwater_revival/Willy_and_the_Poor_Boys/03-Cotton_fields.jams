@@ -1,0 +1,641 @@
+{
+  "chord": [
+    {
+      "annotation_metadata": {
+        "data_source": "Undergraduate music students", 
+        "curator": {
+          "name": "Tae Min Cho", 
+          "email": "tmc323@nyu.edu"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "MARL-Chords", 
+        "annotation_tools": "Sonic Visualizer"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 1.205
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 1.205
+          }, 
+          "end": {
+            "value": 4.54
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 4.54
+          }, 
+          "end": {
+            "value": 5.343
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 5.343
+          }, 
+          "end": {
+            "value": 6.178
+          }, 
+          "label": {
+            "value": "E:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 6.178
+          }, 
+          "end": {
+            "value": 11.114
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 11.114
+          }, 
+          "end": {
+            "value": 12.812
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 12.812
+          }, 
+          "end": {
+            "value": 17.647
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 17.647
+          }, 
+          "end": {
+            "value": 20.869
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 20.869
+          }, 
+          "end": {
+            "value": 24.138
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 24.138
+          }, 
+          "end": {
+            "value": 25.758
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 25.758
+          }, 
+          "end": {
+            "value": 29.003
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.003
+          }, 
+          "end": {
+            "value": 30.624
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 30.624
+          }, 
+          "end": {
+            "value": 32.642
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 32.642
+          }, 
+          "end": {
+            "value": 33.841
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 33.841
+          }, 
+          "end": {
+            "value": 37.114
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 37.114
+          }, 
+          "end": {
+            "value": 43.56
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 43.56
+          }, 
+          "end": {
+            "value": 46.782
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 46.782
+          }, 
+          "end": {
+            "value": 49.942
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 49.942
+          }, 
+          "end": {
+            "value": 51.564
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 51.564
+          }, 
+          "end": {
+            "value": 54.814
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 54.814
+          }, 
+          "end": {
+            "value": 56.511
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 56.511
+          }, 
+          "end": {
+            "value": 63.08
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 63.08
+          }, 
+          "end": {
+            "value": 64.77
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 64.77
+          }, 
+          "end": {
+            "value": 69.642
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 69.642
+          }, 
+          "end": {
+            "value": 72.895
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 72.895
+          }, 
+          "end": {
+            "value": 76.161
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 76.161
+          }, 
+          "end": {
+            "value": 77.801
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 77.801
+          }, 
+          "end": {
+            "value": 81.006
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 81.006
+          }, 
+          "end": {
+            "value": 82.642
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 82.642
+          }, 
+          "end": {
+            "value": 85.845
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 85.845
+          }, 
+          "end": {
+            "value": 89.065
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 89.065
+          }, 
+          "end": {
+            "value": 95.573
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 95.573
+          }, 
+          "end": {
+            "value": 98.838
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 98.838
+          }, 
+          "end": {
+            "value": 102.088
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 102.088
+          }, 
+          "end": {
+            "value": 103.704
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 103.704
+          }, 
+          "end": {
+            "value": 106.933
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 106.933
+          }, 
+          "end": {
+            "value": 108.572
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 108.572
+          }, 
+          "end": {
+            "value": 115.081
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 115.081
+          }, 
+          "end": {
+            "value": 116.713
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 116.713
+          }, 
+          "end": {
+            "value": 121.683
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 121.683
+          }, 
+          "end": {
+            "value": 124.97
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 124.97
+          }, 
+          "end": {
+            "value": 128.236
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 128.236
+          }, 
+          "end": {
+            "value": 129.875
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 129.875
+          }, 
+          "end": {
+            "value": 133.237
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 133.237
+          }, 
+          "end": {
+            "value": 134.871
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 134.871
+          }, 
+          "end": {
+            "value": 141.534
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 141.534
+          }, 
+          "end": {
+            "value": 143.262
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 143.262
+          }, 
+          "end": {
+            "value": 148.105
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 148.105
+          }, 
+          "end": {
+            "value": 151.355
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 151.355
+          }, 
+          "end": {
+            "value": 154.604
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 154.604
+          }, 
+          "end": {
+            "value": 156.216
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 156.216
+          }, 
+          "end": {
+            "value": 159.448
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 159.448
+          }, 
+          "end": {
+            "value": 161.024
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 161.024
+          }, 
+          "end": {
+            "value": 165.849
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 165.849
+          }, 
+          "end": {
+            "value": 167.483
+          }, 
+          "label": {
+            "value": "E:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 167.483
+          }, 
+          "end": {
+            "value": 174.182
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": 174.182, 
+    "title": "03-Cotton_fields", 
+    "jams_version": "0.0.1", 
+    "artist": "creedence_clearwater_revival"
+  }
+}

@@ -1,0 +1,905 @@
+{
+  "chord": [
+    {
+      "annotation_metadata": {
+        "data_source": "Undergraduate music students", 
+        "curator": {
+          "name": "Tae Min Cho", 
+          "email": "tmc323@nyu.edu"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "MARL-Chords", 
+        "annotation_tools": "Sonic Visualizer"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.407
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.407
+          }, 
+          "end": {
+            "value": 38.24
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 38.24
+          }, 
+          "end": {
+            "value": 40.937
+          }, 
+          "label": {
+            "value": "F#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 40.937
+          }, 
+          "end": {
+            "value": 43.615
+          }, 
+          "label": {
+            "value": "G#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 43.615
+          }, 
+          "end": {
+            "value": 46.334
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 46.334
+          }, 
+          "end": {
+            "value": 49.039
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 49.039
+          }, 
+          "end": {
+            "value": 51.738
+          }, 
+          "label": {
+            "value": "G#:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 51.738
+          }, 
+          "end": {
+            "value": 54.418
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 54.418
+          }, 
+          "end": {
+            "value": 55.776
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 55.776
+          }, 
+          "end": {
+            "value": 59.796
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 59.796
+          }, 
+          "end": {
+            "value": 61.148
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 61.148
+          }, 
+          "end": {
+            "value": 65.162
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 65.162
+          }, 
+          "end": {
+            "value": 66.57
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 66.57
+          }, 
+          "end": {
+            "value": 70.557
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 70.557
+          }, 
+          "end": {
+            "value": 71.89
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 71.89
+          }, 
+          "end": {
+            "value": 73.289
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 73.289
+          }, 
+          "end": {
+            "value": 74.619
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 74.619
+          }, 
+          "end": {
+            "value": 76.0
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 76.0
+          }, 
+          "end": {
+            "value": 77.347
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 77.347
+          }, 
+          "end": {
+            "value": 100.226
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 100.226
+          }, 
+          "end": {
+            "value": 102.945
+          }, 
+          "label": {
+            "value": "F#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 102.945
+          }, 
+          "end": {
+            "value": 105.649
+          }, 
+          "label": {
+            "value": "G#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 105.649
+          }, 
+          "end": {
+            "value": 108.337
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 108.337
+          }, 
+          "end": {
+            "value": 111.038
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 111.038
+          }, 
+          "end": {
+            "value": 113.706
+          }, 
+          "label": {
+            "value": "G#:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 113.706
+          }, 
+          "end": {
+            "value": 116.374
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 116.374
+          }, 
+          "end": {
+            "value": 117.757
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 117.757
+          }, 
+          "end": {
+            "value": 121.797
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 121.797
+          }, 
+          "end": {
+            "value": 123.147
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 123.147
+          }, 
+          "end": {
+            "value": 127.205
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 127.205
+          }, 
+          "end": {
+            "value": 128.533
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 128.533
+          }, 
+          "end": {
+            "value": 132.584
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 132.584
+          }, 
+          "end": {
+            "value": 133.952
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 133.952
+          }, 
+          "end": {
+            "value": 135.259
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 135.259
+          }, 
+          "end": {
+            "value": 136.648
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 136.648
+          }, 
+          "end": {
+            "value": 137.969
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 137.969
+          }, 
+          "end": {
+            "value": 139.346
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 139.346
+          }, 
+          "end": {
+            "value": 143.371
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 143.371
+          }, 
+          "end": {
+            "value": 144.675
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 144.675
+          }, 
+          "end": {
+            "value": 148.777
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 148.777
+          }, 
+          "end": {
+            "value": 150.131
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 150.131
+          }, 
+          "end": {
+            "value": 151.47
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 151.47
+          }, 
+          "end": {
+            "value": 154.17
+          }, 
+          "label": {
+            "value": "F#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 154.17
+          }, 
+          "end": {
+            "value": 156.905
+          }, 
+          "label": {
+            "value": "G#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 156.905
+          }, 
+          "end": {
+            "value": 159.577
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 159.577
+          }, 
+          "end": {
+            "value": 162.253
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 162.253
+          }, 
+          "end": {
+            "value": 164.903
+          }, 
+          "label": {
+            "value": "G#:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 164.903
+          }, 
+          "end": {
+            "value": 167.674
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 167.674
+          }, 
+          "end": {
+            "value": 168.968
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 168.968
+          }, 
+          "end": {
+            "value": 172.993
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 172.993
+          }, 
+          "end": {
+            "value": 174.384
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 174.384
+          }, 
+          "end": {
+            "value": 178.419
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 178.419
+          }, 
+          "end": {
+            "value": 179.748
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 179.748
+          }, 
+          "end": {
+            "value": 183.788
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 183.788
+          }, 
+          "end": {
+            "value": 185.171
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 185.171
+          }, 
+          "end": {
+            "value": 189.244
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 189.244
+          }, 
+          "end": {
+            "value": 190.583
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 190.583
+          }, 
+          "end": {
+            "value": 194.641
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 194.641
+          }, 
+          "end": {
+            "value": 195.961
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 195.961
+          }, 
+          "end": {
+            "value": 200.039
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 200.039
+          }, 
+          "end": {
+            "value": 201.342
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 201.342
+          }, 
+          "end": {
+            "value": 205.382
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 205.382
+          }, 
+          "end": {
+            "value": 206.729
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 206.729
+          }, 
+          "end": {
+            "value": 208.092
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 208.092
+          }, 
+          "end": {
+            "value": 209.43
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 209.43
+          }, 
+          "end": {
+            "value": 210.818
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 210.818
+          }, 
+          "end": {
+            "value": 212.145
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 212.145
+          }, 
+          "end": {
+            "value": 216.194
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 216.194
+          }, 
+          "end": {
+            "value": 217.553
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 217.553
+          }, 
+          "end": {
+            "value": 221.575
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 221.575
+          }, 
+          "end": {
+            "value": 222.925
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 222.925
+          }, 
+          "end": {
+            "value": 226.96
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 226.96
+          }, 
+          "end": {
+            "value": 228.288
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 228.288
+          }, 
+          "end": {
+            "value": 232.37
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 232.37
+          }, 
+          "end": {
+            "value": 233.709
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 233.709
+          }, 
+          "end": {
+            "value": 235.051
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 235.051
+          }, 
+          "end": {
+            "value": 236.402
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 236.402
+          }, 
+          "end": {
+            "value": 237.803
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 237.803
+          }, 
+          "end": {
+            "value": 238.885
+          }, 
+          "label": {
+            "value": "B:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 238.885
+          }, 
+          "end": {
+            "value": 243.0
+          }, 
+          "label": {
+            "value": "C#:min"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": 243.0, 
+    "title": "01-Livin_La_Vida_Loca", 
+    "jams_version": "0.0.1", 
+    "artist": "ricky_martin"
+  }
+}

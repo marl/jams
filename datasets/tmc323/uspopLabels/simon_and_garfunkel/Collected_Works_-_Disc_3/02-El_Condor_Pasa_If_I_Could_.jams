@@ -1,0 +1,267 @@
+{
+  "chord": [
+    {
+      "annotation_metadata": {
+        "data_source": "Undergraduate music students", 
+        "curator": {
+          "name": "Tae Min Cho", 
+          "email": "tmc323@nyu.edu"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "MARL-Chords", 
+        "annotation_tools": "Sonic Visualizer"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.395
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.395
+          }, 
+          "end": {
+            "value": 29.768
+          }, 
+          "label": {
+            "value": "E:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 29.768
+          }, 
+          "end": {
+            "value": 36.037
+          }, 
+          "label": {
+            "value": "A:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 36.037
+          }, 
+          "end": {
+            "value": 44.306
+          }, 
+          "label": {
+            "value": "E:min/5"
+          }
+        }, 
+        {
+          "start": {
+            "value": 44.306
+          }, 
+          "end": {
+            "value": 54.114
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 54.114
+          }, 
+          "end": {
+            "value": 63.906
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 63.906
+          }, 
+          "end": {
+            "value": 73.612
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 73.612
+          }, 
+          "end": {
+            "value": 80.124
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 80.124
+          }, 
+          "end": {
+            "value": 86.612
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 86.612
+          }, 
+          "end": {
+            "value": 93.051
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 93.051
+          }, 
+          "end": {
+            "value": 99.477
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 99.477
+          }, 
+          "end": {
+            "value": 106.079
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 106.079
+          }, 
+          "end": {
+            "value": 119.118
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 119.118
+          }, 
+          "end": {
+            "value": 128.901
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 128.901
+          }, 
+          "end": {
+            "value": 135.372
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 135.372
+          }, 
+          "end": {
+            "value": 145.241
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 145.241
+          }, 
+          "end": {
+            "value": 148.51
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 148.51
+          }, 
+          "end": {
+            "value": 155.031
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 155.031
+          }, 
+          "end": {
+            "value": 161.495
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 161.495
+          }, 
+          "end": {
+            "value": 167.98
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 167.98
+          }, 
+          "end": {
+            "value": 174.493
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 174.493
+          }, 
+          "end": {
+            "value": 189.0
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": 189.0, 
+    "title": "02-El_Condor_Pasa_If_I_Could_", 
+    "jams_version": "0.0.1", 
+    "artist": "simon_and_garfunkel"
+  }
+}

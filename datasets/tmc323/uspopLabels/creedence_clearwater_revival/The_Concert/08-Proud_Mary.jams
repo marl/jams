@@ -1,0 +1,520 @@
+{
+  "chord": [
+    {
+      "annotation_metadata": {
+        "data_source": "Undergraduate music students", 
+        "curator": {
+          "name": "Tae Min Cho", 
+          "email": "tmc323@nyu.edu"
+        }, 
+        "validation": "TODO", 
+        "version": "1.0", 
+        "corpus": "MARL-Chords", 
+        "annotation_tools": "Sonic Visualizer"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.43
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.43
+          }, 
+          "end": {
+            "value": 1.173
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 1.173
+          }, 
+          "end": {
+            "value": 2.406
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 2.406
+          }, 
+          "end": {
+            "value": 3.136
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 3.136
+          }, 
+          "end": {
+            "value": 4.365
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 4.365
+          }, 
+          "end": {
+            "value": 5.078
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 5.078
+          }, 
+          "end": {
+            "value": 5.571
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 5.571
+          }, 
+          "end": {
+            "value": 6.072
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 6.072
+          }, 
+          "end": {
+            "value": 7.754
+          }, 
+          "label": {
+            "value": "F:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 7.754
+          }, 
+          "end": {
+            "value": 27.489
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 27.489
+          }, 
+          "end": {
+            "value": 31.248
+          }, 
+          "label": {
+            "value": "A:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 31.248
+          }, 
+          "end": {
+            "value": 34.95
+          }, 
+          "label": {
+            "value": "B:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 34.95
+          }, 
+          "end": {
+            "value": 57.41
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 57.41
+          }, 
+          "end": {
+            "value": 61.134
+          }, 
+          "label": {
+            "value": "A:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 61.134
+          }, 
+          "end": {
+            "value": 64.873
+          }, 
+          "label": {
+            "value": "B:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 64.873
+          }, 
+          "end": {
+            "value": 72.234
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 72.234
+          }, 
+          "end": {
+            "value": 72.935
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 72.935
+          }, 
+          "end": {
+            "value": 74.134
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 74.134
+          }, 
+          "end": {
+            "value": 74.805
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 74.805
+          }, 
+          "end": {
+            "value": 75.976
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 75.976
+          }, 
+          "end": {
+            "value": 76.676
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 76.676
+          }, 
+          "end": {
+            "value": 77.122
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 77.122
+          }, 
+          "end": {
+            "value": 77.591
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 77.591
+          }, 
+          "end": {
+            "value": 78.505
+          }, 
+          "label": {
+            "value": "F:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 78.505
+          }, 
+          "end": {
+            "value": 78.731
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 78.731
+          }, 
+          "end": {
+            "value": 79.22
+          }, 
+          "label": {
+            "value": "F:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 79.22
+          }, 
+          "end": {
+            "value": 98.083
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 98.083
+          }, 
+          "end": {
+            "value": 101.666
+          }, 
+          "label": {
+            "value": "A:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 101.666
+          }, 
+          "end": {
+            "value": 105.366
+          }, 
+          "label": {
+            "value": "B:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 105.366
+          }, 
+          "end": {
+            "value": 112.692
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 112.692
+          }, 
+          "end": {
+            "value": 113.362
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 113.362
+          }, 
+          "end": {
+            "value": 114.522
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 114.522
+          }, 
+          "end": {
+            "value": 115.213
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 115.213
+          }, 
+          "end": {
+            "value": 116.397
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 116.397
+          }, 
+          "end": {
+            "value": 117.058
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 117.058
+          }, 
+          "end": {
+            "value": 117.514
+          }, 
+          "label": {
+            "value": "A:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 117.514
+          }, 
+          "end": {
+            "value": 117.999
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 117.999
+          }, 
+          "end": {
+            "value": 118.91
+          }, 
+          "label": {
+            "value": "F:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 118.91
+          }, 
+          "end": {
+            "value": 119.148
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 119.148
+          }, 
+          "end": {
+            "value": 119.606
+          }, 
+          "label": {
+            "value": "F:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 119.606
+          }, 
+          "end": {
+            "value": 138.564
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 138.564
+          }, 
+          "end": {
+            "value": 142.198
+          }, 
+          "label": {
+            "value": "A:7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 142.198
+          }, 
+          "end": {
+            "value": 145.896
+          }, 
+          "label": {
+            "value": "B:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 145.896
+          }, 
+          "end": {
+            "value": 169.266
+          }, 
+          "label": {
+            "value": "D:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 169.266
+          }, 
+          "end": {
+            "value": 213.0
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }
+      ]
+    }
+  ], 
+  "file_metadata": {
+    "duration": 213.0, 
+    "title": "08-Proud_Mary", 
+    "jams_version": "0.0.1", 
+    "artist": "creedence_clearwater_revival"
+  }
+}
