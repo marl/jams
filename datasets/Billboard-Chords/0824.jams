@@ -1,0 +1,1332 @@
+{
+  "sandbox": {
+    "weeks_on_chart": "17", 
+    "chart_date": "1976-03-27", 
+    "peak_rank": "1", 
+    "actual_rank": "29", 
+    "target_rank": "31", 
+    "id": "824"
+  }, 
+  "chord": [
+    {
+      "annotation_metadata": {
+        "corpus": "Billboard-Chords", 
+        "version": "2.0.1", 
+        "curator": {
+          "name": "Ashley Bourgoyne", 
+          "email": "john.ashley.burgoyne@mail.mcgill.ca"
+        }, 
+        "data_source": "Graduate music students"
+      }, 
+      "data": [
+        {
+          "start": {
+            "value": 0.0
+          }, 
+          "end": {
+            "value": 0.417959183
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 0.417959183
+          }, 
+          "end": {
+            "value": 2.845028344000001
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 2.845028344000001
+          }, 
+          "end": {
+            "value": 5.272097505000005
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 5.272097505000005
+          }, 
+          "end": {
+            "value": 7.699166666000011
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 7.699166666000011
+          }, 
+          "end": {
+            "value": 9.822852181875016
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 9.822852181875016
+          }, 
+          "end": {
+            "value": 10.126235827000016
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 10.126235827
+          }, 
+          "end": {
+            "value": 11.305345804375
+          }, 
+          "label": {
+            "value": "E:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 11.305345804375
+          }, 
+          "end": {
+            "value": 12.484455781749999
+          }, 
+          "label": {
+            "value": "B:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 12.484455781749999
+          }, 
+          "end": {
+            "value": 13.663565759124998
+          }, 
+          "label": {
+            "value": "C:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 13.663565759124998
+          }, 
+          "end": {
+            "value": 14.842675736499997
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 14.842675736499997
+          }, 
+          "end": {
+            "value": 16.021785713874998
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 16.021785713874998
+          }, 
+          "end": {
+            "value": 17.200895691250004
+          }, 
+          "label": {
+            "value": "B:7/3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 17.200895691250004
+          }, 
+          "end": {
+            "value": 18.38000566862501
+          }, 
+          "label": {
+            "value": "B:7/5"
+          }
+        }, 
+        {
+          "start": {
+            "value": 18.38000566862501
+          }, 
+          "end": {
+            "value": 19.559115646000016
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 19.559115646
+          }, 
+          "end": {
+            "value": 20.736870748000005
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 20.736870748000005
+          }, 
+          "end": {
+            "value": 21.91462585000001
+          }, 
+          "label": {
+            "value": "B:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 21.91462585000001
+          }, 
+          "end": {
+            "value": 23.092380952000017
+          }, 
+          "label": {
+            "value": "C:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 23.092380952000017
+          }, 
+          "end": {
+            "value": 24.270136054000023
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 24.270136054000023
+          }, 
+          "end": {
+            "value": 25.44789115600003
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 25.44789115600003
+          }, 
+          "end": {
+            "value": 26.625646258000035
+          }, 
+          "label": {
+            "value": "A:min7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 26.625646258000035
+          }, 
+          "end": {
+            "value": 28.981156462000047
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 28.981156462
+          }, 
+          "end": {
+            "value": 30.165558389500006
+          }, 
+          "label": {
+            "value": "E:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 30.165558389500006
+          }, 
+          "end": {
+            "value": 31.34996031700001
+          }, 
+          "label": {
+            "value": "B:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 31.34996031700001
+          }, 
+          "end": {
+            "value": 32.53436224450002
+          }, 
+          "label": {
+            "value": "C:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 32.53436224450002
+          }, 
+          "end": {
+            "value": 33.71876417200002
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 33.71876417200002
+          }, 
+          "end": {
+            "value": 34.90316609950003
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 34.90316609950003
+          }, 
+          "end": {
+            "value": 36.08756802700003
+          }, 
+          "label": {
+            "value": "B:7/3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 36.08756802700003
+          }, 
+          "end": {
+            "value": 37.27196995450004
+          }, 
+          "label": {
+            "value": "B:7/5"
+          }
+        }, 
+        {
+          "start": {
+            "value": 37.27196995450004
+          }, 
+          "end": {
+            "value": 38.45637188200004
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 38.456371882
+          }, 
+          "end": {
+            "value": 39.63368480712499
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 39.63368480712499
+          }, 
+          "end": {
+            "value": 40.81099773224999
+          }, 
+          "label": {
+            "value": "B:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 40.81099773224999
+          }, 
+          "end": {
+            "value": 41.98831065737498
+          }, 
+          "label": {
+            "value": "C:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 41.98831065737498
+          }, 
+          "end": {
+            "value": 43.165623582499975
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 43.165623582499975
+          }, 
+          "end": {
+            "value": 44.34293650762497
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 44.34293650762497
+          }, 
+          "end": {
+            "value": 45.520249432749964
+          }, 
+          "label": {
+            "value": "A:min7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 45.520249432749964
+          }, 
+          "end": {
+            "value": 47.87487528299995
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 47.874875283
+          }, 
+          "end": {
+            "value": 49.04002267524999
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 49.04002267524999
+          }, 
+          "end": {
+            "value": 50.205170067499985
+          }, 
+          "label": {
+            "value": "A:min7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 50.205170067499985
+          }, 
+          "end": {
+            "value": 52.53546485199997
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 52.535464852
+          }, 
+          "end": {
+            "value": 54.8818820855
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 54.8818820855
+          }, 
+          "end": {
+            "value": 57.22829931900001
+          }, 
+          "label": {
+            "value": "Bb:maj6"
+          }
+        }, 
+        {
+          "start": {
+            "value": 57.22829931900001
+          }, 
+          "end": {
+            "value": 59.574716552500014
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 59.574716552500014
+          }, 
+          "end": {
+            "value": 61.92113378600002
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 61.921133786
+          }, 
+          "end": {
+            "value": 64.24727324175002
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 64.24727324175002
+          }, 
+          "end": {
+            "value": 66.57341269749999
+          }, 
+          "label": {
+            "value": "Bb:maj6"
+          }
+        }, 
+        {
+          "start": {
+            "value": 66.57341269749999
+          }, 
+          "end": {
+            "value": 68.89955215324996
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 68.89955215324996
+          }, 
+          "end": {
+            "value": 71.22569160899992
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 71.225691609
+          }, 
+          "end": {
+            "value": 73.55171768625004
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 73.55171768625004
+          }, 
+          "end": {
+            "value": 75.87774376350009
+          }, 
+          "label": {
+            "value": "Bb:maj6"
+          }
+        }, 
+        {
+          "start": {
+            "value": 75.87774376350009
+          }, 
+          "end": {
+            "value": 78.20376984075014
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 78.20376984075014
+          }, 
+          "end": {
+            "value": 80.52979591800019
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 80.529795918
+          }, 
+          "end": {
+            "value": 82.88729402833339
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 82.88729402833339
+          }, 
+          "end": {
+            "value": 85.24479213866677
+          }, 
+          "label": {
+            "value": "Bb:maj6"
+          }
+        }, 
+        {
+          "start": {
+            "value": 85.24479213866677
+          }, 
+          "end": {
+            "value": 87.30760298520848
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 87.30760298520848
+          }, 
+          "end": {
+            "value": 87.60229024900015
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 87.602290249
+          }, 
+          "end": {
+            "value": 89.96725623550002
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 89.96725623550002
+          }, 
+          "end": {
+            "value": 92.03660147368753
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 92.03660147368753
+          }, 
+          "end": {
+            "value": 92.33222222200003
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 92.332222222
+          }, 
+          "end": {
+            "value": 93.53195294762499
+          }, 
+          "label": {
+            "value": "E:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 93.53195294762499
+          }, 
+          "end": {
+            "value": 94.73168367324998
+          }, 
+          "label": {
+            "value": "B:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 94.73168367324998
+          }, 
+          "end": {
+            "value": 95.93141439887496
+          }, 
+          "label": {
+            "value": "C:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 95.93141439887496
+          }, 
+          "end": {
+            "value": 97.13114512449995
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 97.13114512449995
+          }, 
+          "end": {
+            "value": 98.33087585012494
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 98.33087585012494
+          }, 
+          "end": {
+            "value": 99.53060657574993
+          }, 
+          "label": {
+            "value": "B:7/3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 99.53060657574993
+          }, 
+          "end": {
+            "value": 100.73033730137492
+          }, 
+          "label": {
+            "value": "B:7/5"
+          }
+        }, 
+        {
+          "start": {
+            "value": 100.73033730137492
+          }, 
+          "end": {
+            "value": 101.9300680269999
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 101.930068027
+          }, 
+          "end": {
+            "value": 103.11203798162501
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 103.11203798162501
+          }, 
+          "end": {
+            "value": 104.29400793625001
+          }, 
+          "label": {
+            "value": "B:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 104.29400793625001
+          }, 
+          "end": {
+            "value": 105.47597789087501
+          }, 
+          "label": {
+            "value": "C:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 105.47597789087501
+          }, 
+          "end": {
+            "value": 106.65794784550002
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 106.65794784550002
+          }, 
+          "end": {
+            "value": 107.83991780012502
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 107.83991780012502
+          }, 
+          "end": {
+            "value": 109.02188775475003
+          }, 
+          "label": {
+            "value": "A:min7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 109.02188775475003
+          }, 
+          "end": {
+            "value": 111.38582766400003
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 111.385827664
+          }, 
+          "end": {
+            "value": 112.57069727849998
+          }, 
+          "label": {
+            "value": "E:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 112.57069727849998
+          }, 
+          "end": {
+            "value": 113.75556689299995
+          }, 
+          "label": {
+            "value": "B:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 113.75556689299995
+          }, 
+          "end": {
+            "value": 114.94043650749992
+          }, 
+          "label": {
+            "value": "C:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 114.94043650749992
+          }, 
+          "end": {
+            "value": 116.1253061219999
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 116.1253061219999
+          }, 
+          "end": {
+            "value": 117.31017573649987
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 117.31017573649987
+          }, 
+          "end": {
+            "value": 118.49504535099985
+          }, 
+          "label": {
+            "value": "B:7/3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 118.49504535099985
+          }, 
+          "end": {
+            "value": 119.67991496549982
+          }, 
+          "label": {
+            "value": "B:7/5"
+          }
+        }, 
+        {
+          "start": {
+            "value": 119.67991496549982
+          }, 
+          "end": {
+            "value": 120.86478457999979
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 120.86478458
+          }, 
+          "end": {
+            "value": 122.05322278862498
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 122.05322278862498
+          }, 
+          "end": {
+            "value": 123.24166099724995
+          }, 
+          "label": {
+            "value": "B:min/b3"
+          }
+        }, 
+        {
+          "start": {
+            "value": 123.24166099724995
+          }, 
+          "end": {
+            "value": 124.43009920587492
+          }, 
+          "label": {
+            "value": "C:maj7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 124.43009920587492
+          }, 
+          "end": {
+            "value": 125.6185374144999
+          }, 
+          "label": {
+            "value": "B:7(b9)"
+          }
+        }, 
+        {
+          "start": {
+            "value": 125.6185374144999
+          }, 
+          "end": {
+            "value": 126.80697562312487
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 126.80697562312487
+          }, 
+          "end": {
+            "value": 127.99541383174984
+          }, 
+          "label": {
+            "value": "A:min7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 127.99541383174984
+          }, 
+          "end": {
+            "value": 130.3722902489999
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 130.372290249
+          }, 
+          "end": {
+            "value": 131.56974489749996
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 131.56974489749996
+          }, 
+          "end": {
+            "value": 132.76719954599992
+          }, 
+          "label": {
+            "value": "A:min7"
+          }
+        }, 
+        {
+          "start": {
+            "value": 132.76719954599992
+          }, 
+          "end": {
+            "value": 135.16210884299983
+          }, 
+          "label": {
+            "value": "E:min"
+          }
+        }, 
+        {
+          "start": {
+            "value": 135.162108843
+          }, 
+          "end": {
+            "value": 137.51490362750002
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 137.51490362750002
+          }, 
+          "end": {
+            "value": 139.86769841200004
+          }, 
+          "label": {
+            "value": "Bb:maj6"
+          }
+        }, 
+        {
+          "start": {
+            "value": 139.86769841200004
+          }, 
+          "end": {
+            "value": 142.22049319650006
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 142.22049319650006
+          }, 
+          "end": {
+            "value": 144.57328798100008
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 144.573287981
+          }, 
+          "end": {
+            "value": 146.910884353
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 146.910884353
+          }, 
+          "end": {
+            "value": 149.248480725
+          }, 
+          "label": {
+            "value": "Bb:maj6"
+          }
+        }, 
+        {
+          "start": {
+            "value": 149.248480725
+          }, 
+          "end": {
+            "value": 151.58607709700001
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 151.58607709700001
+          }, 
+          "end": {
+            "value": 153.92367346900002
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 153.923673469
+          }, 
+          "end": {
+            "value": 156.28539682500008
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 156.28539682500008
+          }, 
+          "end": {
+            "value": 158.64712018100016
+          }, 
+          "label": {
+            "value": "Bb:maj6"
+          }
+        }, 
+        {
+          "start": {
+            "value": 158.64712018100016
+          }, 
+          "end": {
+            "value": 161.00884353700025
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 161.00884353700025
+          }, 
+          "end": {
+            "value": 163.37056689300033
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 163.370566893
+          }, 
+          "end": {
+            "value": 165.70211640166673
+          }, 
+          "label": {
+            "value": "G:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 165.70211640166673
+          }, 
+          "end": {
+            "value": 168.03366591033347
+          }, 
+          "label": {
+            "value": "Bb:maj6"
+          }
+        }, 
+        {
+          "start": {
+            "value": 168.03366591033347
+          }, 
+          "end": {
+            "value": 170.07377173041687
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 170.07377173041687
+          }, 
+          "end": {
+            "value": 170.3652154190002
+          }, 
+          "label": {
+            "value": "C:maj"
+          }
+        }, 
+        {
+          "start": {
+            "value": 170.365215419
+          }, 
+          "end": {
+            "value": 172.75726757325
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 172.75726757325
+          }, 
+          "end": {
+            "value": 175.1493197275
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 175.1493197275
+          }, 
+          "end": {
+            "value": 177.54137188175
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 177.54137188175
+          }, 
+          "end": {
+            "value": 179.933424036
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 179.933424036
+          }, 
+          "end": {
+            "value": 182.09248072520003
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 182.09248072520003
+          }, 
+          "end": {
+            "value": 184.25153741440008
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 184.25153741440008
+          }, 
+          "end": {
+            "value": 186.41059410360012
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 186.41059410360012
+          }, 
+          "end": {
+            "value": 188.56965079280016
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 188.56965079280016
+          }, 
+          "end": {
+            "value": 190.4588253958502
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 190.4588253958502
+          }, 
+          "end": {
+            "value": 190.7287074820002
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }, 
+        {
+          "start": {
+            "value": 190.728707482
+          }, 
+          "end": {
+            "value": 195.030204081
+          }, 
+          "label": {
+            "value": "N"
+          }
+        }
+      ], 
+      "sandbox": {
+        "ref_url": "http://ddmal.music.mcgill.ca/billboard"
+      }
+    }
+  ], 
+  "file_metadata": {
+    "duration": 195.030204081, 
+    "title": "50 Ways To Leave Your Lover", 
+    "jams_version": "0.0.1", 
+    "artist": "Paul Simon"
+  }
+}
