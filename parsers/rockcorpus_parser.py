@@ -56,6 +56,11 @@ rs200_melody_nlt (containing the expanded melody annotations).
 This directory should also contain the file "audio_sources.txt" at the top
 level.
 
+7. There is a discrepancy between the harmony and melody annotations for
+the track "Billie Jean" (files billie_jean_dt.mel/.nlt,
+and billie_jean_dt.clt and billie_jean_tdc.clt). Since the melody transcription
+seems to be in error, omit it.
+
 """
 
 __author__ = "J. P. Forsyth"
@@ -76,9 +81,14 @@ sys.path.append("..")
 import pyjams
 
 
+ANNOTATORS = dict(
+    dt=dict(
+        name='David Temperley',
+        email='dtemperley@esm.rochester.edu'),
+    tdc=dict(
+        name='Trevor de Clercq',
+        email='trevor.declercq@gmail.com'))
 AUDIO_SOURCES_FILE = 'audio_sources.txt'
-ANNOTATORS = {'dt': 'David Temperley', 'tdc': 'Trevor de Clercq'}
-
 MELODY_DIR = 'rs200_melody_nlt'
 HARMONY_DIR = 'rs200_harmony_clt'
 TIMING_DATA_DIR = 'timing_data'
@@ -95,8 +105,7 @@ def fill_annotation_metadata(annot, annotator, sandbox_text=None):
         email="dtemperley@esm.rochester.edu, trevor.declercq@gmail.com")
     annot.annotation_metadata.annotator = annotator
     if not sandbox_text is None:
-        annot.sandbox['import_notes'] = sandbox_text
-
+        annot.sandbox = dict(import_notes=sandbox_text)
 
 def fill_event_annotation_data(times, labels, secondary_values,
                                event_annotation):
@@ -193,7 +202,8 @@ def get_audio_sources_info(audio_sources_file):
     Parameters
     ----------
     audio_sources_file : str
-        ?
+        Filepath of master file containing title, artist, and album
+        information.
 
     Returns
     -------
@@ -204,8 +214,7 @@ def get_audio_sources_info(audio_sources_file):
 
     # make a dictionary so we can look up by song name
     songs = {}
-    N = len(data[0])
-    for n in range(N):
+    for n in range(len(data[0])):
         name = str(data[0][n])
         songs[name] = dict(artist=str(data[1][n]), album=str(data[2][n]))
 
@@ -236,13 +245,15 @@ def parse_melody_nlt_file(melody_file, jam, annotator, timing_added):
     """Add the annotations of a melody .nlt file to a JAMS object."""
 
     if timing_added:
-        (_, times, note_events,
+        (est_times, times, note_events,
             scale_degrees) = pyjams.util.read_lab(melody_file, 4)
     else:
         (times, note_events,
             scale_degrees) = pyjams.util.read_lab(melody_file, 3)
 
-    if len(times) == 0:
+    # some songs have no corresponding melody transcription, or the
+    # melody transcription contains an error
+    if len(times) == 0 or 'Error' in str(est_times[-1]):
         logging.warning(
             "skipping: %s (no melody transcription available)." % melody_file)
         return
