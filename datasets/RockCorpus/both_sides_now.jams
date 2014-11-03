@@ -1011,7 +1011,9 @@
           }
         }
       ], 
-      "sandbox": "beat label secondary value indicates measure number."
+      "sandbox": {
+        "import_notes": "Beat label secondary value indicates measure number."
+      }
     }
   ], 
   "note": [
@@ -1024,7 +1026,10 @@
           "name": "David Temperley, Trevor de Clercq", 
           "email": "dtemperley@esm.rochester.edu, trevor.declercq@gmail.com"
         }, 
-        "annotator": "Trevor de Clercq"
+        "annotator": {
+          "email": "trevor.declercq@gmail.com", 
+          "name": "Trevor de Clercq"
+        }
       }, 
       "data": [
         {
@@ -5084,7 +5089,9 @@
           }
         }
       ], 
-      "sandbox": "note label secondary value indicates scale degree of melody note. time units are measures."
+      "sandbox": {
+        "import_notes": "Note label secondary value indicates scale degree of melody note. Time units are measures."
+      }
     }
   ], 
   "chord": [
@@ -5097,7 +5104,10 @@
           "name": "David Temperley, Trevor de Clercq", 
           "email": "dtemperley@esm.rochester.edu, trevor.declercq@gmail.com"
         }, 
-        "annotator": "Trevor de Clercq"
+        "annotator": {
+          "email": "trevor.declercq@gmail.com", 
+          "name": "Trevor de Clercq"
+        }
       }, 
       "data": [
         {
@@ -7225,7 +7235,9 @@
           }
         }
       ], 
-      "sandbox": "chord label secondary value indicates pitch class of current key. time units are measures."
+      "sandbox": {
+        "import_notes": "Chord label secondary value indicates pitch class of current key. Time units are measures."
+      }
     }, 
     {
       "annotation_metadata": {
@@ -7236,7 +7248,10 @@
           "name": "David Temperley, Trevor de Clercq", 
           "email": "dtemperley@esm.rochester.edu, trevor.declercq@gmail.com"
         }, 
-        "annotator": "David Temperley"
+        "annotator": {
+          "email": "dtemperley@esm.rochester.edu", 
+          "name": "David Temperley"
+        }
       }, 
       "data": [
         {
@@ -8380,7 +8395,9 @@
           }
         }
       ], 
-      "sandbox": "chord label secondary value indicates pitch class of current key. time units are measures."
+      "sandbox": {
+        "import_notes": "Chord label secondary value indicates pitch class of current key. Time units are measures."
+      }
     }
   ], 
   "file_metadata": {
