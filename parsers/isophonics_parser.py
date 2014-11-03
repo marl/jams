@@ -46,7 +46,7 @@ ISO_ATTRS = {'beat': 'beat',
              'segment': 'seglab'}
 
 
-def fill_global_metadata(jam, artist, title):
+def fill_file_metadata(jam, artist, title):
     """Fills the global metada into the JAMS jam."""
     jam.file_metadata.artist = artist
     jam.file_metadata.duration = -1  # In seconds
@@ -93,7 +93,7 @@ def process(in_dir, out_dir):
         if not title in all_jams:
             all_jams[title] = pyjams.JAMS()
             parts = lab_file.replace(in_dir, '').strip('/').split('/')
-            fill_global_metadata(all_jams[title], artist=parts[1], title=title)
+            fill_file_metadata(all_jams[title], artist=parts[1], title=title)
             output_paths[title] = os.path.join(
                 out_dir, *parts[1:]).replace(".lab", ".jams")
             print "%s -> %s" % (title, output_paths[title])
