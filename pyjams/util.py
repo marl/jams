@@ -107,7 +107,7 @@ def find_with_extension(in_dir, ext, depth=3):
     return match
 
 
-def fill_observation_annotation_data(value, confidence, secondary_value,
+def fill_observation_annotation_data(values, confidences, secondary_values,
                                      observation_annotation):
     """Add a collection of data to an event annotation (in-place).
 
@@ -122,7 +122,7 @@ def fill_observation_annotation_data(value, confidence, secondary_value,
     observation_annotation: ObservationAnnotation
         An instantiated observation annotation to populate.
     """
-    for v, c, sv in zip(value, confidence, secondary_value):
+    for v, c, sv in zip(values, confidences, secondary_values):
         data = observation_annotation.create_datapoint()
         data.value = v
         data.confidence = c
