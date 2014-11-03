@@ -2,7 +2,7 @@
 """Translates Billboard Chord Annotations to a set of JAMS files.
 
 The original data is found online at the following URL:
-    http://billboard.music.mcgill.ca
+    http://ddmal.music.mcgill.ca/billboard
 
 Specifically, this parser converts the "MIREX-style" lab files, provided on the
 dataset's homepage. To parse the entire dataset, you simply need to provide the
@@ -75,7 +75,17 @@ def fill_annotation_metadata(annot):
     annot.annotation_metadata.curator = pyjams.Curator(
         name="Ashley Bourgoyne", email='john.ashley.burgoyne@mail.mcgill.ca')
     annot.annotation_metadata.annotator = {}
-    annot.sandbox = dict(ref_url="http://ddmal.music.mcgill.ca/billboard")
+    annot.sandbox = dict(
+        ref_url="http://ddmal.music.mcgill.ca/billboard",
+        citation="""@inproceedings{Burgoyne2011,
+    author = {John Ashley Burgoyne and Jonathan Wild and Ichiro Fujinaga},
+    booktitle = {Proceedings of the 12th International Society for Music Information Retrieval Conference},
+    month = {October},
+    title = {An Expert Ground Truth Set for Audio Chord Recognition and Music Analysis},
+    pages = {633–638},
+    volume = {12},
+    year = {2011}}
+    """)
 
 
 def create_JAMS(lab_file, out_file, index_data=None):
