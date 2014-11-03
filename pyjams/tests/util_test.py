@@ -30,8 +30,12 @@ class UtilTests(unittest.TestCase):
         self.assertEqual(result[1], [1.5, -2])
         self.assertEqual(result[2], ['a\tblah blah', -5.5])
 
-        with self.assertRaises(ValueError):
-            util.read_lab(fpath, 4, delimiter='\t', comment='#')
+        result = util.read_lab(fpath, 4, delimiter='\t', comment='#')
+        self.assertEqual(result[0], [0, 'b'])
+        self.assertEqual(result[1], [1.5, -2])
+        self.assertEqual(result[2], ['a', -5.5])
+        self.assertEqual(result[3], ['blah blah', ''])
+
         os.remove(fpath)
 
 if __name__ == "__main__":

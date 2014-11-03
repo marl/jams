@@ -10,6 +10,9 @@ def read_lab(filename, num_columns, delimiter=None, comment='#', header=False):
     An effort is made to infer datatypes, and therefore numerical values will
     be mapped to ints / floats accordingly.
 
+    Note: Any row with fewer than `num_columns` values will be back-filled
+    with empty strings.
+
     Parameters
     ----------
     filename : str
@@ -32,15 +35,13 @@ def read_lab(filename, num_columns, delimiter=None, comment='#', header=False):
     first_row = True
     with open(filename, 'r') as input_file:
         for row_idx, line in enumerate(input_file, 1):
-            if line == '\n':
+            if line.strip() == '':
                 continue
             if line.startswith(comment):
                 continue
             values = line.strip().split(delimiter, num_columns - 1)
-            if len(values) != num_columns:
-                raise ValueError(
-                    "Expected %d columns, received %d at line %d: %s" %
-                    (num_columns, len(values), row_idx, line))
+            while len(values) < num_columns:
+                values.append('')
             if header and first_row:
                 first_row = False
                 continue
