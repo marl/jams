@@ -1,16 +1,50 @@
 #!/usr/bin/env python
-"""
-Translates the Rock Corpus Dataset chord and melody annotations to a set of
+"""Translates the Rock Corpus Dataset chord and melody annotations to a set of
 JAMS files.
 
 The original data is found online at the following URL:
     http://theory.esm.rochester.edu/rock_corpus/
 
-To parse the entire dataset, you simply need to provide the path to the
-unarchived folders.
+A few steps must be taken before parsing the entire dataset. This is mostly
+achieved by downloading the current version of the annotations, which will look
+like the following after expansion (e.g. for version 2.1):
 
-Example:
-TODO(jpf211): Provide one
+    rock_corpus_v2-1/
+        rs200_harmony/
+            1999_dt.har
+            1999_tdc.har
+            ...
+        rs200_melody/
+            1999_tdc.mel
+            a_change_is_gonna_come_dt.mel
+            ...
+        timing_data/
+            1999.tim
+            a_change_is_gonna_come.tim
+            ...
+
+Then, save the following three files from the `Programs` tab of the website to
+the base directory above (i.e. `rock_corpus_v2-1`):
+
+    rock_corpus_v2-1/
+        expand6.c
+        add-timings.pl
+        process-mel5.pl
+
+Next, compile `expand6.c`, using the following command, given that you have a
+C-compiler on your path:
+
+    $ cc expand6.c -o expand6
+
+NOTE: This did not work as-downloaded for us, throwing a compiler error at
+line 441 (non-void must return a value); this was resolved by adding an
+arbitrary `0` to the return statement.
+
+
+At this point the dataset can be converted by something like the following
+command:
+
+    $ python rockcorpus_parser.py ~/rock_corpus_v2-1 ~/rock_corpus_v2-1/jams
 
 
 NOTES:
@@ -106,6 +140,7 @@ def fill_annotation_metadata(annot, annotator, sandbox_text=None):
     annot.annotation_metadata.annotator = annotator
     if not sandbox_text is None:
         annot.sandbox = dict(import_notes=sandbox_text)
+
 
 def fill_event_annotation_data(times, labels, secondary_values,
                                event_annotation):
