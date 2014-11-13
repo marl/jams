@@ -1,0 +1,146 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "#root",
+
+    "definitions": {
+
+        "namespace": { "type": "string" },
+
+        "time": {
+            "type": "number",
+            "description": "A time value, in seconds.",
+            "minimum": 0.0
+        },
+
+        "confidence": {
+            "type": "number",
+            "description": "A confidence value, in the range of [0, 1].",
+            "minimum": 0.0,
+            "maximum": 1.0
+        },
+
+        "label": {
+            "type": "object",
+            "properties": {
+                "label": { "type": "string" },
+                "confidence": { "$ref": "#/definitions/confidence" },
+                "namespace": { "$ref": "#/definitions/namespace" }
+            },
+            "required": ["label"]
+        },
+
+        "interval": {
+            "type": "object",
+            "properties": {
+                "time": { "$ref": "#/definitions/time" },
+                "duration": { "$ref": "#/definitions/time" }
+            },
+            "required": ["time", "duration"]
+        },
+
+        "labeled_interval": {
+            "type": "object",
+            "allOf": [
+                { "$ref": "#/definitions/interval" },
+                { "$ref": "#/definitions/label" }
+            ],
+            "properties": {
+                "type": { "enum": ["labeled_interval"]}
+            },
+            "required": ["type"]
+        },
+
+        "observation_set": {
+            "type": "array",
+            "title": "Observation set",
+            "description": "Container for a collection of observations.",
+            "items": {
+                "anyOf" : [
+                    { "$ref": "#/definitions/labeled_interval" }
+                ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+
+        "file_metadata": {
+            "type": "object",
+            "title": "File Metadata",
+            "properties": {
+                "identifiers": {
+                    "type": "object",
+                    "title": "Namespace Identifiers",
+                    "description": "Sandbox for file ID information (e.g. echonest ID, musicbrainz ID, etc.)."
+                },
+                "artist": { "type": "string"},
+                "title": { "type": "string"},
+                "release": { "type": "string"},
+                "duration": { "$ref": "#/definitions/time" }
+            }
+        },
+
+        "curator": {
+            "type": "object",
+            "title": "Curator",
+            "description": "Curator contact information: name and email",
+            "properties": {
+                "name": { "type": "string"},
+                "email": { "type": "string", "format": "email" }
+            },
+            "required": ["name", "email"]
+        },
+
+        "annotation_metadata": {
+            "type": "object",
+            "title": "Annotation metadata",
+            "description": "All metadata required to describe an annotation",
+            "properties": {
+                "corpus": { "type": "string" },
+                "version": { "type": "string" },
+                "curator": { "$ref": "#/definitions/curator" },
+                "annotator": {
+                    "type": "object",
+                    "title": "Annotator",
+                    "description": "Sandbox for information about the annotator."
+                },
+                "annotation_tools": { "type": "string"},
+                "annotation_rules": { "type": "string"},
+                "validation": { "type": "string"},
+                "data_source": { "type": "string"}
+            },
+            "required": ["version", "curator"]
+        },
+
+        "annotation": {
+            "type": "object",
+            "title": "Annotation",
+            "description": "An annotation by a single observer.",
+            "properties": {
+                "annotation_metadata": { "$ref": "#/definitions/annotation_metadata" },
+                "observations": { "$ref": "#/definitions/observation_set" },
+                "sandbox": { "type": "object"}
+            },
+            "required": ["annotation_metadata", "observations"]
+        }
+
+    },
+
+    "type": "object",
+    "title": "JAMS file",
+    "description": "JSON Annotated Music Specification",
+    "properties": {
+
+        "file_metadata": { "$ref": "#/definitions/file_metadata" },
+        "jams_version" : { "type": "string", "pattern": "[0-9].[0-9].[0-9]"},
+        "annotations": {
+            "type": "array",
+            "title": "Annotations",
+            "description": "All annotations for this file",
+            "items": { "$ref": "#/definitions/annotation" },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "sandbox": { "type": "object" }
+    },
+    "required": ["file_metadata", "jams_version"]
+}
