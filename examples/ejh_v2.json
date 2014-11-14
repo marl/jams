@@ -9,11 +9,14 @@
     "annotations": [
         {
             "annotation_metadata": {
-                "curator": {
+                "annotation_tools": "Sonic Visualizer",
+                "annotator": {
                     "name": "Eric Humphrey",
                     "email": "ejhumphrey@nyu.edu"
                 },
-                "version": "75ae8948ca1"
+                "version": "75ae8948ca1",
+                "corpus": "Isophonics",
+                "data_source": "Centre for Digital Music"
             },
             "sandbox": {},
             "observations": [
@@ -23,6 +26,22 @@
                     "duration": 1.58,
                     "label": "N",
                     "namespace": "chords.harte",
+                    "confidence": 1.0
+                },
+                {
+                    "type": "labeled_interval",
+                    "time": 1.58,
+                    "duration": 3.171,
+                    "label": "vi",
+                    "namespace": "chords.roman",
+                    "confidence": 1.0
+                },
+                {
+                    "type": "labeled_interval",
+                    "time": 1.58,
+                    "duration": 0.0,
+                    "label": "1",
+                    "namespace": "beat",
                     "confidence": 1.0
                 }
             ]
