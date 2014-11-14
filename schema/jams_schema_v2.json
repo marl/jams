@@ -12,42 +12,63 @@
             "minimum": 0.0
         },
 
-        "confidence": {
+        "frequency": {
             "type": "number",
-            "description": "A confidence value, in the range of [0, 1].",
+            "description": "A frequency value, in Hertz.",
             "minimum": 0.0,
-            "maximum": 1.0
+            "exclusiveMinimum": true
         },
 
-        "label": {
-            "type": "object",
-            "properties": {
-                "label": { "type": "string" },
-                "confidence": { "$ref": "#/definitions/confidence" },
-                "namespace": { "$ref": "#/definitions/namespace" }
-            },
-            "required": ["label"]
+        "bounded_magnitude": {
+            "type": "number",
+            "description": "A unitless value, in the range of [0, 1].",
+            "minimum": 0.0,
+            "maximum": 1.0
         },
 
         "interval": {
             "type": "object",
             "properties": {
+                "type": { "enum": [ "interval" ] },
                 "time": { "$ref": "#/definitions/time" },
-                "duration": { "$ref": "#/definitions/time" }
+                "duration": { "$ref": "#/definitions/time" },
+                "value": {
+                    "oneOf": [
+                        { "type": "string" },
+                        { "type": "number" },
+                        { "type": "integer" }
+                    ]
+                },
+                "confidence": { "$ref": "#/definitions/bounded_magnitude" },
+                "namespace": { "$ref": "#/definitions/namespace" }
             },
-            "required": ["time", "duration"]
+            "required": ["type", "time", "duration", "value", "namespace"],
+            "additionalProperties": false
         },
 
-        "labeled_interval": {
+        "series": {
             "type": "object",
-            "allOf": [
-                { "$ref": "#/definitions/interval" },
-                { "$ref": "#/definitions/label" }
-            ],
+            "description": "",
             "properties": {
-                "type": { "enum": ["labeled_interval"]}
+                "type": { "enum": [ "series" ] },
+                "time": { "$ref": "#/definitions/time" },
+                "duration": { "$ref": "#/definitions/time" },
+                "values": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            { "type": "integer" }
+                        ]
+                    },
+                    "minItems": 1
+                },
+                "confidence": { "$ref": "#/definitions/bounded_magnitude" },
+                "namespace": { "$ref": "#/definitions/namespace" }
             },
-            "required": ["type"]
+            "required": ["type", "time", "duration", "values", "namespace"],
+            "additionalProperties": false
         },
 
         "observation_set": {
@@ -55,8 +76,9 @@
             "title": "Observation set",
             "description": "Container for a collection of observations.",
             "items": {
-                "anyOf" : [
-                    { "$ref": "#/definitions/labeled_interval" }
+                "anyOf": [
+                    { "$ref": "#/definitions/interval" },
+                    { "$ref": "#/definitions/series" }
                 ]
             },
             "minItems": 1,
@@ -76,7 +98,8 @@
                 "title": { "type": "string"},
                 "release": { "type": "string"},
                 "duration": { "$ref": "#/definitions/time" }
-            }
+            },
+            "additionalProperties": false
         },
 
         "curator": {
@@ -87,7 +110,8 @@
                 "name": { "type": "string"},
                 "email": { "type": "string", "format": "email" }
             },
-            "required": ["name", "email"]
+            "required": ["name", "email"],
+            "additionalProperties": false
         },
 
         "annotation_metadata": {
@@ -108,7 +132,8 @@
                 "validation": { "type": "string"},
                 "data_source": { "type": "string"}
             },
-            "required": ["version", "curator"]
+            "required": ["version", "curator"],
+            "additionalProperties": false
         },
 
         "annotation": {
@@ -120,7 +145,8 @@
                 "observations": { "$ref": "#/definitions/observation_set" },
                 "sandbox": { "type": "object"}
             },
-            "required": ["annotation_metadata", "observations"]
+            "required": ["annotation_metadata", "observations"],
+            "additionalProperties": false
         }
 
     },
@@ -129,7 +155,6 @@
     "title": "JAMS file",
     "description": "JSON Annotated Music Specification",
     "properties": {
-
         "file_metadata": { "$ref": "#/definitions/file_metadata" },
         "jams_version" : { "type": "string", "pattern": "[0-9].[0-9].[0-9]"},
         "annotations": {
