@@ -2,14 +2,14 @@
     "chord": [
         {
             "annotation_metadata": {
-                "annotation_tools": "Sonic Visualizer", 
+                "annotation_tools": "Sonic Visualizer",
                 "annotator": {
-                    "name": "Eric Humphrey", 
+                    "name": "Eric Humphrey",
                     "email": "ejhumphrey@nyu.edu"
-                }, 
+                },
                 "version": "75ae8948ca1",
-                "version": "1.0", 
-                "corpus": "Isophonics", 
+                "version": "1.0",
+                "corpus": "Isophonics",
                 "data_source": "Centre for Digital Music"
             },
             "data": [
@@ -17,13 +17,56 @@
                     "start": {
                         "value": 0.0,
                         "confidence": 1.0
-                    }, 
+                    },
                     "end": {
                         "value": 1.58,
                         "confidence": 1.0
-                    }, 
+                    },
                     "label": {
                         "value": "N",
+                        "confidence": 1.0
+                    }
+                },
+                {
+                    "start": {
+                        "value": 1.58,
+                        "confidence": 1.0
+                    },
+                    "end": {
+                        "value": 3.171,
+                        "confidence": 1.0
+                    },
+                    "label": {
+                        "value": "vi",
+                        "confidence": 1.0,
+                        "secondary_value": "roman"
+                    }
+                }
+            ],
+            "sandbox": {}
+        }
+    ],
+    "beat": [
+        {
+            "annotation_metadata": {
+                "annotation_tools": "Sonic Visualizer",
+                "annotator": {
+                    "name": "Eric Humphrey",
+                    "email": "ejhumphrey@nyu.edu"
+                },
+                "version": "75ae8948ca1",
+                "version": "1.0",
+                "corpus": "Isophonics",
+                "data_source": "Centre for Digital Music"
+            },
+            "data": [
+                {
+                    "time": {
+                        "value": 1.58,
+                        "confidence": 1.0
+                    },
+                    "label": {
+                        "value": "1",
                         "confidence": 1.0
                     }
                 }
@@ -32,7 +75,7 @@
         }
     ],
     "file_metadata": {
-        "identifiers": { 
+        "identifiers": {
             "musicbrainz": "11c2f2dc-80f4-4d19-8d19-ab5195bf322f"
         },
         "artist": "The National",
@@ -40,7 +83,7 @@
         "release": "Trouble Will Find Me",
         "duration": {
             "value": 249.0
-        } 
+        }
     },
     "jams_version": "0.0.2",
     "sandbox": {}
