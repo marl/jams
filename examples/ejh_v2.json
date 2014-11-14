@@ -24,6 +24,22 @@
                     "label": "N",
                     "namespace": "chords.harte",
                     "confidence": 1.0
+                },
+                {
+                    "type": "labeled_interval",
+                    "time": 1.58,
+                    "duration": 3.171,
+                    "label": "vi",
+                    "namespace": "chords.roman",
+                    "confidence": 1.0
+                },
+                {
+                    "type": "labeled_interval",
+                    "time": 1.58,
+                    "duration": 0.0,
+                    "label": "1",
+                    "namespace": "beat",
+                    "confidence": 1.0
                 }
             ]
         }
