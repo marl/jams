@@ -60,14 +60,16 @@ And that's it!
 """
 
 import json
+import numpy as np
+import pandas
 import os.path as path
 
 __VERSION__ = "0.0.1"
 __OBJECT_TYPE__ = 'object_type'
 
 # TODO: This is super fragile; migrate toward pkg_resources.
-__SCHEMA__ = json.load(open(path.join(path.split(__file__)[0],
-                                      '../schema/jams_schema.json')))
+# __SCHEMA__ = json.load(open(path.join(path.split(__file__)[0],
+#                                       '../schema/jams_schema.json')))
 
 
 def load(filepath):
@@ -116,7 +118,9 @@ class JObject(object):
 
     @property
     def __schema__(self):
-        return __SCHEMA__['definitions'].get(self.type, None)
+        # TODO(ejhumphrey): Disabled schema enforcement.
+        return
+        # return __SCHEMA__['definitions'].get(self.type, None)
 
     @property
     def __json__(self):
@@ -184,11 +188,18 @@ class JObject(object):
 
     def update(self, **kwargs):
         for name, value in kwargs.iteritems():
-            self.__dict__[name] = value
+            setattr(self, name, value)
 
     @property
     def type(self):
         return self.__class__.__name__
+
+    @classmethod
+    def loads(cls, obj):
+        return cls.__json_init__(**obj)
+
+    def dumps(self):
+        return self.__json__
 
 
 class Sandbox(JObject):
@@ -200,12 +211,9 @@ class Sandbox(JObject):
 
 
 class Observation(JObject):
-    """Observation (global)
+    """Observation (data frame)"""
 
-    Smallest observable concept (value) with a confidence interval. Used for
-    almost anything, from observed times to semantic tags.
-    """
-    def __init__(self, value=None, confidence=None, secondary_value=None):
+    def __init__(self, time=None, duration=None, value=None, confidence=None):
         """Create an Observation.
 
         Parameters
@@ -217,144 +225,17 @@ class Observation(JObject):
         secondary_value: obj, default=None
         """
         JObject.__init__(self)
-        self.value = value
-        self.confidence = confidence
-        self.secondary_value = secondary_value
-
-
-class Event(Observation):
-    """Event (sparse, instantaneous)
-
-    Instantaneous time event, consisting of two Observations (time and label).
-    Used for such ideas like beats or onsets.
-    """
-    def __init__(self, time=None, label=None):
-        """Create an Event.
-
-        Note that, if an argument is None, an empty Observation is created in
-        its place. Additionally, a dictionary matching the expected structure
-        of the arguments will be parsed successfully (i.e. instantiating from
-        JSON).
-
-        Parameters
-        ----------
-        time: Observation (or dict), default=None
-            A time Observation for this event.
-        label: Observation (or dict), default=None
-            A semantic concept for this event, as an Observation.
-        """
-        JObject.__init__(self)
-        if time is None:
-            time = Observation()
-        if label is None:
-            label = Observation()
-        self.time = Observation(**time)
-        self.label = Observation(**label)
-
-
-class Range(Observation):
-    """Range
-
-    An observed time interval, composed of three Observations (start, end, and
-    label). Used for such concepts as chords.
-    """
-    def __init__(self, start=None, end=None, label=None):
-        """Create a Range.
-
-        Note that, if an argument is None, an empty Observation is created in
-        its place. Additionally, a dictionary matching the expected structure
-        of the arguments will be parsed successfully (i.e. instantiating from
-        JSON).
-
-        Parameters
-        ----------
-        start: Observation (or dict)
-            The observed start time of the range.
-        end: Observation (or dict)
-            The observed end time of the range.
-        label: Observation (or dict)
-            Label over this time interval.
-        """
-        JObject.__init__(self)
-        # input checks
-        start = Observation() if start is None else start
-        end = Observation() if end is None else end
-        label = Observation() if label is None else label
-
-        self.start = Observation(**start)
-        self.end = Observation(**end)
-        self.label = Observation(**label)
-        if not self.duration is None and self.duration < 0:
-            raise ValueError(
-                "end.value (%s) < start.value (%s)" % (self.end.value,
-                                                       self.start.value))
-
-    @property
-    def duration(self):
-        if None in (self.end.value, self.start.value):
-            return None
-        return self.end.value - self.start.value
-
-
-class TimeSeries(Observation):
-    """Sampled Time Series Observation
-
-    This could be an array, and skip the value abstraction. However,
-    some abstraction could help turn data into numpy arrays on the fly.
-
-    However, np.ndarrays are not directly serializable. It might be necessary
-    to subclass np.ndarray and change __repr__.
-    """
-    def __init__(self, value=None, time=None, confidence=None):
-        """Create a TimeSeries.
-
-        Note that, if an argument is None, empty lists are created in
-        its place. Additionally, a dictionary matching the expected structure
-        of the arguments will be parsed successfully (i.e. instantiating from
-        JSON).
-
-        Parameters
-        ----------
-        value: list or serializable array
-            Values for this time-series.
-        time: list or serializable 1D-array
-            Times corresponding to the value series.
-        confidence: list or serializable 1D-array
-            Confidence values corresponding to the value series.
-        """
-        JObject.__init__(self)
-
-        # input checks
-        value = list() if value is None else value
-        time = list() if time is None else time
-        confidence = list() if confidence is None else confidence
-
-        # Validation -- could possibly be a private method to call when fields
-        #   change, but properties / setters break the JSON serialization.
-        lengths = list()
-        for x in (value, time, confidence):
-            if x:
-                lengths.append(len(x))
-        if lengths and len(set(lengths)) > 1:
-            raise ValueError("All initialized lists must be the same length.")
-
-        self.value = value
         self.time = time
+        self.duration = duration
+        self.value = value
         self.confidence = confidence
 
 
-class BaseAnnotation(JObject):
-    """Annotation base class.
+class Annotation(JObject):
+    """Annotation base class."""
 
-    Default Type: None
-
-    Be aware that Annotations define a '_DefaultType' class variable,
-    specifying the kind of objects contained in its 'data' attribute. Therefore
-    any subclass will need to set this accordingly.
-    """
-    _DefaultType = None
-
-    def __init__(self, data=None, annotation_metadata=None, sandbox=None):
+    def __init__(self, data=None, annotation_metadata=None, namespace='',
+                 sandbox=None):
         """Create an Annotation.
 
         Note that, if an argument is None, an empty Annotation is created in
@@ -385,6 +266,7 @@ class BaseAnnotation(JObject):
         self.annotation_metadata = AnnotationMetadata(**annotation_metadata)
         self.data = self.__parse_data__(data)
         self.sandbox = Sandbox(**sandbox)
+        self.namespace = namespace
 
     def __parse_data__(self, data):
         """This method unpacks data as a specific type of objects, defined by
@@ -404,60 +286,34 @@ class BaseAnnotation(JObject):
         objects = list()
         for idx, obj in enumerate(data):
             try:
-                objects.append(self._DefaultType(**obj))
+                objects.append(Observation(**obj))
             except TypeError:
                 raise TypeError(
                     "Invalid data at position %d for %s: "
                     "%s" % (idx, self.type, obj))
         return objects
 
-    def create_datapoint(self):
-        """Factory method to create an empty Data object based on this type of
-        Annotation, adding it to the data list and returning a reference.
+    def create_datapoint(self, *args, **kwargs):
+        """Factory method to create an Observation, adding it to the data array
+        and returning a reference.
 
         Returns
         -------
-        obj: self._DefaultType
-            An empty object, whose type is determined by the Annotation type.
+        obs: Observation
+            An Observation, initialized with the given parameters.
         """
-        self.data.append(self._DefaultType())
+        self.data.append(Observation(*args, **kwargs))
         return self.data[-1]
 
-
-class ObservationAnnotation(BaseAnnotation):
-    """Observation Annotation
-
-    Default Type: Observation
-
-    Be aware that Annotations define a '_DefaultType' class variable,
-    specifying the kind of objects contained in its 'data' attribute. Therefore
-    any subclass will need to set this accordingly."""
-    _DefaultType = Observation
-
-
-class EventAnnotation(BaseAnnotation):
-    """Event Annotation
-
-    Default Type: Event
-
-    Be aware that Annotations define a '_DefaultType' class variable,
-    specifying the kind of objects contained in its 'data' attribute. Therefore
-    any subclass will need to set this accordingly."""
-    _DefaultType = Event
-
     @property
-    def labels(self):
-        """All labels in the annotation, as a single object.
+    def values(self):
+        """All values in the annotation, as a single object.
 
         Returns
         -------
-        labels: JObject
-            Object with the label fields (value, confidence, secondary_label)
-            as lists, in order over the annotation.
+        values: list
         """
-        kwargs = dict([(k, [obj.label[k] for obj in self.data])
-                       for k in self._DefaultType().label.keys()])
-        return Observation(**kwargs)
+        return [obs.value for obs in self.data]
 
     @property
     def times(self):
@@ -465,88 +321,9 @@ class EventAnnotation(BaseAnnotation):
 
         Returns
         -------
-        times: JObject
-            Object with the time fields (value, confidence, secondary_label)
-            as lists, in order over the annotation.
+        times: list
         """
-        kwargs = dict([(k, [obj.time[k] for obj in self.data])
-                       for k in self._DefaultType().time.keys()])
-        return Observation(**kwargs)
-
-
-class TimeSeriesAnnotation(BaseAnnotation):
-    """TimeSeries Annotation
-
-    Default Type: TimeSeries
-
-    Be aware that Annotations define a '_DefaultType' class variable,
-    specifying the kind of objects contained in its 'data' attribute. Therefore
-    any subclass will need to set this accordingly."""
-    _DefaultType = TimeSeries
-
-
-class RangeAnnotation(BaseAnnotation):
-    """Range Annotation
-
-    Default Type: Range
-
-    Be aware that Annotations define a '_DefaultType' class variable,
-    specifying the kind of objects contained in its 'data' attribute. Therefore
-    any subclass will need to set this accordingly."""
-    _DefaultType = Range
-
-    @property
-    def labels(self):
-        """All labels in the annotation, as a single object.
-
-        Returns
-        -------
-        labels: JObject
-            Object with the label fields (value, confidence, secondary_label)
-            as lists, in order over the annotation.
-        """
-        kwargs = dict([(k, [obj.label[k] for obj in self.data])
-                       for k in self._DefaultType().label.keys()])
-        return Observation(**kwargs)
-
-    @property
-    def starts(self):
-        """All start times in the annotation, as a single object.
-
-        Returns
-        -------
-        start_times: JObject
-            Object with the start fields (value, confidence, secondary_label)
-            as lists, in order over the annotation.
-        """
-        kwargs = dict([(k, [obj.start[k] for obj in self.data])
-                       for k in self._DefaultType().start.keys()])
-        return Observation(**kwargs)
-
-    @property
-    def ends(self):
-        """All end times in the annotation, as a single Observation.
-
-        Returns
-        -------
-        end_times: Observation
-            Object with the end fields (value, confidence, secondary_label)
-            as lists, in order over the annotation.
-        """
-        kwargs = dict([(k, [obj.end[k] for obj in self.data])
-                      for k in self._DefaultType().end.keys()])
-        return Observation(**kwargs)
-
-    @property
-    def intervals(self):
-        """All start and end times in the annotation.
-
-        Returns
-        -------
-        intervals: list of tuples
-            Ordered collection of (start.value, end.value) pairs
-        """
-        return [(obj.start.value, obj.end.value) for obj in self.data]
+        return [obs.time for obs in self.data]
 
 
 class Curator(JObject):
@@ -647,41 +424,36 @@ class FileMetadata(JObject):
         self.jams_version = jams_version
 
 
-class AnnotationList(list):
-    """AnnotationList
+class AnnotationArray(list):
+    """AnnotationArray
 
     List subclass for managing collections of annotations, providing factory
     methods to create empty annotations.
     """
-    def __init__(self, annotations, AnnotationType):
-        """Create an AnnotationList.
+    def __init__(self, annotations):
+        """Create an AnnotationArray.
 
         Parameters
         ----------
         annotations: list
             List of XAnnotations, or appropriately formated dicts, where X
             is consistent with AnnotationType.
-        AnnotationType: class
-            XAnnotation to use as the default type, where X in
-                [Observation, Event, Range, TimeSeries]
         """
         if annotations is None:
             annotations = list()
 
-        self._DefaultType = AnnotationType
-        self.extend([self._DefaultType(**obj) for obj in annotations])
+        self.extend([Annotation(**obj) for obj in annotations])
 
-    def create_annotation(self):
-        """Create an empty XAnnotation based on the annotation type provided
-        on init, adding it to the annotation list and returning a reference to
+    def create_annotation(self, *args, **kwargs):
+        """Create an empty Annotation, returning a reference to
         the new annotation object.
 
         Returns
         -------
-        obj: AnnotationType
-            An empty annotation, whose type is determined by self._DefaultType.
+        obj: Annotation
+            An annotation, initialized with the given arguments.
         """
-        self.append(self._DefaultType())
+        self.append(Annotation(*args, **kwargs))
         return self[-1]
 
 
@@ -696,29 +468,29 @@ class JAMS(JObject):
 
         Parameters
         ----------
-        beat : list of EventAnnotations
+        beat : list of Annotations
             Used for beat-tracking.
-        chord : list of RangeAnnotations
+        chord : list of Annotations
             Used for chord estimation.
-        genre : list of ObservationAnnotations
+        genre : list of Annotations
             Used for genre tagging.
-        key : list of RangeAnnotations
+        key : list of Annotations
             Used for key estimation.
-        mood : list of ObservationAnnotations
+        mood : list of Annotations
             Used for mood estimation.
-        melody : list of TimeSeriesAnnotations
+        melody : list of Annotations
             Used for continuous-f0 melody.
-        note : list of RangeAnnotations
+        note : list of Annotations
             Used for estimated note transcription.
-        onset : list of EventAnnotations
+        onset : list of Annotations
             Used for onset detection.
-        pattern : list of TimeSeriesAnnotations
+        pattern : list of Annotations
             Used for pattern discovery.
-        pitch : list of TimeSeriesAnnotations
+        pitch : list of Annotations
             Used for pitch estimation.
-        segment : list of RangeAnnotations
+        segment : list of Annotations
             Used for music segmentation.
-        source : list of RangeAnnotations
+        source : list of Annotations
             Used for source activations.
         tag : list of Annotations
             Used for music tagging and semantic descriptors.
@@ -733,38 +505,25 @@ class JAMS(JObject):
         if sandbox is None:
             sandbox = Sandbox()
 
-        self.beat = AnnotationList(
-            [] if beat is None else beat, EventAnnotation)
-        self.chord = AnnotationList(
-            [] if chord is None else chord, RangeAnnotation)
-        self.genre = AnnotationList(
-            [] if genre is None else genre, ObservationAnnotation)
-        self.key = AnnotationList(
-            [] if key is None else key, RangeAnnotation)
-        self.melody = AnnotationList(
-            [] if melody is None else melody, TimeSeriesAnnotation)
-        self.mood = AnnotationList(
-            [] if mood is None else mood, ObservationAnnotation)
-        self.note = AnnotationList(
-            [] if note is None else note, RangeAnnotation)
-        self.onset = AnnotationList(
-            [] if onset is None else onset, EventAnnotation)
-        self.pattern = AnnotationList(
-            [] if pattern is None else pattern, TimeSeriesAnnotation)
-        self.pitch = AnnotationList(
-            [] if pitch is None else pitch, TimeSeriesAnnotation)
-        self.segment = AnnotationList(
-            [] if segment is None else segment, RangeAnnotation)
-        self.source = AnnotationList(
-            [] if source is None else source, RangeAnnotation)
-        self.tag = AnnotationList(
-            [] if tag is None else tag, ObservationAnnotation)
+        self.beat = AnnotationArray([] if beat is None else beat)
+        self.chord = AnnotationArray([] if chord is None else chord)
+        self.genre = AnnotationArray([] if genre is None else genre)
+        self.key = AnnotationArray([] if key is None else key)
+        self.melody = AnnotationArray([] if melody is None else melody)
+        self.mood = AnnotationArray([] if mood is None else mood)
+        self.note = AnnotationArray([] if note is None else note)
+        self.onset = AnnotationArray([] if onset is None else onset)
+        self.pattern = AnnotationArray([] if pattern is None else pattern)
+        self.pitch = AnnotationArray([] if pitch is None else pitch)
+        self.segment = AnnotationArray([] if segment is None else segment)
+        self.source = AnnotationArray([] if source is None else source)
+        self.tag = AnnotationArray([] if tag is None else tag)
         self.file_metadata = FileMetadata(**file_metadata)
         self.sandbox = Sandbox(**sandbox)
 
     @property
     def __schema__(self):
-        return __SCHEMA__
+        return None
 
     def add(self, jam, on_conflict='fail'):
         """Add the contents of another jam to this object.
@@ -796,9 +555,13 @@ class JAMS(JObject):
 
         self.beat.extend(jam.beat)
         self.chord.extend(jam.chord)
+        self.genre.extend(jam.pitch)
         self.key.extend(jam.key)
         self.melody.extend(jam.melody)
+        self.mood.extend(jam.mood)
         self.note.extend(jam.note)
+        self.onset.extend(jam.onset)
+        self.pattern.extend(jam.pattern)
         self.pitch.extend(jam.pitch)
         self.segment.extend(jam.segment)
         self.source.extend(jam.source)
