@@ -98,11 +98,11 @@ def find_with_extension(in_dir, ext, depth=3):
         Collection of matching file paths.
     """
     assert depth >= 1
-    ext = ext.strip('.')
+    ext = ext.strip(os.extsep)
     match = list()
     for n in range(1, depth+1):
-        wildcard = "/".join(["*"]*n)
-        search_path = os.path.join(in_dir, "%s.%s" % (wildcard, ext))
+        wildcard = os.path.sep.join(["*"]*n)
+        search_path = os.path.join(in_dir, os.extsep.join([wildcard, ext]))
         match += glob.glob(search_path)
 
     return match
