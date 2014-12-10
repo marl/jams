@@ -2,6 +2,22 @@
 
 import os
 import glob
+import pandas as pd
+import numpy as np
+
+
+def serialize_obj(obj):
+    '''
+    Custom serialization functionality for working with dataframes.
+
+    '''
+    if isinstance(obj, pd.tslib.Timedelta):
+        return obj.total_seconds()
+
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+
+    return obj
 
 
 def read_lab(filename, num_columns, delimiter=None, comment='#', header=False):

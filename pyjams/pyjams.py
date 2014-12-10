@@ -61,7 +61,7 @@ And that's it!
 
 import json
 import numpy as np
-import pandas
+import pandas as pd
 import os.path as path
 
 __VERSION__ = "0.0.1"
@@ -258,13 +258,16 @@ class Annotation(JObject):
 
         if data is None:
             data = list()
+
         if annotation_metadata is None:
             annotation_metadata = AnnotationMetadata()
+
         if sandbox is None:
             sandbox = Sandbox()
 
         self.annotation_metadata = AnnotationMetadata(**annotation_metadata)
         self.data = self.__parse_data__(data)
+
         self.sandbox = Sandbox(**sandbox)
         self.namespace = namespace
 
@@ -276,54 +279,56 @@ class Annotation(JObject):
         Parameters
         ----------
         data: list
-            Collection of dicts or _DefaultTypes.
+            Collection of dicts
 
         Returns
         -------
         objects: list
             Collection of _DefaultTypes.
         """
-        objects = list()
-        for idx, obj in enumerate(data):
-            try:
-                objects.append(Observation(**obj))
-            except TypeError:
-                raise TypeError(
-                    "Invalid data at position %d for %s: "
-                    "%s" % (idx, self.type, obj))
-        return objects
 
-    def create_datapoint(self, *args, **kwargs):
-        """Factory method to create an Observation, adding it to the data array
-        and returning a reference.
+        df = pd.DataFrame.from_dict(data)
 
-        Returns
-        -------
-        obs: Observation
-            An Observation, initialized with the given parameters.
-        """
-        self.data.append(Observation(*args, **kwargs))
-        return self.data[-1]
+        # Cast the time fields to timedelta format
+        df.time = pd.to_timedelta(df.time, unit='s')
+        df.duration = pd.to_timedelta(df.duration, unit='s')
 
-    @property
-    def values(self):
-        """All values in the annotation, as a single object.
+        # TODO:   2014-12-10 16:54:04 by Brian McFee <brian.mcfee@nyu.edu>
+        #  properly order the columns of df
 
-        Returns
-        -------
-        values: list
-        """
-        return [obs.value for obs in self.data]
+        return df
 
-    @property
-    def times(self):
-        """All times in the annotation, as a single object.
+#     def create_datapoint(self, *args, **kwargs):
+#         """Factory method to create an Observation, adding it to the data array
+#         and returning a reference.
 
-        Returns
-        -------
-        times: list
-        """
-        return [obs.time for obs in self.data]
+#         Returns
+#         -------
+#         obs: Observation
+#             An Observation, initialized with the given parameters.
+#         """
+#         self.data.append(Observation(*args, **kwargs))
+#         return self.data[-1]
+
+#     @property
+#     def values(self):
+#         """All values in the annotation, as a single object.
+
+#         Returns
+#         -------
+#         values: list
+#         """
+#         return [obs.value for obs in self.data]
+
+#     @property
+#     def times(self):
+#         """All times in the annotation, as a single object.
+
+#         Returns
+#         -------
+#         times: list
+#         """
+#         return [obs.time for obs in self.data]
 
 
 class Curator(JObject):
