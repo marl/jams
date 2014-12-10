@@ -66,7 +66,7 @@ def load_textlist(filename):
 
 def expand_filepaths(base_dir, rel_paths):
     """Expand a list of relative paths to a give base directory."""
-    return [os.path.join(base_dir, rp.strip("./")) for rp in rel_paths]
+    return [os.path.join(base_dir, os.path.normpath(rp)) for rp in rel_paths]
 
 
 def smkdirs(dpath):
