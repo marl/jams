@@ -64,6 +64,8 @@ import numpy as np
 import pandas as pd
 import os.path as path
 
+from . import util
+
 __VERSION__ = "0.0.1"
 __OBJECT_TYPE__ = 'object_type'
 
@@ -131,9 +133,13 @@ class JObject(object):
         """
         filtered_dict = dict()
         for k, v in self.__dict__.iteritems():
-            if v in [None, '', list(), dict()] or k.startswith('_'):
+            if isinstance(v, pd.DataFrame):
+                filtered_dict[k] = v
+            elif v in [None, '', list(), dict()] or k.startswith('_'):
                 continue
-            filtered_dict[k] = v
+            else:
+                filtered_dict[k] = v
+
         return filtered_dict
 
     @classmethod
@@ -196,10 +202,17 @@ class JObject(object):
 
     @classmethod
     def loads(cls, obj):
+        # FIXME:  2014-12-11 13:20:45 by Brian McFee <brian.mcfee@nyu.edu>
+        # why does loads take an object and not a string?     
+
         return cls.__json_init__(**obj)
 
     def dumps(self):
-        return self.__json__
+        # self.__json__ does not recurse
+        # json.dumps(self) does recurse
+        return json.dumps(self)
+#         return json.dumps(self.__json__)
+#         return self.__json__
 
 
 class Sandbox(JObject):
@@ -229,6 +242,44 @@ class Observation(JObject):
         self.duration = duration
         self.value = value
         self.confidence = confidence
+
+
+class JamsFrame(pd.DataFrame):
+    '''A dataframe class for JAMS.
+
+    This automates certain niceties, such as timestamp
+    conversion and serializatoin.
+    '''
+
+    @classmethod
+    def from_dict(cls, *args, **kwargs):
+
+        new_frame = super(JamsFrame, cls).from_dict(*args, **kwargs)
+
+        # Encode time properly
+        new_frame.time = pd.to_timedelta(new_frame.time,
+                                         unit='s')
+
+        new_frame.duration = pd.to_timedelta(new_frame.duration,
+                                             unit='s')
+
+        # Properly order the columns
+        new_frame = new_frame[['time', 'duration', 'value', 'confidence']]
+
+        # Clobber the class attribute
+        new_frame.__class__ = cls
+
+        return new_frame
+
+    @property
+    def __json__(self):
+        '''JSON encoding attribute'''
+        return util.frame_to_dict(self, orient='records')
+
+    def to_interval_values(self):
+        '''Extract observation data in a mir_eval-friendly format'''
+        # TODO
+        pass
 
 
 class Annotation(JObject):
@@ -266,7 +317,7 @@ class Annotation(JObject):
             sandbox = Sandbox()
 
         self.annotation_metadata = AnnotationMetadata(**annotation_metadata)
-        self.data = self.__parse_data__(data)
+        self.data = JamsFrame.from_dict(data)
 
         self.sandbox = Sandbox(**sandbox)
         self.namespace = namespace
@@ -293,9 +344,9 @@ class Annotation(JObject):
         df.time = pd.to_timedelta(df.time, unit='s')
         df.duration = pd.to_timedelta(df.duration, unit='s')
 
-        # TODO:   2014-12-10 16:54:04 by Brian McFee <brian.mcfee@nyu.edu>
         #  properly order the columns of df
 
+        df = df[['time', 'duration', 'value', 'confidence']]
         return df
 
 #     def create_datapoint(self, *args, **kwargs):
