@@ -373,38 +373,6 @@ class Annotation(JObject):
         df = df[['time', 'duration', 'value', 'confidence']]
         return df
 
-#     def create_datapoint(self, *args, **kwargs):
-#         """Factory method to create an Observation, adding it to the data array
-#         and returning a reference.
-
-#         Returns
-#         -------
-#         obs: Observation
-#             An Observation, initialized with the given parameters.
-#         """
-#         self.data.append(Observation(*args, **kwargs))
-#         return self.data[-1]
-
-#     @property
-#     def values(self):
-#         """All values in the annotation, as a single object.
-
-#         Returns
-#         -------
-#         values: list
-#         """
-#         return [obs.value for obs in self.data]
-
-#     @property
-#     def times(self):
-#         """All times in the annotation, as a single object.
-
-#         Returns
-#         -------
-#         times: list
-#         """
-#         return [obs.time for obs in self.data]
-
 
 class Curator(JObject):
     """Curator
