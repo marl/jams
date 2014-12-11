@@ -303,7 +303,7 @@ class JamsFrame(pd.DataFrame):
         times = util.timedelta_to_float(self.time.values)
         duration = util.timedelta_to_float(self.duration.values)
 
-        return np.hstack([times, times + duration]), list(self.value)
+        return np.vstack([times, times + duration]).T, list(self.value)
 
 
 class Annotation(JObject):
