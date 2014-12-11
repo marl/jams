@@ -6,6 +6,12 @@ import pandas as pd
 import numpy as np
 
 
+def timedelta_to_float(t):
+    '''Convert a timedelta64[ns] to floating point (seconds)'''
+
+    return t.astype(np.float) * 1e-9
+
+
 def serialize_obj(obj):
     '''
     Custom serialization functionality for working with advanced data types.

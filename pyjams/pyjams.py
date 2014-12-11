@@ -273,7 +273,6 @@ class JamsFrame(pd.DataFrame):
 
         def __recursive_simplify(D):
             '''A simplifier for nested dictionary structures'''
-
             if isinstance(D, list):
                 return [__recursive_simplify(Di) for Di in D]
 
@@ -288,9 +287,23 @@ class JamsFrame(pd.DataFrame):
         return __recursive_simplify(self.to_dict(orient='records'))
 
     def to_interval_values(self):
-        '''Extract observation data in a mir_eval-friendly format'''
-        # TODO
-        pass
+        '''Extract observation data in a mir_eval-friendly format.
+
+        :returns:
+            - intervals : np.ndarray [shape=(n, 2), dtype=float]
+              Start- and end-times of all valued intervals
+
+              intervals[i, 0] = time[i]
+              intervals[i, 1] = time[i] + duration[i]
+
+            - labels : list
+              List view of value field.
+        '''
+
+        times = util.timedelta_to_float(self.time.values)
+        duration = util.timedelta_to_float(self.duration.values)
+
+        return np.hstack([times, times + duration]), list(self.value)
 
 
 class Annotation(JObject):
