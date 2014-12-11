@@ -6,30 +6,6 @@ import pandas as pd
 import numpy as np
 
 
-def frame_to_dict(data, **kwargs):
-    '''Custom semi-serializer for dataframe objects, allowing
-    decoding into primitive javascript types.
-
-    See also: serialize_obj()
-    '''
-
-    def __recursive_simplify(D):
-        '''A simplifier for nested dictionary structures'''
-
-        if isinstance(D, list):
-            return [__recursive_simplify(Di) for Di in D]
-
-        dict_out = {}
-        for key, value in D.iteritems():
-            if isinstance(value, dict):
-                dict_out[key] = __recursive_simplify(value)
-            else:
-                dict_out[key] = serialize_obj(value)
-        return dict_out
-
-    return __recursive_simplify(data.to_dict(**kwargs))
-
-
 def serialize_obj(obj):
     '''
     Custom serialization functionality for working with advanced data types.

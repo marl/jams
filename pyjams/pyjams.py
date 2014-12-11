@@ -207,12 +207,8 @@ class JObject(object):
 
         return cls.__json_init__(**obj)
 
-    def dumps(self):
-        # self.__json__ does not recurse
-        # json.dumps(self) does recurse
-        return json.dumps(self)
-#         return json.dumps(self.__json__)
-#         return self.__json__
+    def dumps(self, *args, **kwargs):
+        return json.dumps(self, *args, **kwargs)
 
 
 class Sandbox(JObject):
@@ -274,7 +270,22 @@ class JamsFrame(pd.DataFrame):
     @property
     def __json__(self):
         '''JSON encoding attribute'''
-        return util.frame_to_dict(self, orient='records')
+
+        def __recursive_simplify(D):
+            '''A simplifier for nested dictionary structures'''
+
+            if isinstance(D, list):
+                return [__recursive_simplify(Di) for Di in D]
+
+            dict_out = {}
+            for key, value in D.iteritems():
+                if isinstance(value, dict):
+                    dict_out[key] = __recursive_simplify(value)
+                else:
+                    dict_out[key] = util.serialize_obj(value)
+            return dict_out
+
+        return __recursive_simplify(self.to_dict(orient='records'))
 
     def to_interval_values(self):
         '''Extract observation data in a mir_eval-friendly format'''
