@@ -200,11 +200,8 @@ class JObject(object):
         return self.__class__.__name__
 
     @classmethod
-    def loads(cls, obj):
-        # FIXME:  2014-12-11 13:20:45 by Brian McFee <brian.mcfee@nyu.edu>
-        # why does loads take an object and not a string?     
-
-        return cls.__json_init__(**obj)
+    def loads(cls, s):
+        return cls.__json_init__(**json.loads(s))
 
     def dumps(self, *args, **kwargs):
         return json.dumps(self, *args, **kwargs)
@@ -216,30 +213,6 @@ class Sandbox(JObject):
     Functionally identitical to JObjects, but the class hierarchy might be
     confusing if all objects inherit from Sandboxes."""
     pass
-
-
-# FIXME:  2014-12-11 16:37:34 by Brian McFee <brian.mcfee@nyu.edu>
-#  do we still need an Observation object?
-
-class Observation(JObject):
-    """Observation (data frame)"""
-
-    def __init__(self, time=None, duration=None, value=None, confidence=None):
-        """Create an Observation.
-
-        Parameters
-        ----------
-        value: obj, default=None
-            The conceptual value for this observation.
-        confidence: float, default=None
-            Degree of confidence for the value, in the range [0, 1].
-        secondary_value: obj, default=None
-        """
-        JObject.__init__(self)
-        self.time = time
-        self.duration = duration
-        self.value = value
-        self.confidence = confidence
 
 
 class JamsFrame(pd.DataFrame):
