@@ -26,6 +26,9 @@ def serialize_obj(obj):
     elif isinstance(obj, np.ndarray):
         return obj.tolist()
 
+    elif isinstance(obj, list):
+        return [serialize_obj(x) for x in obj]
+
     return obj
 
 

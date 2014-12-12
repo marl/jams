@@ -62,7 +62,6 @@ And that's it!
 import json
 import numpy as np
 import pandas as pd
-import os.path as path
 
 from . import util
 
@@ -169,9 +168,9 @@ class JObject(object):
         return self.__dict__[key]
 
     def __setattr__(self, name, value):
-        if not self.__schema__ is None:
+        if self.__schema__ is not None:
             props = self.__schema__['properties']
-            if not name in props:
+            if name not in props:
                 raise ValueError(
                     "Invalid attribute: %s\n"
                     "\t Should be one of %s." % (name, props.keys()))
@@ -219,6 +218,9 @@ class Sandbox(JObject):
     pass
 
 
+# FIXME:  2014-12-11 16:37:34 by Brian McFee <brian.mcfee@nyu.edu>
+#  do we still need an Observation object?
+
 class Observation(JObject):
     """Observation (data frame)"""
 
@@ -247,6 +249,18 @@ class JamsFrame(pd.DataFrame):
     conversion and serializatoin.
     '''
 
+    __dense = False
+
+    @property
+    def dense(self):
+        '''Is this to be interpreted as a dense array, or sparse?'''
+        return self.__dense
+
+    @dense.setter
+    def dense(self, value):
+        '''Setter for dense'''
+        self.__dense = value
+
     @classmethod
     def from_dict(cls, *args, **kwargs):
 
@@ -264,7 +278,6 @@ class JamsFrame(pd.DataFrame):
 
         # Clobber the class attribute
         new_frame.__class__ = cls
-
         return new_frame
 
     @property
@@ -284,7 +297,15 @@ class JamsFrame(pd.DataFrame):
                     dict_out[key] = util.serialize_obj(value)
             return dict_out
 
-        return __recursive_simplify(self.to_dict(orient='records'))
+        # By default, we'll output a record for each row
+        # But, if the dense flag is set, we'll output the entire
+        # table as one object
+
+        orient = 'records'
+        if self.dense:
+            orient = 'list'
+
+        return __recursive_simplify(self.to_dict(orient=orient))
 
     def to_interval_values(self):
         '''Extract observation data in a mir_eval-friendly format.
@@ -326,9 +347,7 @@ class Annotation(JObject):
         sandbox: Sandbox (dict), default=None
             Miscellaneous information; keep to native datatypes if possible.
         """
-        # TODO(ejhumphrey@nyu.edu): We may want to subclass list here to turn
-        #   'data' into a special container with convenience methods to more
-        #   easily unpack sparse events, among other things.
+
         JObject.__init__(self)
 
         if data is None:
@@ -345,33 +364,6 @@ class Annotation(JObject):
 
         self.sandbox = Sandbox(**sandbox)
         self.namespace = namespace
-
-    def __parse_data__(self, data):
-        """This method unpacks data as a specific type of objects, defined by
-        the self._DefaultType, for the purposes of safely creating a list of
-        properly initialized objects.
-
-        Parameters
-        ----------
-        data: list
-            Collection of dicts
-
-        Returns
-        -------
-        objects: list
-            Collection of _DefaultTypes.
-        """
-
-        df = pd.DataFrame.from_dict(data)
-
-        # Cast the time fields to timedelta format
-        df.time = pd.to_timedelta(df.time, unit='s')
-        df.duration = pd.to_timedelta(df.duration, unit='s')
-
-        #  properly order the columns of df
-
-        df = df[['time', 'duration', 'value', 'confidence']]
-        return df
 
 
 class Curator(JObject):
