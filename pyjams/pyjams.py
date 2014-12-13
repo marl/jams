@@ -235,6 +235,11 @@ class JamsFrame(pd.DataFrame):
         self.__dense = value
 
     @classmethod
+    def fields(cls):
+        '''Fields of a JamsFrame'''
+        return ['time', 'duration', 'value', 'confidence']
+
+    @classmethod
     def from_dict(cls, *args, **kwargs):
 
         new_frame = super(JamsFrame, cls).from_dict(*args, **kwargs)
@@ -247,7 +252,7 @@ class JamsFrame(pd.DataFrame):
                                              unit='s')
 
         # Properly order the columns
-        new_frame = new_frame[['time', 'duration', 'value', 'confidence']]
+        new_frame = new_frame[cls.fields()]
 
         # Clobber the class attribute
         new_frame.__class__ = cls
