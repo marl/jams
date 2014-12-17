@@ -354,7 +354,7 @@ class Annotation(JObject):
         self.annotation_metadata = AnnotationMetadata(**annotation_metadata)
 
         if data is None:
-            data = JamsFrame.factory()
+            self.data = JamsFrame.factory()
         else:
             self.data = JamsFrame.from_dict(data)
 
