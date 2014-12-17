@@ -38,7 +38,7 @@
             "description": "All metadata required to describe an annotation",
             "properties": {
                 "corpus": { "type": "string" },
-                "version": { "type": "string" },
+                "version": { "type": ["string", "number"] },
                 "curator": { "$ref": "#/definitions/Curator" },
                 "annotator": {
                     "type": "object",
@@ -96,7 +96,7 @@
             "title": "Observation Annotation",
             "description": "An annotation of a single observation, e.g. tags",
             "properties": {
-                "annotation_metadata": { "$ref": "#/definitions/annotation_metadata" },
+                "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
                 "data": {
                     "type": "array",
                     "title": "Data",
@@ -106,7 +106,7 @@
                 },
                 "sandbox": { "type": "object"}
             },
-            "required": ["annotation_metadata","file_metadata","data"]
+            "required": ["annotation_metadata", "data"]
         }
 
     },
