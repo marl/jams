@@ -259,6 +259,12 @@ class JamsFrame(pd.DataFrame):
         new_frame.__class__ = cls
         return new_frame
 
+    @classmethod
+    def factory(cls):
+        '''Construct a new, empty JamsFrame'''
+
+        return cls.from_dict({x: [] for x in cls.fields()})
+
     @property
     def __json__(self):
         '''JSON encoding attribute'''
@@ -285,6 +291,16 @@ class JamsFrame(pd.DataFrame):
             orient = 'list'
 
         return __recursive_simplify(self.to_dict(orient=orient))
+
+    def add_observation(self, time=None, duration=None,
+                        value=None, confidence=None):
+        '''Add a single observation event to an existing frame'''
+
+        n = len(self)
+        self.loc[n] = {'time': pd.to_timedelta(time, unit='s'),
+                       'duration': pd.to_timedelta(duration, unit='s'),
+                       'value': value,
+                       'confidence': confidence}
 
     def to_interval_values(self):
         '''Extract observation data in a mir_eval-friendly format.
@@ -328,9 +344,6 @@ class Annotation(JObject):
 
         JObject.__init__(self)
 
-        if data is None:
-            data = list()
-
         if annotation_metadata is None:
             annotation_metadata = AnnotationMetadata()
 
@@ -338,7 +351,11 @@ class Annotation(JObject):
             sandbox = Sandbox()
 
         self.annotation_metadata = AnnotationMetadata(**annotation_metadata)
-        self.data = JamsFrame.from_dict(data)
+
+        if data is None:
+            data = JamsFrame.factory()
+        else:
+            self.data = JamsFrame.from_dict(data)
 
         self.sandbox = Sandbox(**sandbox)
         self.namespace = namespace
