@@ -14,11 +14,10 @@ First, create the top-level JAMS container:
  Now we can create a beat annotation:
 
   >>> annot = jam.beat.create_annotation()
-  >>> beat = annot.create_datapoint()
-  >>> beat.time.value = 0.33
-  >>> beat.time.confidence = 1.0
-  >>> beat.label.value = "1"
-  >>> beat.label.confidence = 0.75
+  >>> annot.data.add_observation(time=0.33,
+                                 duration=0.0,
+                                 confidence=1.0,
+                                 value="1")
 
 
 Then, we'll update the annotation's metadata by directly setting its fields:
@@ -30,8 +29,10 @@ Then, we'll update the annotation's metadata by directly setting its fields:
 
 And now a second time, cause this is our house (and we can do what we want):
 
-  >>> beat2 = annot.create_datapoint()
-  >>> beat2.label.value = "second beat"
+  >>> annot.data.add_observation(time=0.66,
+                                 duration=0.0,
+                                 confidence=1.0,
+                                 value="1")
 
 
 Once you've added all your data, you can serialize the annotation to a file
