@@ -57,12 +57,10 @@
             "title": "SparseObservation",
             "description": "An observation that spans an interval of time",
             "properties": {
-                "value": {"type": ["number", "string", "boolean", "array", "object"] },
+                "value": { },
                 "confidence": {"type": ["number", "null"] },
-                "time": {"type": "number", 
-                         "minimum": 0.0},
-                "duration": {"type": "number",
-                             "minimum": 0.0}
+                "time": {"type": "number", "minimum": 0.0},
+                "duration": {"type": "number", "minimum": 0.0}
             },
             "required": ["value", "time", "duration", "confidence"]
         },
@@ -73,17 +71,9 @@
             "description": "A dense series of observations",
             "properties": {
                 "value": {"type": "array"}, 
-
-                "confidence": {"type": "array", 
-                               "items": {"type": ["number", "null"]}},
-
-                "time": {"type": "array", 
-                         "items": { "type": "number", 
-                                    "minimum": 0.0 }},
-
-                "duration": {"type": "array", 
-                             "items": { "type": "number",
-                                        "minimum": 0.0 }}
+                "confidence": {"type": "array", "items": {"type": ["number", "null"]}},
+                "time": {"type": "array", "items": { "type": "number", "minimum": 0.0 }},
+                "duration": {"type": "array", "items": { "type": "number", "minimum": 0.0 }}
             },
             "required": ["value", "time", "duration", "confidence"]
         },
@@ -96,10 +86,10 @@
             "items": { "$ref": "#/definitions/SparseObservation" }
         },
 
-        "ObservationAnnotation": {
-            "id": "#observation-annotation",
+        "Annotation": {
+            "id": "#annotation",
             "type": "object",
-            "title": "Observation Annotation",
+            "title": "Annotation",
             "description": "An annotation of a single observation, e.g. tags",
             "properties": {
                 "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
@@ -109,9 +99,10 @@
                     "oneOf": [  { "$ref": "#/definitions/DenseObservation" },
                                 { "$ref": "#/definitions/SparseObservationList" } ]
                 },
+                "namespace": "string",
                 "sandbox": { "type": "object"}
             },
-            "required": ["annotation_metadata", "data"]
+            "required": ["annotation_metadata", "data", "namespace"]
         }
 
     },
@@ -127,91 +118,91 @@
             "type": "array",
             "title": "Genre",
             "description": "Genre annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "mood": {
             "type": "array",
             "title": "Mood",
             "description": "Mood annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "tag": {
             "type": "array",
             "title": "Tag",
             "description": "Semantic tag annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "beat": {
             "type": "array",
             "title": "Beats",
             "description": "Beat annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "onset": {
             "type": "array",
             "title": "Onsets",
             "description": "Onset annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "chord": {
             "type": "array",
             "title": "Chords",
             "description": "Chord annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "key": {
             "type": "array",
             "title": "key",
             "description": "Key annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "segment": {
             "type": "array",
             "title": "Segment",
             "description": "Structural segmentation annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "source": {
             "type": "array",
             "title": "Source",
             "description": "Source activation annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "note": {
             "type": "array",
             "title": "Notes",
             "description": "Notes (symbolic) annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "melody": {
             "type": "array",
             "title": "Melody",
             "description": "Melody (continuous predominant f0) annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "pitch": {
             "type": "array",
             "title": "Pitch",
             "description": "Pitch (continuous f0) annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "pattern": {
             "type": "array",
             "title": "Patterns",
             "description": "Pattern annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "sandbox": { "type": "object" }
