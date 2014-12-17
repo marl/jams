@@ -62,6 +62,7 @@ And that's it!
 import json
 import numpy as np
 import pandas as pd
+import os
 
 from . import util
 
@@ -69,8 +70,8 @@ __VERSION__ = "0.0.1"
 __OBJECT_TYPE__ = 'object_type'
 
 # TODO: This is super fragile; migrate toward pkg_resources.
-# __SCHEMA__ = json.load(open(path.join(path.split(__file__)[0],
-#                                       '../schema/jams_schema.json')))
+__SCHEMA__ = json.load(open(os.path.join(os.path.split(__file__)[0],
+                                         '../schema/jams_schema.json')))
 
 
 def load(filepath):
@@ -120,8 +121,8 @@ class JObject(object):
     @property
     def __schema__(self):
         # TODO(ejhumphrey): Disabled schema enforcement.
-        return
-        # return __SCHEMA__['definitions'].get(self.type, None)
+#         return
+        return __SCHEMA__['definitions'].get(self.type, None)
 
     @property
     def __json__(self):
@@ -292,8 +293,7 @@ class JamsFrame(pd.DataFrame):
             - intervals : np.ndarray [shape=(n, 2), dtype=float]
               Start- and end-times of all valued intervals
 
-              intervals[i, 0] = time[i]
-              intervals[i, 1] = time[i] + duration[i]
+              intervals[i, :] = [time[i], time[i] + duration[i]]
 
             - labels : list
               List view of value field.
