@@ -49,8 +49,7 @@
                 "annotation_rules": { "type": "string"},
                 "validation": { "type": "string"},
                 "data_source": { "type": "string"}
-            },
-            "required": ["version", "curator"]
+            }
         },
 
         "SparseObservation": {
@@ -58,8 +57,8 @@
             "title": "SparseObservation",
             "description": "An observation that spans an interval of time",
             "properties": {
-                "value": {"type": ["number", "string", "boolean"] },
-                "confidence": {"type": "number" },
+                "value": {"type": ["number", "string", "boolean", "array", "object"] },
+                "confidence": {"type": ["number", "null"] },
                 "time": {"type": "number", 
                          "minimum": 0.0},
                 "duration": {"type": "number",
@@ -73,11 +72,10 @@
             "title": "DenseObservation",
             "description": "A dense series of observations",
             "properties": {
-                "value": {"type": "array", 
-                          "items": {"type": "object" }},
+                "value": {"type": "array"}, 
 
                 "confidence": {"type": "array", 
-                               "items": {"type": "number"}},
+                               "items": {"type": ["number", "null"]}},
 
                 "time": {"type": "array", 
                          "items": { "type": "number", 
@@ -90,6 +88,14 @@
             "required": ["value", "time", "duration", "confidence"]
         },
 
+        "SparseObservationList": {
+            "type": "array",
+            "title": "Sparse Observation List",
+            "id": "#sparse-observation-list",
+            "description": "A list of sparse observation objects",
+            "items": { "$ref": "#/definitions/SparseObservation" }
+        },
+
         "ObservationAnnotation": {
             "id": "#observation-annotation",
             "type": "object",
@@ -98,11 +104,10 @@
             "properties": {
                 "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
                 "data": {
-                    "type": "array",
                     "title": "Data",
                     "description": "An array of observations",
-                    "items": { "$ref": ["#/definitions/SparseObservation",
-                                        "#/definitions/DenseObservation" ]}
+                    "oneOf": [  { "$ref": "#/definitions/DenseObservation" },
+                                { "$ref": "#/definitions/SparseObservationList" } ]
                 },
                 "sandbox": { "type": "object"}
             },
