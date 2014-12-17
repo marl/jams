@@ -14,10 +14,10 @@ First, create the top-level JAMS container:
  Now we can create a beat annotation:
 
   >>> annot = jam.beat.create_annotation()
-  >>> annot.data.add_observation(time=0.33,
-                                 duration=0.0,
-                                 confidence=1.0,
-                                 value="1")
+  >>> annot.append(time=0.33,
+                   duration=0.0,
+                   confidence=1.0,
+                   value="1")
 
 
 Then, we'll update the annotation's metadata by directly setting its fields:
@@ -29,10 +29,10 @@ Then, we'll update the annotation's metadata by directly setting its fields:
 
 And now a second time, cause this is our house (and we can do what we want):
 
-  >>> annot.data.add_observation(time=0.66,
-                                 duration=0.0,
-                                 confidence=1.0,
-                                 value="1")
+  >>> annot.append(time=0.66,
+                   duration=0.0,
+                   confidence=1.0,
+                   value="1")
 
 
 Once you've added all your data, you can serialize the annotation to a file
@@ -360,6 +360,11 @@ class Annotation(JObject):
 
         self.sandbox = Sandbox(**sandbox)
         self.namespace = namespace
+
+    def append(self, **kwargs):
+        '''Append an observation to the data field'''
+
+        self.data.add_observation(**kwargs)
 
 
 class Curator(JObject):
