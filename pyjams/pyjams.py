@@ -70,17 +70,6 @@ __SCHEMA__ = json.load(open(path.join(path.split(__file__)[0],
                                       '../schema/jams_schema.json')))
 
 
-def load(filepath):
-    """Load a JAMS Annotation from a file."""
-    return JAMS(**json.load(open(filepath, 'r')))
-
-
-def save(jam, filepath):
-    """Serialize annotation as a JSON formatted stream to file."""
-    with open(filepath, 'w') as fp:
-        json.dump(jam, fp, indent=2)
-
-
 def append(jam, filepath, new_filepath=None, on_conflict='fail'):
     """Append the contents of one JAMS file to another.
 
@@ -176,7 +165,7 @@ class JObject(object):
         return '<%s: %s>' % (self.type, ", ".join(self.keys()))
 
     def __str__(self):
-        return json.dumps(self, indent=2)
+        return dumps(self, indent=2)
 
     def keys(self):
         """Return the fields of the object."""
@@ -807,31 +796,50 @@ class JAMS(JObject):
 
 
 # Private functionality
-# -- Used internally / for testing purposes --
-def __jams_serialization__():
-    """writeme."""
-    def encode(self, jams_obj):
-        """writeme."""
-        return jams_obj.__json__
+# -- Thar be dragons here --
+class JSONSupport():
+    """Context manager for temporary JSON support."""
+    def __enter__(self):
+        # Encoder returns the object's `__json__` property.
+        json.JSONEncoder.default = lambda self, jams_obj: jams_obj.__json__
 
-    def decode(obj):
-        """writeme."""
-        if __OBJECT_TYPE__ in obj:
-            return eval(obj.pop(__OBJECT_TYPE__)).__json_init__(**obj)
-        return obj
+        # Decoder looks for the class name, and calls it's class constructor.
+        def decode(obj):
+            if __OBJECT_TYPE__ in obj:
+                return eval(obj.pop(__OBJECT_TYPE__)).__json_init__(**obj)
+            return obj
 
-    json.JSONEncoder.default = encode
-    json._default_decoder = json.JSONDecoder(object_hook=decode)
+        json._default_decoder = json.JSONDecoder(object_hook=decode)
+        return
 
-
-__jams_serialization__()
-
-
-def _loads(*args, **kwargs):
-    """Alias of json.loads()"""
-    return json.loads(*args, **kwargs)
+    def __exit__(self, type, value, traceback):
+        # Nothing to do here...
+        pass
 
 
-def _dumps(*args, **kwargs):
-    """Alias of json.dumps()"""
-    return json.dumps(*args, **kwargs)
+def load(filepath):
+    """Load a JAMS Annotation from a file."""
+    with open(filepath, 'r') as fp:
+        with JSONSupport():
+            jam = JAMS(**json.load(fp))
+
+    return jam
+
+
+def save(jam, filepath):
+    """Serialize annotation as a JSON formatted stream to file."""
+    with open(filepath, 'w') as fp:
+        with JSONSupport():
+            json.dump(jam, fp, indent=2)
+
+
+def loads(*args, **kwargs):
+    """Safe alias of json.loads()"""
+    with JSONSupport():
+        return json.loads(*args, **kwargs)
+
+
+def dumps(*args, **kwargs):
+    """Safe alias of json.dumps()"""
+    with JSONSupport():
+        return json.dumps(*args, **kwargs)

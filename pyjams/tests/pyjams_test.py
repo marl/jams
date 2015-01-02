@@ -3,8 +3,8 @@
 
 import unittest
 
-from pyjams.pyjams import _loads
-from pyjams.pyjams import _dumps
+from pyjams.pyjams import loads
+from pyjams.pyjams import dumps
 from pyjams.pyjams import JObject
 from pyjams.pyjams import Observation
 from pyjams.pyjams import Event
@@ -76,7 +76,7 @@ class JamsTests(unittest.TestCase):
             "Failed to properly serialize.")
 
         # Verify pass-through loop.
-        jobj2 = JObject(**_loads(_dumps(self.jobj)))
+        jobj2 = JObject(**loads(dumps(self.jobj)))
         self.assertEqual(
             self.jobj,
             jobj2,
@@ -112,7 +112,7 @@ class JamsTests(unittest.TestCase):
             "Failed to initialize 'secondary_value' with None.")
 
     def test_Observation_serialization(self):
-        obs2 = Observation(**_loads(_dumps(self.obs)))
+        obs2 = Observation(**loads(dumps(self.obs)))
         self.assertEqual(
             self.obs,
             obs2,
@@ -147,7 +147,7 @@ class JamsTests(unittest.TestCase):
             "Failed to initialize 'label.confidence' properly.")
 
     def test_Event_serialization(self):
-        event2 = Event(**_loads(_dumps(self.event)))
+        event2 = Event(**loads(dumps(self.event)))
         self.assertEqual(
             self.event,
             event2,
@@ -174,7 +174,7 @@ class JamsTests(unittest.TestCase):
             "Failed to initialize 'label.value' properly.")
 
     def test_Range_serialization(self):
-        chord2 = Range(**_loads(_dumps(self.chord)))
+        chord2 = Range(**loads(dumps(self.chord)))
         self.assertEqual(
             self.chord,
             chord2,
@@ -217,7 +217,7 @@ class JamsTests(unittest.TestCase):
             "Failed to initialize 'label.value' properly.")
 
     def test_TimeSeries_serialization(self):
-        series2 = TimeSeries(**_loads(_dumps(self.series)))
+        series2 = TimeSeries(**loads(dumps(self.series)))
         self.assertEqual(
             self.series,
             series2,
@@ -253,7 +253,7 @@ class JamsTests(unittest.TestCase):
 
     def test_ObservationAnnotation_serialization(self):
         # Test that Annotations can be deserialized without a class wrapper.
-        annot2 = _loads(_dumps(self.obs_annot))
+        annot2 = loads(dumps(self.obs_annot))
         self.assertEqual(
             self.obs_annot,
             annot2,
@@ -302,7 +302,7 @@ class JamsTests(unittest.TestCase):
 
     def test_EventAnnotation_serialization(self):
         # Test that Annotations can be deserialized without a class wrapper.
-        annot2 = _loads(_dumps(self.event_annot))
+        annot2 = loads(dumps(self.event_annot))
         self.assertEqual(
             self.event_annot,
             annot2,
@@ -378,7 +378,7 @@ class JamsTests(unittest.TestCase):
 
     def test_RangeAnnotation_serialization(self):
         # Test that Annotations can be deserialized without a class wrapper.
-        annot2 = _loads(_dumps(self.range_annot))
+        annot2 = loads(dumps(self.range_annot))
         self.assertEqual(
             self.range_annot,
             annot2,
@@ -473,7 +473,7 @@ class JamsTests(unittest.TestCase):
 
     def test_TimeSeriesAnnotation_serialization(self):
         """Verify XAnnotation can be deserialized without a class wrapper."""
-        annot2 = _loads(_dumps(self.series_annot))
+        annot2 = loads(dumps(self.series_annot))
         self.assertEqual(
             self.series_annot,
             annot2,
@@ -538,7 +538,7 @@ class JamsTests(unittest.TestCase):
                    melody=[self.series_annot],
                    file_metadata=self.fmeta,
                    sandbox=self.sandbox)
-        jam2 = JAMS(**_loads(_dumps(jam)))
+        jam2 = JAMS(**loads(dumps(jam)))
         self.assertEqual(
             jam, jam2,
             "Failed to properly recreate the JAMS object."
