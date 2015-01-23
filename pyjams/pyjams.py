@@ -40,11 +40,11 @@ with the built-in `json` library:
 
   >>> import json
   >>> with open("these_are_my.jams", 'w') as fp:
-          json.dump(annot, fp, indent=2)
+          json.dump(jam, fp, indent=2)
 
 Or, less verbosely, using the built-in save function:
 
-  >>> pyjams.save(annot, "these_are_still_my.jams")
+  >>> pyjams.save(jam, "these_are_still_my.jams")
 
 
 2. Reading a Jams file
@@ -52,7 +52,7 @@ Or, less verbosely, using the built-in save function:
 Assuming you already have a JAMS file on-disk, say at 'these_are_also_my.jams',
 you can easily read it back into memory:
 
-  >>> another_annot = pyjams.load('these_are_also_my.jams')
+  >>> another_jam = pyjams.load('these_are_also_my.jams')
 
 
 And that's it!

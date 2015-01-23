@@ -1,0 +1,21 @@
+{"tag_gtzan":
+    {
+        "value": { 
+            "type": "string", 
+            "oneOf": {
+                {"format": "blues"},
+                {"format": "classical"},
+                {"format": "country"},
+                {"format": "disco"},
+                {"format": "hip-hop"},
+                {"format": "jazz"},
+                {"format": "metal"},
+                {"format": "pop"},
+                {"format": "reggae"},
+                {"format": "rock"},
+            }
+        },
+        "dense": false,
+        "descrpition": "GTZAN 10-class genre annotation"
+    }
+}
