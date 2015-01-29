@@ -64,6 +64,7 @@ import json
 import numpy as np
 import pandas as pd
 import os
+from pkg_resources import resource_filename
 
 from . import util
 from .version import version as __VERSION__
@@ -71,8 +72,27 @@ from .version import version as __VERSION__
 __OBJECT_TYPE__ = 'object_type'
 
 # TODO: This is super fragile; migrate toward pkg_resources.
-__SCHEMA__ = json.load(open(os.path.join(os.path.split(__file__)[0],
-                                         '../schema/jams_schema.json')))
+# __SCHEMA__ = json.load(open(os.path.join(os.path.split(__file__)[0],
+#                                          '../schema/jams_schema.json')))
+
+
+def __load_schema():
+    '''Load the schema file from the package.
+
+    '''
+
+    schema_file = os.path.join('schema', 'jams_schema.json')
+
+    schema = None
+    with open(resource_filename(__name__, schema_file), mode='r') as f:
+        schema = json.load(f)
+
+    assert schema is not None
+
+    return schema
+
+
+__SCHEMA__ = __load_schema()
 
 
 def load(filepath):

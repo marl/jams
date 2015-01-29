@@ -4,5 +4,6 @@
 # Import the necessary modules
 from .pyjams import *
 from . import util
+from . import namespace
 from .version import version as __VERSION__
 
