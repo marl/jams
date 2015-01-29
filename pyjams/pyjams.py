@@ -66,8 +66,8 @@ import pandas as pd
 import os
 
 from . import util
+from .version import version as __VERSION__
 
-__VERSION__ = "0.0.1"
 __OBJECT_TYPE__ = 'object_type'
 
 # TODO: This is super fragile; migrate toward pkg_resources.
