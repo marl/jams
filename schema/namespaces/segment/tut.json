@@ -2,7 +2,7 @@
     {
         "value": { 
             "type": "string", 
-            "oneOf": {
+            "oneOf": [
                 {"format": "Break"},
                 {"format": "Bridge"},
                 {"format": "BridgeA"},
@@ -74,8 +74,8 @@
                 {"format": "verseHS"},
                 {"format": "verseI"},
                 {"format": "verseS"},
-                {"format": "verseV"},
-            }
+                {"format": "verseV"}
+            ]
         },
         "dense": false,
         "descrpition": "Label to identify the type of a segment based on the TUT Beatles Dataset."

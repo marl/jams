@@ -1,9 +1,9 @@
 {"tempo":
     {
         "value": {
-                                "type": "number", 
-                                "minimum": "0"}, 
-                },
+                    "type": "number", 
+                    "minimum": "0"
+        },
         "dense": false,
         "description": "Tempo measurements, in beats per minute (BPM)"
     }
