@@ -68,7 +68,7 @@ from pkg_resources import resource_filename
 
 from . import util
 from .version import version as __VERSION__
-import .namespace as ns
+from . import namespace as ns
 
 __OBJECT_TYPE__ = 'object_type'
 
