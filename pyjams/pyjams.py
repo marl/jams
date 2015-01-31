@@ -228,25 +228,25 @@ class JObject(object):
 
         match = False
 
-        for key in kwargs:
+        r_query = {}
+        myself = self.__class__.__name__
+
+        # Pop this object name off the query
+        for k, value in kwargs.iteritems():
+            k_pop = util.query_pop(k, myself)
+
+            if k_pop:
+                r_query[k_pop] = value
+
+        if not r_query:
+            return False
+
+        for key in r_query:
             if hasattr(self, key):
                 match |= util.match_query(getattr(self, key),
-                                          kwargs[key])
+                                          r_query[key])
 
         if not match:
-            r_query = {}
-            myself = self.__class__.__name__
-
-            # Pop this object name off the query
-            for k, value in kwargs.iteritems():
-                k_pop = util.query_pop(k, myself)
-
-                if k_pop:
-                    r_query[k_pop] = value
-
-            if not r_query:
-                return False
-
             for attr in dir(self):
                 obj = getattr(self, attr)
 
