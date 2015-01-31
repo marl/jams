@@ -72,10 +72,6 @@ from . import namespace as ns
 
 __OBJECT_TYPE__ = 'object_type'
 
-# TODO: This is super fragile; migrate toward pkg_resources.
-# __SCHEMA__ = json.load(open(os.path.join(os.path.split(__file__)[0],
-#                                          '../schema/jams_schema.json')))
-
 
 def __load_schema():
     '''Load the schema file from the package.
