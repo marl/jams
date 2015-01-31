@@ -248,12 +248,9 @@ class JObject(object):
                 return False
 
             for attr in dir(self):
-                if attr[0] == '_':
-                    continue
-
                 obj = getattr(self, attr)
 
-                if hasattr(obj, 'search'):
+                if isinstance(obj, JObject):
                     match |= obj.search(**r_query)
 
         return match
