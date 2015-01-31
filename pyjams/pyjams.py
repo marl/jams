@@ -68,6 +68,7 @@ from pkg_resources import resource_filename
 
 from . import util
 from .version import version as __VERSION__
+import .namespace as ns
 
 __OBJECT_TYPE__ = 'object_type'
 
@@ -413,6 +414,9 @@ class Annotation(JObject):
 
         self.sandbox = Sandbox(**sandbox)
         self.namespace = namespace
+
+        # Set the data export coding to match the namespace
+        self.data.dense = ns.is_dense(self.namespace)
 
     def append(self, **kwargs):
         '''Append an observation to the data field'''
