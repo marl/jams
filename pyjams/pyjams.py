@@ -141,8 +141,6 @@ class JObject(object):
 
     @property
     def __schema__(self):
-        # TODO(ejhumphrey): Disabled schema enforcement.
-#         return
         return __SCHEMA__['definitions'].get(self.type, None)
 
     @property
@@ -227,6 +225,41 @@ class JObject(object):
 
     def dumps(self, *args, **kwargs):
         return json.dumps(self, *args, **kwargs)
+
+    def search(self, **kwargs):
+        '''Query this object (and its descendants)'''
+
+        match = False
+
+        for key in kwargs:
+            if hasattr(self, key):
+                match |= util.match_query(getattr(self, key),
+                                          kwargs[key])
+
+        if not match:
+            r_query = {}
+            myself = self.__class__.__name__
+
+            # Pop this object name off the query
+            for k, value in kwargs.iteritems():
+                k_pop = util.query_pop(k, myself)
+
+                if k_pop:
+                    r_query[k_pop] = value
+
+            if not r_query:
+                return False
+
+            for attr in dir(self):
+                if attr[0] == '_':
+                    continue
+
+                obj = getattr(self, attr)
+
+                if hasattr(obj, 'search'):
+                    match |= obj.search(**r_query)
+
+        return match
 
 
 class Sandbox(JObject):

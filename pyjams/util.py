@@ -4,7 +4,8 @@ import os
 import glob
 import pandas as pd
 import numpy as np
-
+import re
+import six
 
 def timedelta_to_float(t):
     '''Convert a timedelta64[ns] to floating point (seconds)'''
@@ -218,3 +219,72 @@ def fill_timeseries_annotation_data(times, values, confidences,
     data.time = times
     if confidences is not None:
         data.confidence = confidences
+
+
+def match_query(string, query):
+    '''Test if a string matches a functional query.
+
+    Parameters
+    ----------
+    string : str
+        The string to test
+
+    query : string or callable
+        Either a regular expression or a callable function
+
+    Returns
+    -------
+    match : bool
+        `True` if `query` is a callable and `query(string) == True`
+        or if `query` is a regexp and `re.match(query, regexp)`
+
+        `False` otherwise
+    '''
+
+    if six.callable(query):
+        return query(string)
+
+    elif isinstance(query, six.string_types):
+        return (re.match(query, string) is not None)
+
+    else:
+        raise TypeError('Invalid query type: {:s}'.format(type(query)))
+
+    return False
+
+
+def query_pop(query, prefix, sep='.'):
+    '''Pop a prefix from a query string.
+
+    Example
+    -------
+    >>> query_pop('Annotation.namespace', 'Annotation')
+    'namespace'
+    >>> query_pop('namespace', 'Annotation')
+    'namespace'
+
+
+    Parameters
+    ----------
+    query : str
+        The query string
+
+    prefix : str
+        The prefix string to pop, if it exists
+
+    sep : str
+        The string to separate fields
+
+    Returns
+    -------
+    popped : str
+        `query` with a `prefix` removed from the front (if found)
+        or `query` if the prefix was not found
+    '''
+
+    terms = query.split(sep)
+
+    if terms[0] == prefix:
+        terms = terms[1:]
+
+    return sep.join(terms)
