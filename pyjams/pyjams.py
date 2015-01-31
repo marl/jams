@@ -521,7 +521,7 @@ class AnnotationArray(list):
     List subclass for managing collections of annotations, providing factory
     methods to create empty annotations.
     """
-    def __init__(self, annotations):
+    def __init__(self, annotations=None):
         """Create an AnnotationArray.
 
         Parameters
@@ -546,6 +546,34 @@ class AnnotationArray(list):
         """
         self.append(Annotation(*args, **kwargs))
         return self[-1]
+
+    def search(self, **kwargs):
+        '''Filter the annotation array down to only those Annotation
+        objects matching the query.
+
+
+        Parameters
+        ----------
+        kwargs : search parameters
+            See JObject.search
+
+        Returns
+        -------
+        results : AnnotationArray
+            An annotation array of the objects matching the query
+
+        See Also
+        --------
+        JObject.search
+        '''
+
+        results = AnnotationArray()
+
+        for annotation in self:
+            if annotation.search(**kwargs):
+                results.append(annotation)
+
+        return results
 
 
 class JAMS(JObject):
