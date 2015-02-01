@@ -187,7 +187,7 @@ class JObject(object):
     """
     def __init__(self, **kwargs):
         object.__init__(self)
-        for name, value in kwargs.iteritems():
+        for name, value in six.iteritems(kwargs):
             setattr(self, name, value)
 
     @property
@@ -203,13 +203,13 @@ class JObject(object):
         """
         filtered_dict = dict()
 
-        for k, v in six.iteritems(self.__dict__):
-            if isinstance(v, (JamsFrame, JObject)):
-                filtered_dict[k] = v.__json__
-            elif k.startswith('_') or not v:
+        for k, item in six.iteritems(self.__dict__):
+            if hasattr(item, '__json__'):
+                filtered_dict[k] = item.__json__
+            elif k.startswith('_') or not item:
                 continue
             else:
-                filtered_dict[k] = v
+                filtered_dict[k] = item
 
         return filtered_dict
 
@@ -264,7 +264,7 @@ class JObject(object):
         return self.__dict__.keys()
 
     def update(self, **kwargs):
-        for name, value in kwargs.iteritems():
+        for name, value in six.iteritems(kwargs):
             setattr(self, name, value)
 
     @property
@@ -287,7 +287,7 @@ class JObject(object):
         myself = self.__class__.__name__
 
         # Pop this object name off the query
-        for k, value in kwargs.iteritems():
+        for k, value in six.iteritems(kwargs):
             k_pop = util.query_pop(k, myself)
 
             if k_pop:
@@ -378,7 +378,7 @@ class JamsFrame(pd.DataFrame):
                 return [__recursive_simplify(Di) for Di in D]
 
             dict_out = {}
-            for key, value in D.iteritems():
+            for key, value in six.iteritems(D):
                 if isinstance(value, dict):
                     dict_out[key] = __recursive_simplify(value)
                 else:
