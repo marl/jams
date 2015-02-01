@@ -109,7 +109,7 @@ def filebase(filepath):
     return os.path.splitext(os.path.basename(filepath))[0]
 
 
-def find_with_extension(in_dir, ext, depth=3):
+def find_with_extension(in_dir, ext, depth=3, sort=True):
     """Naive depth-search into a directory for files with a given extension.
 
     Parameters
@@ -120,6 +120,8 @@ def find_with_extension(in_dir, ext, depth=3):
         File extension to match.
     depth : int
         Depth of directories to search.
+    sort : bool
+        Sort the list alphabetically
 
     Returns
     -------
@@ -134,6 +136,8 @@ def find_with_extension(in_dir, ext, depth=3):
         search_path = os.path.join(in_dir, os.extsep.join([wildcard, ext]))
         match += glob.glob(search_path)
 
+    if sort:
+        match.sort()
     return match
 
 
