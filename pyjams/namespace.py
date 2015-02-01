@@ -5,6 +5,8 @@
 import json
 import jsonschema
 from jsonschema import ValidationError
+import six
+import sys
 
 import os
 import warnings
@@ -136,7 +138,7 @@ def validate_annotation(annotation, strict=True):
         validate_jamsframe(annotation.data, annotation.namespace)
     except ValidationError as invalid:
         if strict:
-            raise invalid
+            six.reraise(*sys.exc_info())
         else:
             warnings.warn(str(invalid))
 

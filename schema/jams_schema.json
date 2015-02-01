@@ -114,94 +114,10 @@
 
         "file_metadata": { "$ref": "#/definitions/FileMetadata" },
 
-        "genre": {
+        "annotations": {
             "type": "array",
-            "title": "Genre",
-            "description": "Genre annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "mood": {
-            "type": "array",
-            "title": "Mood",
-            "description": "Mood annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "tag": {
-            "type": "array",
-            "title": "Tag",
-            "description": "Semantic tag annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "beat": {
-            "type": "array",
-            "title": "Beats",
-            "description": "Beat annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "onset": {
-            "type": "array",
-            "title": "Onsets",
-            "description": "Onset annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "chord": {
-            "type": "array",
-            "title": "Chords",
-            "description": "Chord annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "key": {
-            "type": "array",
-            "title": "key",
-            "description": "Key annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "segment": {
-            "type": "array",
-            "title": "Segment",
-            "description": "Structural segmentation annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "source": {
-            "type": "array",
-            "title": "Source",
-            "description": "Source activation annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "note": {
-            "type": "array",
-            "title": "Notes",
-            "description": "Notes (symbolic) annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "melody": {
-            "type": "array",
-            "title": "Melody",
-            "description": "Melody (continuous predominant f0) annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "pitch": {
-            "type": "array",
-            "title": "Pitch",
-            "description": "Pitch (continuous f0) annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
-        },
-
-        "pattern": {
-            "type": "array",
-            "title": "Patterns",
-            "description": "Pattern annotations",
+            "title": "Annotations",
+            "description": "Array of annotations",
             "items": { "$ref": "#/definitions/Annotation" }
         },
 

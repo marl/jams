@@ -61,9 +61,16 @@ And that's it!
 """
 
 import json
+import jsonschema
+from jsonschema import ValidationError
+
 import numpy as np
 import pandas as pd
 import os
+import six
+import warnings
+import sys
+
 from pkg_resources import resource_filename
 
 from . import util
@@ -92,15 +99,62 @@ def __load_schema():
 __SCHEMA__ = __load_schema()
 
 
-def load(filepath):
+def load(filepath, strict=True):
     """Load a JAMS Annotation from a file."""
-    return JAMS(**json.load(open(filepath, 'r')))
+    jam = JAMS(**json.load(open(filepath, 'r')))
+
+    validate(jam, strict=strict)
+
+    return jam
 
 
-def save(jam, filepath):
+def save(jam, filepath, strict=True):
     """Serialize annotation as a JSON formatted stream to file."""
+
+    validate(jam, strict=strict)
+
     with open(filepath, 'w') as fp:
         json.dump(jam, fp, indent=2)
+
+
+def validate(jam, strict=True):
+    '''Validate a JAM object.
+
+    Parameters
+    ----------
+    jam : JAMS
+        A JAMS object to validate
+
+    Returns
+    -------
+    valid : bool
+        True if the jam validates
+        False if not, and `strict==False`
+
+    Raises
+    ------
+    ValidationError
+        If `strict==True` and `jam` fails validation
+
+    '''
+
+    valid = True
+
+    try:
+        jsonschema.validate(jam, __SCHEMA__)
+
+    except ValidationError as invalid:
+        if strict:
+            six.reraise(*sys.exc_info())
+        else:
+            warnings.warn(str(invalid))
+
+        valid = False
+
+    for ann in jam.annotations:
+        valid &= ns.validate_annotation(ann, strict=strict)
+
+    return valid
 
 
 def append(jam, filepath, new_filepath=None, on_conflict='fail'):
@@ -372,7 +426,7 @@ class JamsFrame(pd.DataFrame):
 class Annotation(JObject):
     """Annotation base class."""
 
-    def __init__(self, data=None, annotation_metadata=None, namespace='',
+    def __init__(self, namespace, data=None, annotation_metadata=None,
                  sandbox=None):
         """Create an Annotation.
 
@@ -382,10 +436,15 @@ class Annotation(JObject):
 
         Parameters
         ----------
+        namespace : str
+            The namespace for this annotation
+
         data: list, or None
             Collection of Observations
+
         annotation_metadata: AnnotationMetadata (or dict), default=None.
             Metadata corresponding to this Annotation.
+
         sandbox: Sandbox (dict), default=None
             Miscellaneous information; keep to native datatypes if possible.
         """
@@ -579,42 +638,17 @@ class AnnotationArray(list):
 class JAMS(JObject):
     """Top-level Jams Object"""
 
-    def __init__(self, beat=None, chord=None, genre=None, key=None, mood=None,
-                 melody=None, note=None, onset=None, pattern=None, pitch=None,
-                 segment=None, source=None, tag=None, file_metadata=None,
-                 sandbox=None):
+    def __init__(self, annotations=None, file_metadata=None, sandbox=None):
         """Create a Jams object.
 
         Parameters
         ----------
-        beat : list of Annotations
-            Used for beat-tracking.
-        chord : list of Annotations
-            Used for chord estimation.
-        genre : list of Annotations
-            Used for genre tagging.
-        key : list of Annotations
-            Used for key estimation.
-        mood : list of Annotations
-            Used for mood estimation.
-        melody : list of Annotations
-            Used for continuous-f0 melody.
-        note : list of Annotations
-            Used for estimated note transcription.
-        onset : list of Annotations
-            Used for onset detection.
-        pattern : list of Annotations
-            Used for pattern discovery.
-        pitch : list of Annotations
-            Used for pitch estimation.
-        segment : list of Annotations
-            Used for music segmentation.
-        source : list of Annotations
-            Used for source activations.
-        tag : list of Annotations
-            Used for music tagging and semantic descriptors.
+        annotations : list of Annotations
+            Zero or more Annotation objcets
+
         file_metadata : FileMetadata (or dict), default=None
             Metadata corresponding to the audio file.
+
         sandbox : Sandbox (or dict), default=None
             Unconstrained global sandbox for additional information.
         """
@@ -624,20 +658,10 @@ class JAMS(JObject):
         if sandbox is None:
             sandbox = Sandbox()
 
-        self.beat = AnnotationArray([] if beat is None else beat)
-        self.chord = AnnotationArray([] if chord is None else chord)
-        self.genre = AnnotationArray([] if genre is None else genre)
-        self.key = AnnotationArray([] if key is None else key)
-        self.melody = AnnotationArray([] if melody is None else melody)
-        self.mood = AnnotationArray([] if mood is None else mood)
-        self.note = AnnotationArray([] if note is None else note)
-        self.onset = AnnotationArray([] if onset is None else onset)
-        self.pattern = AnnotationArray([] if pattern is None else pattern)
-        self.pitch = AnnotationArray([] if pitch is None else pitch)
-        self.segment = AnnotationArray([] if segment is None else segment)
-        self.source = AnnotationArray([] if source is None else source)
-        self.tag = AnnotationArray([] if tag is None else tag)
+        self.annotations = AnnotationArray(annotations=annotations)
+
         self.file_metadata = FileMetadata(**file_metadata)
+
         self.sandbox = Sandbox(**sandbox)
 
     @property
@@ -672,20 +696,19 @@ class JAMS(JObject):
             raise ValueError("on_conflict received '%s'. Must be one of "
                              "['fail', 'overwrite', 'ignore']." % on_conflict)
 
-        self.beat.extend(jam.beat)
-        self.chord.extend(jam.chord)
-        self.genre.extend(jam.pitch)
-        self.key.extend(jam.key)
-        self.melody.extend(jam.melody)
-        self.mood.extend(jam.mood)
-        self.note.extend(jam.note)
-        self.onset.extend(jam.onset)
-        self.pattern.extend(jam.pattern)
-        self.pitch.extend(jam.pitch)
-        self.segment.extend(jam.segment)
-        self.source.extend(jam.source)
-        self.tag.extend(jam.tag)
+        self.annotations.extend(jam.annotations)
         self.sandbox.update(**jam.sandbox)
+
+    def search(self, **kwargs):
+        '''Search a JAMS object for matching objects.'''
+
+        # Question:
+        #   just annotations?
+        #   annotations + sandbox?
+        #   do we return an annotationarray?
+        #   new jams object?
+        #   flat list?
+        pass
 
 
 # Private functionality
