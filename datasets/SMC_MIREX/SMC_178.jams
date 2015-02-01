@@ -1,0 +1,196 @@
+{
+  "sandbox": {}, 
+  "annotations": [
+    {
+      "data": [
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 3.274
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 4.8297
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 6.3622
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 8.0081
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 9.613
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 11.134
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 12.805
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 14.43
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 16.04
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 17.61
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 19.273
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 21.014
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 22.639
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 24.299
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 25.877
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 27.52
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 29.257
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 30.79
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 32.465
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 34.44
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 36.024
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 37.6
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 39.273
+        }
+      ], 
+      "annotation_metadata": {
+        "corpus": "SMC_MIREX", 
+        "curator": {
+          "name": "Matthew Davies", 
+          "email": "mdavies@inescporto.pt"
+        }, 
+        "annotator": {
+          "id": "j"
+        }
+      }, 
+      "namespace": "beat", 
+      "sandbox": {
+        "metrical_interpretation": "3_1_1"
+      }
+    }, 
+    {
+      "data": [
+        {
+          "duration": 40.0, 
+          "confidence": null, 
+          "value": "none", 
+          "time": 0.0
+        }, 
+        {
+          "duration": 40.0, 
+          "confidence": null, 
+          "value": "(ternary meter)", 
+          "time": 0.0
+        }
+      ], 
+      "annotation_metadata": {
+        "corpus": "SMC_MIREX", 
+        "curator": {
+          "name": "Matthew Davies", 
+          "email": "mdavies@inescporto.pt"
+        }, 
+        "annotator": {
+          "confidence": 1, 
+          "id": "j"
+        }
+      }, 
+      "namespace": "tag_open", 
+      "sandbox": {}
+    }
+  ], 
+  "file_metadata": {
+    "duration": "00:00:40.00", 
+    "identifiers": {}, 
+    "jams_version": "0.1.0", 
+    "title": "SMC_178"
+  }
+}

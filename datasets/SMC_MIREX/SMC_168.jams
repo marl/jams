@@ -1,0 +1,208 @@
+{
+  "sandbox": {}, 
+  "annotations": [
+    {
+      "data": [
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 1.2534
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 3.0011
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 4.6091
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 6.4841
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 8.2204
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 9.9591
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 11.772
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 13.525
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 15.238
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 17.229
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 18.992
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 20.63
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 22.801
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 24.584
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 26.302
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 28.045
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 29.773
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 31.645
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 33.756
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 35.613
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 37.407
+        }, 
+        {
+          "duration": 0.0, 
+          "confidence": NaN, 
+          "value": 1.0, 
+          "time": 39.173
+        }
+      ], 
+      "annotation_metadata": {
+        "corpus": "SMC_MIREX", 
+        "curator": {
+          "name": "Matthew Davies", 
+          "email": "mdavies@inescporto.pt"
+        }, 
+        "annotator": {
+          "id": "a"
+        }
+      }, 
+      "namespace": "beat", 
+      "sandbox": {
+        "metrical_interpretation": "3_1_1"
+      }
+    }, 
+    {
+      "data": [
+        {
+          "duration": 40.0, 
+          "confidence": null, 
+          "value": "slow tempo", 
+          "time": 0.0
+        }, 
+        {
+          "duration": 40.0, 
+          "confidence": null, 
+          "value": "expressive timing", 
+          "time": 0.0
+        }, 
+        {
+          "duration": 40.0, 
+          "confidence": null, 
+          "value": "lack of transient sounds", 
+          "time": 0.0
+        }, 
+        {
+          "duration": 40.0, 
+          "confidence": null, 
+          "value": "(missing bass)", 
+          "time": 0.0
+        }, 
+        {
+          "duration": 40.0, 
+          "confidence": null, 
+          "value": "(ternary meter)", 
+          "time": 0.0
+        }
+      ], 
+      "annotation_metadata": {
+        "corpus": "SMC_MIREX", 
+        "curator": {
+          "name": "Matthew Davies", 
+          "email": "mdavies@inescporto.pt"
+        }, 
+        "annotator": {
+          "confidence": 1, 
+          "id": "a"
+        }
+      }, 
+      "namespace": "tag_open", 
+      "sandbox": {}
+    }
+  ], 
+  "file_metadata": {
+    "duration": "00:00:40.00", 
+    "identifiers": {}, 
+    "jams_version": "0.1.0", 
+    "title": "SMC_168"
+  }
+}
