@@ -141,7 +141,7 @@ def validate(jam, strict=True):
     valid = True
 
     try:
-        jsonschema.validate(jam, __SCHEMA__)
+        jsonschema.validate(jam.__json__, __SCHEMA__)
 
     except ValidationError as invalid:
         if strict:
@@ -202,10 +202,11 @@ class JObject(object):
         with underscores are suppressed.
         """
         filtered_dict = dict()
-        for k, v in self.__dict__.iteritems():
-            if isinstance(v, pd.DataFrame):
-                filtered_dict[k] = v
-            elif v in [None, '', list(), dict()] or k.startswith('_'):
+
+        for k, v in six.iteritems(self.__dict__):
+            if isinstance(v, (JamsFrame, JObject)):
+                filtered_dict[k] = v.__json__
+            elif k.startswith('_') or not v:
                 continue
             else:
                 filtered_dict[k] = v
@@ -634,6 +635,10 @@ class AnnotationArray(list):
 
         return results
 
+    @property
+    def __json__(self):
+        return [item.__json__ for item in self]
+
 
 class JAMS(JObject):
     """Top-level Jams Object"""
@@ -652,6 +657,8 @@ class JAMS(JObject):
         sandbox : Sandbox (or dict), default=None
             Unconstrained global sandbox for additional information.
         """
+        JObject.__init__(self)
+
         if file_metadata is None:
             file_metadata = FileMetadata()
 

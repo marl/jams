@@ -99,7 +99,7 @@
                     "oneOf": [  { "$ref": "#/definitions/DenseObservation" },
                                 { "$ref": "#/definitions/SparseObservationList" } ]
                 },
-                "namespace": "string",
+                "namespace": {"type": "string"},
                 "sandbox": { "type": "object"}
             },
             "required": ["annotation_metadata", "data", "namespace"]
