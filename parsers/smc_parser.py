@@ -102,10 +102,9 @@ def smc_file_metadata(infile):
     duration = librosa.get_duration(y=y, sr=sr)
 
     # Format duration as time
-    dtime = '00:00:{:.2f}'.format(duration)
-
     metadata = pyjams.FileMetadata(title=match.group('index'),
-                                   duration=dtime)
+                                   duration=duration,
+                                   content_path=os.path.basename(infile))
 
     return metadata
 
@@ -152,9 +151,7 @@ def parse_smc(input_dir, output_dir):
         beat_annotation = smc_annotation(ann)
 
         # Get the tags
-        duration = float(metadata.duration.split(':')[-1])
-
-        tag_annotation = smc_tags(tag, duration)
+        tag_annotation = smc_tags(tag, metadata.duration)
 
         jam = pyjams.JAMS(file_metadata=metadata)
         jam.annotations.append(beat_annotation)
