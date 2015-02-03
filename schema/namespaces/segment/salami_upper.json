@@ -1,0 +1,10 @@
+{"segment_salami_upper":
+    {
+        "value": { 
+            "type": "string",
+            "pattern": "^[A-Z]+'?$"
+        },
+        "dense": false,
+        "descrpition": "Uppercase label to identify the type of a segment based on the SALAMI guidelines."
+    }
+}

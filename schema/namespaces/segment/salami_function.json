@@ -1,0 +1,35 @@
+{"segment_salami_function":
+    {
+        "value": { 
+            "enum": [
+                "bridge",
+                "chorus",
+                "coda",
+                "development",
+                "end",
+                "exposition",
+                "fadeout",
+                "fade-out",
+                "head",
+                "instrumental",
+                "interlude",
+                "intro",
+                "introduction",
+                "main theme",
+                "outro",
+                "pre-chorus",
+                "pre-verse",
+                "recapitulation",
+                "secondary theme",
+                "silence",
+                "solo",
+                "theme",
+                "trans",
+                "transition",
+                "verse"
+            ]
+        },
+        "dense": false,
+        "descrpition": "Function label to identify the type of a segment based on the SALAMI guidelines."
+    }
+}

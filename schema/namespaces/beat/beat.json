@@ -1,0 +1,15 @@
+{"beat": {
+    "value": {
+        "oneOf": [
+            {
+                "type": "number"
+            },
+            {
+                "type": "null"
+            }
+        ]
+    },
+    "dense": false,
+    "description": "Beat event markers with optional metrical position markers"
+    }
+}

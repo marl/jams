@@ -2,7 +2,8 @@
 """Top-level module for pyjams."""
 
 # Import the necessary modules
-from pyjams import *
+from .pyjams import *
 from . import util
+from . import namespace
+from .version import version as __VERSION__
 
-__version__ = '0.0.1'

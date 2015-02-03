@@ -2,6 +2,35 @@
 
 import os
 import glob
+import pandas as pd
+import numpy as np
+import re
+import six
+
+def timedelta_to_float(t):
+    '''Convert a timedelta64[ns] to floating point (seconds)'''
+
+    return t.astype(np.float) * 1e-9
+
+
+def serialize_obj(obj):
+    '''
+    Custom serialization functionality for working with advanced data types.
+
+    - Timedelta objects are convered to floats (in seconds)
+    - numpy arrays are converted to lists
+
+    '''
+    if isinstance(obj, pd.tslib.Timedelta):
+        return obj.total_seconds()
+
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+
+    elif isinstance(obj, list):
+        return [serialize_obj(x) for x in obj]
+
+    return obj
 
 
 def read_lab(filename, num_columns, delimiter=None, comment='#', header=False):
@@ -66,7 +95,7 @@ def load_textlist(filename):
 
 def expand_filepaths(base_dir, rel_paths):
     """Expand a list of relative paths to a give base directory."""
-    return [os.path.join(base_dir, rp.strip("./")) for rp in rel_paths]
+    return [os.path.join(base_dir, os.path.normpath(rp)) for rp in rel_paths]
 
 
 def smkdirs(dpath):
@@ -80,7 +109,7 @@ def filebase(filepath):
     return os.path.splitext(os.path.basename(filepath))[0]
 
 
-def find_with_extension(in_dir, ext, depth=3):
+def find_with_extension(in_dir, ext, depth=3, sort=True):
     """Naive depth-search into a directory for files with a given extension.
 
     Parameters
@@ -91,6 +120,8 @@ def find_with_extension(in_dir, ext, depth=3):
         File extension to match.
     depth : int
         Depth of directories to search.
+    sort : bool
+        Sort the list alphabetically
 
     Returns
     -------
@@ -98,13 +129,15 @@ def find_with_extension(in_dir, ext, depth=3):
         Collection of matching file paths.
     """
     assert depth >= 1
-    ext = ext.strip('.')
+    ext = ext.strip(os.extsep)
     match = list()
     for n in range(1, depth+1):
-        wildcard = "/".join(["*"]*n)
-        search_path = os.path.join(in_dir, "%s.%s" % (wildcard, ext))
+        wildcard = os.path.sep.join(["*"]*n)
+        search_path = os.path.join(in_dir, os.extsep.join([wildcard, ext]))
         match += glob.glob(search_path)
 
+    if sort:
+        match.sort()
     return match
 
 
@@ -190,3 +223,72 @@ def fill_timeseries_annotation_data(times, values, confidences,
     data.time = times
     if confidences is not None:
         data.confidence = confidences
+
+
+def match_query(string, query):
+    '''Test if a string matches a functional query.
+
+    Parameters
+    ----------
+    string : str
+        The string to test
+
+    query : string or callable
+        Either a regular expression or a callable function
+
+    Returns
+    -------
+    match : bool
+        `True` if `query` is a callable and `query(string) == True`
+        or if `query` is a regexp and `re.match(query, regexp)`
+
+        `False` otherwise
+    '''
+
+    if six.callable(query):
+        return query(string)
+
+    elif isinstance(query, six.string_types):
+        return (re.match(query, string) is not None)
+
+    else:
+        raise TypeError('Invalid query type: {:s}'.format(type(query)))
+
+    return False
+
+
+def query_pop(query, prefix, sep='.'):
+    '''Pop a prefix from a query string.
+
+    Example
+    -------
+    >>> query_pop('Annotation.namespace', 'Annotation')
+    'namespace'
+    >>> query_pop('namespace', 'Annotation')
+    'namespace'
+
+
+    Parameters
+    ----------
+    query : str
+        The query string
+
+    prefix : str
+        The prefix string to pop, if it exists
+
+    sep : str
+        The string to separate fields
+
+    Returns
+    -------
+    popped : str
+        `query` with a `prefix` removed from the front (if found)
+        or `query` if the prefix was not found
+    '''
+
+    terms = query.split(sep)
+
+    if terms[0] == prefix:
+        terms = terms[1:]
+
+    return sep.join(terms)
