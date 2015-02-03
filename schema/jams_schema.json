@@ -71,7 +71,7 @@
             "description": "A dense series of observations",
             "properties": {
                 "value": {"type": "array"}, 
-                "confidence": {"type": "array" }},
+                "confidence": {"type": "array" },
                 "time": {"type": "array", "items": { "type": "number", "minimum": 0.0 }},
                 "duration": {"type": "array", "items": { "type": "number", "minimum": 0.0 }}
             },
