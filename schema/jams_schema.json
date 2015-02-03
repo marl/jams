@@ -58,7 +58,7 @@
             "description": "An observation that spans an interval of time",
             "properties": {
                 "value": { },
-                "confidence": {"type": ["number", "null"] },
+                "confidence": { },
                 "time": {"type": "number", "minimum": 0.0},
                 "duration": {"type": "number", "minimum": 0.0}
             },
@@ -71,7 +71,7 @@
             "description": "A dense series of observations",
             "properties": {
                 "value": {"type": "array"}, 
-                "confidence": {"type": "array", "items": {"type": ["number", "null"]}},
+                "confidence": {"type": "array" }},
                 "time": {"type": "array", "items": { "type": "number", "minimum": 0.0 }},
                 "duration": {"type": "array", "items": { "type": "number", "minimum": 0.0 }}
             },

@@ -707,15 +707,31 @@ class JAMS(JObject):
         self.sandbox.update(**jam.sandbox)
 
     def search(self, **kwargs):
-        '''Search a JAMS object for matching objects.'''
+        '''Search a JAMS object for matching objects.
 
-        # Question:
-        #   just annotations?
-        #   annotations + sandbox?
-        #   do we return an annotationarray?
-        #   new jams object?
-        #   flat list?
-        pass
+        Parameters
+        ----------
+        kwargs : keyword arguments
+            Keyword query
+
+        Returns
+        -------
+        AnnotationArray
+            All annotation objects in this JAMS which match the query
+
+        See Also
+        --------
+        JObject.search
+
+        Examples
+        --------
+        A simple query to get all beat annotations
+
+        >>> beats = my_jams.search(namespace='beat')
+
+        '''
+
+        return self.annotations.search(**kwargs)
 
 
 # Private functionality
