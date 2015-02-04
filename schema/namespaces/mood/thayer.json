@@ -1,0 +1,12 @@
+{"mood_thayer":
+    {
+        "value": {
+            "type": "array",
+            "items": {"type": "number"},
+            "minItems": 2,
+            "maxItems": 2
+        },
+        "dense": false,
+        "description": "Time-varying emotional measurements as ordered pairs of (valence, arousal)"
+    }
+}
