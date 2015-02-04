@@ -15,6 +15,30 @@ from pkg_resources import resource_filename
 from . import util
 
 
+def __add_namespace(names, filename):
+    '''Add a namespace definition to our working set.
+
+    Parameters
+    ----------
+    names : dict
+        Dictionary of namespace objects
+
+    filename : str
+        Path to json file defining the namespace object
+
+    Returns
+    -------
+    names_new : dict
+        The modified namespace dictionary
+
+        .. note:: `names` is updated in-place.
+    '''
+    with open(filename, mode='r') as fileobj:
+        names.update(json.load(fileobj))
+
+    return names
+
+
 def __load_namespaces(basedir):
     '''Load all namespace files stored within a base directory.
 
@@ -29,12 +53,23 @@ def __load_namespaces(basedir):
         Dictionary of JAMS namespaces
     '''
 
-    ns = dict()
-    for nsfile in util.find_with_extension(basedir, 'json'):
-        with open(nsfile, mode='r') as f:
-            ns.update(json.load(f))
+    names = dict()
 
-    return ns
+    for nsfile in util.find_with_extension(basedir, 'json'):
+        names = __add_namespace(names, nsfile)
+
+    return names
+
+
+def add_namespace(filename):
+    '''Add a new namespace object.
+
+    Parameters
+    ----------
+    filename : str
+        Path to the namespace json file
+    '''
+    __add_namespace(__NAMESPACE__, filename)
 
 
 def ns_schema(namespace):
