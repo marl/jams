@@ -81,15 +81,13 @@ __OBJECT_TYPE__ = 'object_type'
 
 
 def __load_schema():
-    '''Load the schema file from the package.
-
-    '''
+    '''Load the schema file from the package.'''
 
     schema_file = os.path.join('schema', 'jams_schema.json')
 
     schema = None
-    with open(resource_filename(__name__, schema_file), mode='r') as f:
-        schema = json.load(f)
+    with open(resource_filename(__name__, schema_file), mode='r') as fdesc:
+        schema = json.load(fdesc)
 
     assert schema is not None
 
@@ -103,58 +101,9 @@ def load(filepath, strict=True):
     """Load a JAMS Annotation from a file."""
     jam = JAMS(**json.load(open(filepath, 'r')))
 
-    validate(jam, strict=strict)
+    jam.validate(strict=strict)
 
     return jam
-
-
-def save(jam, filepath, strict=True):
-    """Serialize annotation as a JSON formatted stream to file."""
-
-    validate(jam, strict=strict)
-
-    with open(filepath, 'w') as fp:
-        json.dump(jam, fp, indent=2)
-
-
-def validate(jam, strict=True):
-    '''Validate a JAM object.
-
-    Parameters
-    ----------
-    jam : JAMS
-        A JAMS object to validate
-
-    Returns
-    -------
-    valid : bool
-        True if the jam validates
-        False if not, and `strict==False`
-
-    Raises
-    ------
-    ValidationError
-        If `strict==True` and `jam` fails validation
-
-    '''
-
-    valid = True
-
-    try:
-        jsonschema.validate(jam.__json__, __SCHEMA__)
-
-    except ValidationError as invalid:
-        if strict:
-            six.reraise(*sys.exc_info())
-        else:
-            warnings.warn(str(invalid))
-
-        valid = False
-
-    for ann in jam.annotations:
-        valid &= ns.validate_annotation(ann, strict=strict)
-
-    return valid
 
 
 def append(jam, filepath, new_filepath=None, on_conflict='fail'):
@@ -176,7 +125,7 @@ def append(jam, filepath, new_filepath=None, on_conflict='fail'):
     old_jam.add(jam, on_conflict=on_conflict)
     if new_filepath is None:
         new_filepath = filepath
-    save(old_jam, new_filepath)
+    old_jam.save(new_filepath)
 
 
 class JObject(object):
@@ -257,18 +206,20 @@ class JObject(object):
         return '<%s: %s>' % (self.type, ", ".join(self.keys()))
 
     def __str__(self):
-        return dumps(self, indent=2)
+        return json.dumps(self.__json__, indent=2)
 
     def keys(self):
         """Return the fields of the object."""
         return self.__dict__.keys()
 
     def update(self, **kwargs):
+        '''Update the attributes of a JObject.'''
         for name, value in six.iteritems(kwargs):
             setattr(self, name, value)
 
     @property
     def type(self):
+        '''Return the type of a derived JObject type'''
         return self.__class__.__name__
 
     @classmethod
@@ -734,6 +685,72 @@ class JAMS(JObject):
 
         return self.annotations.search(**kwargs)
 
+    def save(self, filepath, strict=True):
+        """Serialize annotation as a JSON formatted stream to file.
+
+        Parameters
+        ----------
+        filepath : str
+            Path to save the JAMS object on disk
+
+        strict : bool
+            Force strict schema validation
+
+        Raises
+        ------
+        ValidationError
+            If `strict == True` and the JAMS object fails schema
+            or namespace validation.
+
+        See also
+        --------
+        validate
+        """
+
+        self.validate(strict=strict)
+
+        with open(filepath, 'w') as fp:
+            json.dump(self.__json__, fp, indent=2)
+
+    def validate(self, strict=True):
+        '''Validate a JAM object.
+
+        Parameters
+        ----------
+        strict : bool
+            Enforce strict schema validation
+
+        Returns
+        -------
+        valid : bool
+            True if the jam validates
+            False if not, and `strict==False`
+
+        Raises
+        ------
+        ValidationError
+            If `strict==True` and `jam` fails validation
+
+        '''
+
+        valid = True
+
+        try:
+            jsonschema.validate(self.__json__, __SCHEMA__)
+
+        except ValidationError as invalid:
+            if strict:
+                six.reraise(*sys.exc_info())
+            else:
+                warnings.warn(str(invalid))
+
+            valid = False
+
+        for ann in self.annotations:
+            valid &= ns.validate_annotation(ann, strict=strict)
+
+        return valid
+
 
 def import_lab(namespace, filename, jam=None, **parse_options):
     '''Load a .lab file into a JAMS object.
@@ -772,7 +789,7 @@ def import_lab(namespace, filename, jam=None, **parse_options):
     if jam is None:
         jam = JAMS()
 
-    parse_options.setdefault('sep', '\s+')
+    parse_options.setdefault('sep', r'\s+')
     parse_options.setdefault('engine', 'python')
     parse_options.setdefault('header', None)
     parse_options.setdefault('index_col', False)
@@ -807,53 +824,3 @@ def import_lab(namespace, filename, jam=None, **parse_options):
     jam.annotations.append(annotation)
 
     return jam, annotation
-
-
-# Private functionality
-# -- Thar be dragons here --
-class JSONSupport():
-    """Context manager for temporary JSON support."""
-    def __enter__(self):
-        # Encoder returns the object's `__json__` property.
-        json.JSONEncoder.default = lambda self, jams_obj: jams_obj.__json__
-
-        # Decoder looks for the class name, and calls it's class constructor.
-        def decode(obj):
-            if __OBJECT_TYPE__ in obj:
-                return eval(obj.pop(__OBJECT_TYPE__)).__json_init__(**obj)
-            return obj
-
-        json._default_decoder = json.JSONDecoder(object_hook=decode)
-        return
-
-    def __exit__(self, type, value, traceback):
-        # Nothing to do here...
-        pass
-
-
-def load(filepath):
-    """Load a JAMS Annotation from a file."""
-    with open(filepath, 'r') as fp:
-        with JSONSupport():
-            jam = JAMS(**json.load(fp))
-
-    return jam
-
-
-def save(jam, filepath):
-    """Serialize annotation as a JSON formatted stream to file."""
-    with open(filepath, 'w') as fp:
-        with JSONSupport():
-            json.dump(jam, fp, indent=2)
-
-
-def loads(*args, **kwargs):
-    """Safe alias of json.loads()"""
-    with JSONSupport():
-        return json.loads(*args, **kwargs)
-
-
-def dumps(*args, **kwargs):
-    """Safe alias of json.dumps()"""
-    with JSONSupport():
-        return json.dumps(*args, **kwargs)
