@@ -98,8 +98,34 @@ __SCHEMA__ = __load_schema()
 
 
 def load(filepath, strict=True):
-    """Load a JAMS Annotation from a file."""
-    jam = JAMS(**json.load(open(filepath, 'r')))
+    """Load a JAMS Annotation from a file.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the JAMS file to load
+
+    strict : bool
+        Enforce strict schema validation
+
+    Returns
+    -------
+    jam : JAMS
+        The loaded JAMS object
+
+    Raises
+    ------
+    ValidationError
+        if `strict==True` and validation files
+
+    See also
+    --------
+    JAMS.validate
+    JAMS.save
+    """
+
+    with open(filepath, 'r') as fdesc:
+        jam = JAMS(**json.load(fdesc))
 
     jam.validate(strict=strict)
 
