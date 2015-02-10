@@ -34,6 +34,7 @@ setup(
         'jsonschema'
         'numpy >= 1.8.0',
         'six',
+        'decorator',
     ],
     extras_require={
         'docs': ['numpydoc']
