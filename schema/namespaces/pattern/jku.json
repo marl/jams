@@ -1,0 +1,25 @@
+{"pattern_jku":
+    {
+        "value": {
+            "type": "object",
+            "properties": {
+                "pitch": {"type": "number"},
+                "staff": {"type": "number"},
+                "voice": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "pattern_id": {
+                    "type": "number",
+                    "minimum": 1
+                },
+                "occurrence_id": {
+                    "type": "number",
+                    "minimum": 1
+                }
+            }
+        },
+        "dense": false,
+        "description": "TODO"
+    }
+}
