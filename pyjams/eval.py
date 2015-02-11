@@ -3,10 +3,11 @@
 '''mir_eval integration'''
 
 from decorator import decorator
+import numpydoc
 import mir_eval
 from . import namespace as ns
 
-__all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'tempo']
+__all__ = ['beat', 'chord', 'onset', 'segment', 'tempo']
 
 
 def validate_annotation(ann, namespace):
@@ -45,6 +46,58 @@ def validate_annotation(ann, namespace):
     return True
 
 
+def jamsify_docstring(function, function_name, namespace):
+    '''Modify the docstring for an existing function.
+
+    This changes the documented call signature, parameters,
+    and example strings for the function in question.
+
+    Parameters
+    ----------
+    function : callable
+        The function from which to get the original docstring
+
+    function_name : str
+        The name of the new function
+
+    namespace : str
+        The namespace for the target annotation objects
+
+    Returns
+    -------
+    docstring : str
+        A numpydoc-style docstring, jamsified.
+    '''
+    F = numpydoc.docscrape.FunctionDoc(function)
+
+    F['Parameters'] = [('reference_annotation',
+                        'pyjams.Annotation',
+                        ['Reference annotation object']),
+                       ('estimated_annotation',
+                        'pyjams.Annotation',
+                        ['Estimated annotation object']),
+                       ('kwargs',
+                        '',
+                        ['Additional keyword arguments'])]
+
+    F['Signature'] = r''
+
+    F['Examples'] = [r""">>> # Load in the JAMS objects""",
+                     r""">>> ref_jam = pyjams.load('reference.jams')""",
+                     r""">>> est_jam = pyjams.load('estimated.jams')""",
+                     r""">>> # Select out the first relevant annotation from each jam""",
+                     r""">>> ref_ann = ref_jam.search(namespace='{:s}')[0]""".format(namespace),
+                     r""">>> est_ann = est_jam.search(namespace='{:s}')[0]""".format(namespace),
+                     r""">>> scores = {:s}.{:s}(ref_ann, est_ann)""".format(__name__, function_name)]
+
+    F['See Also'] = [(r"""{:s}.{:s}""".format(function.__module__,
+                                              function.__name__),
+                      '',
+                      '')]
+
+    return str(F)
+
+
 def __events(namespace):
     '''Wrapper function for event evaluation metrics.
 
@@ -64,8 +117,6 @@ def __events(namespace):
 
     def evaluator(f_eval, ref, est, **kwargs):
         '''The working decorator'''
-        # TODO:   2015-02-10 10:00:27 by Brian McFee <brian.mcfee@nyu.edu>
-        #   mangle the docstring here
         validate_annotation(ref, namespace)
         validate_annotation(est, namespace)
         ref_interval, _ = ref.data.to_interval_values()
@@ -95,8 +146,6 @@ def __labeled_intervals(namespace):
 
     def evaluator(f_eval, ref, est, **kwargs):
         '''The working decorator'''
-        # TODO:   2015-02-10 10:00:27 by Brian McFee <brian.mcfee@nyu.edu>
-        #   mangle the docstring here
         validate_annotation(ref, namespace)
         validate_annotation(est, namespace)
         ref_interval, ref_value = ref.data.to_interval_values()
@@ -124,8 +173,6 @@ def __tempo(namespace):
 
     def evaluator(f_eval, ref, est, **kwargs):
         '''The working decorator'''
-        # TODO:   2015-02-10 10:00:27 by Brian McFee <brian.mcfee@nyu.edu>
-        #   mangle the docstring here
         validate_annotation(ref, namespace)
         validate_annotation(est, namespace)
         ref_tempi = ref.data.values
@@ -138,17 +185,28 @@ def __tempo(namespace):
 
 
 beat = __events('beat')(mir_eval.beat.evaluate)
+beat.__doc__ = jamsify_docstring(mir_eval.beat.evaluate, 'beat', 'beat')
 
 chord = __labeled_intervals('chord_harte')(mir_eval.chord.evaluate)
-
-melody = __labeled_intervals('melody_hz')(mir_eval.melody.evaluate)
+chord.__doc__ = jamsify_docstring(mir_eval.chord.evaluate,
+                                  'chord',
+                                  'chord_harte')
 
 onset = __events('onset')(mir_eval.onset.evaluate)
+onset.__doc__ = jamsify_docstring(mir_eval.onset.evaluate,
+                                  'onset',
+                                  'onset')
 
 segment = __labeled_intervals('segment_.*')(mir_eval.segment.evaluate)
+segment.__doc__ = jamsify_docstring(mir_eval.segment.evaluate,
+                                    'segment',
+                                    'segment_.*')
 
 tempo = __tempo('tempo')(mir_eval.tempo.evaluate)
+tempo.__doc__ = jamsify_docstring(mir_eval.tempo.evaluate,
+                                  'tempo',
+                                  'tempo_.*')
 
 # TODO
+# melody = __labeled_intervals('melody_hz', 'melody')(mir_eval.melody.evaluate)
 #  pattern
-#  separation
