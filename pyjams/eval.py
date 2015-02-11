@@ -184,29 +184,55 @@ def __tempo(namespace):
     return decorator(evaluator)
 
 
-beat = __events('beat')(mir_eval.beat.evaluate)
-beat.__doc__ = jamsify_docstring(mir_eval.beat.evaluate, 'beat', 'beat')
+def __wrap_evaluator(wrapper, function, name, namespace):
+    '''Namespace-mangling post-decoration of evaluator functions.
 
-chord = __labeled_intervals('chord_harte')(mir_eval.chord.evaluate)
-chord.__doc__ = jamsify_docstring(mir_eval.chord.evaluate,
-                                  'chord',
-                                  'chord_harte')
+    Parameters
+    ----------
+    wrapper : function
+        The decorator constructor
 
-onset = __events('onset')(mir_eval.onset.evaluate)
-onset.__doc__ = jamsify_docstring(mir_eval.onset.evaluate,
-                                  'onset',
-                                  'onset')
+    function: function
+        The function to be wrapped
 
-segment = __labeled_intervals('segment_.*')(mir_eval.segment.evaluate)
-segment.__doc__ = jamsify_docstring(mir_eval.segment.evaluate,
-                                    'segment',
-                                    'segment_.*')
+    name : str
+        The name of the wrapped function
 
-tempo = __tempo('tempo')(mir_eval.tempo.evaluate)
-tempo.__doc__ = jamsify_docstring(mir_eval.tempo.evaluate,
-                                  'tempo',
-                                  'tempo_.*')
+    namesapce : str
+        The namespace pattern of the annotation in question
+
+    Returns
+    -------
+    f_wrapped : function
+        The wrapped function
+
+    '''
+    f_wrap = wrapper(namespace)(function)
+    f_wrap.__doc__ = jamsify_docstring(function, name, namespace)
+    return f_wrap
+
+beat = __wrap_evaluator(__events,
+                        mir_eval.beat.evaluate,
+                        'beat', 'beat')
+
+chord = __wrap_evaluator(__labeled_intervals,
+                         mir_eval.chord.evaluate,
+                         'chord', 'chord_harte')
+
+onset = __wrap_evaluator(__events,
+                         mir_eval.onset.evaluate,
+                         'onset', 'onset')
+
+
+segment = __wrap_evaluator(__labeled_intervals,
+                           mir_eval.segment.evaluate,
+                           'segment', 'segment_.*')
+
+tempo = __wrap_evaluator(__tempo,
+                         mir_eval.tempo.evaluate,
+                         'tempo', 'tempo')
+
 
 # TODO
-# melody = __labeled_intervals('melody_hz', 'melody')(mir_eval.melody.evaluate)
-#  pattern
+# melody 
+# pattern
