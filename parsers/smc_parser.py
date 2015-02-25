@@ -10,9 +10,9 @@ import os
 import librosa
 import re
 import pandas as pd
-import pyjams
+import jams
 
-from pyjams.util import find_with_extension
+from jams.util import find_with_extension
 
 __curator__ = dict(name='Matthew Davies', email='mdavies@inescporto.pt')
 __corpus__ = 'SMC_MIREX'
@@ -28,21 +28,21 @@ def smc_annotation(ann_file):
     if not match:
         raise RuntimeError('Could not parse filename {:s}'.format(ann_file))
 
-    curator = pyjams.Curator(**__curator__)
+    curator = jams.Curator(**__curator__)
 
-    metadata = pyjams.AnnotationMetadata(curator=curator,
-                                         corpus=__corpus__,
-                                         annotator={'id':
-                                                    match.group('annotator')})
+    metadata = jams.AnnotationMetadata(curator=curator,
+                                       corpus=__corpus__,
+                                       annotator={'id':
+                                                  match.group('annotator')})
 
     # Sandbox the following info:
     #   annotator id
     #   metrical interpretation
 
-    annotation = pyjams.Annotation('beat',
-                                   annotation_metadata=metadata,
-                                   sandbox={'metrical_interpretation':
-                                            match.group('meter')})
+    annotation = jams.Annotation('beat',
+                                 annotation_metadata=metadata,
+                                 sandbox={'metrical_interpretation':
+                                          match.group('meter')})
 
     # Now load the data
 
@@ -60,7 +60,7 @@ def smc_annotation(ann_file):
 def smc_tags(tag_file, duration):
     '''Get the tag data for this track as a JAMS annotation'''
 
-    annotation = pyjams.Annotation('tag_open')
+    annotation = jams.Annotation('tag_open')
 
     data = []
     for value in list(pd.read_table(tag_file,
@@ -71,12 +71,12 @@ def smc_tags(tag_file, duration):
         else:
             data.append(value)
 
-    curator = pyjams.Curator(**__curator__)
+    curator = jams.Curator(**__curator__)
 
-    metadata = pyjams.AnnotationMetadata(curator=curator,
-                                         corpus=__corpus__,
-                                         annotator={'id': ann_id,
-                                                    'confidence': int(ann_conf)})
+    metadata = jams.AnnotationMetadata(curator=curator,
+                                       corpus=__corpus__,
+                                       annotator={'id': ann_id,
+                                                  'confidence': int(ann_conf)})
 
     annotation.annotation_metadata = metadata
 
@@ -102,8 +102,8 @@ def smc_file_metadata(infile):
     duration = librosa.get_duration(y=y, sr=sr)
 
     # Format duration as time
-    metadata = pyjams.FileMetadata(title=match.group('index'),
-                                   duration=duration)
+    metadata = jams.FileMetadata(title=match.group('index'),
+                                 duration=duration)
 
     return metadata
 
@@ -152,7 +152,7 @@ def parse_smc(input_dir, output_dir):
         # Get the tags
         tag_annotation = smc_tags(tag, metadata.duration)
 
-        jam = pyjams.JAMS(file_metadata=metadata)
+        jam = jams.JAMS(file_metadata=metadata)
         jam.annotations.append(beat_annotation)
         jam.annotations.append(tag_annotation)
 

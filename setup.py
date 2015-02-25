@@ -2,10 +2,10 @@ from setuptools import setup, find_packages
 
 import imp
 
-version = imp.load_source('pyjams.version', 'pyjams/version.py')
+version = imp.load_source('jams.version', 'jams/version.py')
 
 setup(
-    name='pyjams',
+    name='jams',
     version=version.version,
     description='A JSON Annotated Music Specification for Reproducible MIR Research',
     author='JAMS development crew',
