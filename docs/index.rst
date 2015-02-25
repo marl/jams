@@ -14,19 +14,19 @@ Contents:
 :mod:`PyJAMS`
 ----------------
 
-.. automodule:: pyjams
+.. automodule:: jams
     :members:
     :undoc-members:
     :show-inheritance:
     :member-order: bysource
 
-.. automodule:: pyjams.pyjams
+.. automodule:: jams.pyjams
     :members:
     :undoc-members:
     :show-inheritance:
     :member-order: bysource
 
-.. automodule:: pyjams.util
+.. automodule:: jams.util
     :members:
     :undoc-members:
     :show-inheritance:
