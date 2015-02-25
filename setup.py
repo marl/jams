@@ -29,10 +29,9 @@ setup(
     keywords='audio music json',
     license='BSD',
     install_requires=[
-        'json',
         'pandas',
-        'jsonschema'
-        'numpy >= 1.8.0',
+        'jsonschema',
+        'numpy>=1.8.0',
         'six',
         'decorator',
     ],
