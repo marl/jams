@@ -521,7 +521,7 @@ class AnnotationMetadata(JObject):
 class FileMetadata(JObject):
     """Metadata for a given audio file."""
     def __init__(self, title='', artist='', release='', duration=None,
-                 content_path=None, identifiers=None, jams_version=None):
+                 identifiers=None, jams_version=None):
         """Create a file-level Metadata object.
 
         Parameters
@@ -534,8 +534,6 @@ class FileMetadata(JObject):
             MD5 hash of the corresponding file.
         duration: number
             Time duration of the file, in seconds.
-        content_path : str
-            Relative path of the audio data corresponding to this annotation
         identifiers : pyjams.Sandbox
             Sandbox of identifier keys (eg, musicbrainz ids)
         jams_version: str
@@ -548,7 +546,6 @@ class FileMetadata(JObject):
         self.artist = artist
         self.release = release
         self.duration = duration
-        self.content_path = content_path
         self.identifiers = JObject(**identifiers)
         self.jams_version = jams_version
 
