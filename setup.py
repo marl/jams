@@ -18,7 +18,7 @@ setup(
     include_package_data=True,
     long_description="""A python module for audio and music processing.""",
     classifiers=[
-        "License :: OSI Approved :: BSD License",
+        "License :: OSI Approved :: ISC License (ISCL)",
         "Programming Language :: Python",
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
