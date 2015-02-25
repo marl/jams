@@ -1,5 +1,7 @@
 {
-  "sandbox": {}, 
+  "sandbox": {
+    "content_path": "SMC_056.wav"
+  }, 
   "annotations": [
     {
       "data": [
@@ -410,12 +412,6 @@
           "confidence": NaN, 
           "value": 1.0, 
           "time": 39.511
-        }, 
-        {
-          "duration": 0.0, 
-          "confidence": NaN, 
-          "value": 1.0, 
-          "time": 40.013
         }
       ], 
       "annotation_metadata": {
@@ -471,9 +467,8 @@
   ], 
   "file_metadata": {
     "duration": 40.0, 
-    "title": "SMC_056", 
-    "content_path": "SMC_056.wav", 
+    "identifiers": {}, 
     "jams_version": "0.1.0", 
-    "identifiers": {}
+    "title": "SMC_056"
   }
 }

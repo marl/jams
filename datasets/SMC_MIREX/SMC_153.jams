@@ -1,5 +1,7 @@
 {
-  "sandbox": {}, 
+  "sandbox": {
+    "content_path": "SMC_153.wav"
+  }, 
   "annotations": [
     {
       "data": [
@@ -386,12 +388,6 @@
           "confidence": NaN, 
           "value": 1.0, 
           "time": 39.392
-        }, 
-        {
-          "duration": 0.0, 
-          "confidence": NaN, 
-          "value": 1.0, 
-          "time": 40.014
         }
       ], 
       "annotation_metadata": {
@@ -435,9 +431,8 @@
   ], 
   "file_metadata": {
     "duration": 40.0, 
-    "title": "SMC_153", 
-    "content_path": "SMC_153.wav", 
+    "identifiers": {}, 
     "jams_version": "0.1.0", 
-    "identifiers": {}
+    "title": "SMC_153"
   }
 }

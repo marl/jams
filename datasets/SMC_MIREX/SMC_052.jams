@@ -1,5 +1,7 @@
 {
-  "sandbox": {}, 
+  "sandbox": {
+    "content_path": "SMC_052.wav"
+  }, 
   "annotations": [
     {
       "data": [
@@ -435,9 +437,8 @@
   ], 
   "file_metadata": {
     "duration": 40.0, 
-    "title": "SMC_052", 
-    "content_path": "SMC_052.wav", 
+    "identifiers": {}, 
     "jams_version": "0.1.0", 
-    "identifiers": {}
+    "title": "SMC_052"
   }
 }

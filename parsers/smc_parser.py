@@ -103,8 +103,7 @@ def smc_file_metadata(infile):
 
     # Format duration as time
     metadata = pyjams.FileMetadata(title=match.group('index'),
-                                   duration=duration,
-                                   content_path=os.path.basename(infile))
+                                   duration=duration)
 
     return metadata
 
@@ -119,7 +118,7 @@ def save_jam(output_dir, jam):
     outfile = os.path.join(output_dir, outfile)
 
     print 'Saving {:s}'.format(outfile)
-    pyjams.save(jam, outfile)
+    jam.save(outfile)
 
 
 def parse_smc(input_dir, output_dir):
@@ -132,7 +131,7 @@ def parse_smc(input_dir, output_dir):
                                     'wav', depth=1)
 
     ann_files = find_with_extension(os.path.join(input_dir,
-                                                 'SMC_MIREX_Annotations'),
+                                                 'SMC_MIREX_Annotations_05_08_2014'),
                                     'txt', depth=1)
 
     tag_files = find_with_extension(os.path.join(input_dir,
@@ -157,7 +156,8 @@ def parse_smc(input_dir, output_dir):
         jam.annotations.append(beat_annotation)
         jam.annotations.append(tag_annotation)
 
-        pyjams.validate(jam)
+        # Add content path to the top-level sandbox
+        jam.sandbox.content_path = os.path.basename(wav)
 
         # Save the jam
         save_jam(output_dir, jam)
@@ -176,6 +176,7 @@ def parse_arguments(args):
                         help='Path to output jam files')
 
     return vars(parser.parse_args(args))
+
 
 if __name__ == '__main__':
     parameters = parse_arguments(sys.argv[1:])

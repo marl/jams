@@ -1,5 +1,7 @@
 {
-  "sandbox": {}, 
+  "sandbox": {
+    "content_path": "SMC_257.wav"
+  }, 
   "annotations": [
     {
       "data": [
@@ -464,12 +466,6 @@
           "confidence": NaN, 
           "value": 1.0, 
           "time": 39.851
-        }, 
-        {
-          "duration": 0.0, 
-          "confidence": NaN, 
-          "value": 1.0, 
-          "time": 40.002
         }
       ], 
       "annotation_metadata": {
@@ -537,9 +533,8 @@
   ], 
   "file_metadata": {
     "duration": 40.0, 
-    "title": "SMC_257", 
-    "content_path": "SMC_257.wav", 
+    "identifiers": {}, 
     "jams_version": "0.1.0", 
-    "identifiers": {}
+    "title": "SMC_257"
   }
 }
