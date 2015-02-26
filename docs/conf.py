@@ -132,14 +132,15 @@ class Mock(MagicMock):
 # a list of builtin themes.
 # html_theme = 'default'
 import sphinx_rtd_theme
-html_theme = 'sphinx_rtd_theme'
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 if on_rtd:
     html_theme = 'default'
     MOCK_MODULES = ['numpy', 'pandas']
-
+    sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+else:
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
