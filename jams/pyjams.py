@@ -58,6 +58,31 @@ you can easily read it back into memory:
 And that's it!
 
   >>> print annot2
+
+
+3. Function reference
+---------------------
+.. autosummary::
+    :toctree: generated/
+
+    load
+    append
+    import_lab
+
+4. Object reference
+-------------------
+.. autosummary::
+    :toctree: generated/
+
+    JAMS
+    FileMetadata
+    AnnotationArray
+    AnnotationMetadata
+    Curator
+    Annotation
+    JamsFrame
+    Sandbox
+    JObject
 """
 
 import json
@@ -98,7 +123,8 @@ __SCHEMA__ = __load_schema()
 
 
 def load(filepath, strict=True):
-    """Load a JAMS Annotation from a file.
+    r"""Load a JAMS Annotation from a file.
+
 
     Parameters
     ----------
@@ -108,15 +134,18 @@ def load(filepath, strict=True):
     strict : bool
         Enforce strict schema validation
 
+
     Returns
     -------
     jam : JAMS
         The loaded JAMS object
 
+
     Raises
     ------
     ValidationError
         if `strict==True` and validation files
+
 
     See also
     --------
@@ -155,10 +184,11 @@ def append(jam, filepath, new_filepath=None, on_conflict='fail'):
 
 
 class JObject(object):
-    """Dict-like object for JSON Serialization.
+    r"""Dict-like object for JSON Serialization.
 
     This object behaves like a dictionary to allow init-level attribute names,
     seamless JSON-serialization, and double-star style unpacking (**obj).
+
     """
     def __init__(self, **kwargs):
         object.__init__(self)
@@ -171,7 +201,7 @@ class JObject(object):
 
     @property
     def __json__(self):
-        """Return the object as a set of native datatypes for serialization.
+        r"""Return the object as a set of native datatypes for serialization.
 
         Note: Empty strings / lists / dicts, None, and attributes beginning
         with underscores are suppressed.
@@ -219,8 +249,8 @@ class JObject(object):
             props = self.__schema__['properties']
             if name not in props:
                 raise ValueError(
-                    "Invalid attribute: %s\n"
-                    "\t Should be one of %s." % (name, props.keys()))
+                    ("Invalid attribute: {:s}\n"
+                     "\t Should be one of {:s}.").format(name, props.keys()))
         self.__dict__[name] = value
 
     def __len__(self):
@@ -228,8 +258,7 @@ class JObject(object):
 
     def __repr__(self):
         """Render the object alongside its attributes."""
-        # data = ", ".join(["%s=%s" % (k, self[k]) for k in self.keys()])
-        return '<%s: %s>' % (self.type, ", ".join(self.keys()))
+        return '<{:s}: {:s}>'.format(self.type, ', '.join(self.keys()))
 
     def __str__(self):
         return json.dumps(self.__json__, indent=2)
@@ -291,7 +320,7 @@ class JObject(object):
 class Sandbox(JObject):
     """Sandbox (unconstrained)
 
-    Functionally identitical to JObjects, but the class hierarchy might be
+    Functionally identical to JObjects, but the class hierarchy might be
     confusing if all objects inherit from Sandboxes."""
     pass
 
@@ -317,7 +346,7 @@ class JamsFrame(pd.DataFrame):
 
     @classmethod
     def fields(cls):
-        '''Fields of a JamsFrame'''
+        '''Fields of a JamsFrame: (time, duration, value, confidence)'''
         return ['time', 'duration', 'value', 'confidence']
 
     @classmethod
@@ -385,14 +414,15 @@ class JamsFrame(pd.DataFrame):
     def to_interval_values(self):
         '''Extract observation data in a mir_eval-friendly format.
 
-        :returns:
-            - intervals : np.ndarray [shape=(n, 2), dtype=float]
-              Start- and end-times of all valued intervals
+        Returns
+        -------
+        intervals : np.ndarray [shape=(n, 2), dtype=float]
+            Start- and end-times of all valued intervals
 
-              intervals[i, :] = [time[i], time[i] + duration[i]]
+            `intervals[i, :] = [time[i], time[i] + duration[i]]`
 
-            - labels : list
-              List view of value field.
+        labels : list
+            List view of value field.
         '''
 
         times = util.timedelta_to_float(self.time.values)
@@ -466,6 +496,7 @@ class Curator(JObject):
         ----------
         name: str, default=''
             Common name of the curator.
+
         email: str, default=''
             An email address corresponding to the curator.
         """
@@ -489,19 +520,26 @@ class AnnotationMetadata(JObject):
         curator: Curator, default=None
             Object documenting a name and email address for the person of
             correspondence.
+
         version: string, default=''
             Version of this annotation.
+
         annotator: dict, default=None
             Sandbox for information about the specific annotator, such as
             musical experience, skill level, principal instrument, etc.
+
         corpus: str, default=''
             Collection assignment.
+
         annotation_tools: str, default=''
             Description of the tools used to create the annotation.
+
         annotation_rules: str, default=''
             Description of the rules provided to the annotator.
+
         validation: str, default=''
             Methods for validating the integrity of the data.
+
         data_source: str, default=''
             Description of where the data originated, e.g. 'Manual Annotation'.
         """
@@ -528,14 +566,19 @@ class FileMetadata(JObject):
         ----------
         title: str
             Name of the recording.
+
         artist: str
             Name of the artist / musician.
+
         md5: str
             MD5 hash of the corresponding file.
+
         duration: number
             Time duration of the file, in seconds.
+
         identifiers : pyjams.Sandbox
             Sandbox of identifier keys (eg, musicbrainz ids)
+
         jams_version: str
             Version of the JAMS Schema.
         """
@@ -631,6 +674,7 @@ class JAMS(JObject):
 
         sandbox : Sandbox (or dict), default=None
             Unconstrained global sandbox for additional information.
+
         """
         JObject.__init__(self)
 
@@ -662,6 +706,7 @@ class JAMS(JObject):
         ----------
         jam: JAMS object
             Object to add to this jam
+
         on_conflict: str, default='fail'
             Strategy for resolving metadata conflicts; one of
                 ['fail', 'overwrite', or 'ignore'].
@@ -697,6 +742,7 @@ class JAMS(JObject):
         See Also
         --------
         JObject.search
+
 
         Examples
         --------

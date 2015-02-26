@@ -1,4 +1,37 @@
-"""Utility functions for parsing datasets."""
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+r"""Utility functions
+
+Data I/O
+========
+.. autosummary::
+    :toctree: generated/
+
+    read_lab
+    load_textlist
+    expand_filepaths
+    smkdirs
+    filebase
+    find_with_extension
+
+
+JObject helpers
+===============
+.. autosummary::
+    :toctree: generated/
+
+    match_query
+    query_pop
+
+
+JamsFrame helpers
+=================
+.. autosummary::
+    :toctree: generated/
+
+    timedelta_to_float
+    serialize_obj
+"""
 
 import os
 import glob
@@ -6,6 +39,7 @@ import pandas as pd
 import numpy as np
 import re
 import six
+
 
 def timedelta_to_float(t):
     '''Convert a timedelta64[ns] to floating point (seconds)'''
@@ -260,13 +294,6 @@ def match_query(string, query):
 def query_pop(query, prefix, sep='.'):
     '''Pop a prefix from a query string.
 
-    Example
-    -------
-    >>> query_pop('Annotation.namespace', 'Annotation')
-    'namespace'
-    >>> query_pop('namespace', 'Annotation')
-    'namespace'
-
 
     Parameters
     ----------
@@ -284,6 +311,14 @@ def query_pop(query, prefix, sep='.'):
     popped : str
         `query` with a `prefix` removed from the front (if found)
         or `query` if the prefix was not found
+
+    Examples
+    --------
+    >>> query_pop('Annotation.namespace', 'Annotation')
+    'namespace'
+    >>> query_pop('namespace', 'Annotation')
+    'namespace'
+
     '''
 
     terms = query.split(sep)
