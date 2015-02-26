@@ -48,11 +48,11 @@ def timedelta_to_float(t):
 
 
 def serialize_obj(obj):
-    '''
-    Custom serialization functionality for working with advanced data types.
+    '''Custom serialization functionality for working with advanced data types.
 
     - Timedelta objects are convered to floats (in seconds)
     - numpy arrays are converted to lists
+    - lists are recursively serialized element-wise
 
     '''
     if isinstance(obj, pd.tslib.Timedelta):
