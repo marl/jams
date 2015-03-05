@@ -3,9 +3,11 @@
 """Test the util module"""
 
 import tempfile
-from jams import util
 import os
 from nose.tools import eq_
+import numpy as np
+
+from jams import util
 
 
 def test_read_lab():
@@ -41,3 +43,15 @@ def test_read_lab():
     eq_(result[3], ['blah blah', ''])
 
 
+def test_timedelta_to_float():
+
+    # 30 seconds
+    t = 30.0
+
+    # in nanoseconds
+    x = np.timedelta64(int(t * 1e9))
+
+    # convert back
+    tn = util.timedelta_to_float(x)
+
+    assert np.allclose(t, tn)
