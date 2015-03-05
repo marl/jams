@@ -4,7 +4,7 @@
 
 import tempfile
 import os
-from nose.tools import eq_
+from nose.tools import eq_, raises
 import numpy as np
 
 from jams import util
@@ -67,3 +67,22 @@ def test_query_pop():
     yield __test, 'alpha.beta.gamma', 'beta', '.', 'alpha.beta.gamma'
     yield __test, 'alpha.beta.gamma', 'beta', '/', 'alpha.beta.gamma'
     yield __test, 'alpha.alpha.beta.gamma', 'alpha', '.', 'alpha.beta.gamma'
+
+
+def test_match_query():
+
+    def __test(needle, haystack, result):
+        eq_(util.match_query(haystack, needle), result)
+
+    haystack = 'abcdeABCDE123'
+
+    yield __test, haystack, haystack, True
+    yield __test, '.*cde.*', haystack, True
+    yield __test, 'cde$', haystack, False
+    yield __test, r'.*\d+$', haystack, True
+    yield __test, r'^\d+$', haystack, False
+
+    yield __test, lambda x: True, haystack, True
+    yield __test, lambda x: False, haystack, False
+
+    yield raises(TypeError)(__test), None, haystack, False

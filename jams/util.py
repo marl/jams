@@ -199,10 +199,10 @@ def match_query(string, query):
         return query(string)
 
     elif isinstance(query, six.string_types):
-        return (re.match(query, string) is not None)
+        return re.match(query, string) is not None
 
     else:
-        raise TypeError('Invalid query type: {:s}'.format(type(query)))
+        raise TypeError('Invalid query type: {}'.format(type(query)))
 
     return False
 
