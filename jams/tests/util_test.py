@@ -55,3 +55,15 @@ def test_timedelta_to_float():
     tn = util.timedelta_to_float(x)
 
     assert np.allclose(t, tn)
+
+
+def test_query_pop():
+
+    def __test(query, prefix, sep, target):
+        eq_(util.query_pop(query, prefix, sep=sep), target)
+
+    yield __test, 'alpha.beta.gamma', 'alpha', '.', 'beta.gamma'
+    yield __test, 'alpha/beta/gamma', 'alpha', '/', 'beta/gamma'
+    yield __test, 'alpha.beta.gamma', 'beta', '.', 'alpha.beta.gamma'
+    yield __test, 'alpha.beta.gamma', 'beta', '/', 'alpha.beta.gamma'
+    yield __test, 'alpha.alpha.beta.gamma', 'alpha', '.', 'alpha.beta.gamma'
