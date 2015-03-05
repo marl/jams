@@ -7,7 +7,7 @@ import os
 from nose.tools import eq_, raises
 import numpy as np
 
-from jams import util
+from jams import pyjams, util
 
 
 def test_read_lab():
@@ -45,22 +45,19 @@ def test_read_lab():
 
 def test_timedelta_to_float():
 
-    # 30 seconds
-    t = 30.0
-
-    # in nanoseconds
+    # 2.5 seconds
+    t = 2.5
     x = np.timedelta64(int(t * 1e9))
+    tn = pyjams.__timedelta_to_float(x)
 
     # convert back
-    tn = util.timedelta_to_float(x)
-
     assert np.allclose(t, tn)
 
 
 def test_query_pop():
 
     def __test(query, prefix, sep, target):
-        eq_(util.query_pop(query, prefix, sep=sep), target)
+        eq_(pyjams.__query_pop(query, prefix, sep=sep), target)
 
     yield __test, 'alpha.beta.gamma', 'alpha', '.', 'beta.gamma'
     yield __test, 'alpha/beta/gamma', 'alpha', '/', 'beta/gamma'
@@ -72,7 +69,7 @@ def test_query_pop():
 def test_match_query():
 
     def __test(needle, haystack, result):
-        eq_(util.match_query(haystack, needle), result)
+        eq_(pyjams.__match_query(haystack, needle), result)
 
     haystack = 'abcdeABCDE123'
 

@@ -92,13 +92,13 @@ from jsonschema import ValidationError
 import numpy as np
 import pandas as pd
 import os
+import re
 import six
 import warnings
 import sys
 
 from pkg_resources import resource_filename
 
-from . import util
 from .version import version as __VERSION__
 from . import namespace as ns
 
@@ -278,8 +278,8 @@ class JObject(object):
         return self.__class__.__name__
 
     @classmethod
-    def loads(cls, s):
-        return cls.__json_init__(**json.loads(s))
+    def loads(cls, string):
+        return cls.__json_init__(**json.loads(string))
 
     def dumps(self, *args, **kwargs):
         return json.dumps(self, *args, **kwargs)
@@ -294,7 +294,7 @@ class JObject(object):
 
         # Pop this object name off the query
         for k, value in six.iteritems(kwargs):
-            k_pop = util.query_pop(k, myself)
+            k_pop = __query_pop(k, myself)
 
             if k_pop:
                 r_query[k_pop] = value
@@ -304,8 +304,8 @@ class JObject(object):
 
         for key in r_query:
             if hasattr(self, key):
-                match |= util.match_query(getattr(self, key),
-                                          r_query[key])
+                match |= __match_query(getattr(self, key),
+                                       r_query[key])
 
         if not match:
             for attr in dir(self):
@@ -388,7 +388,7 @@ class JamsFrame(pd.DataFrame):
                 if isinstance(value, dict):
                     dict_out[key] = __recursive_simplify(value)
                 else:
-                    dict_out[key] = util.serialize_obj(value)
+                    dict_out[key] = __serialize_obj(value)
             return dict_out
 
         # By default, we'll output a record for each row
@@ -425,8 +425,8 @@ class JamsFrame(pd.DataFrame):
             List view of value field.
         '''
 
-        times = util.timedelta_to_float(self.time.values)
-        duration = util.timedelta_to_float(self.duration.values)
+        times = __timedelta_to_float(self.time.values)
+        duration = __timedelta_to_float(self.duration.values)
 
         return np.vstack([times, times + duration]).T, list(self.value)
 
@@ -893,3 +893,99 @@ def import_lab(namespace, filename, jam=None, **parse_options):
     jam.annotations.append(annotation)
 
     return jam, annotation
+
+
+def __timedelta_to_float(t):
+    '''Convert a timedelta64[ns] to floating point (seconds)'''
+
+    return t.astype(np.float) * 1e-9
+
+
+def __query_pop(query, prefix, sep='.'):
+    '''Pop a prefix from a query string.
+
+
+    Parameters
+    ----------
+    query : str
+        The query string
+
+    prefix : str
+        The prefix string to pop, if it exists
+
+    sep : str
+        The string to separate fields
+
+    Returns
+    -------
+    popped : str
+        `query` with a `prefix` removed from the front (if found)
+        or `query` if the prefix was not found
+
+    Examples
+    --------
+    >>> query_pop('Annotation.namespace', 'Annotation')
+    'namespace'
+    >>> query_pop('namespace', 'Annotation')
+    'namespace'
+
+    '''
+
+    terms = query.split(sep)
+
+    if terms[0] == prefix:
+        terms = terms[1:]
+
+    return sep.join(terms)
+
+
+def __match_query(string, query):
+    '''Test if a string matches a functional query.
+
+    Parameters
+    ----------
+    string : str
+        The string to test
+
+    query : string or callable
+        Either a regular expression or a callable function
+
+    Returns
+    -------
+    match : bool
+        `True` if `query` is a callable and `query(string) == True`
+        or if `query` is a regexp and `re.match(query, regexp)`
+
+        `False` otherwise
+    '''
+
+    if six.callable(query):
+        return query(string)
+
+    elif isinstance(query, six.string_types):
+        return re.match(query, string) is not None
+
+    else:
+        raise TypeError('Invalid query type: {}'.format(type(query)))
+
+    return False
+
+
+def __serialize_obj(obj):
+    '''Custom serialization functionality for working with advanced data types.
+
+    - Timedelta objects are convered to floats (in seconds)
+    - numpy arrays are converted to lists
+    - lists are recursively serialized element-wise
+
+    '''
+    if isinstance(obj, pd.tslib.Timedelta):
+        return obj.total_seconds()
+
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+
+    elif isinstance(obj, list):
+        return [__serialize_obj(x) for x in obj]
+
+    return obj
