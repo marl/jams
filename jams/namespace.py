@@ -10,66 +10,20 @@ import sys
 
 import os
 import warnings
-from pkg_resources import resource_filename
 
-from . import util
+__NAMESPACE__ = dict()
 
 
-def __add_namespace(names, filename):
+def add_namespace(filename):
     '''Add a namespace definition to our working set.
 
     Parameters
     ----------
-    names : dict
-        Dictionary of namespace objects
-
     filename : str
         Path to json file defining the namespace object
-
-    Returns
-    -------
-    names_new : dict
-        The modified namespace dictionary
-
-        .. note:: `names` is updated in-place.
     '''
     with open(filename, mode='r') as fileobj:
-        names.update(json.load(fileobj))
-
-    return names
-
-
-def __load_namespaces(basedir):
-    '''Load all namespace files stored within a base directory.
-
-    Parameters
-    ----------
-    basedir : str
-        Path to the top-level directory
-
-    Returns
-    -------
-    namespaces : dict
-        Dictionary of JAMS namespaces
-    '''
-
-    names = dict()
-
-    for nsfile in util.find_with_extension(basedir, 'json'):
-        names = __add_namespace(names, nsfile)
-
-    return names
-
-
-def add_namespace(filename):
-    '''Add a new namespace object.
-
-    Parameters
-    ----------
-    filename : str
-        Path to the namespace json file
-    '''
-    __add_namespace(__NAMESPACE__, filename)
+        __NAMESPACE__.update(json.load(fileobj))
 
 
 def ns_schema(namespace):
@@ -182,5 +136,4 @@ def validate_annotation(annotation, strict=True):
     return True
 
 # Populate the schemata
-__SCHEMA_DIR__ = os.path.join('schema', 'namespaces')
-__NAMESPACE__ = __load_namespaces(resource_filename(__name__, __SCHEMA_DIR__))
+_SCHEMA_DIR = os.path.join('schema', 'namespaces')
