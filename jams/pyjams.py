@@ -100,7 +100,7 @@ import sys
 from pkg_resources import resource_filename
 
 from .version import version as __VERSION__
-from . import namespace as ns
+from . import ns
 
 __OBJECT_TYPE__ = 'object_type'
 
