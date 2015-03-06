@@ -48,7 +48,7 @@ def test_timedelta_to_float():
     # 2.5 seconds
     t = 2.5
     x = np.timedelta64(int(t * 1e9))
-    tn = pyjams.__timedelta_to_float(x)
+    tn = pyjams.timedelta_to_float(x)
 
     # convert back
     assert np.allclose(t, tn)
@@ -57,7 +57,7 @@ def test_timedelta_to_float():
 def test_query_pop():
 
     def __test(query, prefix, sep, target):
-        eq_(pyjams.__query_pop(query, prefix, sep=sep), target)
+        eq_(pyjams.query_pop(query, prefix, sep=sep), target)
 
     yield __test, 'alpha.beta.gamma', 'alpha', '.', 'beta.gamma'
     yield __test, 'alpha/beta/gamma', 'alpha', '/', 'beta/gamma'
@@ -69,7 +69,7 @@ def test_query_pop():
 def test_match_query():
 
     def __test(needle, haystack, result):
-        eq_(pyjams.__match_query(haystack, needle), result)
+        eq_(pyjams.match_query(haystack, needle), result)
 
     haystack = 'abcdeABCDE123'
 

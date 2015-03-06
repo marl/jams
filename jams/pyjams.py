@@ -294,7 +294,7 @@ class JObject(object):
 
         # Pop this object name off the query
         for k, value in six.iteritems(kwargs):
-            k_pop = __query_pop(k, myself)
+            k_pop = query_pop(k, myself)
 
             if k_pop:
                 r_query[k_pop] = value
@@ -304,7 +304,7 @@ class JObject(object):
 
         for key in r_query:
             if hasattr(self, key):
-                match |= __match_query(getattr(self, key),
+                match |= match_query(getattr(self, key),
                                        r_query[key])
 
         if not match:
@@ -388,7 +388,7 @@ class JamsFrame(pd.DataFrame):
                 if isinstance(value, dict):
                     dict_out[key] = __recursive_simplify(value)
                 else:
-                    dict_out[key] = __serialize_obj(value)
+                    dict_out[key] = serialize_obj(value)
             return dict_out
 
         # By default, we'll output a record for each row
@@ -425,8 +425,8 @@ class JamsFrame(pd.DataFrame):
             List view of value field.
         '''
 
-        times = __timedelta_to_float(self.time.values)
-        duration = __timedelta_to_float(self.duration.values)
+        times = timedelta_to_float(self.time.values)
+        duration = timedelta_to_float(self.duration.values)
 
         return np.vstack([times, times + duration]).T, list(self.value)
 
@@ -477,6 +477,10 @@ class Annotation(JObject):
 
         # Set the data export coding to match the namespace
         self.data.dense = ns.is_dense(self.namespace)
+
+    @property
+    def __schema__(self):
+        return __SCHEMA__['definitions'].get(self.type, None)
 
     def append(self, **kwargs):
         '''Append an observation to the data field'''
@@ -895,13 +899,13 @@ def import_lab(namespace, filename, jam=None, **parse_options):
     return jam, annotation
 
 
-def __timedelta_to_float(t):
+def timedelta_to_float(t):
     '''Convert a timedelta64[ns] to floating point (seconds)'''
 
     return t.astype(np.float) * 1e-9
 
 
-def __query_pop(query, prefix, sep='.'):
+def query_pop(query, prefix, sep='.'):
     '''Pop a prefix from a query string.
 
 
@@ -939,7 +943,7 @@ def __query_pop(query, prefix, sep='.'):
     return sep.join(terms)
 
 
-def __match_query(string, query):
+def match_query(string, query):
     '''Test if a string matches a functional query.
 
     Parameters
@@ -971,7 +975,7 @@ def __match_query(string, query):
     return False
 
 
-def __serialize_obj(obj):
+def serialize_obj(obj):
     '''Custom serialization functionality for working with advanced data types.
 
     - Timedelta objects are convered to floats (in seconds)
@@ -986,6 +990,6 @@ def __serialize_obj(obj):
         return obj.tolist()
 
     elif isinstance(obj, list):
-        return [__serialize_obj(x) for x in obj]
+        return [serialize_obj(x) for x in obj]
 
     return obj
