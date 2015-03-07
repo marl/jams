@@ -117,7 +117,6 @@ def test_filebase():
 
 
 def test_find_with_extension():
-    
     root = tempfile.mkdtemp()
 
     files = [[root, 'file1.txt'],
@@ -150,3 +149,17 @@ def test_find_with_extension():
         os.remove(fname)
         os.remove(badfname)
         os.rmdir(os.path.dirname(fname))
+
+
+def test_expand_filepaths():
+
+    targets = ['foo.bar', 'dir/file.txt', 'dir2///file2.txt', '/q.bin']
+
+    target_dir = '/tmp'
+
+    paths = util.expand_filepaths(target_dir, targets)
+
+    for search, result in zip(targets, paths):
+
+        eq_(os.path.normpath(os.path.join(target_dir, search)), result)
+
