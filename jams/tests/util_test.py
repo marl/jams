@@ -83,3 +83,22 @@ def test_match_query():
     yield __test, lambda x: False, haystack, False
 
     yield raises(TypeError)(__test), None, haystack, False
+
+
+def test_smkdirs():
+
+    root = tempfile.mkdtemp()
+    my_dirs = [root, 'level1', 'level2', 'level3']
+
+    try:
+        target = os.sep.join(my_dirs)
+        util.smkdirs(target)
+
+        for i in range(1, len(my_dirs)):
+            tmpdir = os.sep.join(my_dirs[:i])
+            assert os.path.exists(tmpdir)
+            assert os.path.isdir(tmpdir)
+    finally:
+        for i in range(len(my_dirs), 0, -1):
+            tmpdir = os.sep.join(my_dirs[:i])
+            os.rmdir(tmpdir)
