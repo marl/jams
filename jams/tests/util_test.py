@@ -102,3 +102,15 @@ def test_smkdirs():
         for i in range(len(my_dirs), 0, -1):
             tmpdir = os.sep.join(my_dirs[:i])
             os.rmdir(tmpdir)
+
+
+def test_filebase():
+
+    def __test(query, target):
+
+        eq_(util.filebase(query), target)
+
+    yield __test, 'foo', 'foo'
+    yield __test, 'foo.txt', 'foo'
+    yield __test, '/path/to/foo.txt', 'foo'
+    yield __test, '/path/to/foo', 'foo'
