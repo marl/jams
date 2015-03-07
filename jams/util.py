@@ -35,7 +35,6 @@ JamsFrame helpers
 
 import os
 import glob
-
 import pandas as pd
 
 from . import pyjams
@@ -176,18 +175,50 @@ def load_textlist(filename):
 
 
 def expand_filepaths(base_dir, rel_paths):
-    """Expand a list of relative paths to a give base directory."""
+    """Expand a list of relative paths to a give base directory.
+
+    Parameters
+    ----------
+    base_dir : str
+        The target base directory
+
+    rel_paths : list (or list-like)
+        Collection of relative path strings
+
+    Returns
+    -------
+    expanded_paths : list
+        `rel_paths` rooted at `base_dir`
+
+    """
     return [os.path.join(base_dir, os.path.normpath(rp)) for rp in rel_paths]
 
 
 def smkdirs(dpath):
-    """Safely make a directory path if it doesn't exist."""
+    """Safely make a directory path if it doesn't exist.
+
+    Parameters
+    ----------
+    dpath : str
+        Path of directory/directories to create
+    """
     if not os.path.exists(dpath):
         os.makedirs(dpath)
 
 
 def filebase(filepath):
-    """Return the extension-less basename of a file path."""
+    """Return the extension-less basename of a file path.
+    
+    Parameters
+    ----------
+    filepath : str
+        Path to a file
+        
+    Returns
+    -------
+    base : str
+        The name of the file, with directory and extension removed
+    """
     return os.path.splitext(os.path.basename(filepath))[0]
 
 
