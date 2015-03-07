@@ -114,3 +114,39 @@ def test_filebase():
     yield __test, 'foo.txt', 'foo'
     yield __test, '/path/to/foo.txt', 'foo'
     yield __test, '/path/to/foo', 'foo'
+
+
+def test_find_with_extension():
+    
+    root = tempfile.mkdtemp()
+
+    files = [[root, 'file1.txt'],
+             [root, 'sub1', 'file2.txt'],
+             [root, 'sub1', 'sub2', 'file3.txt'],
+             [root, 'sub1', 'sub2', 'sub3', 'file4.txt']]
+
+    files = [os.sep.join(_) for _ in files]
+    badfiles = [_.replace('.txt', '.csv') for _ in files]
+
+    # Create all the necessary directories
+    util.smkdirs(os.path.dirname(files[-1]))
+
+    # Create the dummy files
+    for fname in files + badfiles:
+        with open(fname, 'w') as _:
+            pass
+
+    def __test(level, sort):
+        results = util.find_with_extension(root, 'txt', depth=level, sort=sort)
+
+        eq_(sorted(results), sorted(files[:level]))
+
+    for level in [1, 2, 3, 4]:
+        for sort in [False, True]:
+            yield __test, level, sort
+
+    # Cleanup
+    for fname, badfname in zip(files, badfiles)[::-1]:
+        os.remove(fname)
+        os.remove(badfname)
+        os.rmdir(os.path.dirname(fname))
