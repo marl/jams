@@ -102,6 +102,13 @@ from pkg_resources import resource_filename
 from .version import version as __VERSION__
 from . import ns
 
+
+__all__ = ['load', 'append',
+           'JObject', 'Sandbox', 'JamsFrame',
+           'Annotation', 'Curator', 'AnnotationMetadata',
+           'FileMetadata', 'AnnotationArray', 'JAMS']
+
+
 __OBJECT_TYPE__ = 'object_type'
 
 
@@ -258,7 +265,7 @@ class JObject(object):
 
     def __repr__(self):
         """Render the object alongside its attributes."""
-        return '<{:s}: {:s}>'.format(self.type, ', '.join(self.keys()))
+        return '<{}: {:s}>'.format(self.type, ', '.join(self.keys()))
 
     def __str__(self):
         return json.dumps(self.__json__, indent=2)
@@ -304,8 +311,7 @@ class JObject(object):
 
         for key in r_query:
             if hasattr(self, key):
-                match |= match_query(getattr(self, key),
-                                       r_query[key])
+                match |= match_query(getattr(self, key), r_query[key])
 
         if not match:
             for attr in dir(self):
@@ -823,80 +829,6 @@ class JAMS(JObject):
             valid &= ns.validate_annotation(ann, strict=strict)
 
         return valid
-
-
-def import_lab(namespace, filename, jam=None, **parse_options):
-    '''Load a .lab file into a JAMS object.
-
-    .lab files are assumed to have the following format:
-
-    TIME_START\\tTIME_END\\tANNOTATION
-
-    Parameters
-    ----------
-    namespace : str
-        The namespace for the new annotation
-
-    filename : str
-        Path to the .lab file
-
-    jam : pyjams.JAMS (optional)
-        An optional pre-existing JAMS object to append into.
-        If `None`, a new, blank JAMS object is created.
-
-    parse_options : additional keyword arguments
-        See `pandas.DataFrame.read_csv`
-
-    Returns
-    -------
-    jam : JAMS
-        The modified or constructed JAMS object
-
-    annotation : Annotation
-        A handle to the newly constructed annotation object
-    '''
-
-    # Create a new annotation object
-    annotation = Annotation(namespace)
-
-    if jam is None:
-        jam = JAMS()
-
-    parse_options.setdefault('sep', r'\s+')
-    parse_options.setdefault('engine', 'python')
-    parse_options.setdefault('header', None)
-    parse_options.setdefault('index_col', False)
-
-    # This is a hack to handle potentially ragged .lab data
-    parse_options.setdefault('names', range(20))
-
-    data = pd.read_csv(filename, **parse_options)
-
-    # Drop all-nan columns
-    data = data.dropna(how='all', axis=1)
-
-    # Do we need to add a duration column?
-    # This only applies to event annotations
-    if len(data.columns) == 2:
-        # Insert a column of zeros after the timing
-        data.insert(1, 'duration', 0)
-    else:
-        # Convert from time to duration
-        data.loc[:, 1] -= data[0]
-
-    for row in data.itertuples():
-        time, duration = row[1:3]
-
-        value = [x for x in row[3:] if x is not None][-1]
-
-        annotation.data.add_observation(time=time,
-                                        duration=duration,
-                                        confidence=1.0,
-                                        value=value)
-
-    jam.annotations.append(annotation)
-
-    return jam, annotation
 
 
 def timedelta_to_float(t):
