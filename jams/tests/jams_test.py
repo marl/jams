@@ -69,3 +69,14 @@ def test_jobject_eq():
     yield __test, data_1, data_2, True
     yield __test, data_1, data_3, False
 
+
+def test_jobject_nonzero():
+
+    def __test(d, value):
+        J = jams.JObject(**d)
+
+        eq_(J.__nonzero__(), value)
+
+    yield __test, {'key': True}, True
+    yield __test, {'key': False}, False
+    yield __test, {}, False
