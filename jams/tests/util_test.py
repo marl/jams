@@ -162,4 +162,3 @@ def test_expand_filepaths():
     for search, result in zip(targets, paths):
 
         eq_(os.path.normpath(os.path.join(target_dir, search)), result)
-

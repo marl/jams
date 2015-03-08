@@ -289,7 +289,7 @@ class JObject(object):
         return cls.__json_init__(**json.loads(string))
 
     def dumps(self, *args, **kwargs):
-        return json.dumps(self, *args, **kwargs)
+        return json.dumps(self.__json__, *args, **kwargs)
 
     def search(self, **kwargs):
         '''Query this object (and its descendants)'''
