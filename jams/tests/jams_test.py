@@ -45,3 +45,27 @@ def test_jobject_deserialize():
 
     eq_(json_data, json_jobject)
 
+
+def test_jobject_eq():
+
+    def __test(d1, d2, match):
+
+        J1 = jams.JObject(**d1)
+        J2 = jams.JObject(**d2)
+
+        # Test self-equivalence
+        assert J1 == J1
+        assert J2 == J2
+
+        # Test equivalence in both directions
+        assert (J1 == J2) == match
+        assert (J2 == J1) == match
+
+    data_1 = dict(key1='value 1', key2='value 2')
+    data_2 = dict(key1='value 1', key2='value 2')
+    data_3 = dict(key1='value 1', key2='value 3')
+
+    yield __test, data_1, data_1, True
+    yield __test, data_1, data_2, True
+    yield __test, data_1, data_3, False
+
