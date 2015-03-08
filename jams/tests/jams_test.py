@@ -4,6 +4,8 @@
 '''Unit tests for JAMS core objects'''
 
 import json
+import six
+
 from nose.tools import raises, eq_
 
 import jams
@@ -80,3 +82,14 @@ def test_jobject_nonzero():
     yield __test, {'key': True}, True
     yield __test, {'key': False}, False
     yield __test, {}, False
+
+
+def test_sandbox():
+
+    data = dict(key1='value 1', key2='value 2')
+
+    J = jams.Sandbox(**data)
+
+    for key, value in six.iteritems(data):
+        eq_(value, J[key])
+
