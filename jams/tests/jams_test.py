@@ -11,6 +11,8 @@ from nose.tools import raises, eq_
 import jams
 
 
+# JObject
+
 def test_jobject_dict():
 
     data = dict(key1='value 1', key2='value 2')
@@ -84,6 +86,8 @@ def test_jobject_nonzero():
     yield __test, {}, False
 
 
+# Sandbox
+
 def test_sandbox():
 
     data = dict(key1='value 1', key2='value 2')
@@ -93,3 +97,17 @@ def test_sandbox():
     for key, value in six.iteritems(data):
         eq_(value, J[key])
 
+
+# JamsFrame
+
+# Curator
+
+# AnnotationMetadata
+
+# Annotation
+
+# FileMetadata
+
+# AnnotationArray
+
+# JAMS

@@ -901,10 +901,7 @@ def match_query(string, query):
     elif isinstance(query, six.string_types):
         return re.match(query, string) is not None
 
-    else:
-        raise TypeError('Invalid query type: {}'.format(type(query)))
-
-    return False
+    raise TypeError('Invalid query type: {}'.format(type(query)))
 
 
 def serialize_obj(obj):
