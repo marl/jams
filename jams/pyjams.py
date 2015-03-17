@@ -360,19 +360,25 @@ class JamsFrame(pd.DataFrame):
 
         new_frame = super(JamsFrame, cls).from_dict(*args, **kwargs)
 
-        # Encode time properly
-        new_frame.time = pd.to_timedelta(new_frame.time,
-                                         unit='s')
+        return cls.from_dataframe(new_frame)
 
-        new_frame.duration = pd.to_timedelta(new_frame.duration,
-                                             unit='s')
+    @classmethod
+    def from_dataframe(cls, df):
+        '''Convert a dataframe into a JamsFrame.
+
+        Note: this operation is destructive.
+        '''
+        # Encode time properly
+        df.time = pd.to_timedelta(df.time, unit='s')
+
+        df.duration = pd.to_timedelta(df.duration, unit='s')
 
         # Properly order the columns
-        new_frame = new_frame[cls.fields()]
+        df = df[cls.fields()]
 
         # Clobber the class attribute
-        new_frame.__class__ = cls
-        return new_frame
+        df.__class__ = cls
+        return df
 
     @classmethod
     def factory(cls):
