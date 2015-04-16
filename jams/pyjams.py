@@ -129,7 +129,7 @@ def __load_schema():
 __SCHEMA__ = __load_schema()
 
 
-def load(filepath, strict=True):
+def load(filepath, validate=True, strict=True):
     r"""Load a JAMS Annotation from a file.
 
 
@@ -138,8 +138,11 @@ def load(filepath, strict=True):
     filepath : str
         Path to the JAMS file to load
 
+    validate : bool
+        Attempt to validate the JAMS object
+
     strict : bool
-        Enforce strict schema validation
+        if `validate == True`, enforce strict schema validation
 
 
     Returns
@@ -151,7 +154,7 @@ def load(filepath, strict=True):
     Raises
     ------
     ValidationError
-        if `strict==True` and validation files
+        if `validate == True` `strict==True` and validation fails
 
 
     See also
@@ -163,7 +166,8 @@ def load(filepath, strict=True):
     with open(filepath, 'r') as fdesc:
         jam = JAMS(**json.load(fdesc))
 
-    jam.validate(strict=strict)
+    if validate:
+        jam.validate(strict=strict)
 
     return jam
 
