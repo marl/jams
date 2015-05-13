@@ -6,38 +6,38 @@ import tempfile
 import os
 from nose.tools import eq_, raises
 import numpy as np
+import pandas as pd
 
 from jams import pyjams, util
 
+import six
 
-def test_read_lab():
-    fid, fpath = tempfile.mkstemp(suffix='.lab')
 
-    lab_data = [[0, 1.5, 'a\tblah blah'],
-                [],
-                ['# I am a comment'],
-                ['b', -2, -5.5]]
+def test_import_lab():
 
-    text = ["\t".join(["%s" % _ for _ in row]) + "\n" for row in lab_data]
+    labs = [r'''1.0 1
+3.0 2''', r'''1.0 2.0 a
+2.0 4.0 b''']
 
-    fhandle = os.fdopen(fid, 'w')
-    fhandle.writelines(text)
-    fhandle.close()
+    intervals = [np.array([[1.0, 1.0], [3.0, 3.0]]),
+                 np.array([[1.0, 2.0], [2.0, 4.0]])]
 
-    try:
-        result = util.read_lab(fpath, 3, delimiter='\t', comment='#')
-        eq_(result[0], [0, 'b'])
-        eq_(result[1], [1.5, -2])
-        eq_(result[2], ['a\tblah blah', -5.5])
+    labels = [[1, 2], ['a', 'b']]
 
-        result = util.read_lab(fpath, 4, delimiter='\t', comment='#')
-        eq_(result[0], [0, 'b'])
-        eq_(result[1], [1.5, -2])
-        eq_(result[2], ['a', -5.5])
-        eq_(result[3], ['blah blah', ''])
+    namespace = ['beat', 'chord_harte']
 
-    finally:
-        os.remove(fpath)
+    def __test(ns, lab, ints, y):
+        _, ann = util.import_lab(ns, six.StringIO(lab))
+
+        assert np.allclose(pyjams.timedelta_to_float(ann.data['time'].values),
+                           ints[:, 0])
+        assert np.allclose(pyjams.timedelta_to_float(ann.data['duration'].values),
+                           ints[:, 1] - ints[:, 0])
+        for y1, y2 in zip(list(ann.data['value'].values), y):
+            eq_(y1, y2)
+
+    for ns, lab, ints, y in zip(namespace, labs, intervals, labels):
+        yield __test, ns, lab, ints, y
 
 
 def test_timedelta_to_float():
