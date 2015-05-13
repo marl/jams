@@ -7,8 +7,6 @@ Data I/O
 .. autosummary::
     :toctree: generated/
 
-    read_lab
-    load_textlist
     expand_filepaths
     smkdirs
     filebase
@@ -38,60 +36,6 @@ import glob
 import pandas as pd
 
 from . import pyjams
-
-
-def read_lab(filename, num_columns, delimiter=None, comment='#', header=False):
-    """Read the rows of a labfile into memory.
-
-    An effort is made to infer datatypes, and therefore numerical values will
-    be mapped to ints / floats accordingly.
-
-    Note: Any row with fewer than `num_columns` values will be back-filled
-    with empty strings.
-
-    Parameters
-    ----------
-    filename : str
-        Path to a labfile.
-    num_columns : int
-        Number of columns in lab file.
-    delimiter : str
-        lab file delimiter
-    comment : str
-        lab file comment character
-    header : bool
-        if true, the first line will be skipped
-
-    Returns
-    -------
-    columns : list of lists
-        Columns of data in the labfile.
-    """
-    data = [list() for _ in range(num_columns)]
-    first_row = True
-    with open(filename, 'r') as input_file:
-        for row_idx, line in enumerate(input_file, 1):
-            if line.strip() == '':
-                continue
-            if line.startswith(comment):
-                continue
-            values = line.strip().split(delimiter, num_columns - 1)
-            while len(values) < num_columns:
-                values.append('')
-            if header and first_row:
-                first_row = False
-                continue
-            for idx, value in enumerate(values):
-                try:
-                    if "." in value:
-                        value = float(value)
-                    else:
-                        value = int(value)
-                except ValueError:
-                    pass
-                data[idx].append(value)
-
-    return data
 
 
 def import_lab(namespace, filename, jam=None, **parse_options):
@@ -166,12 +110,6 @@ def import_lab(namespace, filename, jam=None, **parse_options):
     jam.annotations.append(annotation)
 
     return jam, annotation
-
-
-def load_textlist(filename):
-    """Return a list of lines in a text file."""
-    with open(filename, 'r') as fp:
-        return [line.strip("\n") for line in fp]
 
 
 def expand_filepaths(base_dir, rel_paths):
