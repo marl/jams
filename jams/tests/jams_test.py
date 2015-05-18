@@ -4,7 +4,9 @@
 '''Unit tests for JAMS core objects'''
 
 import json
+import jsonschema
 import six
+import warnings
 
 from nose.tools import raises, eq_
 
@@ -112,3 +114,53 @@ def test_sandbox():
 # AnnotationArray
 
 # JAMS
+
+def test_load_fail():
+    # 1. test bad file path
+    # 2. test non-json file
+
+    pass
+
+
+def test_load_valid():
+
+    # 3. test good jams file with strict validation
+    # 4. test good jams file without strict validation
+
+    def __test(filename, valid, strict):
+        jams.load(filename, validate=valid, strict=strict)
+
+
+    fn = 'fixtures/valid.jams'
+
+    for validate in [False, True]:
+        for strict in [False, True]:
+            yield __test, fn, validate, strict
+
+def test_load_invalid():
+
+    def __test(filename, valid, strict):
+        jams.load(filename, validate=valid, strict=strict)
+
+    def __test_warn(filename, valid, strict):
+        warnings.resetwarnings()
+        with warnings.catch_warnings(record=True) as out:
+            jams.load(filename, validate=valid, strict=strict)
+
+        assert len(out) > 0
+        assert out[0].category is UserWarning
+        assert 'failed validating' in str(out[0].message).lower()
+
+    # 5. test bad jams file with strict validation
+    # 6. test bad jams file without strict validation
+    fn = 'fixtures/invalid.jams'
+
+    # Test once with no validation
+    yield __test, fn, False, False
+
+    # With validation, failure can either be a warning or an exception
+    yield raises(jsonschema.ValidationError)(__test), fn, True, True
+
+    yield __test_warn, fn, True, False
+
+
