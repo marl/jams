@@ -3,6 +3,8 @@
 # CREATED:2015-03-06 14:24:58 by Brian McFee <brian.mcfee@nyu.edu>
 '''Unit tests for JAMS core objects'''
 
+import os
+import tempfile
 import json
 import jsonschema
 import six
@@ -119,7 +121,22 @@ def test_load_fail():
     # 1. test bad file path
     # 2. test non-json file
 
-    pass
+    def __test(filename):
+        jams.load(filename)
+
+    # Make a non-existent file
+    tdir = tempfile.mkdtemp()
+    yield raises(IOError)(__test), os.path.join(tdir, 'nonexistent.jams')
+    os.rmdir(tdir)
+    
+    # Make a non-json file
+    tdir = tempfile.mkdtemp()
+    badfile = os.path.join(tdir, 'nonexistent.jams')
+    with open(badfile, mode='w') as fp:
+        fp.write('some garbage')
+    yield raises(ValueError)(__test), os.path.join(tdir, 'nonexistent.jams')
+    os.unlink(badfile)
+    os.rmdir(tdir)
 
 
 def test_load_valid():
