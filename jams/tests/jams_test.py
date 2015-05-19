@@ -194,6 +194,12 @@ def test_jamsframe_serialize():
         yield __test, dense
 
 # Curator
+def test_curator():
+
+    c = jams.Curator(name='myself', email='you@me.com')
+
+    eq_(c.name, 'myself')
+    eq_(c.email, 'you@me.com')
 
 # AnnotationMetadata
 
