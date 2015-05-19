@@ -203,6 +203,41 @@ def test_curator():
 
 # AnnotationMetadata
 
+def test_annotation_metadata():
+
+
+    def __test(data, curator, annotator):
+
+        md = jams.AnnotationMetadata(curator=curator, annotator=annotator,
+                                     **data)
+
+        if curator is not None:
+            eq_(dict(md.curator), dict(curator))
+
+        if annotator is not None:
+            eq_(dict(md.annotator), dict(annotator))
+
+        real_data = dict(md)
+        real_data.pop('curator')
+        real_data.pop('annotator')
+        eq_(real_data, data)
+
+
+    dummies = dict(version='0',
+                   corpus='test',
+                   annotation_tools='nose',
+                   annotation_rules='brains',
+                   validation='unnecessary',
+                   data_source='null')
+
+    real_curator = jams.Curator(name='nobody', email='none@none.com')
+
+    real_annotator = jams.Sandbox(description='none')
+
+    for curator in [None, real_curator]:
+        for annotator in [None, real_annotator]:
+            yield __test, dummies, real_curator, real_annotator
+    
 # Annotation
 
 # FileMetadata
