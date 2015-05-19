@@ -157,6 +157,19 @@ def test_jamsframe_add_observation():
     eq_(list(jf['confidence']), [0.0, 0.0, 0.0])
 
 
+def test_jamsframe_interval_values():
+
+    df = pd.DataFrame(data=[[0.0, 1.0, 'a', 0.0],
+                            [1.0, 2.0, 'b', 0.0]],
+                      columns=['time', 'duration', 'value', 'confidence'])
+
+    jf = jams.JamsFrame.from_dataframe(df)
+
+    intervals, values = jf.to_interval_values()
+
+    assert np.allclose(intervals, np.array([[0.0, 1.0], [1.0, 3.0]]))
+    eq_(values, ['a', 'b'])
+
 # Curator
 
 # AnnotationMetadata
