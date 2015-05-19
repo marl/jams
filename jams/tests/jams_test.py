@@ -9,6 +9,8 @@ import json
 import jsonschema
 import six
 import warnings
+import numpy as np
+import pandas as pd
 
 from nose.tools import raises, eq_
 
@@ -104,6 +106,39 @@ def test_sandbox():
 
 
 # JamsFrame
+
+def test_jamsframe_fields():
+
+    eq_(jams.JamsFrame.fields(), ['time', 'duration', 'value', 'confidence'])
+
+
+def test_jamsframe_from_df():
+
+    df = pd.DataFrame(data=[[0.0, 1.0, 'a', 0.0],
+                            [1.0, 2.0, 'b', 0.0]],
+                      columns=['time', 'duration', 'value', 'confidence'])
+
+    jf = jams.JamsFrame.from_dataframe(df)
+
+    # 1. type check
+    assert isinstance(jf, jams.JamsFrame)
+
+    # 2. check field order
+    eq_(list(jf.keys().values),
+        jams.JamsFrame.fields())
+
+    # 3. check field types
+    assert jf['time'].dtype == np.dtype('<m8[ns]')
+    assert jf['duration'].dtype == np.dtype('<m8[ns]')
+
+    # 4. Check the values
+    eq_(list(jf['time']),
+        list(pd.to_timedelta([0.0, 1.0], unit='s')))
+    eq_(list(jf['duration']), 
+        list(pd.to_timedelta([1.0, 2.0], unit='s')))
+    eq_(list(jf['value']), ['a', 'b'])
+    eq_(list(jf['confidence']), [0.0, 0.0])
+
 
 # Curator
 
