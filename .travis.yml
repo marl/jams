@@ -25,6 +25,7 @@ before_install:
     - source activate test-environment
     - pip install python-coveralls
     - pip install numpydoc
+    - pip install mir_eval
 
 install:
     # install your own package into the environment

@@ -34,6 +34,7 @@ setup(
         'numpy>=1.8.0',
         'six',
         'decorator',
+        'mir_eval',
     ],
     extras_require={
         'docs': ['numpydoc']
