@@ -103,7 +103,7 @@ from .version import version as __VERSION__
 from . import ns
 
 
-__all__ = ['load', 'append',
+__all__ = ['load',
            'JObject', 'Sandbox', 'JamsFrame',
            'Annotation', 'Curator', 'AnnotationMetadata',
            'FileMetadata', 'AnnotationArray', 'JAMS']
@@ -170,28 +170,6 @@ def load(filepath, validate=True, strict=True):
         jam.validate(strict=strict)
 
     return jam
-
-
-def append(jam, filepath, new_filepath=None, on_conflict='fail'):
-    """Append the contents of one JAMS file to another.
-
-    Parameters
-    ----------
-    jam: JAMS object
-        Annotation object to write.
-    filepath: str
-        Jams file the object should be added to.
-    new_filepath: str
-        Optional output file for non-destructive append operations.
-    on_conflict: str, default='fail'
-        Strategy for resolving metadata conflicts; one of:
-                ['fail', 'overwrite', 'ignore'].
-    """
-    old_jam = load(filepath)
-    old_jam.add(jam, on_conflict=on_conflict)
-    if new_filepath is None:
-        new_filepath = filepath
-    old_jam.save(new_filepath)
 
 
 class JObject(object):
