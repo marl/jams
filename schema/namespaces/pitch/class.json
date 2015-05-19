@@ -10,7 +10,9 @@
                 {
                     "type": "integer"
                 }
-            ]
+            ],
+            "minItems": 2,
+            "maxItems": 2
         },
         "dense": true,
         "descrpition": "Pitch class in (key, pitch class) format"
