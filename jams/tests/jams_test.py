@@ -170,6 +170,29 @@ def test_jamsframe_interval_values():
     assert np.allclose(intervals, np.array([[0.0, 1.0], [1.0, 3.0]]))
     eq_(values, ['a', 'b'])
 
+
+def test_jamsframe_serialize():
+
+    def __test(dense):
+        df = pd.DataFrame(data=[[0.0, 1.0, 'a', 0.0],
+                                [1.0, 2.0, 'b', 0.0]],
+                          columns=['time', 'duration', 'value', 'confidence'])
+
+        jf = jams.JamsFrame.from_dataframe(df)
+        jf.dense = dense
+
+        jf_s = jf.__json__
+
+        jf2 = jams.JamsFrame.from_dict(jf_s)
+
+
+        for key in jams.JamsFrame.fields():
+            eq_(list(jf[key]), list(jf2[key]))
+
+
+    for dense in [False, True]:
+        yield __test, dense
+
 # Curator
 
 # AnnotationMetadata
