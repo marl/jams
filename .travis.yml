@@ -18,7 +18,6 @@ before_install:
     - hash -r
     - conda config --set always_yes yes --set changeps1 no
     - conda update -q conda
-    # Useful for debugging any issues with conda
     - conda config --add channels pypi
     - conda info -a
     - deps='pip numpy scipy nose pandas jsonschema six decorator'
