@@ -236,7 +236,7 @@ def test_annotation_metadata():
 
     for curator in [None, real_curator]:
         for annotator in [None, real_annotator]:
-            yield __test, dummies, real_curator, real_annotator
+            yield __test, dummies, curator, annotator
     
 # Annotation
 
