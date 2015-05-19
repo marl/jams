@@ -1,5 +1,6 @@
 jams
 ====
+[![Build Status](https://travis-ci.org/marl/jams.svg?branch=develop)](https://travis-ci.org/marl/jams)
 
 A JSON Annotated Music Specification for Reproducible MIR Research.
 
