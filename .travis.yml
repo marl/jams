@@ -24,6 +24,7 @@ before_install:
     - conda create -q -n test-environment "python=$TRAVIS_PYTHON_VERSION" $deps 
     - source activate test-environment
     - pip install python-coveralls
+    - pip install numpydoc
 
 install:
     # install your own package into the environment
