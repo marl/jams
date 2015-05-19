@@ -142,7 +142,7 @@ def test_find_with_extension():
             yield __test, level, sort
 
     # Cleanup
-    for fname, badfname in zip(files, badfiles)[::-1]:
+    for fname, badfname in zip(files[::-1], badfiles[::-1]):
         os.remove(fname)
         os.remove(badfname)
         os.rmdir(os.path.dirname(fname))
