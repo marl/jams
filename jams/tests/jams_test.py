@@ -140,6 +140,23 @@ def test_jamsframe_from_df():
     eq_(list(jf['confidence']), [0.0, 0.0])
 
 
+def test_jamsframe_add_observation():
+    df = pd.DataFrame(data=[[0.0, 1.0, 'a', 0.0],
+                            [1.0, 2.0, 'b', 0.0]],
+                      columns=['time', 'duration', 'value', 'confidence'])
+
+    jf = jams.JamsFrame.from_dataframe(df)
+
+    jf.add_observation(time=3.0, duration=1.0, value='c', confidence=0.0)
+
+    eq_(list(jf['time']),
+        list(pd.to_timedelta([0.0, 1.0, 3.0], unit='s')))
+    eq_(list(jf['duration']), 
+        list(pd.to_timedelta([1.0, 2.0, 1.0], unit='s')))
+    eq_(list(jf['value']), ['a', 'b', 'c'])
+    eq_(list(jf['confidence']), [0.0, 0.0, 0.0])
+
+
 # Curator
 
 # AnnotationMetadata
