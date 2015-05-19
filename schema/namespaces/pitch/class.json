@@ -1,0 +1,19 @@
+{"pitch_class":
+    {
+        "value": { 
+            "type": "array",
+            "items": [
+                {
+                    "type": "string",
+                    "pattern": "^[A-G][b#]*$"
+                },
+                {
+                    "type": "integer"
+                }
+            ]
+        },
+        "dense": true,
+        "descrpition": "Pitch class in (key, pitch class) format"
+    }
+}
+
