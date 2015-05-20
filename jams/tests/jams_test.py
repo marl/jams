@@ -172,9 +172,8 @@ def test_jamsframe_interval_values():
 
 def test_jamsframe_serialize():
 
-    def __test(dense):
-        df = pd.DataFrame(data=[[0.0, 1.0, 'a', 0.0],
-                                [1.0, 2.0, 'b', 0.0]],
+    def __test(dense, data):
+        df = pd.DataFrame(data=data,
                           columns=['time', 'duration', 'value', 'confidence'])
 
         jf = jams.JamsFrame.from_dataframe(df)
@@ -188,8 +187,13 @@ def test_jamsframe_serialize():
         for key in jams.JamsFrame.fields():
             eq_(list(jf[key]), list(jf2[key]))
 
-    for dense in [False, True]:
-        yield __test, dense
+    values = [['a', 'b'], [dict(a=1), dict(b=2)]]
+
+    for value in values:
+        data = [[0.0, 1.0, value[0], 0.0],
+                [1.0, 2.0, value[1], 0.0]]
+        for dense in [False, True]:
+            yield __test, dense, data
 
 
 # Curator
