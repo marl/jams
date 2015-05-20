@@ -456,9 +456,6 @@ class Annotation(JObject):
         if annotation_metadata is None:
             annotation_metadata = AnnotationMetadata()
 
-        if sandbox is None:
-            sandbox = Sandbox()
-
         self.annotation_metadata = AnnotationMetadata(**annotation_metadata)
 
         if data is None:
@@ -466,7 +463,11 @@ class Annotation(JObject):
         else:
             self.data = JamsFrame.from_dict(data)
 
+        if sandbox is None:
+            sandbox = Sandbox()
+
         self.sandbox = Sandbox(**sandbox)
+
         self.namespace = namespace
 
         # Set the data export coding to match the namespace
