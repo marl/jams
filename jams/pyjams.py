@@ -578,13 +578,13 @@ class FileMetadata(JObject):
             Version of the JAMS Schema.
         """
         jams_version = __VERSION__ if jams_version is None else jams_version
-        identifiers = JObject() if identifiers is None else identifiers
+        identifiers = Sandbox() if identifiers is None else identifiers
 
         self.title = title
         self.artist = artist
         self.release = release
         self.duration = duration
-        self.identifiers = JObject(**identifiers)
+        self.identifiers = Sandbox(**identifiers)
         self.jams_version = jams_version
 
 
