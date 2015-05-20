@@ -472,10 +472,6 @@ class Annotation(JObject):
         # Set the data export coding to match the namespace
         self.data.dense = ns.is_dense(self.namespace)
 
-    @property
-    def __schema__(self):
-        return __SCHEMA__['definitions'].get(self.type, None)
-
     def append(self, **kwargs):
         '''Append an observation to the data field'''
 
