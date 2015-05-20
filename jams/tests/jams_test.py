@@ -237,8 +237,41 @@ def test_annotation_metadata():
     for curator in [None, real_curator]:
         for annotator in [None, real_annotator]:
             yield __test, dummies, curator, annotator
-    
+
+
 # Annotation
+def test_annotation():
+
+    def __test(namespace, data, amd, sandbox):
+        ann = jams.Annotation(namespace,
+                              data=data,
+                              annotation_metadata=amd,
+                              sandbox=sandbox)
+
+        eq_(namespace, ann.namespace)
+
+        if amd is not None:
+            eq_(dict(amd), dict(ann.annotation_metadata))
+
+        if sandbox is not None:
+            eq_(dict(sandbox), dict(ann.sandbox))
+
+        if data is not None:
+            assert ann.data.equals(jams.JamsFrame.from_dict(data))
+
+    real_sandbox = jams.Sandbox(description='none')
+    real_amd = jams.AnnotationMetadata(corpus='test collection')
+    real_data = dict(time=[0.0, 1.0],
+                     duration=[0.5, 0.5],
+                     value=['one', 'two'],
+                     confidence=[0.9, 0.9])
+
+    namespace = 'tag_open'
+
+    for data in [None, real_data]:
+        for amd in [None, real_amd]:
+            for sandbox in [None, real_sandbox]:
+                yield __test, namespace, data, amd, sandbox
 
 # FileMetadata
 
