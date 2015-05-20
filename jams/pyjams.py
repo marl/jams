@@ -565,8 +565,8 @@ class FileMetadata(JObject):
         artist: str
             Name of the artist / musician.
 
-        md5: str
-            MD5 hash of the corresponding file.
+        release: str
+            Name of the release
 
         duration: number
             Time duration of the file, in seconds.

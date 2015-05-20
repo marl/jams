@@ -104,7 +104,6 @@ def test_sandbox():
         eq_(value, J[key])
 
 
-
 # JamsFrame
 
 def test_jamsframe_fields():
@@ -189,9 +188,9 @@ def test_jamsframe_serialize():
         for key in jams.JamsFrame.fields():
             eq_(list(jf[key]), list(jf2[key]))
 
-
     for dense in [False, True]:
         yield __test, dense
+
 
 # Curator
 def test_curator():
@@ -200,6 +199,7 @@ def test_curator():
 
     eq_(c.name, 'myself')
     eq_(c.email, 'you@me.com')
+
 
 # AnnotationMetadata
 
@@ -297,6 +297,19 @@ def test_annotation_append():
 
 # FileMetadata
 
+def test_filemetadata():
+
+    meta = dict(title='Test track',
+                artist='Test artist',
+                release='Test release',
+                duration=31.3)
+
+    fm = jams.FileMetadata(**meta)
+    dict_fm = dict(fm)
+
+    for k in meta:
+        eq_(meta[k], dict_fm[k])
+
 # AnnotationArray
 
 # JAMS
@@ -337,6 +350,7 @@ def test_load_valid():
     for validate in [False, True]:
         for strict in [False, True]:
             yield __test, fn, validate, strict
+
 
 def test_load_invalid():
 
