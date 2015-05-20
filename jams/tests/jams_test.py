@@ -274,6 +274,27 @@ def test_annotation():
                 yield __test, namespace, data, amd, sandbox
 
 
+def test_annotation_append():
+
+    data = dict(time=[0.0, 1.0],
+                duration=[0.5, 0.5],
+                value=['one', 'two'],
+                confidence=[0.9, 0.9])
+
+    namespace = 'tag_open'
+
+    ann = jams.Annotation(namespace, data=data)
+
+    update = dict(time=2.0, duration=1.0, value='three', confidence=0.8)
+
+    ann.append(**update)
+
+    jf = jams.JamsFrame.from_dict(data)
+    jf.add_observation(**update)
+
+    assert ann.data.equals(jf)
+
+
 # FileMetadata
 
 # AnnotationArray
