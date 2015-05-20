@@ -307,7 +307,6 @@ def test_filemetadata():
                 artist='Test artist',
                 release='Test release',
                 duration=31.3)
-
     fm = jams.FileMetadata(**meta)
     dict_fm = dict(fm)
 
@@ -329,10 +328,7 @@ def test_annotation_array_data():
                 duration=[0.5, 0.5],
                 value=['one', 'two'],
                 confidence=[0.9, 0.9])
-
-    namespace = 'tag_open'
-    ann = jams.Annotation(namespace, data=data)
-
+    ann = jams.Annotation('tag_open', data=data)
     arr = jams.AnnotationArray(annotations=[ann, ann])
 
     eq_(len(arr), 2)
@@ -362,8 +358,46 @@ def test_annotation_array_serialize():
 
     eq_(arr, arr2)
 
-# JAMS
 
+# JAMS
+def test_jams():
+
+    data = dict(time=[0.0, 1.0],
+                duration=[0.5, 0.5],
+                value=['one', 'two'],
+                confidence=[0.9, 0.9])
+
+    real_ann = jams.AnnotationArray(annotations=[jams.Annotation('tag_open',
+                                                                 data=data)])
+    meta = dict(title='Test track',
+                artist='Test artist',
+                release='Test release',
+                duration=31.3)
+    real_fm = jams.FileMetadata(**meta)
+
+    real_sandbox = jams.Sandbox(description='none')
+
+
+    def __test(annotations, file_metadata, sandbox):
+        jam = jams.JAMS(annotations=annotations,
+                        file_metadata=file_metadata,
+                        sandbox=sandbox)
+
+        if file_metadata is not None:
+            eq_(dict(file_metadata), dict(jam.file_metadata))
+
+        if sandbox is not None:
+            eq_(dict(sandbox), dict(jam.sandbox))
+
+        if annotations is not None:
+            eq_(annotations, jam.annotations)
+
+    for ann in [None, real_ann]:
+        for fm in [None, real_fm]:
+            for sandbox in [None, real_sandbox]:
+                yield __test, ann, fm, sandbox
+
+# Load
 def test_load_fail():
     # 1. test bad file path
     # 2. test non-json file
