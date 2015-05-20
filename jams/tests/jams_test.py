@@ -312,6 +312,34 @@ def test_filemetadata():
 
 # AnnotationArray
 
+def test_annotation_array():
+
+    arr = jams.AnnotationArray()
+
+    eq_(len(arr), 0)
+
+
+def test_annotation_array_data():
+
+    data = dict(time=[0.0, 1.0],
+                duration=[0.5, 0.5],
+                value=['one', 'two'],
+                confidence=[0.9, 0.9])
+
+    namespace = 'tag_open'
+    ann = jams.Annotation(namespace, data=data)
+
+    arr = jams.AnnotationArray(annotations=[ann, ann])
+
+    eq_(len(arr), 2)
+    arr.append(ann)
+
+    eq_(len(arr), 3)
+
+    for t_ann in arr:
+        assert ann.data.equals(t_ann.data)
+
+
 # JAMS
 
 def test_load_fail():
