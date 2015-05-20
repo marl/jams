@@ -608,17 +608,6 @@ class AnnotationArray(list):
 
         self.extend([Annotation(**obj) for obj in annotations])
 
-    def create_annotation(self, *args, **kwargs):
-        """Create an empty Annotation, returning a reference to
-        the new annotation object.
-
-        Returns
-        -------
-        obj: Annotation
-            An annotation, initialized with the given arguments.
-        """
-        self.append(Annotation(*args, **kwargs))
-        return self[-1]
 
     def search(self, **kwargs):
         '''Filter the annotation array down to only those Annotation
