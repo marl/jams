@@ -525,9 +525,24 @@ class Annotation(JObject):
     def validate(self, strict=True):
 
         valid = super(Annotation, self).validate(strict=strict)
-        valid &= ns.validate_annotation(self, strict=strict)
+
+        # Get the schema for this annotation
+        schema = ns.ns_schema(self.namespace)
+
+        try:
+            # validate each record in the frame
+            for rec in self.data.to_dict(orient='record'):
+                jsonschema.validate(rec, schema)
+
+        except ValidationError as invalid:
+            if strict:
+                six.reraise(*sys.exc_info())
+            else:
+                warnings.warn(str(invalid))
+            valid = False
 
         return valid
+
 
 class Curator(JObject):
     """Curator
