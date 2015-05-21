@@ -706,9 +706,10 @@ class JAMS(JObject):
         equal_metadata = self.file_metadata == jam.file_metadata
         if on_conflict == 'overwrite':
             self.file_metadata = jam.file_metadata
-        elif on_conflict == 'fail' and not equal_metadata:
-            raise ValueError("Metadata conflict! "
-                             "Resolve manually or force-overwrite it.")
+        elif on_conflict == 'fail':
+            if not equal_metadata:
+                raise ValueError("Metadata conflict! "
+                                 "Resolve manually or force-overwrite it.")
         elif on_conflict == 'ignore':
             pass
         else:
