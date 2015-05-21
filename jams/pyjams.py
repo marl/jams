@@ -415,8 +415,6 @@ class JamsFrame(pd.DataFrame):
 
         return np.vstack([times, times + duration]).T, list(self.value)
 
-    def __eq__(self, other):
-        return self.equals(other)
 
 class Annotation(JObject):
     """Annotation base class."""
@@ -470,6 +468,23 @@ class Annotation(JObject):
         '''Append an observation to the data field'''
 
         self.data.add_observation(**kwargs)
+
+    def __eq__(self, other):
+        '''Override JObject equality to handle JamsFrames specially'''
+        if not isinstance(other, self.__class__):
+            return False
+
+        for key in self.__dict__:
+            value = True
+            if key == 'data':
+                value = self.__dict__[key].equals(other.__dict__[key])
+            else:
+                value = self.__dict__[key] == other.__dict__[key]
+
+            if not value:
+                return False
+
+        return True
 
 
 class Curator(JObject):
