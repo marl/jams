@@ -499,18 +499,16 @@ def test_jams_add():
 
 
 def test_jams_search():
-    fn = 'fixtures/valid.jams'
-
-
     def __test(jam, query, expected):
         
         result = jam.search(**query)
 
         eq_(result, expected)
 
-
+    fn = 'fixtures/valid.jams'
     jam = jams.load(fn)
 
+    yield __test, jam, dict(corpus='SMC_MIREX'), jam.annotations
     yield __test, jam, dict(namespace='beat'), jam.annotations[0:1]
     yield __test, jam, dict(namespace='tag_open'), jam.annotations[1:]
     yield __test, jam, dict(namespace='segment_tut'), jams.AnnotationArray()
