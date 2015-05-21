@@ -8,6 +8,7 @@ import tempfile
 import json
 import jsonschema
 import six
+import sys
 import warnings
 import numpy as np
 import pandas as pd
@@ -15,6 +16,18 @@ import pandas as pd
 from nose.tools import raises, eq_
 
 import jams
+
+
+## Borrowed from sklearn
+def clean_warning_registry():
+    """Safe way to reset warnings """
+    warnings.resetwarnings()
+    reg = "__warningregistry__"
+    for mod_name, mod in list(sys.modules.items()):
+        if 'six.moves' in mod_name:
+            continue
+        if hasattr(mod, reg):
+            getattr(mod, reg).clear()
 
 
 # JObject
@@ -514,6 +527,33 @@ def test_jams_search():
     yield __test, jam, dict(namespace='segment_tut'), jams.AnnotationArray()
 
 
+def test_jams_validate_good():
+
+    fn = 'fixtures/valid.jams'
+    j1 = jams.load(fn, validate=False)
+
+    j1.validate()
+
+
+def test_jams_validate_bad():
+
+    def __test(strict):
+        fn = 'fixtures/invalid.jams'
+        j1 = jams.load(fn, validate=False)
+
+        clean_warning_registry()
+
+        with warnings.catch_warnings(record=True) as out:
+            j1.validate(strict=strict)
+
+        assert len(out) > 0
+        assert out[0].category is UserWarning
+        assert 'failed validating' in str(out[0].message).lower()
+
+    yield __test, False
+    yield raises(jsonschema.ValidationError)(__test), True
+
+
 # Load
 def test_load_fail():
     # 1. test bad file path
@@ -559,7 +599,8 @@ def test_load_invalid():
         jams.load(filename, validate=valid, strict=strict)
 
     def __test_warn(filename, valid, strict):
-        warnings.resetwarnings()
+        clean_warning_registry()
+
         with warnings.catch_warnings(record=True) as out:
             jams.load(filename, validate=valid, strict=strict)
 
