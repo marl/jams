@@ -413,8 +413,6 @@ def test_jams_save():
 
         jam2 = jams.load(jam_out)
 
-        print jam.__dict__
-        print jam2.__dict__
         eq_(jam, jam2)
     finally:
         os.unlink(jam_out)
