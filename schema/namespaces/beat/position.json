@@ -1,16 +1,15 @@
 {"beat_position": {
     "value": {
-        "type": "array",
-        "items": [
-            { "type": "number", "minimum": 1},
-            { "type": "integer", "minimum": 0},
-            { "type": "integer", "minimum": 1},
-            { "enum": [1, 2, 4, 8, 16, 32, 64, 128, 256]}
-        ],
-        "minItems": 4,
-        "maxItems": 4
+        "type": "object",
+        "properties": {
+            "position": {"type": "number", "minimum": 1},
+            "measure": {"type": "integer", "minimum": 0},
+            "num_beats": { "type": "integer", "minimum": 1},
+            "beat_units": { "enum": [1, 2, 4, 8, 16, 32, 64, 128, 256]}
+        }
     },
     "dense": false,
-    "description": "Tuples of (position, measure number, beats per measure, beat units)"
+    "description": "Tuples of (position, measure, beats per measure, beat units)"
     }
 }
+
