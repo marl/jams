@@ -554,6 +554,13 @@ def test_jams_validate_bad():
     yield raises(jsonschema.ValidationError)(__test), True
 
 
+@raises(ValueError)
+def test_jobject_bad_field():
+    jam = jams.JAMS()
+
+    jam.out_of_schema = None
+
+
 # Load
 def test_load_fail():
     # 1. test bad file path
