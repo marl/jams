@@ -42,7 +42,7 @@ def validate_annotation(ann, namespace):
                            'Expected "{:s}", found "{:s}"'
                            .format(namespace, ann.namespace))
 
-    ns.validate_annotation(ann, strict=True)
+    ann.validate(strict=True)
 
     return True
 
