@@ -1,21 +1,15 @@
 {"pitch_class":
     {
         "value": { 
-            "type": "array",
-            "items": [
-                {
-                    "type": "string",
-                    "pattern": "^[A-G][b#]*$"
-                },
-                {
-                    "type": "integer"
-                }
-            ],
-            "minItems": 2,
-            "maxItems": 2
+            "type": "object",
+            "properties": {
+                "tonic": { "type": "string", "pattern": "^[A-G][b#]*$" },
+                "pitch": { "type": "integer" }
+            },
+            "required": ["tonic", "pitch"]
         },
         "dense": true,
-        "descrpition": "Pitch class in (key, pitch class) format"
+        "descrpition": "Pitch class in (tonic, pitch class) format"
     }
 }
 
