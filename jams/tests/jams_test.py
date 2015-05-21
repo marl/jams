@@ -397,6 +397,29 @@ def test_jams():
             for sandbox in [None, real_sandbox]:
                 yield __test, ann, fm, sandbox
 
+
+def test_jams_save():
+
+    fn = 'fixtures/valid.jams'
+
+
+    jam = jams.load(fn)
+
+    # Save to a temp file
+    _, jam_out = tempfile.mkstemp()
+
+    try:
+        jam.save(jam_out)
+
+        jam2 = jams.load(jam_out)
+
+        print jam.__dict__
+        print jam2.__dict__
+        eq_(jam, jam2)
+    finally:
+        os.unlink(jam_out)
+
+
 # Load
 def test_load_fail():
     # 1. test bad file path
