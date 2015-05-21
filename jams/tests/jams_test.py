@@ -497,6 +497,25 @@ def test_jams_add():
     for on_conflict in ['fail', 'bad_fail_mode']:
         yield raises(ValueError)(__test_conflict), on_conflict
 
+
+def test_jams_search():
+    fn = 'fixtures/valid.jams'
+
+
+    def __test(jam, query, expected):
+        
+        result = jam.search(**query)
+
+        eq_(result, expected)
+
+
+    jam = jams.load(fn)
+
+    yield __test, jam, dict(namespace='beat'), jam.annotations[0:1]
+    yield __test, jam, dict(namespace='tag_open'), jam.annotations[1:]
+    yield __test, jam, dict(namespace='segment_tut'), jams.AnnotationArray()
+
+
 # Load
 def test_load_fail():
     # 1. test bad file path
