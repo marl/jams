@@ -229,8 +229,8 @@ class JObject(object):
             props = self.__schema__['properties']
             if name not in props:
                 raise ValueError(
-                    ("Invalid attribute: {:s}\n"
-                     "\t Should be one of {:r}.").format(name, props.keys()))
+                    ("Invalid attribute: {}\n"
+                     "\t Should be one of {}.").format(name, props.keys()))
         self.__dict__[name] = value
 
     def __len__(self):
