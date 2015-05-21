@@ -71,6 +71,10 @@ def test_jobject_eq():
         assert (J1 == J2) == match
         assert (J2 == J1) == match
 
+        # Test type safety
+        J3 = jams.Sandbox(**d1)
+        assert not (J1 == J3)
+
     data_1 = dict(key1='value 1', key2='value 2')
     data_2 = dict(key1='value 1', key2='value 2')
     data_3 = dict(key1='value 1', key2='value 3')
@@ -312,6 +316,9 @@ def test_annotation_eq():
     ann2 = jams.Annotation(namespace, data=data)
 
     eq_(ann1, ann2)
+
+    # Test the type-check in equality
+    assert not (ann1 == data)
 
     update = dict(time=2.0, duration=1.0, value='three', confidence=0.8)
 
