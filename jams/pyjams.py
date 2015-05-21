@@ -212,19 +212,10 @@ class JObject(object):
         """TODO(ejhumphrey@nyu.edu): writeme."""
         return cls(**kwargs)
 
-    def __eq__(self, y):
-        """Test for equality between two objects.
 
-        Uses the following logic:
-        1. If the class types are equal, the serialized objects are compared;
-        2. If the compared object is a dict, the serialized object is compared;
-        3. False
-        """
-        if isinstance(y, dict):
-            return self.__json__ == y
-        elif isinstance(y, self.__class__):
-            return self.__json__ == y.__json__
-        return False
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and
+                (self.__dict__ == other.__dict__))
 
     def __nonzero__(self):
         return bool(self.__json__)
@@ -424,6 +415,8 @@ class JamsFrame(pd.DataFrame):
 
         return np.vstack([times, times + duration]).T, list(self.value)
 
+    def __eq__(self, other):
+        return self.equals(other)
 
 class Annotation(JObject):
     """Annotation base class."""
