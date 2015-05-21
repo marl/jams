@@ -299,6 +299,26 @@ def test_annotation_append():
     assert ann.data.equals(jf)
 
 
+def test_annotation_eq():
+
+    data = dict(time=[0.0, 1.0],
+                duration=[0.5, 0.5],
+                value=['one', 'two'],
+                confidence=[0.9, 0.9])
+
+    namespace = 'tag_open'
+
+    ann1 = jams.Annotation(namespace, data=data)
+    ann2 = jams.Annotation(namespace, data=data)
+
+    eq_(ann1, ann2)
+
+    update = dict(time=2.0, duration=1.0, value='three', confidence=0.8)
+
+    ann2.append(**update)
+
+    assert not (ann1 == ann2)
+
 # FileMetadata
 
 def test_filemetadata():
@@ -401,7 +421,6 @@ def test_jams():
 def test_jams_save():
 
     fn = 'fixtures/valid.jams'
-
 
     jam = jams.load(fn)
 
