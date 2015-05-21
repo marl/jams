@@ -53,20 +53,19 @@ def test_jobject_serialize():
 
     json_jobject = J.dumps(indent=2)
 
-    eq_(json_data, json_jobject)
+    # De-serialize into dicts
+    eq_(json.loads(json_data), json.loads(json_jobject))
 
 
 def test_jobject_deserialize():
 
     data = dict(key1='value 1', key2='value 2')
 
-    json_data = json.dumps(data, indent=2)
-
-    J = jams.JObject.loads(json_data)
+    J = jams.JObject(**data)
 
     json_jobject = J.dumps(indent=2)
 
-    eq_(json_data, json_jobject)
+    eq_(J, jams.JObject.loads(json_jobject))
 
 
 def test_jobject_eq():
