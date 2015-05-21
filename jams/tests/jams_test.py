@@ -73,7 +73,7 @@ def test_jobject_eq():
 
         # Test type safety
         J3 = jams.Sandbox(**d1)
-        assert not (J1 == J3)
+        assert not J1 == J3
 
     data_1 = dict(key1='value 1', key2='value 2')
     data_2 = dict(key1='value 1', key2='value 2')
@@ -443,6 +443,59 @@ def test_jams_save():
     finally:
         os.unlink(jam_out)
 
+
+def test_jams_add():
+
+    def __test():
+
+        fn = 'fixtures/valid.jams'
+
+        # The original jam
+        jam_orig = jams.load(fn)
+        jam = jams.load(fn)
+
+        # Make a new jam with the same metadata and different data
+        jam2 = jams.load(fn)
+        data = dict(time=[0.0, 1.0],
+                    duration=[0.5, 0.5],
+                    value=['one', 'two'],
+                    confidence=[0.9, 0.9])
+        ann = jams.Annotation('tag_open', data=data)
+        jam2.annotations = jams.AnnotationArray(annotations=[ann])
+
+        # Add the two
+        jam.add(jam2)
+
+        eq_(len(jam.annotations), 3)
+        eq_(jam.annotations[:-1], jam_orig.annotations)
+        eq_(jam.annotations[-1], jam2.annotations[0])
+
+    def __test_conflict(on_conflict):
+        fn = 'fixtures/valid.jams'
+
+        # The original jam
+        jam = jams.load(fn)
+        jam_orig = jams.load(fn)
+
+        # The copy
+        jam2 = jams.load(fn)
+
+        jam2.file_metadata = jams.FileMetadata()
+
+        jam.add(jam2, on_conflict=on_conflict)
+
+        if on_conflict == 'overwrite':
+            eq_(jam.file_metadata, jam2.file_metadata)
+        elif on_conflict == 'ignore':
+            eq_(jam.file_metadata, jam_orig.file_metadata)
+
+    yield __test
+
+    for on_conflict in ['overwrite', 'ignore']:
+        yield __test_conflict, on_conflict
+
+    for on_conflict in ['fail', 'bad_fail_mode']:
+        yield raises(ValueError)(__test_conflict), on_conflict
 
 # Load
 def test_load_fail():

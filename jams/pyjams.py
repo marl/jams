@@ -703,18 +703,17 @@ class JAMS(JObject):
             Strategy for resolving metadata conflicts; one of
                 ['fail', 'overwrite', or 'ignore'].
         """
-        equal_metadata = self.file_metadata == jam.file_metadata
-        if on_conflict == 'overwrite':
-            self.file_metadata = jam.file_metadata
-        elif on_conflict == 'fail':
-            if not equal_metadata:
+
+        if on_conflict not in ['overwrite', 'fail', 'ignore']:
+            raise ValueError("on_conflict received '{}'. Must be one of "
+                             "['fail', 'overwrite', 'ignore'].".format(on_conflict))
+
+        if not self.file_metadata == jam.file_metadata:
+            if on_conflict == 'overwrite':
+                self.file_metadata = jam.file_metadata
+            elif on_conflict == 'fail':
                 raise ValueError("Metadata conflict! "
                                  "Resolve manually or force-overwrite it.")
-        elif on_conflict == 'ignore':
-            pass
-        else:
-            raise ValueError("on_conflict received '%s'. Must be one of "
-                             "['fail', 'overwrite', 'ignore']." % on_conflict)
 
         self.annotations.extend(jam.annotations)
         self.sandbox.update(**jam.sandbox)
