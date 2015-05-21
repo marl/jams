@@ -684,7 +684,7 @@ class JAMS(JObject):
 
     @property
     def __schema__(self):
-        return None
+        return __SCHEMA__
 
     def add(self, jam, on_conflict='fail'):
         """Add the contents of another jam to this object.
