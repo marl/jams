@@ -521,6 +521,7 @@ def test_jams_search():
     jam = jams.load(fn)
 
     yield __test, jam, dict(corpus='SMC_MIREX'), jam.annotations
+    yield __test, jam, dict(), []
     yield __test, jam, dict(namespace='beat'), jam.annotations[0:1]
     yield __test, jam, dict(namespace='tag_open'), jam.annotations[1:]
     yield __test, jam, dict(namespace='segment_tut'), jams.AnnotationArray()
