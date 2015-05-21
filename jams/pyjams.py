@@ -230,7 +230,7 @@ class JObject(object):
             if name not in props:
                 raise ValueError(
                     ("Invalid attribute: {:s}\n"
-                     "\t Should be one of {:s}.").format(name, props.keys()))
+                     "\t Should be one of {:r}.").format(name, props.keys()))
         self.__dict__[name] = value
 
     def __len__(self):
