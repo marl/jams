@@ -295,6 +295,42 @@ class JObject(object):
 
         return match
 
+    def validate(self, strict=True):
+        '''Validate a JObject against its schema
+
+        Parameters
+        ----------
+        strict : bool
+            Enforce strict schema validation
+
+        Returns
+        -------
+        valid : bool
+            True if the jam validates
+            False if not, and `strict==False`
+
+        Raises
+        ------
+        ValidationError
+            If `strict==True` and `jam` fails validation
+
+        '''
+
+        valid = True
+
+        try:
+            jsonschema.validate(self.__json__, __SCHEMA__)
+
+        except ValidationError as invalid:
+            if strict:
+                six.reraise(*sys.exc_info())
+            else:
+                warnings.warn(str(invalid))
+
+            valid = False
+
+        return valid
+
 
 class Sandbox(JObject):
     """Sandbox (unconstrained)
@@ -486,6 +522,12 @@ class Annotation(JObject):
 
         return True
 
+    def validate(self, strict=True):
+
+        valid = super(Annotation, self).validate(strict=strict)
+        valid &= ns.validate_annotation(self, strict=strict)
+
+        return valid
 
 class Curator(JObject):
     """Curator
@@ -773,42 +815,13 @@ class JAMS(JObject):
         with open(filepath, 'w') as fp:
             json.dump(self.__json__, fp, indent=2)
 
+
     def validate(self, strict=True):
-        '''Validate a JAM object.
 
-        Parameters
-        ----------
-        strict : bool
-            Enforce strict schema validation
-
-        Returns
-        -------
-        valid : bool
-            True if the jam validates
-            False if not, and `strict==False`
-
-        Raises
-        ------
-        ValidationError
-            If `strict==True` and `jam` fails validation
-
-        '''
-
-        valid = True
-
-        try:
-            jsonschema.validate(self.__json__, __SCHEMA__)
-
-        except ValidationError as invalid:
-            if strict:
-                six.reraise(*sys.exc_info())
-            else:
-                warnings.warn(str(invalid))
-
-            valid = False
+        valid = super(JAMS, self).validate(strict=strict)
 
         for ann in self.annotations:
-            valid &= ns.validate_annotation(ann, strict=strict)
+            valid &= ann.validate(strict=strict)
 
         return valid
 
