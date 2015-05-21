@@ -1,21 +1,16 @@
 {"chord_roman":
     {
         "value": {
-            "type": "array",
-            "items": [
-                { 
-                    "type": "string",
-                    "pattern": "^[A-G][b#]*$"
-                },
-                { 
+            "type": "object",
+            "properties": {
+                "key": { "type": "string", "pattern": "^[A-G][b#]*$" },
+                "chord": { 
                     "type": "string",
                     "pattern": "^([#]?(i|I))|([b#]?(ii|II))|([b]?(iii|III))|([#]?(iv|IV))|([b#]?(v|V))|([b#]?(vi|VI))|([b]?(vii|VII))[oasdhx+]?[0-9]?[0-9]?(/([#]?(i|I))|([b#]?(ii|II))|([b]?(iii|III))|([#]?(iv|IV))|([b#]?(v|V))|([b#]?(vi|VI))|([b]?(vii|VII)))?$"
                 }
-            ],
-            "minItems": 2,
-            "maxItems": 2
+            }
         },
         "dense": false,
-        "description": "Chord annotations in roman numeral format: tuples (root note, number)"
+        "description": "Chord annotations in roman numeral format: tuples (key, chord)"
     }
 }
