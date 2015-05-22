@@ -180,7 +180,8 @@ class JObject(object):
 
     """
     def __init__(self, **kwargs):
-        object.__init__(self)
+        super(JObject, self).__init__()
+
         for name, value in six.iteritems(kwargs):
             setattr(self, name, value)
 
