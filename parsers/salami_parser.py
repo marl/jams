@@ -14,14 +14,75 @@ __email__ = "oriol@nyu.edu"
 
 import argparse
 import csv
-import json
 import logging
 import os
 import sys
 import time
-import zipfile
 
 import jams
+
+
+def fix_labels(label):
+    """Fixes the given labels to comply the SALAMI guidelines and JAMS
+    namespace."""
+    label = label.lower()
+    if label == "a'/a''":
+        label = "no_function"
+    if label == "b/c'":
+        label = "no_function"
+    if label == "bagpipes":
+        label = "instrumental"
+    if label == "banjo":
+        label = "instrumental"
+    if label == "code":
+        label = "coda"
+    if label == "dialog":
+        label = "spoken"
+    if label == "female":
+        label = "voice_female"
+    if label == "first":
+        label = "main theme"
+    if label == "guitar":
+        label = "instrumental"
+    if label == "hammond":
+        label = "instrumental"
+    if label == "main_theme":
+        label = "main theme"
+    if label == "male":
+        label = "voice_male"
+    if label == "muted":
+        label = "fade-out"
+    if label == "organ":
+        label = "instrumental"
+    if label == "out":
+        label = "outro"
+    if label == "piano":
+        label = "instrumental"
+    if label == "recap":
+        label = "recapitulation"
+    if label == "secondary_theme":
+        label = "secondary theme"
+    if label == "spoken_voice":
+        label = "spoken"
+    if label == "stage_speaking":
+        label = "spoken"
+    if label == "steel":
+        label = "instrumental"
+    if label == "tag":
+        label = "head"
+    if label == "trumpet":
+        label = "instrumental"
+    if label == "third":
+        label = "third theme"
+    if label == "violin":
+        label = "instrumental"
+    if label == "vocalizations":
+        label = "voice"
+    if label == "vocals":
+        label = "voice"
+    if label == "w/dialog":
+        label = "spoken"
+    return label
 
 
 def parse_annotation(jam, path, annotation_id, level, metadata):
@@ -91,8 +152,10 @@ def parse_annotation(jam, path, annotation_id, level, metadata):
         dur = end_time - start_time
         if start_time - end_time == 0:
             continue
+
         if level == "function":
-            label = label.lower()
+            label = fix_labels(label)
+
         annot.data.add_observation(time=start_time, duration=dur, value=label)
     f.close()
 
@@ -103,10 +166,12 @@ def parse_annotation(jam, path, annotation_id, level, metadata):
 def fill_global_metadata(jam, metadata):
     """Fills the global metada into the JAMS jam."""
     if metadata[5] == "":
-        metadata[5] = -1
+        metadata[5] = None
+    else:
+        metadata[5] = float(metadata[5])
     meta = jams.FileMetadata(title=metadata[7],
                              artist=metadata[8],
-                             duration=float(metadata[5]),
+                             duration=metadata[5],
                              jams_version=jams.version.version)
     jam.file_metadata = meta
 
@@ -166,8 +231,7 @@ def create_JAMS(in_dir, metadata, out_file):
             create_annotations(jam, path, annotation_id, metadata)
 
     # Save JAMS
-    with open(out_file, "w") as f:
-        json.dump(jam, f, indent=2)
+    jam.save(out_file)
 
 
 def process(in_dir, out_dir):
@@ -181,9 +245,11 @@ def process(in_dir, out_dir):
     # Open CSV with metadata
     with open(os.path.join(in_dir, "metadata", "metadata.csv")) as fh:
         csv_reader = csv.reader(fh)
-
-        for metadata in csv_reader:
+        for i, metadata in enumerate(csv_reader):
+            if metadata[0] == "SONG_ID":
+                continue
             # Create a JAMS file for this track
+            logging.info("Parsing file %s..." % metadata[0])
             create_JAMS(in_dir, metadata,
                         os.path.join(out_dir,
                             os.path.basename(metadata[0]) + ".jams"))
