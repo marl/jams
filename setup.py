@@ -35,8 +35,6 @@ setup(
         'six',
         'decorator',
         'mir_eval',
-    ],
-    extras_require={
-        'docs': ['numpydoc']
-    }
+        'numpydoc',
+    ]
 )
