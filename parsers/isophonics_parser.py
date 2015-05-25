@@ -17,27 +17,26 @@ To parse the entire dataset, you simply need the path to the Isophonics dataset
 and an optional output folder.
 
 Example:
-./isohpnics_parser.py \
-~/datasets/Isophonics/Carole King \
+./isohpnics_parser.py ~/datasets/Isophonics/Carole King \
 -o ~/datasets/Isophonics/Carole_King_jams
 
 """
 
 __author__ = "Oriol Nieto"
 __copyright__ = "Copyright 2014, Music and Audio Research Lab (MARL)"
-__license__ = "GPL"
-__version__ = "1.0"
+__license__ = "MIT"
+__version__ = "1.1"
 __email__ = "oriol@nyu.edu"
 
 import argparse
 import json
 import logging
+import mir_eval
 import os
 import sys
 import time
 
-sys.path.append("..")
-import pyjams
+import jams
 
 # Map of JAMS attributes to Isophonics directories.
 ISO_ATTRS = {'beat': 'beat',
@@ -45,39 +44,43 @@ ISO_ATTRS = {'beat': 'beat',
              'key': 'keylab',
              'segment': 'seglab'}
 
+# Namespace dictionary
+NS_DICT = {'beat': 'beat',
+           'chord': 'chord_harte',
+           'key': 'key_mode',
+           'segment': 'segment_isophonics'}
+
 
 def fill_file_metadata(jam, artist, title):
     """Fills the global metada into the JAMS jam."""
     jam.file_metadata.artist = artist
-    jam.file_metadata.duration = -1  # In seconds
+    jam.file_metadata.duration = None
     jam.file_metadata.title = title
 
 
-def fill_annotation_metadata(annot):
-    """Fills the annotation metadata."""
-    annot.annotation_metadata.corpus = "Isophonics"
-    annot.annotation_metadata.version = "1.0"
-    annot.annotation_metadata.annotation_tools = "Sonic Visualizer"
-    annot.annotation_metadata.annotation_rules = "TODO"  # TODO
-    annot.annotation_metadata.validation = "TODO"  # TODO
-    annot.annotation_metadata.data_source = "Centre for Digital Music"
-    annot.annotation_metadata.annotator.name = "TODO"
-    annot.annotation_metadata.annotator.email = "TODO"  # TODO
+def get_duration_from_annot(annot):
+    """Obtains the actual duration from a given annotation."""
+    dur = annot.data.iloc[-1].time + annot.data.iloc[-1].duration
+    return dur.total_seconds()
 
 
 def lab_to_range_annotation(lab_file, annot):
     """Populate a range annotation with a given lab file."""
-    start_times, end_times, labels = pyjams.util.read_lab(lab_file, 3)
-    pyjams.util.fill_range_annotation_data(
-        start_times, end_times, labels, annot)
-    fill_annotation_metadata(annot)
+    intervals, labels = mir_eval.io.load_labeled_intervals(lab_file, '\t+')
+    for interval, label in zip(intervals, labels):
+        time = float(interval[0])
+        dur = float(interval[1]) - time
+        if dur <= 0:
+            continue
+        annot.data.add_observation(time=time, duration=dur, value=label)
 
 
 def lab_to_event_annotation(lab_file, annot):
     """Populate an event annotation with a given lab file."""
-    times, labels = pyjams.util.read_lab(lab_file, 2)
-    pyjams.util.fill_event_annotation_data(times, labels, annot)
-    fill_annotation_metadata(annot)
+    intervals, labels = mir_eval.io.load_labeled_events(lab_file, '\t+| *')
+    for interval, label in zip(intervals, labels):
+        time = float(interval[0])
+        annot.data.add_observation(time=time, value=label)
 
 
 def process(in_dir, out_dir):
@@ -85,13 +88,13 @@ def process(in_dir, out_dir):
     them in the out_dir folder."""
     all_jams = dict()
     output_paths = dict()
-    all_labs = pyjams.util.find_with_extension(in_dir, 'lab', 4)
-    all_labs += pyjams.util.find_with_extension(in_dir, 'txt', 4)
+    all_labs = jams.util.find_with_extension(in_dir, 'lab', 5)
+    all_labs += jams.util.find_with_extension(in_dir, 'txt', 4)
 
     for lab_file in all_labs:
-        title = pyjams.util.filebase(lab_file)
+        title = jams.util.filebase(lab_file)
         if not title in all_jams:
-            all_jams[title] = pyjams.JAMS()
+            all_jams[title] = jams.JAMS()
             parts = lab_file.replace(in_dir, '').strip('/').split('/')
             fill_file_metadata(all_jams[title], artist=parts[1], title=title)
             output_paths[title] = os.path.join(
@@ -99,29 +102,44 @@ def process(in_dir, out_dir):
             print "%s -> %s" % (title, output_paths[title])
 
         jam = all_jams[title]
+        curator = jams.Curator(name="Matthias Mauch",
+                               email="m.mauch@qmul.ac.uk")
+        ann_meta = jams.AnnotationMetadata(curator=curator,
+                                           version=1.0,
+                                           corpus="Isophonics",
+                                           annotator=None)
         if ISO_ATTRS['beat'] in lab_file:
-            lab_to_event_annotation(lab_file, jam.beat.create_annotation())
+            annot = jams.Annotation(NS_DICT['beat'],
+                                    annotation_metadata=ann_meta)
+            lab_to_event_annotation(lab_file, annot)
+            jam.annotations.append(annot)
         elif ISO_ATTRS['chord'] in lab_file:
-            annot = jam.chord.create_annotation()
+            annot = jams.Annotation(NS_DICT['chord'],
+                                    annotation_metadata=ann_meta)
             lab_to_range_annotation(lab_file, annot)
-            jam.file_metadata.duration = annot.data[-1].end
+            jam.file_metadata.duration = get_duration_from_annot(annot)
+            jam.annotations.append(annot)
         elif ISO_ATTRS['key'] in lab_file:
-            lab_to_range_annotation(lab_file, jam.key.create_annotation())
-        elif ISO_ATTRS['segment'] in lab_file:
-            annot = jam.segment.create_annotation()
+            annot = jams.Annotation(NS_DICT['key'],
+                                    annotation_metadata=ann_meta)
             lab_to_range_annotation(lab_file, annot)
-            jam.file_metadata.duration = annot.data[-1].end
+            jam.annotations.append(annot)
+        elif ISO_ATTRS['segment'] in lab_file:
+            annot = jams.Annotation(NS_DICT['segment'],
+                                    annotation_metadata=ann_meta)
+            lab_to_range_annotation(lab_file, annot)
+            jam.annotations.append(annot)
+            jam.file_metadata.duration = get_duration_from_annot(annot)
 
     for title in all_jams:
         # Save JAMS
         out_file = output_paths[title]
-        pyjams.util.smkdirs(os.path.split(out_file)[0])
-        with open(out_file, "w") as fp:
-            json.dump(all_jams[title], fp, indent=2)
+        jams.util.smkdirs(os.path.split(out_file)[1])
+        import pdb; pdb.set_trace()  # XXX BREAKPOINT
+        all_jams[title].save(out_file)
 
 
-def main():
-    """Main function to convert the dataset into JAMS."""
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Converts the Isophonics dataset to the JAMS format",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -144,6 +162,3 @@ def main():
 
     # Done!
     logging.info("Done! Took %.2f seconds." % (time.time() - start_time))
-
-if __name__ == '__main__':
-    main()
