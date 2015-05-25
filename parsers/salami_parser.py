@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 """
-This script parses the SALAMI v1.2 dataset into the JAMS format.
+This script parses the SALAMI v2.0 dataset into the JAMS format.
 
 Usage:
-    ./salami_parser.py SALAMIv1.2/ [-o SalamiJAMS/]
+    ./salami_parser.py salami-data-public/ [-o SalamiJAMS/]
 """
 
 __author__ = "Oriol Nieto"
-__copyright__ = "Copyright 2014, Music and Audio Research Lab (MARL)"
-__license__ = "GPL"
-__version__ = "1.0"
+__copyright__ = "Copyright 2015, Music and Audio Research Lab (MARL)"
+__license__ = "MIT"
+__version__ = "1.1"
 __email__ = "oriol@nyu.edu"
 
 import argparse
@@ -21,59 +21,39 @@ import sys
 import time
 import zipfile
 
-sys.path.append("..")
-import pyjams
+import jams
 
 
-def unzip(source_filename, dest_dir):
-    """Unzips a zip file and puts it into the dest_dir. Copied from:
-        http://stackoverflow.com/questions/12886768/
-            simple-way-to-unzip-file-in-python-on-all-oses
+def parse_annotation(jam, path, annotation_id, level, metadata):
+    """Parses one annotation for the given level
 
     Parameters
     ----------
-    source_filename : str
-        Path to the zip file.
-    dest_dir : str
-        Output directory to save the contents of the zipped file.
-    """
-    with zipfile.ZipFile(source_filename) as zf:
-        for member in zf.infolist():
-            # Path traversal defense copied from
-            # http://hg.python.org/cpython/file/tip/Lib/http/server.py#l789
-            words = member.filename.split('/')
-            path = dest_dir
-            for word in words[:-1]:
-                drive, word = os.path.splitdrive(word)
-                head, word = os.path.split(word)
-                if word in (os.curdir, os.pardir, ''):
-                    continue
-                path = os.path.join(path, word)
-            zf.extract(member, path)
-
-
-def parse_annotation_level(annot, path, annotation_id, level):
-    """Parses one specific level of annotation and puts it into annot.
-
-    Parameters
-    ----------
-    annot: Annotation
+    jam: object
+        The top-level JAMS object.
     path: str
-        path to the track in the SALAMI dataset
+        path to the track in the SALAMI dataset.
     annotation_id: int
-        Whether to use the first or the second annotation
+        Whether to use the first or the second annotation.
     level: str
-        Level of annotation
+        Level of annotation.
+    metadata: list
+        List containing the information of the CSV file for the current track.
     """
     level_dict = {
         "function": "_functions",
         "large_scale": "_uppercase",
         "small_scale": "_lowercase"
     }
+    namespace_dict = {
+        "function": "segment_salami_function",
+        "large_scale": "segment_salami_upper",
+        "small_scale": "segment_salami_lower"
+    }
 
     # File to open
-    file_path = os.path.join(path, "parsed", "data", os.path.basename(path),
-                             "parsed", "textfile" + str(annotation_id + 1) +
+    file_path = os.path.join(path, "parsed",
+                             "textfile" + str(annotation_id) +
                              level_dict[level] + ".txt")
 
     # Open file
@@ -83,66 +63,73 @@ def parse_annotation_level(annot, path, annotation_id, level):
         logging.warning("Annotation missing in %s", file_path)
         return
 
-    # Parse file
+    # Annotation Metadata
+    curator = jams.Curator(name="Jordan Smith",
+                           email="jblsmith@gmail.com")
+    annotator = {
+        "name": metadata[annotation_id + 1],
+        "submission_date": metadata[annotation_id + 15]
+    }
+    ann_meta = jams.AnnotationMetadata(curator=curator,
+                                       version="2.0",
+                                       corpus="SALAMI",
+                                       annotator=annotator,
+                                       data_source=metadata[1],
+                                       annotation_tools="Sonic Visualizer")
+
+    # Create Annotation
+    annot = jams.Annotation(namespace=namespace_dict[level],
+                            annotation_metadata=ann_meta)
+
+    # Actual Data
     lines = f.readlines()
     for i, line in enumerate(lines[:-1]):
         start_time, label = line.strip("\n").split("\t")
         end_time = lines[i + 1].split("\t")[0]
-        if float(start_time) - float(end_time) == 0:
+        start_time = float(start_time)
+        end_time = float(end_time)
+        dur = end_time - start_time
+        if start_time - end_time == 0:
             continue
-        segment = annot.create_datapoint()
-        segment.start.value = float(start_time)
-        segment.start.confidence = 1.0
-        segment.end.value = float(end_time)
-        segment.end.confidence = 1.0
-        segment.label.value = label
-        segment.label.confidence = 1.0
-        segment.label.secondary_value = level
-        #print start_time, end_time, label
-        #print segment
-
+        if level == "function":
+            label = label.lower()
+        annot.data.add_observation(time=start_time, duration=dur, value=label)
     f.close()
+
+    # Add annotation to the jams
+    jam.annotations.append(annot)
 
 
 def fill_global_metadata(jam, metadata):
     """Fills the global metada into the JAMS jam."""
     if metadata[5] == "":
         metadata[5] = -1
-    jam.file_metadata.artist = metadata[8]
-    jam.file_metadata.duration = float(metadata[5])  # In seconds
-    jam.file_metadata.title = metadata[7]
+    meta = jams.FileMetadata(title=metadata[7],
+                             artist=metadata[8],
+                             duration=float(metadata[5]),
+                             jams_version=jams.version.version)
+    jam.file_metadata = meta
 
-    # TODO: extra info
-    #jam.file_metadata.genre = metadata[14]
 
-
-def fill_annotation(path, annot, annotation_id, metadata):
+def create_annotations(jam, path, annotation_id, metadata):
     """Fills the JAMS annot annotation given a path to the original
     SALAMI annotations. The variable "annotator" let's you choose which
     SALAMI annotation to use.
 
     Parameters
     ----------
-
+    jam: object
+        The top-level JAMS object.
+    path: str
+        Patht to the file containing the references.
     annotation_id: int
-        0 or 1 depending on which annotation to use
-
+        1 or 2 depending on which annotation to use
+    metadata: list
+        List containing the information of the CSV file for the current track.
     """
-
-    # Annotation Metadata
-    annot.annotation_metadata.corpus = "SALAMI"
-    annot.annotation_metadata.version = "1.2"
-    annot.annotation_metadata.annotation_tools = "Sonic Visualizer"
-    annot.annotation_metadata.annotation_rules = "TODO"  # TODO
-    annot.annotation_metadata.data_source = metadata[1]
-    annot.annotation_metadata.annotator.name = metadata[annotation_id + 2]
-    annot.annotation_metadata.annotator.email = "TODO"  # TODO
-    #TODO:
-    #time = metadata[annotation_id + 15]
-
     # Parse all level annotations
     levels = ["function", "large_scale", "small_scale"]
-    [parse_annotation_level(annot, path, annotation_id, level)
+    [parse_annotation(jam, path, annotation_id, level, metadata)
         for level in levels]
 
 
@@ -158,7 +145,7 @@ def create_JAMS(in_dir, metadata, out_file):
     out_file : str
         Output JAMS file
     """
-    path = os.path.join(in_dir, "data", metadata[0], )
+    path = os.path.join(in_dir, "annotations", metadata[0], )
 
     # Sanity check
     if not os.path.exists(path):
@@ -166,19 +153,17 @@ def create_JAMS(in_dir, metadata, out_file):
         return
 
     # New JAMS and annotation
-    jam = pyjams.JAMS()
+    jam = jams.JAMS()
 
     # Global file metadata
     fill_global_metadata(jam, metadata)
 
     # Create Annotations if they exist
     # Maximum 3 annotations per file
-    for possible_annot in xrange(3):
+    for annotation_id in range(1, 4):
         if os.path.isfile(
-            os.path.join(path, "data", metadata[0],
-                         "textfile" + str(possible_annot + 1) + ".txt")):
-            annot = jam.segment.create_annotation()
-            fill_annotation(path, annot, possible_annot, metadata)
+            os.path.join(path, "textfile" + str(annotation_id) + ".txt")):
+            create_annotations(jam, path, annotation_id, metadata)
 
     # Save JAMS
     with open(out_file, "w") as f:
@@ -193,17 +178,8 @@ def process(in_dir, out_dir):
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
-    # Check if the "data" folder exists. If not, unzip the data.zip.
-    if not os.path.exists(os.path.join(in_dir, "data")):
-        data_zip = os.path.join(in_dir, "data.zip")
-        if not os.path.exists(data_zip):
-            raise Exception("Data folder and data.zip not found! Make sure "
-                            "you are trying to parse SALAMIv1.2")
-        logging.info("Unzipping the data.zip file...")
-        unzip(data_zip, in_dir)
-
     # Open CSV with metadata
-    with open(os.path.join(in_dir, "metadata.csv")) as fh:
+    with open(os.path.join(in_dir, "metadata", "metadata.csv")) as fh:
         csv_reader = csv.reader(fh)
 
         for metadata in csv_reader:
@@ -213,8 +189,7 @@ def process(in_dir, out_dir):
                             os.path.basename(metadata[0]) + ".jams"))
 
 
-def main():
-    """Main function to convert the dataset into JAMS."""
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=
         "Converts the SALAMI dataset to the JAMS format",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -237,6 +212,3 @@ def main():
 
     # Done!
     logging.info("Done! Took %.2f seconds." % (time.time() - start_time))
-
-if __name__ == '__main__':
-    main()
