@@ -28,7 +28,6 @@ def test_ns_time_invalid():
         ann = jams.Annotation(namespace='beat')
         ann.append(**data)
 
-        print ann
         ann.validate()
 
     # Check bad time
