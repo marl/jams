@@ -33,6 +33,7 @@ import json
 import logging
 import mir_eval
 import os
+import six
 import sys
 import time
 
@@ -72,15 +73,39 @@ def lab_to_range_annotation(lab_file, annot):
         dur = float(interval[1]) - time
         if dur <= 0:
             continue
+        if label == "E:4":
+            label = "E:sus4"
+        if label == "Db:6":
+            label = "Db:maj6"
+        if label == "F#min7":
+            label = "F#:min7"
+        if label == "B:7sus":
+            label = "B:maj7"
+        if label == "Db:6/2":
+            label = "Db:maj6/2"
+        if label == "Ab:6":
+            label = "Ab:maj6"
+        if label == "F:6":
+            label = "F:maj6"
+        if label == "D:6":
+            label = "D:maj6"
+        if label == "G:6":
+            label = "G:maj6"
+        if label == "A:6":
+            label = "A:maj6"
+        if label == "E:sus":
+            label = "E"
+        if label == "E:7sus":
+            label = "E:maj7"
         annot.data.add_observation(time=time, duration=dur, value=label)
 
 
 def lab_to_event_annotation(lab_file, annot):
     """Populate an event annotation with a given lab file."""
-    intervals, labels = mir_eval.io.load_labeled_events(lab_file, '\t+| *')
-    for interval, label in zip(intervals, labels):
-        time = float(interval[0])
-        annot.data.add_observation(time=time, value=label)
+    times, labels = mir_eval.io.load_labeled_events(lab_file, '\t+| *')
+    for time, label in zip(times, labels):
+        time = float(time)
+        annot.data.add_observation(time=time, duration=0, value=int(label))
 
 
 def process(in_dir, out_dir):
@@ -99,7 +124,7 @@ def process(in_dir, out_dir):
             fill_file_metadata(all_jams[title], artist=parts[1], title=title)
             output_paths[title] = os.path.join(
                 out_dir, *parts[1:]).replace(".lab", ".jams")
-            print "%s -> %s" % (title, output_paths[title])
+            six.print_(title, "->", output_paths[title])
 
         jam = all_jams[title]
         curator = jams.Curator(name="Matthias Mauch",
@@ -134,8 +159,7 @@ def process(in_dir, out_dir):
     for title in all_jams:
         # Save JAMS
         out_file = output_paths[title]
-        jams.util.smkdirs(os.path.split(out_file)[1])
-        import pdb; pdb.set_trace()  # XXX BREAKPOINT
+        jams.util.smkdirs(os.path.split(out_file)[0])
         all_jams[title].save(out_file)
 
 
