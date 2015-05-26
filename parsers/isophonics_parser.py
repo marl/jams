@@ -67,7 +67,7 @@ def get_duration_from_annot(annot):
 
 def lab_to_range_annotation(lab_file, annot):
     """Populate a range annotation with a given lab file."""
-    intervals, labels = mir_eval.io.load_labeled_intervals(lab_file, '\t+')
+    intervals, labels = mir_eval.io.load_labeled_intervals(lab_file, '\t+|\s+')
     for interval, label in zip(intervals, labels):
         time = float(interval[0])
         dur = float(interval[1]) - time
