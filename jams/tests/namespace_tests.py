@@ -188,7 +188,7 @@ def test_ns_tempo_invalid():
         ann.validate()
 
 
-    for value in [-1, -0.5, 'a', None]:
+    for value in [-1, -0.5, 'a']:
         yield __test, value, 0.5
 
     for confidence in [-1, -0.5, 2.0, 'a']:

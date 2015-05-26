@@ -541,7 +541,7 @@ class Annotation(JObject):
 
         except ValidationError as invalid:
             if strict:
-                six.reraise(*sys.exc_info())
+                six.reraise(ValidationError, *sys.exc_info()[1:])
             else:
                 warnings.warn(str(invalid))
             valid = False
