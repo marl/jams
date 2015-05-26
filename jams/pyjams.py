@@ -244,6 +244,9 @@ class JObject(object):
     def __str__(self):
         return json.dumps(self.__json__, indent=2)
 
+    def dumps(self, **kwargs):
+        return json.dumps(self.__json__, **kwargs)
+
     def keys(self):
         """Return the fields of the object."""
         return self.__dict__.keys()
