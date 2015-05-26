@@ -167,3 +167,30 @@ def test_ns_lyrics():
     for line in [23, None]:
         yield raises(ValidationError)(__test), line
 
+
+def test_ns_tempo_valid():
+
+    ann = Annotation(namespace='tempo')
+
+    ann.append(time=0, duration=0, value=1, confidence=0.85)
+
+    ann.validate()
+
+
+def test_ns_tempo_invalid():
+
+    @raises(ValidationError)
+    def __test(value, confidence):
+        ann = Annotation(namespace='tempo')
+
+        ann.append(time=0, duration=0, value=value, confidence=confidence)
+
+        ann.validate()
+
+
+    for value in [-1, -0.5, 'a', None]:
+        yield __test, value, 0.5
+
+    for confidence in [-1, -0.5, 2.0, 'a', None]:
+        yield __test, 120.0, confidence
+
