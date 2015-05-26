@@ -191,6 +191,6 @@ def test_ns_tempo_invalid():
     for value in [-1, -0.5, 'a', None]:
         yield __test, value, 0.5
 
-    for confidence in [-1, -0.5, 2.0, 'a', None]:
+    for confidence in [-1, -0.5, 2.0, 'a']:
         yield __test, 120.0, confidence
 
