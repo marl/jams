@@ -117,6 +117,27 @@ def test_ns_beat_position_invalid():
     yield __test, None
 
 
+def test_ns_mood_thayer_valid():
+
+    ann = Annotation(namespace='mood_thayer')
+
+    ann.append(time=0, duration=1.0, value=[0.3, 2.0])
+
+    ann.validate()
+
+
+def test_ns_mood_thayer_invalid():
+
+    @raises(ValidationError)
+    def __test(value):
+        ann = Annotation(namespace='mood_thayer')
+        ann.append(time=0, duration=1.0, value=value)
+        ann.validate()
+
+    for value in [ [0], [0, 1, 2], ['a', 'b'], None, 0]:
+        yield __test, value
+
+
 def test_ns_lyrics():
 
     def __test(lyric):
