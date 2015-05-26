@@ -20,7 +20,7 @@ def add_namespace(filename):
         __NAMESPACE__.update(json.load(fileobj))
 
 
-def ns_schema(namespace):
+def ns_schema(namespace, default=None):
     '''Construct a validation schema for a given namespace.
 
     Parameters
@@ -28,13 +28,19 @@ def ns_schema(namespace):
     namespace : str
         Namespace key identifier (eg, 'beat' or 'segment_tut')
 
+    default : schema
+        A pre-existing schema to append into
+
     Returns
     -------
     schema : dict
         JSON schema of `namespace`
     '''
 
-    properties = dict()
+    if default is None:
+        default = dict()
+
+    properties = default['properties'].copy()
 
     for key in ['value', 'confidence']:
         try:

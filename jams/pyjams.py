@@ -531,11 +531,12 @@ class Annotation(JObject):
         valid = super(Annotation, self).validate(strict=strict)
 
         # Get the schema for this annotation
-        schema = ns.ns_schema(self.namespace)
+        schema = ns.ns_schema(self.namespace,
+                              __SCHEMA__['definitions']['SparseObservation'])
 
         try:
             # validate each record in the frame
-            for rec in self.data.to_dict(orient='record'):
+            for rec in self.data.__json__:
                 jsonschema.validate(rec, schema)
 
         except ValidationError as invalid:

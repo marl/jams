@@ -11,6 +11,32 @@ import six
 import jams
 
 
+def test_ns_time_valid():
+
+    ann = jams.Annotation(namespace='beat')
+
+    for time in np.arange(5.0, 10.0):
+        ann.append(time=time, duration=0.0, value=None, confidence=None)
+
+    ann.validate()
+
+
+def test_ns_time_invalid():
+
+    @raises(ValidationError)
+    def __test(data):
+        ann = jams.Annotation(namespace='beat')
+        ann.append(**data)
+
+        print ann
+        ann.validate()
+
+    # Check bad time
+    yield __test, dict(time=-1, duration=0)
+
+    # Check bad duration
+    yield __test, dict(time=1, duration=-1)
+
 def test_ns_beat_valid():
 
     # A valid example
