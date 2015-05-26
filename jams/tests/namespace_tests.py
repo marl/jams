@@ -34,3 +34,57 @@ def test_ns_beat_invalid():
         ann.append(time=time, duration=0.0, value='foo', confidence=None)
 
     ann.validate()
+
+
+def test_ns_beat_position_valid():
+
+    ann = jams.Annotation(namespace='beat_position')
+
+    ann.append(time=0, duration=1.0, value=dict(position=1,
+                                                measure=1,
+                                                num_beats=3,
+                                                beat_units=4))
+    
+    ann.validate()
+
+
+def test_ns_beat_position_invalid():
+
+    @raises(ValidationError)
+    def __test(value):
+        ann = jams.Annotation(namespace='beat_position')
+        ann.append(time=0, duration=1.0, value=value)
+        ann.validate()
+
+    good_dict = dict(position=1, measure=1, num_beats=3, beat_units=4)
+
+    # First, test the bad positions
+    for pos in [-1, 0, 'a', None]:
+        value = good_dict.copy()
+        value['position'] = pos
+        yield __test, value
+
+    # Now test bad measures
+    for measure in [-1, 1.0, 'a', None]:
+        value = good_dict.copy()
+        value['measure'] = measure
+        yield __test, value
+
+    # Now test bad num_beats
+    for nb in [-1, 1.5, 'a', None]:
+        value = good_dict.copy()
+        value['num_beats'] = nb
+        yield __test, value
+
+    # Now test bad beat units
+    for bu in [-1, 1.5, 3, 'a', None]:
+        value = good_dict.copy()
+        value['beat_units'] = bu
+        yield __test, value
+
+    # And test missing fields
+    for field in good_dict.keys():
+        value = good_dict.copy()
+        del value[field]
+        yield __test, value
+
