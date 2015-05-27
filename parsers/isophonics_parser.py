@@ -29,12 +29,10 @@ __version__ = "1.1"
 __email__ = "oriol@nyu.edu"
 
 import argparse
-import json
 import logging
 import mir_eval
 import os
 import six
-import sys
 import time
 
 import jams
