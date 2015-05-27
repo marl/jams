@@ -5,11 +5,16 @@
 import json
 import os
 
+__all__ = ['add_namespace', 'ns_schema', 'is_dense']
+
 __NAMESPACE__ = dict()
 
 
 def add_namespace(filename):
     '''Add a namespace definition to our working set.
+
+    Namespace files consist of partial JSON schemas defining the behavior
+    of the `value` and `confidence` fields of an Annotation.
 
     Parameters
     ----------
