@@ -4,9 +4,11 @@
    contain the root `toctree` directive.
 
 .. toctree::
-    :maxdepth: 3
+    :maxdepth: 2
 
     jams
+    eval
+    ns
     util
 
 
