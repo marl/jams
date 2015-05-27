@@ -75,4 +75,4 @@ def is_dense(namespace):
 
 
 # Populate the schemata
-_SCHEMA_DIR = os.path.join('schema', 'namespaces')
+SCHEMA_DIR = os.path.join('schema', 'namespaces')
