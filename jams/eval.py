@@ -6,8 +6,6 @@ from decorator import decorator
 import numpydoc
 import mir_eval
 
-from . import ns
-
 __all__ = ['beat', 'chord', 'onset', 'segment', 'tempo']
 
 

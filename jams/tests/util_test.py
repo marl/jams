@@ -6,7 +6,6 @@ import tempfile
 import os
 from nose.tools import eq_, raises
 import numpy as np
-import pandas as pd
 
 from jams import pyjams, util
 
