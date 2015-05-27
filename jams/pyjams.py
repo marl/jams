@@ -148,7 +148,6 @@ class JObject(object):
         """TODO(ejhumphrey@nyu.edu): writeme."""
         return cls(**kwargs)
 
-
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
                 (self.__dict__ == other.__dict__))
@@ -199,9 +198,6 @@ class JObject(object):
     @classmethod
     def loads(cls, string):
         return cls.__json_init__(**json.loads(string))
-
-    def dumps(self, *args, **kwargs):
-        return json.dumps(self.__json__, *args, **kwargs)
 
     def search(self, **kwargs):
         '''Query this object (and its descendants)'''
@@ -311,22 +307,22 @@ class JamsFrame(pd.DataFrame):
         return cls.from_dataframe(new_frame)
 
     @classmethod
-    def from_dataframe(cls, df):
+    def from_dataframe(cls, frame):
         '''Convert a dataframe into a JamsFrame.
 
         Note: this operation is destructive.
         '''
         # Encode time properly
-        df.time = pd.to_timedelta(df.time, unit='s')
+        frame.time = pd.to_timedelta(frame.time, unit='s')
 
-        df.duration = pd.to_timedelta(df.duration, unit='s')
+        frame.duration = pd.to_timedelta(frame.duration, unit='s')
 
         # Properly order the columns
-        df = df[cls.fields()]
+        frame = frame[cls.fields()]
 
         # Clobber the class attribute
-        df.__class__ = cls
-        return df
+        frame.__class__ = cls
+        return frame
 
     @classmethod
     def factory(cls):
@@ -543,6 +539,8 @@ class AnnotationMetadata(JObject):
         data_source: str, default=''
             Description of where the data originated, e.g. 'Manual Annotation'.
         """
+        super(AnnotationMetadata, self).__init__()
+
         curator = JObject() if curator is None else curator
         annotator = JObject() if annotator is None else annotator
 
@@ -582,6 +580,8 @@ class FileMetadata(JObject):
         jams_version: str
             Version of the JAMS Schema.
         """
+        super(FileMetadata, self).__init__()
+
         jams_version = __VERSION__ if jams_version is None else jams_version
         identifiers = Sandbox() if identifiers is None else identifiers
 
@@ -608,11 +608,12 @@ class AnnotationArray(list):
             List of XAnnotations, or appropriately formated dicts, where X
             is consistent with AnnotationType.
         """
+        super(AnnotationArray, self).__init__()
+
         if annotations is None:
             annotations = list()
 
         self.extend([Annotation(**obj) for obj in annotations])
-
 
     def search(self, **kwargs):
         '''Filter the annotation array down to only those Annotation
@@ -702,8 +703,8 @@ class JAMS(JObject):
         """
 
         if on_conflict not in ['overwrite', 'fail', 'ignore']:
-            raise ValueError("on_conflict received '{}'. Must be one of "
-                             "['fail', 'overwrite', 'ignore'].".format(on_conflict))
+            raise ValueError("on_conflict='{}' is not in ['fail', "
+                             "'overwrite', 'ignore'].".format(on_conflict))
 
         if not self.file_metadata == jam.file_metadata:
             if on_conflict == 'overwrite':
@@ -767,9 +768,8 @@ class JAMS(JObject):
 
         self.validate(strict=strict)
 
-        with open(filepath, 'w') as fp:
-            json.dump(self.__json__, fp, indent=2)
-
+        with open(filepath, 'w') as fdesc:
+            json.dump(self.__json__, fdesc, indent=2)
 
     def validate(self, strict=True):
 
