@@ -7,28 +7,11 @@ Data I/O
 .. autosummary::
     :toctree: generated/
 
+    import_lab
     expand_filepaths
     smkdirs
     filebase
     find_with_extension
-
-
-JObject helpers
-===============
-.. autosummary::
-    :toctree: generated/
-
-    match_query
-    query_pop
-
-
-JamsFrame helpers
-=================
-.. autosummary::
-    :toctree: generated/
-
-    timedelta_to_float
-    serialize_obj
 """
 
 import os
@@ -39,11 +22,11 @@ from . import pyjams
 
 
 def import_lab(namespace, filename, jam=None, **parse_options):
-    '''Load a .lab file into a JAMS object.
+    r'''Load a .lab file into a JAMS object.
 
     .lab files are assumed to have the following format:
 
-    TIME_START\\tTIME_END\\tANNOTATION
+    TIME_START\tTIME_END\tANNOTATION
 
     Parameters
     ----------
@@ -128,6 +111,11 @@ def expand_filepaths(base_dir, rel_paths):
     expanded_paths : list
         `rel_paths` rooted at `base_dir`
 
+    Examples
+    --------
+    >>> jams.util.expand_filepaths('/data', ['audio', 'beat', 'seglab'])
+    ['/data/audio', '/data/beat', '/data/seglab']
+
     """
     return [os.path.join(base_dir, os.path.normpath(rp)) for rp in rel_paths]
 
@@ -139,6 +127,10 @@ def smkdirs(dpath):
     ----------
     dpath : str
         Path of directory/directories to create
+
+    See also
+    --------
+    os.makedirs
     """
     if not os.path.exists(dpath):
         os.makedirs(dpath)
@@ -146,16 +138,22 @@ def smkdirs(dpath):
 
 def filebase(filepath):
     """Return the extension-less basename of a file path.
-    
+
     Parameters
     ----------
     filepath : str
         Path to a file
-        
+
     Returns
     -------
     base : str
         The name of the file, with directory and extension removed
+
+    Examples
+    --------
+    >>> jams.util.filebase('my_song.mp3')
+    'my_song'
+
     """
     return os.path.splitext(os.path.basename(filepath))[0]
 
@@ -178,6 +176,18 @@ def find_with_extension(in_dir, ext, depth=3, sort=True):
     -------
     matched : list
         Collection of matching file paths.
+
+    Examples
+    --------
+    >>> jams.util.find_with_extension('Audio', 'wav')
+    ['Audio/LizNelson_Rainfall/LizNelson_Rainfall_MIX.wav',
+     'Audio/LizNelson_Rainfall/LizNelson_Rainfall_RAW/LizNelson_Rainfall_RAW_01_01.wav',
+     'Audio/LizNelson_Rainfall/LizNelson_Rainfall_RAW/LizNelson_Rainfall_RAW_02_01.wav',
+     ...
+     'Audio/Phoenix_ScotchMorris/Phoenix_ScotchMorris_STEMS/Phoenix_ScotchMorris_STEM_02.wav',
+     'Audio/Phoenix_ScotchMorris/Phoenix_ScotchMorris_STEMS/Phoenix_ScotchMorris_STEM_03.wav',
+    'Audio/Phoenix_ScotchMorris/Phoenix_ScotchMorris_STEMS/Phoenix_ScotchMorris_STEM_04.wav']
+
     """
     assert depth >= 1
     ext = ext.strip(os.extsep)
