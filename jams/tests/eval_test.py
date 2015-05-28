@@ -51,7 +51,7 @@ def test_beat_invalid():
     yield raises(jams.SchemaError)(__test), ref_ann, est_ann
     yield raises(jams.SchemaError)(__test), est_ann, ref_ann
 
-
+# Onset detection
 def test_onset_valid():
 
     ref_ann = create_annotation(values=np.arange(10) % 4 + 1.,
@@ -84,3 +84,44 @@ def test_onset_invalid():
     yield raises(jams.SchemaError)(__test), ref_ann, est_ann
     yield raises(jams.SchemaError)(__test), est_ann, ref_ann
 
+
+# Chord estimation
+def test_chord_valid():
+
+    ref_ann = create_annotation(values=['C', 'E', 'G:min7'],
+                                namespace='chord_harte')
+
+    est_ann = create_annotation(values=['D', 'E', 'G:maj'],
+                                namespace='chord_harte')
+
+    jams.eval.chord(ref_ann, est_ann)
+
+def test_chord_invalid():
+
+    def __test(ref, est):
+        jams.eval.chord(ref, est)
+
+    ref_ann = create_annotation(values=['C', 'E', 'G:min7'],
+                                namespace='chord_harte')
+
+    est_ann = create_annotation(values=[{'tonic': 'C', 'chord': 'I'}],
+                                namespace='chord_roman')
+
+    yield raises(jams.NamespaceError)(__test), ref_ann, est_ann
+    yield raises(jams.NamespaceError)(__test), est_ann, ref_ann
+
+    est_ann = create_annotation(values=['D', 'E', 'not at all a chord'],
+                                namespace='chord_harte',
+                                offset=0.01)
+
+    yield raises(jams.SchemaError)(__test), ref_ann, est_ann
+    yield raises(jams.SchemaError)(__test), est_ann, ref_ann
+
+
+# Segmentation
+
+# Tempo estimation
+
+# Melody
+
+# Pattern discovery

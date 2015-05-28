@@ -188,7 +188,7 @@ def __tempo(namespace):
         validate_annotation(ref, namespace)
         validate_annotation(est, namespace)
         ref_tempi = ref.data.values
-        ref_weight = ref.data.weight[0]
+        ref_weight = ref.data.confidence[0]
         est_tempi = est.data.values
 
         return f_eval(ref_tempi, ref_weight, est_tempi, **kwargs)
