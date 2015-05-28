@@ -1,10 +1,24 @@
 #!/usr/bin/env python
 # CREATED:2015-02-04 16:39:00 by Brian McFee <brian.mcfee@nyu.edu>
-'''mir_eval integration'''
+r'''
+Evaluation
+==========
+
+.. autosummary::
+    :toctree: generated/
+
+..    beat
+..    chord
+..    onset
+..    segment
+..    tempo
+'''
 
 from decorator import decorator
 import numpydoc
 import mir_eval
+
+from .exceptions import *
 
 __all__ = ['beat', 'chord', 'onset', 'segment', 'tempo']
 
@@ -28,17 +42,16 @@ def validate_annotation(ann, namespace):
 
     Raises
     ------
-    RuntimeError
+    NamespaceError
         If `ann` does not match the proper namespace
 
-    jsonschema.ValidationError
+    SchemaError
         If `ann` fails schema validation
     '''
 
     if not ann.search(namespace=namespace):
-        raise RuntimeError('Incorrect namespace in annotation. '
-                           'Expected "{:s}", found "{:s}"'
-                           .format(namespace, ann.namespace))
+        raise NamespaceError('Expected namespace="{:s}", found "{:s}"'
+                             .format(namespace, ann.namespace))
 
     ann.validate(strict=True)
 
@@ -84,7 +97,7 @@ def jamsify_docstring(function, function_name, namespace):
     F['Examples'] = [r""">>> # Load in the JAMS objects""",
                      r""">>> ref_jam = pyjams.load('reference.jams')""",
                      r""">>> est_jam = pyjams.load('estimated.jams')""",
-                     r""">>> # Select out the first relevant annotation from each jam""",
+                     r""">>> # Select the first relevant annotations""",
                      r""">>> ref_ann = ref_jam.search(namespace='{:s}')[0]""".format(namespace),
                      r""">>> est_ann = est_jam.search(namespace='{:s}')[0]""".format(namespace),
                      r""">>> scores = {:s}.{:s}(ref_ann, est_ann)""".format(__name__, function_name)]
@@ -175,7 +188,7 @@ def __tempo(namespace):
         validate_annotation(ref, namespace)
         validate_annotation(est, namespace)
         ref_tempi = ref.data.values
-        ref_weight = ref.data.weight[0]
+        ref_weight = ref.data.confidence[0]
         est_tempi = est.data.values
 
         return f_eval(ref_tempi, ref_weight, est_tempi, **kwargs)
@@ -233,5 +246,5 @@ tempo = __wrap_evaluator(__tempo,
 
 
 # TODO
-# melody 
+# melody
 # pattern
