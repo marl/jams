@@ -166,7 +166,7 @@ def parse_annotation(jam, path, annotation_id, level, metadata):
 def fill_global_metadata(jam, metadata):
     """Fills the global metada into the JAMS jam."""
     if metadata[5] == "":
-        metadata[5] = None
+        metadata[5] = 0 # TODO: Maybe get duration from file?
     else:
         metadata[5] = float(metadata[5])
     meta = jams.FileMetadata(title=metadata[7],
