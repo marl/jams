@@ -37,9 +37,6 @@ def test_beat_valid():
 
 def test_beat_invalid():
 
-    def __test(ref, est):
-        jams.eval.beat(ref, est)
-
     ref_ann = create_annotation(values=np.arange(10) % 4 + 1.,
                                 namespace='beat')
 
@@ -47,14 +44,14 @@ def test_beat_invalid():
                                 namespace='onsets',
                                 offset=0.01)
 
-    yield raises(jams.NamespaceError)(__test), ref_ann, est_ann
-    yield raises(jams.NamespaceError)(__test), est_ann, ref_ann
+    yield raises(jams.NamespaceError)(jams.eval.beat), ref_ann, est_ann
+    yield raises(jams.NamespaceError)(jams.eval.beat), est_ann, ref_ann
 
     est_ann = create_annotation(values=np.arange(9) % 4 + 1.,
                                 namespace='beat',
                                 offset=-10)
-    yield raises(jams.SchemaError)(__test), ref_ann, est_ann
-    yield raises(jams.SchemaError)(__test), est_ann, ref_ann
+    yield raises(jams.SchemaError)(jams.eval.beat), ref_ann, est_ann
+    yield raises(jams.SchemaError)(jams.eval.beat), est_ann, ref_ann
 
 # Onset detection
 def test_onset_valid():
@@ -70,9 +67,6 @@ def test_onset_valid():
 
 def test_onset_invalid():
 
-    def __test(ref, est):
-        jams.eval.onset(ref, est)
-
     ref_ann = create_annotation(values=np.arange(10) % 4 + 1.,
                                 namespace='onsets')
 
@@ -80,14 +74,14 @@ def test_onset_invalid():
                                 namespace='beat',
                                 offset=0.01)
 
-    yield raises(jams.NamespaceError)(__test), ref_ann, est_ann
-    yield raises(jams.NamespaceError)(__test), est_ann, ref_ann
+    yield raises(jams.NamespaceError)(jams.eval.onset), ref_ann, est_ann
+    yield raises(jams.NamespaceError)(jams.eval.onset), est_ann, ref_ann
 
     est_ann = create_annotation(values=np.arange(9) % 4 + 1.,
                                 namespace='onsets',
                                 offset=-10)
-    yield raises(jams.SchemaError)(__test), ref_ann, est_ann
-    yield raises(jams.SchemaError)(__test), est_ann, ref_ann
+    yield raises(jams.SchemaError)(jams.eval.onset), ref_ann, est_ann
+    yield raises(jams.SchemaError)(jams.eval.onset), est_ann, ref_ann
 
 
 # Chord estimation
@@ -112,15 +106,15 @@ def test_chord_invalid():
     est_ann = create_annotation(values=[{'tonic': 'C', 'chord': 'I'}],
                                 namespace='chord_roman')
 
-    yield raises(jams.NamespaceError)(__test), ref_ann, est_ann
-    yield raises(jams.NamespaceError)(__test), est_ann, ref_ann
+    yield raises(jams.NamespaceError)(jams.eval.chord), ref_ann, est_ann
+    yield raises(jams.NamespaceError)(jams.eval.chord), est_ann, ref_ann
 
     est_ann = create_annotation(values=['D', 'E', 'not at all a chord'],
                                 namespace='chord_harte',
                                 offset=0.01)
 
-    yield raises(jams.SchemaError)(__test), ref_ann, est_ann
-    yield raises(jams.SchemaError)(__test), est_ann, ref_ann
+    yield raises(jams.SchemaError)(jams.eval.chord), ref_ann, est_ann
+    yield raises(jams.SchemaError)(jams.eval.chord), est_ann, ref_ann
 
 
 # Segmentation
@@ -136,23 +130,20 @@ def test_segment_valid():
 
 def test_segment_invalid():
 
-    def __test(ref, est):
-        jams.eval.segment(ref, est)
-
     ref_ann = create_annotation(values=['A', 'B', 'A', 'C'],
                                 namespace='segment_label_open')
 
     est_ann = create_annotation(values=['E', 'B', 'E', 'B'],
                                 namespace='chord_harte')
 
-    yield raises(jams.NamespaceError)(__test), ref_ann, est_ann
-    yield raises(jams.NamespaceError)(__test), est_ann, ref_ann
+    yield raises(jams.NamespaceError)(jams.eval.segment), ref_ann, est_ann
+    yield raises(jams.NamespaceError)(jams.eval.segment), est_ann, ref_ann
 
     est_ann = create_annotation(values=['E', 'B', 'E', 'B'],
                                 namespace='segment_tut')
 
-    yield raises(jams.SchemaError)(__test), ref_ann, est_ann
-    yield raises(jams.SchemaError)(__test), est_ann, ref_ann
+    yield raises(jams.SchemaError)(jams.eval.segment), ref_ann, est_ann
+    yield raises(jams.SchemaError)(jams.eval.segment), est_ann, ref_ann
 
 # Tempo estimation
 def test_tempo_valid():
@@ -165,10 +156,8 @@ def test_tempo_valid():
 
     jams.eval.tempo(ref_ann, est_ann)
 
-def test_tempo_invalid():
 
-    def __test(ref, est):
-        jams.eval.tempo(ref, est)
+def test_tempo_invalid():
 
     ref_ann = create_annotation(values=[120.0, 60.0], confidence=[0.75, 0.25],
                                 namespace='tempo')
@@ -176,14 +165,14 @@ def test_tempo_invalid():
     est_ann = create_annotation(values=[120.0, 80.0], confidence=[0.5, 0.5],
                                 namespace='tag_open')
 
-    yield raises(jams.NamespaceError)(__test), ref_ann, est_ann
-    yield raises(jams.NamespaceError)(__test), est_ann, ref_ann
+    yield raises(jams.NamespaceError)(jams.eval.tempo), ref_ann, est_ann
+    yield raises(jams.NamespaceError)(jams.eval.tempo), est_ann, ref_ann
 
     est_ann = create_annotation(values=[120.0, 80.0], confidence=[-5, 1.5],
                                 namespace='tempo')
 
-    yield raises(jams.SchemaError)(__test), ref_ann, est_ann
-    yield raises(jams.SchemaError)(__test), est_ann, ref_ann
+    yield raises(jams.SchemaError)(jams.eval.tempo), ref_ann, est_ann
+    yield raises(jams.SchemaError)(jams.eval.tempo), est_ann, ref_ann
 # Melody
 
 # Pattern discovery
