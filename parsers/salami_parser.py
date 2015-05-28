@@ -166,7 +166,7 @@ def parse_annotation(jam, path, annotation_id, level, metadata):
 def fill_global_metadata(jam, metadata):
     """Fills the global metada into the JAMS jam."""
     if metadata[5] == "":
-        metadata[5] = None
+        metadata[5] = 0 # TODO: Maybe get duration from file?
     else:
         metadata[5] = float(metadata[5])
     meta = jams.FileMetadata(title=metadata[7],
@@ -247,6 +247,8 @@ def process(in_dir, out_dir):
         csv_reader = csv.reader(fh)
         for i, metadata in enumerate(csv_reader):
             if metadata[0] == "SONG_ID":
+                continue
+            if int(metadata[0]) != 1502:
                 continue
             # Create a JAMS file for this track
             logging.info("Parsing file %s..." % metadata[0])
