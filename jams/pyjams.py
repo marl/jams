@@ -462,8 +462,8 @@ class Annotation(JObject):
         valid = super(Annotation, self).validate(strict=strict)
 
         # Get the schema for this annotation
-        schema = ns.ns_schema(self.namespace,
-                              __SCHEMA__['definitions']['SparseObservation'])
+        schema = ns.schema(self.namespace,
+                           __SCHEMA__['definitions']['SparseObservation'])
 
         try:
             # validate each record in the frame

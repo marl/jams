@@ -5,7 +5,7 @@
 import json
 import os
 
-__all__ = ['add_namespace', 'ns_schema', 'is_dense']
+__all__ = ['add_namespace', 'schema', 'is_dense']
 
 __NAMESPACE__ = dict()
 
@@ -25,7 +25,7 @@ def add_namespace(filename):
         __NAMESPACE__.update(json.load(fileobj))
 
 
-def ns_schema(namespace, default=None):
+def schema(namespace, default=None):
     '''Construct a validation schema for a given namespace.
 
     Parameters
