@@ -18,6 +18,8 @@ from decorator import decorator
 import numpydoc
 import mir_eval
 
+from .exceptions import *
+
 __all__ = ['beat', 'chord', 'onset', 'segment', 'tempo']
 
 
@@ -40,7 +42,7 @@ def validate_annotation(ann, namespace):
 
     Raises
     ------
-    RuntimeError
+    NamespaceError
         If `ann` does not match the proper namespace
 
     jsonschema.ValidationError
@@ -48,9 +50,8 @@ def validate_annotation(ann, namespace):
     '''
 
     if not ann.search(namespace=namespace):
-        raise RuntimeError('Incorrect namespace in annotation. '
-                           'Expected "{:s}", found "{:s}"'
-                           .format(namespace, ann.namespace))
+        raise NamespaceError('Expected namespace="{:s}", found "{:s}"'
+                             .format(namespace, ann.namespace))
 
     ann.validate(strict=True)
 

@@ -5,7 +5,7 @@
 import numpy as np
 
 from nose.tools import raises
-from jsonschema import ValidationError
+from jams import ValidationError
 
 from jams import Annotation
 

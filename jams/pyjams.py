@@ -31,7 +31,6 @@ Function reference
 
 import json
 import jsonschema
-from jsonschema import ValidationError
 
 import numpy as np
 import pandas as pd
@@ -45,6 +44,7 @@ from pkg_resources import resource_filename
 
 from .version import version as __VERSION__
 from . import ns
+from .exceptions import *
 
 
 __all__ = ['load',
@@ -120,7 +120,7 @@ class JObject(object):
     r"""Dict-like object for JSON Serialization.
 
     This object behaves like a dictionary to allow init-level attribute names,
-    seamless JSON-serialization, and double-star style unpacking (**obj).
+    seamless JSON-serialization, and double-star style unpacking (** obj).
 
     """
     def __init__(self, **kwargs):
@@ -173,9 +173,8 @@ class JObject(object):
         if self.__schema__ is not None:
             props = self.__schema__['properties']
             if name not in props:
-                raise ValueError(
-                    ("Invalid attribute: {}\n"
-                     "\t Should be one of {}.").format(name, props.keys()))
+                raise ValidationError("Attribute {} not in {}"
+                                      .format(name, props.keys()))
         self.__dict__[name] = value
 
     def __len__(self):
@@ -266,9 +265,9 @@ class JObject(object):
         try:
             jsonschema.validate(self.__json__, __SCHEMA__)
 
-        except ValidationError as invalid:
+        except jsonschema.ValidationError as invalid:
             if strict:
-                six.reraise(*sys.exc_info())
+                six.reraise(ValidationError, *sys.exc_info()[1:])
             else:
                 warnings.warn(str(invalid))
 
@@ -480,7 +479,7 @@ class Annotation(JObject):
             for rec in self.data.__json__:
                 jsonschema.validate(rec, schema)
 
-        except ValidationError as invalid:
+        except jsonschema.ValidationError as invalid:
             if strict:
                 six.reraise(ValidationError, *sys.exc_info()[1:])
             else:
@@ -710,17 +709,25 @@ class JAMS(JObject):
         on_conflict: str, default='fail'
             Strategy for resolving metadata conflicts; one of
                 ['fail', 'overwrite', or 'ignore'].
+
+        Raises
+        ------
+        ParameterError
+            if `on_conflict` is an unknown value
+
+        MatchError
+            If a conflict is detected and `on_conflict='fail'`
         """
 
         if on_conflict not in ['overwrite', 'fail', 'ignore']:
-            raise ValueError("on_conflict='{}' is not in ['fail', "
-                             "'overwrite', 'ignore'].".format(on_conflict))
+            raise ParameterError("on_conflict='{}' is not in ['fail', "
+                                 "'overwrite', 'ignore'].".format(on_conflict))
 
         if not self.file_metadata == jam.file_metadata:
             if on_conflict == 'overwrite':
                 self.file_metadata = jam.file_metadata
             elif on_conflict == 'fail':
-                raise ValueError("Metadata conflict! "
+                raise MatchError("Metadata conflict! "
                                  "Resolve manually or force-overwrite it.")
 
         self.annotations.extend(jam.annotations)
@@ -782,7 +789,30 @@ class JAMS(JObject):
             json.dump(self.__json__, fdesc, indent=2)
 
     def validate(self, strict=True):
+        '''Validate a JAMS object against the schema.
 
+        Parameters
+        ----------
+        strict : bool
+            If `True`, an exception will be raised on validation failure.
+            If `False`, a warning will be raised on validation failure.
+
+        Returns
+        -------
+        valid : bool
+            `True` if the object passes schema validation.
+            `False` otherwise.
+
+        Raises
+        ------
+        ValidationError
+            If `strict==True` and the JAMS object does not match the schema
+
+        See Also
+        --------
+        jsonschema.validate
+
+        '''
         valid = super(JAMS, self).validate(strict=strict)
 
         for ann in self.annotations:
@@ -790,6 +820,8 @@ class JAMS(JObject):
 
         return valid
 
+
+# -- Helper functions -- #
 
 def timedelta_to_float(t):
     '''Convert a timedelta64[ns] to floating point (seconds)'''
@@ -853,6 +885,11 @@ def match_query(string, query):
         or if `query` is a regexp and `re.match(query, regexp)`
 
         `False` otherwise
+
+    Raises
+    ------
+    ParameterError
+        if `query` is not a string or callable
     '''
 
     if six.callable(query):
@@ -861,7 +898,7 @@ def match_query(string, query):
     elif isinstance(query, six.string_types):
         return re.match(query, string) is not None
 
-    raise TypeError('Invalid query type: {}'.format(type(query)))
+    raise ParameterError('Invalid query type: {}'.format(type(query)))
 
 
 def serialize_obj(obj):

@@ -7,7 +7,9 @@ import os
 from nose.tools import eq_, raises
 import numpy as np
 
+import jams
 from jams import pyjams, util
+
 
 import six
 
@@ -78,7 +80,7 @@ def test_match_query():
     yield __test, lambda x: True, haystack, True
     yield __test, lambda x: False, haystack, False
 
-    yield raises(TypeError)(__test), None, haystack, False
+    yield raises(jams.ParameterError)(__test), None, haystack, False
 
 
 def test_smkdirs():
