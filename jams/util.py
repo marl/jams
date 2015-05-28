@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-r"""Utility functions
+r"""
+Utility functions
+=================
 
-Data I/O
-========
 .. autosummary::
     :toctree: generated/
 

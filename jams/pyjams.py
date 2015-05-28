@@ -1,4 +1,6 @@
-"""JAMS Python API
+"""
+JAMS Python API
+===============
 
 This library provides an interface for reading JAMS into Python, or creating
 them programatically.
@@ -18,6 +20,13 @@ Object reference
     JamsFrame
     Sandbox
     JObject
+
+Function reference
+------------------
+.. autosummary::
+    :toctree: generated/
+
+    load
 """
 
 import json

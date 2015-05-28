@@ -1,6 +1,16 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-'''JAMS task-specific namespaces'''
+r'''
+Task Namespaces
+===============
+
+.. autosummary::
+    :toctree: generated/
+
+    add_namespace
+    schema
+    is_dense
+'''
 
 import json
 import os

@@ -52,15 +52,3 @@ you can easily read it back into memory:
 And that's it!
 
   >>> print annot2
-
-
-3. Function reference
----------------------
-.. autosummary::
-    :toctree: generated/
-
-    load
-    append
-    import_lab
-
-

@@ -1,6 +1,18 @@
 #!/usr/bin/env python
 # CREATED:2015-02-04 16:39:00 by Brian McFee <brian.mcfee@nyu.edu>
-'''mir_eval integration'''
+r'''
+Evaluation
+==========
+
+.. autosummary::
+    :toctree: generated/
+
+..    beat
+..    chord
+..    onset
+..    segment
+..    tempo
+'''
 
 from decorator import decorator
 import numpydoc
@@ -84,7 +96,7 @@ def jamsify_docstring(function, function_name, namespace):
     F['Examples'] = [r""">>> # Load in the JAMS objects""",
                      r""">>> ref_jam = pyjams.load('reference.jams')""",
                      r""">>> est_jam = pyjams.load('estimated.jams')""",
-                     r""">>> # Select out the first relevant annotation from each jam""",
+                     r""">>> # Select the first relevant annotations""",
                      r""">>> ref_ann = ref_jam.search(namespace='{:s}')[0]""".format(namespace),
                      r""">>> est_ann = est_jam.search(namespace='{:s}')[0]""".format(namespace),
                      r""">>> scores = {:s}.{:s}(ref_ann, est_ann)""".format(__name__, function_name)]
@@ -233,5 +245,5 @@ tempo = __wrap_evaluator(__tempo,
 
 
 # TODO
-# melody 
+# melody
 # pattern
