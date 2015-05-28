@@ -110,140 +110,68 @@ def jamsify_docstring(function, function_name, namespace):
     return str(F)
 
 
-def __events(namespace):
-    '''Wrapper function for event evaluation metrics.
+def beat(ref, est, **kwargs):
+    '''dynamically generated docstring'''
 
-    Parameters
-    ----------
-    f : callable
-        The evaluator function
+    namespace = 'beat'
+    validate_annotation(ref, namespace)
+    validate_annotation(est, namespace)
+    ref_interval, _ = ref.data.to_interval_values()
+    est_interval, _ = est.data.to_interval_values()
 
-    namespace : str or callable
-        The namespace against which to match annotation objects
-
-    Returns
-    -------
-    f_wrapped : function
-        `f` decorated to accept JAMS input
-    '''
-
-    def evaluator(f_eval, ref, est, **kwargs):
-        '''The working decorator'''
-        validate_annotation(ref, namespace)
-        validate_annotation(est, namespace)
-        ref_interval, _ = ref.data.to_interval_values()
-        est_interval, _ = est.data.to_interval_values()
-
-        return f_eval(ref_interval[:, 0], est_interval[:, 0], **kwargs)
-
-    return decorator(evaluator)
+    return mir_eval.beat.evaluate(ref_interval[:, 0], est_interval[:, 0], **kwargs)
+beat.__doc__ = jamsify_docstring(mir_eval.beat.evaluate, 'beat', 'beat')
 
 
-def __labeled_intervals(namespace):
-    '''Wrapper function for labeled interval evaluation metrics.
+def onset(ref, est, **kwargs):
+    '''dynamically generated docstring'''
+    namespace = 'onset'
+    validate_annotation(ref, namespace)
+    validate_annotation(est, namespace)
+    ref_interval, _ = ref.data.to_interval_values()
+    est_interval, _ = est.data.to_interval_values()
 
-    Parameters
-    ----------
-    f : callable
-        The evaluator function
-
-    namespace : str or callable
-        The namespace against which to match annotation objects
-
-    Returns
-    -------
-    f_wrapped : function
-        `f` decorated to accept JAMS input
-    '''
-
-    def evaluator(f_eval, ref, est, **kwargs):
-        '''The working decorator'''
-        validate_annotation(ref, namespace)
-        validate_annotation(est, namespace)
-        ref_interval, ref_value = ref.data.to_interval_values()
-        est_interval, est_value = est.data.to_interval_values()
-
-        return f_eval(ref_interval, ref_value,
-                      est_interval, est_value, **kwargs)
-
-    return decorator(evaluator)
+    return mir_eval.onset.evaluate(ref_interval[:, 0], est_interval[:, 0], **kwargs)
+onset.__doc__ = jamsify_docstring(mir_eval.onset.evaluate, 'onset', 'onset')
 
 
-def __tempo(namespace):
-    '''Wrapper function for tempo evaluation metrics.
+def chord(ref, est, **kwargs):
+    '''dynamically generated docstring'''
 
-    Parameters
-    ----------
-    namespace : str or callable
-        The namespace against which to match annotation objects
+    namespace = 'chord_harte'
+    validate_annotation(ref, namespace)
+    validate_annotation(est, namespace)
+    ref_interval, ref_value = ref.data.to_interval_values()
+    est_interval, est_value = est.data.to_interval_values()
 
-    Returns
-    -------
-    f_wrapped : function
-        `f` decorated to accept JAMS input
-    '''
-
-    def evaluator(f_eval, ref, est, **kwargs):
-        '''The working decorator'''
-        validate_annotation(ref, namespace)
-        validate_annotation(est, namespace)
-        ref_tempi = ref.data.values
-        ref_weight = ref.data.confidence[0]
-        est_tempi = est.data.values
-
-        return f_eval(ref_tempi, ref_weight, est_tempi, **kwargs)
-
-    return decorator(evaluator)
+    return mir_eval.chord.evaluate(ref_interval, ref_value,
+                                   est_interval, est_value, **kwargs)
+chord.__doc__ = jamsify_docstring(mir_eval.chord.evaluate, 'chord', 'chord_harte')
 
 
-def __wrap_evaluator(wrapper, function, name, namespace):
-    '''Namespace-mangling post-decoration of evaluator functions.
+def segment(ref, est, **kwargs):
+    '''dynamically generated docstring'''
+    namespace = 'segment_.*'
+    validate_annotation(ref, namespace)
+    validate_annotation(est, namespace)
+    ref_interval, ref_value = ref.data.to_interval_values()
+    est_interval, est_value = est.data.to_interval_values()
 
-    Parameters
-    ----------
-    wrapper : function
-        The decorator constructor
-
-    function: function
-        The function to be wrapped
-
-    name : str
-        The name of the wrapped function
-
-    namesapce : str
-        The namespace pattern of the annotation in question
-
-    Returns
-    -------
-    f_wrapped : function
-        The wrapped function
-
-    '''
-    f_wrap = wrapper(namespace)(function)
-    f_wrap.__doc__ = jamsify_docstring(function, name, namespace)
-    return f_wrap
-
-beat = __wrap_evaluator(__events,
-                        mir_eval.beat.evaluate,
-                        'beat', 'beat')
-
-chord = __wrap_evaluator(__labeled_intervals,
-                         mir_eval.chord.evaluate,
-                         'chord', 'chord_harte')
-
-onset = __wrap_evaluator(__events,
-                         mir_eval.onset.evaluate,
-                         'onset', 'onset')
+    return mir_eval.segment.evaluate(ref_interval, ref_value,
+                                     est_interval, est_value, **kwargs)
+segment.__doc__ = jamsify_docstring(mir_eval.segment.evaluate, 'segment', 'segment_.*')
 
 
-segment = __wrap_evaluator(__labeled_intervals,
-                           mir_eval.segment.evaluate,
-                           'segment', 'segment_.*')
+def tempo(ref, est, **kwargs):
+    '''dynamically generated docstring'''
+    validate_annotation(ref, 'tempo')
+    validate_annotation(est, 'tempo')
+    ref_tempi = ref.data.values
+    ref_weight = ref.data.confidence[0]
+    est_tempi = est.data.values
 
-tempo = __wrap_evaluator(__tempo,
-                         mir_eval.tempo.evaluate,
-                         'tempo', 'tempo')
-
+    return mir_eval.tempo.evaluate(ref_tempi, ref_weight, est_tempi, **kwargs)
+tempo.__doc__ = jamsify_docstring(mir_eval.tempo.evaluate, 'tempo', 'tempo')
 
 # TODO
 # melody
