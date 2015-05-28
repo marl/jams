@@ -5,7 +5,7 @@
 import numpy as np
 
 from nose.tools import raises
-from jams import ValidationError
+from jams import SchemaError
 
 from jams import Annotation
 
@@ -22,7 +22,7 @@ def test_ns_time_valid():
 
 def test_ns_time_invalid():
 
-    @raises(ValidationError)
+    @raises(SchemaError)
     def __test(data):
         ann = Annotation(namespace='onsets')
         ann.append(**data)
@@ -50,7 +50,7 @@ def test_ns_beat_valid():
     ann.validate()
 
 
-@raises(ValidationError)
+@raises(SchemaError)
 def test_ns_beat_invalid():
 
     ann = Annotation(namespace='beat')
@@ -75,7 +75,7 @@ def test_ns_beat_position_valid():
 
 def test_ns_beat_position_invalid():
 
-    @raises(ValidationError)
+    @raises(SchemaError)
     def __test(value):
         ann = Annotation(namespace='beat_position')
         ann.append(time=0, duration=1.0, value=value)
@@ -128,7 +128,7 @@ def test_ns_mood_thayer_valid():
 
 def test_ns_mood_thayer_invalid():
 
-    @raises(ValidationError)
+    @raises(SchemaError)
     def __test(value):
         ann = Annotation(namespace='mood_thayer')
         ann.append(time=0, duration=1.0, value=value)
@@ -165,7 +165,7 @@ def test_ns_lyrics():
         yield __test, line
 
     for line in [23, None]:
-        yield raises(ValidationError)(__test), line
+        yield raises(SchemaError)(__test), line
 
 
 def test_ns_tempo_valid():
@@ -179,7 +179,7 @@ def test_ns_tempo_valid():
 
 def test_ns_tempo_invalid():
 
-    @raises(ValidationError)
+    @raises(SchemaError)
     def __test(value, confidence):
         ann = Annotation(namespace='tempo')
 

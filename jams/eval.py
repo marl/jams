@@ -45,7 +45,7 @@ def validate_annotation(ann, namespace):
     NamespaceError
         If `ann` does not match the proper namespace
 
-    jsonschema.ValidationError
+    SchemaError
         If `ann` fails schema validation
     '''
 

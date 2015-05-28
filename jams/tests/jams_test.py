@@ -506,7 +506,7 @@ def test_jams_add():
         yield __test_conflict, on_conflict
 
     for on_conflict in ['fail']:
-        yield raises(jams.MatchError)(__test_conflict), on_conflict
+        yield raises(jams.JamsError)(__test_conflict), on_conflict
 
     for on_conflict in ['bad_fail_mode']:
         yield raises(jams.ParameterError)(__test_conflict), on_conflict
@@ -553,10 +553,10 @@ def test_jams_validate_bad():
         assert 'failed validating' in str(out[0].message).lower()
 
     yield __test, False
-    yield raises(jams.ValidationError)(__test), True
+    yield raises(jams.SchemaError)(__test), True
 
 
-@raises(jams.ValidationError)
+@raises(jams.SchemaError)
 def test_jobject_bad_field():
     jam = jams.JAMS()
 
@@ -625,7 +625,7 @@ def test_load_invalid():
     yield __test, fn, False, False
 
     # With validation, failure can either be a warning or an exception
-    yield raises(jams.ValidationError)(__test), fn, True, True
+    yield raises(jams.SchemaError)(__test), fn, True, True
 
     yield __test_warn, fn, True, False
 

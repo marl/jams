@@ -7,16 +7,14 @@ class JamsError(Exception):
     pass
 
 
-class ValidationError(JamsError):
+class SchemaError(JamsError):
     '''Exceptions relating to schema validation'''
-
+    pass
 
 class NamespaceError(JamsError):
     '''Exceptions relating to task namespaces'''
-
+    pass
 
 class ParameterError(JamsError):
     '''Exceptions relating to function and method parameters'''
-
-class MatchError(JamsError):
-    '''Exceptions relating to alignment'''
+    pass

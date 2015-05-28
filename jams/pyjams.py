@@ -97,7 +97,7 @@ def load(filepath, validate=True, strict=True):
 
     Raises
     ------
-    ValidationError
+    SchemaError 
         if `validate == True` `strict==True` and validation fails
 
 
@@ -173,8 +173,8 @@ class JObject(object):
         if self.__schema__ is not None:
             props = self.__schema__['properties']
             if name not in props:
-                raise ValidationError("Attribute {} not in {}"
-                                      .format(name, props.keys()))
+                raise SchemaError("Attribute {} not in {}"
+                                  .format(name, props.keys()))
         self.__dict__[name] = value
 
     def __len__(self):
@@ -255,7 +255,7 @@ class JObject(object):
 
         Raises
         ------
-        ValidationError
+        SchemaError 
             If `strict==True` and `jam` fails validation
 
         '''
@@ -267,7 +267,7 @@ class JObject(object):
 
         except jsonschema.ValidationError as invalid:
             if strict:
-                six.raise_from(ValidationError, invalid)
+                six.raise_from(SchemaError, invalid)
             else:
                 warnings.warn(str(invalid))
 
@@ -481,7 +481,7 @@ class Annotation(JObject):
 
         except jsonschema.ValidationError as invalid:
             if strict:
-                six.raise_from(ValidationError, invalid)
+                six.raise_from(SchemaError, invalid)
             else:
                 warnings.warn(str(invalid))
             valid = False
@@ -715,7 +715,7 @@ class JAMS(JObject):
         ParameterError
             if `on_conflict` is an unknown value
 
-        MatchError
+        JamsError
             If a conflict is detected and `on_conflict='fail'`
         """
 
@@ -727,8 +727,8 @@ class JAMS(JObject):
             if on_conflict == 'overwrite':
                 self.file_metadata = jam.file_metadata
             elif on_conflict == 'fail':
-                raise MatchError("Metadata conflict! "
-                                 "Resolve manually or force-overwrite it.")
+                raise JamsError("Metadata conflict! "
+                                "Resolve manually or force-overwrite it.")
 
         self.annotations.extend(jam.annotations)
         self.sandbox.update(**jam.sandbox)
@@ -774,7 +774,7 @@ class JAMS(JObject):
 
         Raises
         ------
-        ValidationError
+        SchemaError
             If `strict == True` and the JAMS object fails schema
             or namespace validation.
 
@@ -805,7 +805,7 @@ class JAMS(JObject):
 
         Raises
         ------
-        ValidationError
+        SchemaError
             If `strict==True` and the JAMS object does not match the schema
 
         See Also
