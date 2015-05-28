@@ -4,6 +4,7 @@
 
 import json
 import os
+import copy
 
 __all__ = ['add_namespace', 'schema', 'is_dense']
 
@@ -43,17 +44,17 @@ def schema(namespace, default=None):
     '''
 
     if default is None:
-        default = dict()
+        default = dict(type='object', properties=dict())
 
-    properties = default['properties'].copy()
+    sch = copy.deepcopy(default)
 
     for key in ['value', 'confidence']:
         try:
-            properties[key] = __NAMESPACE__[namespace][key]
+            sch['properties'][key] = __NAMESPACE__[namespace][key]
         except KeyError:
             pass
 
-    return dict(type='object', properties=properties)
+    return sch
 
 
 def is_dense(namespace):

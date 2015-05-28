@@ -134,10 +134,11 @@ class JObject(object):
         filtered_dict = dict()
 
         for k, item in six.iteritems(self.__dict__):
+            if k.startswith('_'):
+                continue
+
             if hasattr(item, '__json__'):
                 filtered_dict[k] = item.__json__
-            elif k.startswith('_') or not item:
-                continue
             else:
                 filtered_dict[k] = item
 
@@ -463,7 +464,7 @@ class Annotation(JObject):
 
         # Get the schema for this annotation
         schema = ns.schema(self.namespace,
-                           __SCHEMA__['definitions']['SparseObservation'])
+                           default=__SCHEMA__['definitions']['SparseObservation'])
 
         try:
             # validate each record in the frame

@@ -104,7 +104,6 @@ def test_jobject_nonzero():
         eq_(J.__nonzero__(), value)
 
     yield __test, {'key': True}, True
-    yield __test, {'key': False}, False
     yield __test, {}, False
 
 
