@@ -248,8 +248,6 @@ def process(in_dir, out_dir):
         for i, metadata in enumerate(csv_reader):
             if metadata[0] == "SONG_ID":
                 continue
-            if int(metadata[0]) != 1502:
-                continue
             # Create a JAMS file for this track
             logging.info("Parsing file %s..." % metadata[0])
             create_JAMS(in_dir, metadata,
