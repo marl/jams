@@ -267,7 +267,7 @@ class JObject(object):
 
         except jsonschema.ValidationError as invalid:
             if strict:
-                six.reraise(ValidationError, *sys.exc_info()[1:])
+                six.raise_from(ValidationError, invalid)
             else:
                 warnings.warn(str(invalid))
 
@@ -481,7 +481,7 @@ class Annotation(JObject):
 
         except jsonschema.ValidationError as invalid:
             if strict:
-                six.reraise(ValidationError, *sys.exc_info()[1:])
+                six.raise_from(ValidationError, invalid)
             else:
                 warnings.warn(str(invalid))
             valid = False
