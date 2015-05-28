@@ -166,9 +166,9 @@ def tempo(ref, est, **kwargs):
     '''dynamically generated docstring'''
     validate_annotation(ref, 'tempo')
     validate_annotation(est, 'tempo')
-    ref_tempi = ref.data.values
-    ref_weight = ref.data.confidence[0]
-    est_tempi = est.data.values
+    ref_tempi = ref.data['value'].values
+    ref_weight = ref.data['confidence'][0]
+    est_tempi = est.data['value'].values
 
     return mir_eval.tempo.evaluate(ref_tempi, ref_weight, est_tempi, **kwargs)
 tempo.__doc__ = jamsify_docstring(mir_eval.tempo.evaluate, 'tempo', 'tempo')

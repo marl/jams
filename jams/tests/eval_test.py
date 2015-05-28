@@ -8,14 +8,19 @@ import jams
 
 
 # Beat tracking
-def create_annotation(values, namespace='beat', offset=0.0):
+def create_annotation(values, namespace='beat', offset=0.0, duration=1, confidence=1):
     ann = jams.Annotation(namespace=namespace)
 
     time = np.arange(offset, offset + len(values))
-    duration = [1] * len(time)
 
-    for t, d, v in zip(time, duration, values):
-        ann.append(time=t, duration=d, value=v)
+    if np.isscalar(duration):
+        duration = [duration] * len(time)
+
+    if np.isscalar(confidence):
+        confidence = [confidence] * len(time)
+
+    for t, d, v, c in zip(time, duration, values, confidence):
+        ann.append(time=t, duration=d, value=v, confidence=c)
 
     return ann
 
@@ -119,9 +124,66 @@ def test_chord_invalid():
 
 
 # Segmentation
+def test_segment_valid():
+
+    ref_ann = create_annotation(values=['A', 'B', 'A', 'C'],
+                                namespace='segment_label_open')
+
+    est_ann = create_annotation(values=['E', 'B', 'E', 'B'],
+                                namespace='segment_label_open')
+
+    jams.eval.segment(ref_ann, est_ann)
+
+def test_segment_invalid():
+
+    def __test(ref, est):
+        jams.eval.segment(ref, est)
+
+    ref_ann = create_annotation(values=['A', 'B', 'A', 'C'],
+                                namespace='segment_label_open')
+
+    est_ann = create_annotation(values=['E', 'B', 'E', 'B'],
+                                namespace='chord_harte')
+
+    yield raises(jams.NamespaceError)(__test), ref_ann, est_ann
+    yield raises(jams.NamespaceError)(__test), est_ann, ref_ann
+
+    est_ann = create_annotation(values=['E', 'B', 'E', 'B'],
+                                namespace='segment_tut')
+
+    yield raises(jams.SchemaError)(__test), ref_ann, est_ann
+    yield raises(jams.SchemaError)(__test), est_ann, ref_ann
 
 # Tempo estimation
+def test_tempo_valid():
 
+    ref_ann = create_annotation(values=[120.0, 60.0], confidence=[0.75, 0.25],
+                                namespace='tempo')
+
+    est_ann = create_annotation(values=[120.0, 80.0], confidence=[0.5, 0.5],
+                                namespace='tempo')
+
+    jams.eval.tempo(ref_ann, est_ann)
+
+def test_tempo_invalid():
+
+    def __test(ref, est):
+        jams.eval.tempo(ref, est)
+
+    ref_ann = create_annotation(values=[120.0, 60.0], confidence=[0.75, 0.25],
+                                namespace='tempo')
+
+    est_ann = create_annotation(values=[120.0, 80.0], confidence=[0.5, 0.5],
+                                namespace='tag_open')
+
+    yield raises(jams.NamespaceError)(__test), ref_ann, est_ann
+    yield raises(jams.NamespaceError)(__test), est_ann, ref_ann
+
+    est_ann = create_annotation(values=[120.0, 80.0], confidence=[-5, 1.5],
+                                namespace='tempo')
+
+    yield raises(jams.SchemaError)(__test), ref_ann, est_ann
+    yield raises(jams.SchemaError)(__test), est_ann, ref_ann
 # Melody
 
 # Pattern discovery
