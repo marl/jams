@@ -35,7 +35,5 @@ setup(
         'six',
         'decorator',
         'mir_eval',
-        'numpydoc',
-        'sphinx',
     ]
 )
