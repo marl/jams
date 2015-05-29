@@ -5,11 +5,17 @@ JAMS Python API
 This library provides an interface for reading JAMS into Python, or creating
 them programatically.
 
+.. currentmodule:: jams
+
+Function reference
+------------------
+.. autosummary::
+    :toctree: generated/
+
+    load
 
 Object reference
 ----------------
-.. currentmodule:: jams
-
 .. autosummary::
     :toctree: generated/
     :template: class.rst
@@ -24,12 +30,6 @@ Object reference
     Sandbox
     JObject
 
-Function reference
-------------------
-.. autosummary::
-    :toctree: generated/
-
-    load
 """
 
 import json
@@ -41,13 +41,12 @@ import os
 import re
 import six
 import warnings
-import sys
 
 from pkg_resources import resource_filename
 
 from .version import version as __VERSION__
 from . import ns
-from .exceptions import *
+from .exceptions import JamsError, SchemaError, ParameterError
 
 
 __all__ = ['load',
@@ -68,7 +67,8 @@ def __load_schema():
     with open(resource_filename(__name__, schema_file), mode='r') as fdesc:
         schema = json.load(fdesc)
 
-    assert schema is not None
+    if schema is None:
+        raise JamsError('Unable to load JAMS schema')
 
     return schema
 
@@ -125,8 +125,25 @@ class JObject(object):
     This object behaves like a dictionary to allow init-level attribute names,
     seamless JSON-serialization, and double-star style unpacking (** obj).
 
+    By setting the `type` attribute to a defined schema entry, only the fields
+    allowed by the schema are permitted as attributes.
     """
     def __init__(self, **kwargs):
+        '''Construct a new JObject
+
+        Parameters
+        ----------
+        kwargs
+            Each keyword argument becomes an attribute with the specified value
+
+        Examples
+        --------
+        >>> J = jams.JObject(foo=5)
+        >>> J.foo
+        5
+        >>> dict(J)
+        {'foo': 5}
+        '''
         super(JObject, self).__init__()
 
         for name, value in six.iteritems(kwargs):
@@ -134,14 +151,19 @@ class JObject(object):
 
     @property
     def __schema__(self):
+        '''The schema definition for this JObject, if it exists.
+
+        Returns
+        -------
+        schema : dict or None
+        '''
         return __SCHEMA__['definitions'].get(self.type, None)
 
     @property
     def __json__(self):
-        r"""Return the object as a set of native datatypes for serialization.
+        r"""Return the JObject as a set of native datatypes for serialization.
 
-        Note: Empty strings / lists / dicts, None, and attributes beginning
-        with underscores are suppressed.
+        Note: attributes beginning with underscores are suppressed.
         """
         filtered_dict = dict()
 
@@ -191,28 +213,131 @@ class JObject(object):
         return json.dumps(self.__json__, indent=2)
 
     def dumps(self, **kwargs):
+        '''Serialize the JObject to a string.
+
+        Parameters
+        ----------
+        kwargs
+            Keyword arguments to json.dumps
+
+        Returns
+        -------
+        object_str : str
+            Serialized JObject
+
+        See Also
+        --------
+        json.dumps
+        loads
+
+        Examples
+        --------
+        >>> J = jams.JObject(foo=5, bar='baz')
+        >>> J.dumps()
+        '{"foo": 5, "bar": "baz"}'
+
+        '''
         return json.dumps(self.__json__, **kwargs)
 
     def keys(self):
-        """Return the fields of the object."""
+        """Return a list of the attributes of the object."""
         return self.__dict__.keys()
 
     def update(self, **kwargs):
-        '''Update the attributes of a JObject.'''
+        '''Update the attributes of a JObject.
+        
+        Parameters
+        ----------
+        kwargs
+            Keyword arguments of the form `attribute=new_value`
+
+        Examples
+        --------
+        >>> J = jams.JObject(foo=5)
+        >>> J.dumps()
+        '{"foo": 5}'
+        >>> J.update(bar='baz')
+        >>> J.dumps()
+        '{"foo": 5, "bar": "baz"}'
+        '''
         for name, value in six.iteritems(kwargs):
             setattr(self, name, value)
 
     @property
     def type(self):
-        '''Return the type of a derived JObject type'''
+        '''The type (class name) of a derived JObject type'''
         return self.__class__.__name__
 
     @classmethod
     def loads(cls, string):
+        '''Deserialize a JObject
+
+        Parameters
+        ----------
+        string : str
+            A serialized (JSON string) JObject
+
+        Returns
+        -------
+        J : JObject
+            The input string reconstructed as a JObject
+
+        See Also
+        --------
+        json.loads
+        dumps
+
+        Examples
+        --------
+        >>> J = jams.JObject(foo=5, bar='baz')
+        >>> J.dumps()
+        '{"foo": 5, "bar": "baz"}'
+        >>> jams.JObject.loads(J.dumps())
+        <JObject foo, bar>
+        '''
         return cls.__json_init__(**json.loads(string))
 
     def search(self, **kwargs):
-        '''Query this object (and its descendants)'''
+        '''Query this object (and its descendants).
+
+        Parameters
+        ----------
+        kwargs
+            Each `(key, value)` pair encodes a search field in `key`
+            and a target value in `value`.
+
+            `key` must be a string, and should correspond to a property in
+            the JAMS object hierarchy, e.g., 'Annotation.namespace` or `email`
+
+            `value` must be either a string describing a search pattern (regular
+            expression) or a lambda function which evaluates to `True` if the candidate
+            object matches the search criteria and `False` otherwise.
+
+        Returns
+        -------
+        match : bool
+            `True` if any of the search keys match the specified value,
+            `False` otherwise, or if the search keys do not exist within the object.
+
+        Raises
+        ------
+        ParameterError
+            If a search value is not a string or callable
+
+        Examples
+        --------
+        >>> J = jams.JObject(foo=5, needle='quick brown fox')
+        >>> J.search(needle='.*brown.*')
+        True
+        >>> J.search(needle='.*orange.*')
+        False
+        >>> J.search(foo=lambda x: x < 10)
+        True
+        >>> J.search(foo=lambda x: x > 10)
+        False
+        >>> J.search(badger='mushroom')
+        False
+        '''
 
         match = False
 
@@ -258,9 +383,8 @@ class JObject(object):
 
         Raises
         ------
-        SchemaError 
+        SchemaError
             If `strict==True` and `jam` fails validation
-
         '''
 
         valid = True
