@@ -2,8 +2,8 @@
 ----------------------------------------------
 First, create the top-level JAMS container:
 
-  >>> import pyjams
-  >>> jam = pyjams.JAMS()
+  >>> import jams
+  >>> jam = jams.JAMS()
 
  Now we can create a beat annotation:
 
@@ -38,7 +38,7 @@ with the built-in `json` library:
 
 Or, less verbosely, using the built-in save function:
 
-  >>> pyjams.save(jam, "these_are_still_my.jams")
+  >>> jams.save(jam, "these_are_still_my.jams")
 
 
 2. Reading a Jams file
@@ -46,7 +46,7 @@ Or, less verbosely, using the built-in save function:
 Assuming you already have a JAMS file on-disk, say at 'these_are_also_my.jams',
 you can easily read it back into memory:
 
-  >>> another_jam = pyjams.load('these_are_also_my.jams')
+  >>> another_jam = jams.load('these_are_also_my.jams')
 
 
 And that's it!

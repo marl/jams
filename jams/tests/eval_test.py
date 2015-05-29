@@ -173,6 +173,7 @@ def test_tempo_invalid():
 
     yield raises(jams.SchemaError)(jams.eval.tempo), ref_ann, est_ann
     yield raises(jams.SchemaError)(jams.eval.tempo), est_ann, ref_ann
+
 # Melody
 
 # Pattern discovery

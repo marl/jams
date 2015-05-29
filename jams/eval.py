@@ -7,18 +7,16 @@ Evaluation
 .. autosummary::
     :toctree: generated/
 
-..    beat
-..    chord
-..    onset
-..    segment
-..    tempo
+    beat
+    chord
+    onset
+    segment
+    tempo
 '''
 
-from decorator import decorator
-import numpydoc
 import mir_eval
 
-from .exceptions import *
+from .exceptions import NamespaceError
 
 __all__ = ['beat', 'chord', 'onset', 'segment', 'tempo']
 
@@ -29,7 +27,7 @@ def validate_annotation(ann, namespace):
 
     Parameters
     ----------
-    ann : pyjams.Annotation
+    ann : jams.Annotation
         The annotation object in question
 
     namespace : str
@@ -58,60 +56,38 @@ def validate_annotation(ann, namespace):
     return True
 
 
-def jamsify_docstring(function, function_name, namespace):
-    '''Modify the docstring for an existing function.
-
-    This changes the documented call signature, parameters,
-    and example strings for the function in question.
+def beat(ref, est, **kwargs):
+    r'''Beat tracking evaluation
 
     Parameters
     ----------
-    function : callable
-        The function from which to get the original docstring
-
-    function_name : str
-        The name of the new function
-
-    namespace : str
-        The namespace for the target annotation objects
+    ref : jams.Annotation
+        Reference annotation object
+    est : jams.Annotation
+        Estimated annotation object
+    kwargs
+        Additional keyword arguments
 
     Returns
     -------
-    docstring : str
-        A numpydoc-style docstring, jamsified.
+    scores : dict
+        Dictionary of scores, where the key is the metric name (str) and
+        the value is the (float) score achieved.
+
+    See Also
+    --------
+    mir_eval.beat.evaluate
+
+    Examples
+    --------
+    >>> # Load in the JAMS objects
+    >>> ref_jam = jams.load('reference.jams')
+    >>> est_jam = jams.load('estimated.jams')
+    >>> # Select the first relevant annotations
+    >>> ref_ann = ref_jam.search(namespace='beat')[0]
+    >>> est_ann = est_jam.search(namespace='beat')[0]
+    >>> scores = jams.eval.beat(ref_ann, est_ann)
     '''
-    F = numpydoc.docscrape.FunctionDoc(function)
-
-    F['Parameters'] = [('reference_annotation',
-                        'pyjams.Annotation',
-                        ['Reference annotation object']),
-                       ('estimated_annotation',
-                        'pyjams.Annotation',
-                        ['Estimated annotation object']),
-                       ('kwargs',
-                        '',
-                        ['Additional keyword arguments'])]
-
-    F['Signature'] = r''
-
-    F['Examples'] = [r""">>> # Load in the JAMS objects""",
-                     r""">>> ref_jam = pyjams.load('reference.jams')""",
-                     r""">>> est_jam = pyjams.load('estimated.jams')""",
-                     r""">>> # Select the first relevant annotations""",
-                     r""">>> ref_ann = ref_jam.search(namespace='{:s}')[0]""".format(namespace),
-                     r""">>> est_ann = est_jam.search(namespace='{:s}')[0]""".format(namespace),
-                     r""">>> scores = {:s}.{:s}(ref_ann, est_ann)""".format(__name__, function_name)]
-
-    F['See Also'] = [(r"""{:s}.{:s}""".format(function.__module__,
-                                              function.__name__),
-                      '',
-                      '')]
-
-    return str(F)
-
-
-def beat(ref, est, **kwargs):
-    '''dynamically generated docstring'''
 
     namespace = 'beat'
     validate_annotation(ref, namespace)
@@ -120,11 +96,40 @@ def beat(ref, est, **kwargs):
     est_interval, _ = est.data.to_interval_values()
 
     return mir_eval.beat.evaluate(ref_interval[:, 0], est_interval[:, 0], **kwargs)
-beat.__doc__ = jamsify_docstring(mir_eval.beat.evaluate, 'beat', 'beat')
 
 
 def onset(ref, est, **kwargs):
-    '''dynamically generated docstring'''
+    r'''Onset evaluation
+
+    Parameters
+    ----------
+    ref : jams.Annotation
+        Reference annotation object
+    est : jams.Annotation
+        Estimated annotation object
+    kwargs
+        Additional keyword arguments
+
+    Returns
+    -------
+    scores : dict
+        Dictionary of scores, where the key is the metric name (str) and
+        the value is the (float) score achieved.
+
+    See Also
+    --------
+    mir_eval.onset.evaluate
+
+    Examples
+    --------
+    >>> # Load in the JAMS objects
+    >>> ref_jam = jams.load('reference.jams')
+    >>> est_jam = jams.load('estimated.jams')
+    >>> # Select the first relevant annotations
+    >>> ref_ann = ref_jam.search(namespace='onset')[0]
+    >>> est_ann = est_jam.search(namespace='onset')[0]
+    >>> scores = jams.eval.onset(ref_ann, est_ann)
+    '''
     namespace = 'onset'
     validate_annotation(ref, namespace)
     validate_annotation(est, namespace)
@@ -132,11 +137,40 @@ def onset(ref, est, **kwargs):
     est_interval, _ = est.data.to_interval_values()
 
     return mir_eval.onset.evaluate(ref_interval[:, 0], est_interval[:, 0], **kwargs)
-onset.__doc__ = jamsify_docstring(mir_eval.onset.evaluate, 'onset', 'onset')
 
 
 def chord(ref, est, **kwargs):
-    '''dynamically generated docstring'''
+    r'''Chord evaluation
+
+    Parameters
+    ----------
+    ref : jams.Annotation
+        Reference annotation object
+    est : jams.Annotation
+        Estimated annotation object
+    kwargs
+        Additional keyword arguments
+
+    Returns
+    -------
+    scores : dict
+        Dictionary of scores, where the key is the metric name (str) and
+        the value is the (float) score achieved.
+
+    See Also
+    --------
+    mir_eval.chord.evaluate
+
+    Examples
+    --------
+    >>> # Load in the JAMS objects
+    >>> ref_jam = jams.load('reference.jams')
+    >>> est_jam = jams.load('estimated.jams')
+    >>> # Select the first relevant annotations
+    >>> ref_ann = ref_jam.search(namespace='chord_harte')[0]
+    >>> est_ann = est_jam.search(namespace='chord_harte')[0]
+    >>> scores = jams.eval.chord(ref_ann, est_ann)
+    '''
 
     namespace = 'chord_harte'
     validate_annotation(ref, namespace)
@@ -146,11 +180,40 @@ def chord(ref, est, **kwargs):
 
     return mir_eval.chord.evaluate(ref_interval, ref_value,
                                    est_interval, est_value, **kwargs)
-chord.__doc__ = jamsify_docstring(mir_eval.chord.evaluate, 'chord', 'chord_harte')
 
 
 def segment(ref, est, **kwargs):
-    '''dynamically generated docstring'''
+    r'''Segment evaluation
+
+    Parameters
+    ----------
+    ref : jams.Annotation
+        Reference annotation object
+    est : jams.Annotation
+        Estimated annotation object
+    kwargs
+        Additional keyword arguments
+
+    Returns
+    -------
+    scores : dict
+        Dictionary of scores, where the key is the metric name (str) and
+        the value is the (float) score achieved.
+
+    See Also
+    --------
+    mir_eval.segment.evaluate
+
+    Examples
+    --------
+    >>> # Load in the JAMS objects
+    >>> ref_jam = jams.load('reference.jams')
+    >>> est_jam = jams.load('estimated.jams')
+    >>> # Select the first relevant annotations
+    >>> ref_ann = ref_jam.search(namespace='segment_.*')[0]
+    >>> est_ann = est_jam.search(namespace='segment_.*')[0]
+    >>> scores = jams.eval.segment(ref_ann, est_ann)
+    '''
     namespace = 'segment_.*'
     validate_annotation(ref, namespace)
     validate_annotation(est, namespace)
@@ -159,11 +222,41 @@ def segment(ref, est, **kwargs):
 
     return mir_eval.segment.evaluate(ref_interval, ref_value,
                                      est_interval, est_value, **kwargs)
-segment.__doc__ = jamsify_docstring(mir_eval.segment.evaluate, 'segment', 'segment_.*')
 
 
 def tempo(ref, est, **kwargs):
-    '''dynamically generated docstring'''
+    r'''Tempo evaluation
+
+    Parameters
+    ----------
+    ref : jams.Annotation
+        Reference annotation object
+    est : jams.Annotation
+        Estimated annotation object
+    kwargs
+        Additional keyword arguments
+
+    Returns
+    -------
+    scores : dict
+        Dictionary of scores, where the key is the metric name (str) and
+        the value is the (float) score achieved.
+
+    See Also
+    --------
+    mir_eval.tempo.evaluate
+
+    Examples
+    --------
+    >>> # Load in the JAMS objects
+    >>> ref_jam = jams.load('reference.jams')
+    >>> est_jam = jams.load('estimated.jams')
+    >>> # Select the first relevant annotations
+    >>> ref_ann = ref_jam.search(namespace='tempo')[0]
+    >>> est_ann = est_jam.search(namespace='tempo')[0]
+    >>> scores = jams.eval.tempo(ref_ann, est_ann)
+    '''
+
     validate_annotation(ref, 'tempo')
     validate_annotation(est, 'tempo')
     ref_tempi = ref.data['value'].values
@@ -171,7 +264,6 @@ def tempo(ref, est, **kwargs):
     est_tempi = est.data['value'].values
 
     return mir_eval.tempo.evaluate(ref_tempi, ref_weight, est_tempi, **kwargs)
-tempo.__doc__ = jamsify_docstring(mir_eval.tempo.evaluate, 'tempo', 'tempo')
 
 # TODO
 # melody

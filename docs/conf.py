@@ -41,7 +41,8 @@ numpydoc_show_class_members = False
 intersphinx_mapping = {'numpy': ('http://docs.scipy.org/doc/numpy/', None),
                        'np': ('http://docs.scipy.org/doc/numpy/', None),
                        'pandas': ('http://pandas.pydata.org/pandas-docs/dev', None),
-                       'pd': ('http://pandas.pydata.org/pandas-docs/dev', None)}
+                       'pd': ('http://pandas.pydata.org/pandas-docs/dev', None),
+                       'mir_eval': ('http://craffel.github.io/mir_eval/', None)}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
