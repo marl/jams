@@ -8,6 +8,8 @@ them programatically.
 
 Object reference
 ----------------
+.. currentmodule:: jams
+
 .. autosummary::
     :toctree: generated/
 

@@ -12,7 +12,7 @@ from jams import Annotation
 
 def test_ns_time_valid():
 
-    ann = Annotation(namespace='onsets')
+    ann = Annotation(namespace='onset')
 
     for time in np.arange(5.0, 10.0):
         ann.append(time=time, duration=0.0, value=None, confidence=None)
@@ -24,7 +24,7 @@ def test_ns_time_invalid():
 
     @raises(SchemaError)
     def __test(data):
-        ann = Annotation(namespace='onsets')
+        ann = Annotation(namespace='onset')
         ann.append(**data)
 
         ann.validate()
@@ -141,7 +141,7 @@ def test_ns_mood_thayer_invalid():
 def test_ns_onset():
 
     # A valid example
-    ann = Annotation(namespace='onsets')
+    ann = Annotation(namespace='onset')
     
     for time in np.arange(5.0):
         ann.append(time=time, duration=0.0, value=1, confidence=None)

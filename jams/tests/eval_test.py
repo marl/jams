@@ -41,7 +41,7 @@ def test_beat_invalid():
                                 namespace='beat')
 
     est_ann = create_annotation(values=np.arange(9) % 4 + 1.,
-                                namespace='onsets',
+                                namespace='onset',
                                 offset=0.01)
 
     yield raises(jams.NamespaceError)(jams.eval.beat), ref_ann, est_ann
@@ -57,10 +57,10 @@ def test_beat_invalid():
 def test_onset_valid():
 
     ref_ann = create_annotation(values=np.arange(10) % 4 + 1.,
-                                namespace='onsets')
+                                namespace='onset')
 
     est_ann = create_annotation(values=np.arange(9) % 4 + 1.,
-                                namespace='onsets',
+                                namespace='onset',
                                 offset=0.01)
 
     jams.eval.onset(ref_ann, est_ann)
@@ -68,7 +68,7 @@ def test_onset_valid():
 def test_onset_invalid():
 
     ref_ann = create_annotation(values=np.arange(10) % 4 + 1.,
-                                namespace='onsets')
+                                namespace='onset')
 
     est_ann = create_annotation(values=np.arange(9) % 4 + 1.,
                                 namespace='beat',
@@ -78,7 +78,7 @@ def test_onset_invalid():
     yield raises(jams.NamespaceError)(jams.eval.onset), est_ann, ref_ann
 
     est_ann = create_annotation(values=np.arange(9) % 4 + 1.,
-                                namespace='onsets',
+                                namespace='onset',
                                 offset=-10)
     yield raises(jams.SchemaError)(jams.eval.onset), ref_ann, est_ann
     yield raises(jams.SchemaError)(jams.eval.onset), est_ann, ref_ann
