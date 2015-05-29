@@ -12,6 +12,7 @@ Object reference
 
 .. autosummary::
     :toctree: generated/
+    :template: class.rst
 
     JAMS
     FileMetadata

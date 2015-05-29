@@ -44,10 +44,13 @@ intersphinx_mapping = {'numpy': ('http://docs.scipy.org/doc/numpy/', None),
                        'np': ('http://docs.scipy.org/doc/numpy/', None),
                        'pandas': ('http://pandas.pydata.org/pandas-docs/dev', None),
                        'pd': ('http://pandas.pydata.org/pandas-docs/dev', None),
-                       'mir_eval': ('http://craffel.github.io/mir_eval/', None)}
+                       'mir_eval': ('http://craffel.github.io/mir_eval/', None),
+                       'jsonschema': ('https://python-jsonschema.readthedocs.org/en/latest/', None)}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
+
+exclude_trees = ['_templates', '_build']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
