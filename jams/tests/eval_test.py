@@ -118,17 +118,17 @@ def test_chord_invalid():
 def test_segment_valid():
 
     ref_ann = create_annotation(values=['A', 'B', 'A', 'C'],
-                                namespace='segment_label_open')
+                                namespace='segment_open')
 
     est_ann = create_annotation(values=['E', 'B', 'E', 'B'],
-                                namespace='segment_label_open')
+                                namespace='segment_open')
 
     jams.eval.segment(ref_ann, est_ann)
 
 def test_segment_invalid():
 
     ref_ann = create_annotation(values=['A', 'B', 'A', 'C'],
-                                namespace='segment_label_open')
+                                namespace='segment_open')
 
     est_ann = create_annotation(values=['E', 'B', 'E', 'B'],
                                 namespace='chord_harte')
