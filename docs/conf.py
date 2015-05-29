@@ -35,7 +35,8 @@ extensions = [
     'numpydoc'
 ]
 
-autosummary_generate = True
+import glob
+autosummary_generate = glob.glob('*.rst')
 
 numpydoc_show_class_members = False
 
@@ -88,10 +89,10 @@ exclude_patterns = ['_build']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
-#default_role = None
+default_role = 'autolink'
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
-#add_function_parentheses = True
+add_function_parentheses = False
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
@@ -99,7 +100,7 @@ exclude_patterns = ['_build']
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
-#show_authors = False
+show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -236,7 +237,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'jams.tex', u'jams Documentation',
-   u'Eric J. Humphrey, Justin Salamon, Oriol Nieto, Jon Forsyth, Rachel M. Bittner, Juan P. Bello', 'manual'),
+   u'JAMS development team', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -266,7 +267,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'jams', u'jams Documentation',
-     [u'Eric J. Humphrey, Justin Salamon, Oriol Nieto, Jon Forsyth, Rachel M. Bittner, Juan P. Bello'], 1)
+     [u'JAMS development team'], 1)
 ]
 
 # If true, show URL addresses after external links.
