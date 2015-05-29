@@ -97,9 +97,6 @@ def test_chord_valid():
 
 def test_chord_invalid():
 
-    def __test(ref, est):
-        jams.eval.chord(ref, est)
-
     ref_ann = create_annotation(values=['C', 'E', 'G:min7'],
                                 namespace='chord_harte')
 
