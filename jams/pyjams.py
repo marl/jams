@@ -434,7 +434,14 @@ class JamsFrame(pd.DataFrame):
 
     @property
     def dense(self):
-        '''Is this to be interpreted as a dense array, or sparse?'''
+        '''Boolean to determine whether the encoding is dense or sparse.
+        
+        Returns
+        -------
+        dense : bool
+            `True` if the data should be encoded densely
+            `False` otherwise
+        '''
         return self.__dense
 
     @dense.setter
@@ -444,21 +451,53 @@ class JamsFrame(pd.DataFrame):
 
     @classmethod
     def fields(cls):
-        '''Fields of a JamsFrame: (time, duration, value, confidence)'''
+        '''Fields of a JamsFrame: (time, duration, value, confidence)
+
+        Returns
+        -------
+        fields : list
+            The only permissible fields for a JamsFrame:
+            `time`, `duration`, `value`, and `confidence`
+        '''
         return ['time', 'duration', 'value', 'confidence']
 
     @classmethod
     def from_dict(cls, *args, **kwargs):
+        '''Construct a new JamsFrame from a dictionary or list of dictionaries.
 
+        This is analogous to pd.DataFrame.from_dict, except the returned object
+        has the type `JamsFrame`.
+
+        See Also
+        --------
+        pandas.DataFrame.from_dict
+        from_dataframe
+        '''
         new_frame = super(JamsFrame, cls).from_dict(*args, **kwargs)
 
         return cls.from_dataframe(new_frame)
 
     @classmethod
     def from_dataframe(cls, frame):
-        '''Convert a dataframe into a JamsFrame.
+        '''Convert a pandas DataFrame into a JamsFrame.
 
-        Note: this operation is destructive.
+        Note: this operation is destructive, in that the input
+        DataFrame will have its type and data altered.
+
+        Parameters
+        ----------
+        frame : pandas.DataFrame
+            The input DataFrame.  Must have the appropriate JamsFrame fields:
+            'time', 'duration', 'value', and 'confidence'.
+
+            'time' and 'duration' fields should be of type `float` and measured
+            in seconds.
+
+        Returns
+        -------
+        jams_frame : JamsFrame
+            The input `frame` modified to form a JamsFrame.
+
         '''
         # Encode time properly
         frame.time = pd.to_timedelta(frame.time, unit='s')
@@ -474,7 +513,13 @@ class JamsFrame(pd.DataFrame):
 
     @classmethod
     def factory(cls):
-        '''Construct a new, empty JamsFrame'''
+        '''Construct a new, empty JamsFrame
+
+        Returns
+        -------
+        jams_frame : JamsFrame
+            A new, empty JamsFrame
+        '''
 
         return cls.from_dict({x: [] for x in cls.fields()})
 
@@ -507,7 +552,34 @@ class JamsFrame(pd.DataFrame):
 
     def add_observation(self, time=None, duration=None,
                         value=None, confidence=None):
-        '''Add a single observation event to an existing frame'''
+        '''Add a single observation event to an existing frame.
+
+        New observations are appended to the end of the frame.
+
+        Parameters
+        ----------
+        time : float
+            The time of the new observation, in seconds
+
+        duration : float
+            The duration of the new observation, in seconds
+
+        value
+        confidence
+            The value and confidence fields of the new observation.
+            This should conform to the corresponding `namespace` of the
+            containing `Annotation` object.
+
+        Examples
+        --------
+        >>> frame = jams.JamsFrame.factory()
+        >>> frame.add_observation(time=3, duration=1.5, value='C#')
+        >>> frame.add_observation(time=5, duration=.5, value='C#:min', confidence=.8)
+        >>> frame
+              time        duration   value confidence
+        0 00:00:03 00:00:01.500000      C#        NaN
+        1 00:00:05 00:00:00.500000  C#:min        0.8
+        '''
 
         n = len(self)
         self.loc[n] = {'time': pd.to_timedelta(time, unit='s'),
@@ -516,7 +588,7 @@ class JamsFrame(pd.DataFrame):
                        'confidence': confidence}
 
     def to_interval_values(self):
-        '''Extract observation data in a mir_eval-friendly format.
+        '''Extract observation data in a `mir_eval`-friendly format.
 
         Returns
         -------
