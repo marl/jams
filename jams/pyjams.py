@@ -839,13 +839,17 @@ class AnnotationMetadata(JObject):
         """
         super(AnnotationMetadata, self).__init__()
 
-        curator = JObject() if curator is None else curator
-        annotator = JObject() if annotator is None else annotator
+        if curator is None:
+            curator = Curator()
+
+        if annotator is None:
+            annotator = JObject()
 
         self.curator = Curator(**curator)
+        self.annotator = JObject(**annotator)
+
         self.version = version
         self.corpus = corpus
-        self.annotator = JObject(**annotator)
         self.annotation_tools = annotation_tools
         self.annotation_rules = annotation_rules
         self.validation = validation
