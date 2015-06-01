@@ -648,13 +648,13 @@ class Annotation(JObject):
         namespace : str
             The namespace for this annotation
 
-        data: list, or None
-            Collection of Observations
+        data : dict or list-of-dict
+            Data for the new annotation in a format supported by `JamsFrame.from_dict`
 
-        annotation_metadata: AnnotationMetadata (or dict), default=None.
+        annotation_metadata : AnnotationMetadata (or dict), default=None.
             Metadata corresponding to this Annotation.
 
-        sandbox: Sandbox (dict), default=None
+        sandbox : Sandbox (dict), default=None
             Miscellaneous information; keep to native datatypes if possible.
         """
 
@@ -681,7 +681,36 @@ class Annotation(JObject):
         self.data.dense = ns.is_dense(self.namespace)
 
     def append(self, **kwargs):
-        '''Append an observation to the data field'''
+        '''Append an observation to the data field
+
+        Parameters
+        ----------
+        time : float >= 0
+        duration : float >= 0
+            The time and duration of the new observation, in seconds
+        value
+        confidence
+            The value and confidence of the new observations.
+
+            Types and values should conform to the namespace of the
+            Annotation object.
+
+        See Also
+        --------
+        JamsFrame.add_observation
+
+        Examples
+        --------
+        >>> ann = jams.Annotation(namespace='chord_harte')
+        >>> ann.append(time=0, duration=3, value='C#')
+        >>> ann.append(time=3, duration=2, value='E#')
+        >>> ann
+        <Annotation: namespace, annotation_metadata, data, sandbox>
+        >>> ann.data
+              time  duration value confidence
+        0 00:00:00  00:00:03    C#       None
+        1 00:00:03  00:00:02    E#       None
+        '''
 
         self.data.add_observation(**kwargs)
 
@@ -703,6 +732,30 @@ class Annotation(JObject):
         return True
 
     def validate(self, strict=True):
+        '''Validate this annotation object against the JAMS schema,
+        and its data against the namespace schema.
+
+        Parameters
+        ----------
+        strict : bool
+            If `True`, then schema violations will cause an Exception.
+            If `False`, then schema violations will issue a warning.
+
+        Returns
+        -------
+        valid : bool
+            `True` if the object conforms to schema.
+            `False` if the object fails to conform to schema, but `strict == False`.
+
+        Raises
+        ------
+        SchemaError
+            If `strict == True` and the object fails validation
+
+        See Also
+        --------
+        JObject.validate
+        '''
 
         valid = super(Annotation, self).validate(strict=strict)
 
