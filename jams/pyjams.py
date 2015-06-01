@@ -873,10 +873,10 @@ class FileMetadata(JObject):
         release: str
             Name of the release
 
-        duration: number
+        duration: number >= 0
             Time duration of the file, in seconds.
 
-        identifiers : pyjams.Sandbox
+        identifiers : jams.Sandbox
             Sandbox of identifier keys (eg, musicbrainz ids)
 
         jams_version: str
@@ -884,8 +884,11 @@ class FileMetadata(JObject):
         """
         super(FileMetadata, self).__init__()
 
-        jams_version = __VERSION__ if jams_version is None else jams_version
-        identifiers = Sandbox() if identifiers is None else identifiers
+        if jams_version is None:
+            jams_version = __VERSION__
+
+        if identifiers is None:
+            identifiers = Sandbox()
 
         self.title = title
         self.artist = artist
