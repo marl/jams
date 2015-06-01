@@ -658,7 +658,7 @@ class Annotation(JObject):
             Miscellaneous information; keep to native datatypes if possible.
         """
 
-        JObject.__init__(self)
+        super(Annotation, self).__init__()
 
         if annotation_metadata is None:
             annotation_metadata = AnnotationMetadata()
@@ -794,7 +794,7 @@ class Curator(JObject):
         email: str, default=''
             An email address corresponding to the curator.
         """
-        JObject.__init__(self)
+        super(Curator, self).__init__()
         self.name = name
         self.email = email
 
@@ -964,7 +964,7 @@ class JAMS(JObject):
             Unconstrained global sandbox for additional information.
 
         """
-        JObject.__init__(self)
+        super(JAMS, self).__init__()
 
         if file_metadata is None:
             file_metadata = FileMetadata()
