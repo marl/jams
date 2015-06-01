@@ -764,8 +764,16 @@ class Annotation(JObject):
                            default=__SCHEMA__['definitions']['SparseObservation'])
 
         try:
+            records = self.data.__json__
+
+            # If the data has a dense packing, reshape it for record-wise validation
+            if self.data.dense:
+                records = [dict(_)
+                           for _ in zip(*[[(k, v) for v in value]
+                                          for (k, value) in six.iteritems(records)])]
+
             # validate each record in the frame
-            for rec in self.data.__json__:
+            for rec in records:
                 jsonschema.validate(rec, schema)
 
         except jsonschema.ValidationError as invalid:
