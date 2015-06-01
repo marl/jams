@@ -533,6 +533,9 @@ class JamsFrame(pd.DataFrame):
         jams_frame : JamsFrame
             The input `frame` modified to form a JamsFrame.
 
+        See Also
+        --------
+        from_dict
         '''
         # Encode time properly
         frame.time = pd.to_timedelta(frame.time, unit='s')
