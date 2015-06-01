@@ -100,8 +100,8 @@ def load(filepath, validate=True, strict=True):
 
     Raises
     ------
-    SchemaError 
-        if `validate == True` `strict==True` and validation fails
+    SchemaError
+        if `validate == True`, `strict==True`, and validation fails
 
 
     See also
@@ -240,7 +240,19 @@ class JObject(object):
         return json.dumps(self.__json__, **kwargs)
 
     def keys(self):
-        """Return a list of the attributes of the object."""
+        """Return a list of the attributes of the object.
+
+        Returns
+        -------
+        keys : list
+            The attributes of the object
+
+        Examples
+        --------
+        >>> J = jams.JObject(foo=5, bar='baz')
+        >>> J.keys()
+        ['foo', 'bar']
+        """
         return self.__dict__.keys()
 
     def update(self, **kwargs):
@@ -331,11 +343,11 @@ class JObject(object):
         True
         >>> J.search(needle='.*orange.*')
         False
+        >>> J.search(badger='.*brown.*')
+        False
         >>> J.search(foo=lambda x: x < 10)
         True
         >>> J.search(foo=lambda x: x > 10)
-        False
-        >>> J.search(badger='mushroom')
         False
         '''
 
@@ -415,7 +427,7 @@ class JamsFrame(pd.DataFrame):
     '''A dataframe class for JAMS.
 
     This automates certain niceties, such as timestamp
-    conversion and serializatoin.
+    conversion and serialization.
     '''
 
     __dense = False

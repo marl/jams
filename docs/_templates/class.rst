@@ -5,6 +5,7 @@
 
 .. autoclass:: {{ objname }}
     :members:
+    :no-inherited-members:
     :show-inheritance:
 
     .. automethod:: __init__
