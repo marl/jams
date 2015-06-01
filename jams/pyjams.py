@@ -901,8 +901,8 @@ class FileMetadata(JObject):
 class AnnotationArray(list):
     """AnnotationArray
 
-    List subclass for managing collections of annotations, providing factory
-    methods to create empty annotations.
+    This list subclass provides serialization and search/filtering
+    for annotation collections.
     """
     def __init__(self, annotations=None):
         """Create an AnnotationArray.
@@ -910,8 +910,8 @@ class AnnotationArray(list):
         Parameters
         ----------
         annotations: list
-            List of XAnnotations, or appropriately formated dicts, where X
-            is consistent with AnnotationType.
+            List of Annotations, or appropriately formated dicts
+            is consistent with Annotation.
         """
         super(AnnotationArray, self).__init__()
 
@@ -1045,6 +1045,7 @@ class JAMS(JObject):
         See Also
         --------
         JObject.search
+        AnnotationArray.search
 
 
         Examples
