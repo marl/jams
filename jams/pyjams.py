@@ -432,10 +432,45 @@ class JamsFrame(pd.DataFrame):
 
     __dense = False
 
+    def __init__(self, data=None, index=None, columns=None, dtype=None):
+        '''Construct a new JamsFrame object.
+
+        Parameters
+        ----------
+        data
+            Optional data for the new JamsFrame, in any format supported
+            by `pandas.DataFrame.__init__`.
+
+            Fields must be `['time', 'duration', 'value', 'confidence']`.
+
+            `time` and `duration` fields must be floating point types,
+            measured in seconds.
+
+        index
+            Optional index on `data`.
+
+        columns
+        dtype
+            These parameters are ignored by JamsFrame, but are allowed
+            for API compatibility with `pandas.DataFrame`.
+
+        See Also
+        --------
+        from_dict
+        from_dataframe
+        pandas.DataFrame.__init__
+
+        '''
+        super(JamsFrame, self).__init__(data=data, index=index,
+                                        columns=self.fields())
+
+        self.time = pd.to_timedelta(self.time, unit='s')
+        self.duration = pd.to_timedelta(self.duration, unit='s')
+
     @property
     def dense(self):
         '''Boolean to determine whether the encoding is dense or sparse.
-        
+
         Returns
         -------
         dense : bool
@@ -501,7 +536,6 @@ class JamsFrame(pd.DataFrame):
         '''
         # Encode time properly
         frame.time = pd.to_timedelta(frame.time, unit='s')
-
         frame.duration = pd.to_timedelta(frame.duration, unit='s')
 
         # Properly order the columns
@@ -510,18 +544,6 @@ class JamsFrame(pd.DataFrame):
         # Clobber the class attribute
         frame.__class__ = cls
         return frame
-
-    @classmethod
-    def factory(cls):
-        '''Construct a new, empty JamsFrame
-
-        Returns
-        -------
-        jams_frame : JamsFrame
-            A new, empty JamsFrame
-        '''
-
-        return cls.from_dict({x: [] for x in cls.fields()})
 
     @property
     def __json__(self):
@@ -572,7 +594,7 @@ class JamsFrame(pd.DataFrame):
 
         Examples
         --------
-        >>> frame = jams.JamsFrame.factory()
+        >>> frame = jams.JamsFrame()
         >>> frame.add_observation(time=3, duration=1.5, value='C#')
         >>> frame.add_observation(time=5, duration=.5, value='C#:min', confidence=.8)
         >>> frame
@@ -641,7 +663,7 @@ class Annotation(JObject):
         self.annotation_metadata = AnnotationMetadata(**annotation_metadata)
 
         if data is None:
-            self.data = JamsFrame.factory()
+            self.data = JamsFrame()
         else:
             self.data = JamsFrame.from_dict(data)
 
