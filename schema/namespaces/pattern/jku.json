@@ -21,6 +21,6 @@
             "required": ["pitch", "staff", "voice", "pattern_id", "occurrence_id"]
         },
         "dense": false,
-        "description": "Musical patern information (MIDI pitch associated with a time onset and a duration), including staff height, voice number, occurrence identification, and pattern identification."
+        "description": "Musical pattern information (MIDI pitch associated with a time onset and a duration), including staff height, voice number, occurrence identification, and pattern identification."
     }
 }
