@@ -199,13 +199,15 @@ def test_ns_pitch_vz_valid():
 
     ann = Annotation(namespace='pitch_hz')
 
-    for time in np.arange(5.0):
-        ann.append(time=time, duration=0.0,
-                   value=np.random.uniform(-22050., 22050.), confidence=None)
+    seq_len = 21 # should be odd
+    times = np.arange(seq_len)
+    durations = np.zeros(seq_len)
+    values = np.linspace(-22050., 22050, seq_len) # includes 0 (odd symmetric)
+    confidences = np.linspace(0, 1., seq_len)
+    confidences[int(seq_len/2)] = None # throw in a None confidence value
 
-    for time in np.arange(5.0, 10.0):
-        ann.append(time=time, duration=0.0, value=0.0,
-                   confidence=np.random.rand())
+    for (t, d, v, c) in zip(times, durations, values, confidences):
+        ann.append(time=t, duration=d, value=v, confidence=c)
 
     ann.validate()
 
