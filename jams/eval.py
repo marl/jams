@@ -9,16 +9,18 @@ Evaluation
 
     beat
     chord
+    melody
     onset
     segment
     tempo
 '''
 
+import numpy as np
 import mir_eval
 
 from .exceptions import NamespaceError
 
-__all__ = ['beat', 'chord', 'onset', 'segment', 'tempo']
+__all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'tempo']
 
 
 def validate_annotation(ann, namespace):
@@ -265,6 +267,49 @@ def tempo(ref, est, **kwargs):
 
     return mir_eval.tempo.evaluate(ref_tempi, ref_weight, est_tempi, **kwargs)
 
-# TODO
 # melody
+def melody(ref, est, **kwargs):
+    r'''Melody extraction evaluation
+
+    Parameters
+    ----------
+    ref : jams.Annotation
+        Reference annotation object
+    est : jams.Annotation
+        Estimated annotation object
+    kwargs
+        Additional keyword arguments
+
+    Returns
+    -------
+    scores : dict
+        Dictionary of scores, where the key is the metric name (str) and
+        the value is the (float) score achieved.
+
+    See Also
+    --------
+    mir_eval.melody.evaluate
+
+    Examples
+    --------
+    >>> # Load in the JAMS objects
+    >>> ref_jam = jams.load('reference.jams')
+    >>> est_jam = jams.load('estimated.jams')
+    >>> # Select the first relevant annotations
+    >>> ref_ann = ref_jam.search(namespace='pitch_hz')[0]
+    >>> est_ann = est_jam.search(namespace='pitch_hz')[0]
+    >>> scores = jams.eval.melody(ref_ann, est_ann)
+    '''
+
+    namespace = 'pitch_hz'
+    validate_annotation(ref, namespace)
+    validate_annotation(est, namespace)
+    ref_interval, ref_freq = ref.data.to_interval_values()
+    est_interval, est_freq = est.data.to_interval_values()
+
+    return mir_eval.melody.evaluate(ref_interval[:, 0], np.asarray(ref_freq),
+                                    est_interval[:, 0], np.asarray(est_freq),
+                                    **kwargs)
+
+# TODO
 # pattern
