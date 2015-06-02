@@ -9,6 +9,7 @@ Evaluation
 
     beat
     chord
+    melody
     onset
     segment
     tempo
@@ -19,7 +20,7 @@ import mir_eval
 
 from .exceptions import NamespaceError
 
-__all__ = ['beat', 'chord', 'onset', 'segment', 'tempo']
+__all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'tempo']
 
 
 def validate_annotation(ann, namespace):
