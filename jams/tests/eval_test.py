@@ -14,6 +14,7 @@ def create_annotation(values, namespace='beat', offset=0.0, duration=1, confiden
     time = np.arange(offset, offset + len(values))
 
     if np.isscalar(duration):
+        time = time * duration
         duration = [duration] * len(time)
 
     if np.isscalar(confidence):
@@ -172,5 +173,51 @@ def test_tempo_invalid():
     yield raises(jams.SchemaError)(jams.eval.tempo), est_ann, ref_ann
 
 # Melody
+def test_melody_valid():
 
+    f1 = np.linspace(110.0, 440.0, 10)
+    v1 = np.sign(np.random.randn(len(f1)))
+    v2 = np.sign(np.random.randn(len(f1)))
+
+    ref_ann = create_annotation(values=f1 * v1,
+                                confidence=1.0,
+                                duration=0.01,
+                                namespace='pitch_hz')
+
+    est_ann = create_annotation(values=f1 * v2,
+                                confidence=1.0,
+                                duration=0.01,
+                                namespace='pitch_hz')
+
+    jams.eval.melody(ref_ann, est_ann)
+
+def test_melody_invalid():
+
+    f1 = np.linspace(110.0, 440.0, 10)
+    v1 = np.sign(np.random.randn(len(f1)))
+    v2 = np.sign(np.random.randn(len(f1)))
+
+    ref_ann = create_annotation(values=f1 * v1,
+                                confidence=1.0,
+                                duration=0.01,
+                                namespace='pitch_hz')
+
+    est_ann = create_annotation(values=f1 * v2,
+                                confidence=1.0,
+                                duration=0.01,
+                                namespace='pitch_midi')
+
+
+    yield raises(jams.NamespaceError)(jams.eval.melody), ref_ann, est_ann
+    yield raises(jams.NamespaceError)(jams.eval.melody), est_ann, ref_ann
+
+    est_ann = create_annotation(values=['a', 'b', 'c'],
+                                confidence=1.0,
+                                duration=0.01,
+                                namespace='pitch_hz')
+
+    yield raises(jams.SchemaError)(jams.eval.melody), ref_ann, est_ann
+    yield raises(jams.SchemaError)(jams.eval.melody), est_ann, ref_ann
+
+# TODO
 # Pattern discovery
