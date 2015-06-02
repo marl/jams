@@ -195,7 +195,7 @@ def test_ns_tempo_invalid():
         yield __test, 120.0, confidence
 
 
-def test_ns_pitch_vz_valid():
+def test_ns_pitch_hz_valid():
 
     ann = Annotation(namespace='pitch_hz')
 
@@ -204,10 +204,22 @@ def test_ns_pitch_vz_valid():
     durations = np.zeros(seq_len)
     values = np.linspace(-22050., 22050, seq_len) # includes 0 (odd symmetric)
     confidences = np.linspace(0, 1., seq_len)
-    confidences[int(seq_len/2)] = None # throw in a None confidence value
+    confidences[seq_len//2] = None # throw in a None confidence value
 
     for (t, d, v, c) in zip(times, durations, values, confidences):
         ann.append(time=t, duration=d, value=v, confidence=c)
 
     ann.validate()
+
+
+def test_ns_pitch_hz_invalid():
+
+    @raises(SchemaError)
+    def __test(value):
+        ann = Annotation(namespace='pitch_hz')
+        ann.append(time=0, duration=0, value=value, confidence=0.5)
+        ann.validate()
+
+    for value in ['a', None, True, 1j]:
+        yield __test, value
 
