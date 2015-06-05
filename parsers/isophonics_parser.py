@@ -49,6 +49,21 @@ NS_DICT = {'beat': 'beat',
            'key': 'key_mode',
            'segment': 'segment_isophonics'}
 
+# Map chords that doesn't make much sense
+CHORDS_DICT = {
+    "E:4": "E:sus4",
+    "Db:6": "Db:maj6",
+    "F#min7": "F#:min7",
+    "B:7sus": "B:maj7",
+    "Db:6/2": "Db:maj6/2",
+    "Ab:6": "Ab:maj6",
+    "F:6": "F:maj6",
+    "D:6": "D:maj6",
+    "G:6": "G:maj6",
+    "A:6": "A:maj6",
+    "E:sus": "E",
+    "E:7sus": "E:maj7"
+}
 
 def fill_file_metadata(jam, artist, title):
     """Fills the global metada into the JAMS jam."""
@@ -72,30 +87,7 @@ def lab_to_range_annotation(lab_file, annot):
         dur = float(interval[1]) - time
         if dur <= 0:
             continue
-        if label == "E:4":
-            label = "E:sus4"
-        if label == "Db:6":
-            label = "Db:maj6"
-        if label == "F#min7":
-            label = "F#:min7"
-        if label == "B:7sus":
-            label = "B:maj7"
-        if label == "Db:6/2":
-            label = "Db:maj6/2"
-        if label == "Ab:6":
-            label = "Ab:maj6"
-        if label == "F:6":
-            label = "F:maj6"
-        if label == "D:6":
-            label = "D:maj6"
-        if label == "G:6":
-            label = "G:maj6"
-        if label == "A:6":
-            label = "A:maj6"
-        if label == "E:sus":
-            label = "E"
-        if label == "E:7sus":
-            label = "E:maj7"
+        label = CHORDS_DICT.get(label, label)
         annot.data.add_observation(time=time, duration=dur, value=label)
 
 
