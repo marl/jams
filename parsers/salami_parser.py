@@ -22,68 +22,44 @@ import time
 
 import jams
 
+# Mapping of the labels to the actual labels allowed by the SALAMI guidelines
+labels_map = {
+    "a'/a''": "no_function",
+    "b/c'": "no_function",
+    "bagpipes": "instrumental",
+    "banjo": "instrumental",
+    "code": "coda",
+    "dialog": "spoken",
+    "female": "voice_female",
+    "first": "main theme",
+    "guitar": "instrumental",
+    "hammond": "instrumental",
+    "main_theme": "main theme",
+    "male": "voice_male",
+    "muted": "fade-out",
+    "organ": "instrumental",
+    "out": "outro",
+    "piano": "instrumental",
+    "recap": "recapitulation",
+    "secondary_theme": "secondary theme",
+    "spoken_voice": "spoken",
+    "stage_speaking": "spoken",
+    "steel": "instrumental",
+    "tag": "head",
+    "trumpet": "instrumental",
+    "third": "third theme",
+    "violin": "instrumental",
+    "vocalizations": "voice",
+    "vocals": "voice",
+    "w/dialog": "spoken"
+}
 
-def fix_labels(label):
-    """Fixes the given labels to comply the SALAMI guidelines and JAMS
+
+def fix_label(label):
+    """Fixes the given label to comply the SALAMI guidelines and JAMS
     namespace."""
     label = label.lower()
-    if label == "a'/a''":
-        label = "no_function"
-    if label == "b/c'":
-        label = "no_function"
-    if label == "bagpipes":
-        label = "instrumental"
-    if label == "banjo":
-        label = "instrumental"
-    if label == "code":
-        label = "coda"
-    if label == "dialog":
-        label = "spoken"
-    if label == "female":
-        label = "voice_female"
-    if label == "first":
-        label = "main theme"
-    if label == "guitar":
-        label = "instrumental"
-    if label == "hammond":
-        label = "instrumental"
-    if label == "main_theme":
-        label = "main theme"
-    if label == "male":
-        label = "voice_male"
-    if label == "muted":
-        label = "fade-out"
-    if label == "organ":
-        label = "instrumental"
-    if label == "out":
-        label = "outro"
-    if label == "piano":
-        label = "instrumental"
-    if label == "recap":
-        label = "recapitulation"
-    if label == "secondary_theme":
-        label = "secondary theme"
-    if label == "spoken_voice":
-        label = "spoken"
-    if label == "stage_speaking":
-        label = "spoken"
-    if label == "steel":
-        label = "instrumental"
-    if label == "tag":
-        label = "head"
-    if label == "trumpet":
-        label = "instrumental"
-    if label == "third":
-        label = "third theme"
-    if label == "violin":
-        label = "instrumental"
-    if label == "vocalizations":
-        label = "voice"
-    if label == "vocals":
-        label = "voice"
-    if label == "w/dialog":
-        label = "spoken"
-    return label
+    return labels_map.get(label, label)
 
 
 def parse_annotation(jam, path, annotation_id, level, metadata):
@@ -155,7 +131,7 @@ def parse_annotation(jam, path, annotation_id, level, metadata):
             continue
 
         if level == "function":
-            label = fix_labels(label)
+            label = fix_label(label)
 
         annot.data.add_observation(time=start_time, duration=dur, value=label)
     f.close()
