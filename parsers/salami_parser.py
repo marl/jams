@@ -2,8 +2,8 @@
 """
 This script parses the SALAMI v2.0 dataset into the JAMS format.
 
-Usage:
-    ./salami_parser.py salami-data-public/ [-o SalamiJAMS/]
+Usage example:
+    ./salami_parser.py salami-data-public/ OutputSalamiJAMS
 """
 
 __author__ = "Oriol Nieto"
