@@ -283,10 +283,8 @@ if __name__ == '__main__':
     parser.add_argument("in_dir",
                         action="store",
                         help="SALAMI main folder")
-    parser.add_argument("-o",
+    parser.add_argument("out_dir",
                         action="store",
-                        dest="out_dir",
-                        default="SalamiJAMS",
                         help="Output JAMS folder")
     args = parser.parse_args()
     start_time = time.time()
