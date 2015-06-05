@@ -30,8 +30,9 @@ __email__ = "oriol@nyu.edu"
 
 import argparse
 import logging
-import mir_eval
+import numpy as np
 import os
+import pandas as pd
 import six
 import time
 
@@ -80,8 +81,10 @@ def get_duration_from_annot(annot):
 
 def lab_to_range_annotation(lab_file, annot):
     """Populate a range annotation with a given lab file."""
-    table = pd.read_table(tag_file, header=None, squeeze=True).dropna(axis=1)
-    intervals, labels = mir_eval.io.load_labeled_intervals(lab_file, '\t+|\s+')
+    table = pd.read_table(lab_file, header=None, sep="\s+", names=range(20),
+                          squeeze=True).dropna(axis=1)
+    intervals = np.array(table[table.columns[:2]])
+    labels = table[table.columns[2]]
     for interval, label in zip(intervals, labels):
         time = float(interval[0])
         dur = float(interval[1]) - time
@@ -93,7 +96,10 @@ def lab_to_range_annotation(lab_file, annot):
 
 def lab_to_event_annotation(lab_file, annot):
     """Populate an event annotation with a given lab file."""
-    times, labels = mir_eval.io.load_labeled_events(lab_file, '\t+| *')
+    table = pd.read_table(lab_file, sep="\s+", names=range(20),
+                          squeeze=True).dropna(axis=1)
+    times = table[table.columns[0]]
+    labels = table[table.columns[1]]
     for time, label in zip(times, labels):
         time = float(time)
         annot.data.add_observation(time=time, duration=0, value=int(label))
