@@ -15,6 +15,7 @@ __email__ = "oriol@nyu.edu"
 import argparse
 import csv
 import logging
+import numpy as np
 import os
 import sys
 import time
@@ -163,15 +164,11 @@ def parse_annotation(jam, path, annotation_id, level, metadata):
     jam.annotations.append(annot)
 
 
-def fill_global_metadata(jam, metadata):
+def fill_global_metadata(jam, metadata, dur):
     """Fills the global metada into the JAMS jam."""
-    if metadata[5] == "":
-        metadata[5] = 0 # TODO: Maybe get duration from file?
-    else:
-        metadata[5] = float(metadata[5])
     meta = jams.FileMetadata(title=metadata[7],
                              artist=metadata[8],
-                             duration=metadata[5],
+                             duration=dur,
                              jams_version=jams.version.version)
     jam.file_metadata = meta
 
@@ -198,6 +195,27 @@ def create_annotations(jam, path, annotation_id, metadata):
         for level in levels]
 
 
+def get_duration(jam):
+    """Obtains the duration from the jams annotations.
+
+    Parameters
+    ----------
+    jam : object
+        JAMS object with at least one annotation.
+
+    Returns
+    -------
+    dur : float
+        Duration of the file, by taking the max last boundary of all
+        annotations (in seconds).
+    """
+    durs = []
+    for annotation in jam.annotations:
+        durs.append(annotation.data["time"].iloc[-1].total_seconds() +
+                    annotation.data["duration"].iloc[-1].total_seconds())
+    return np.max(durs)
+
+
 def create_JAMS(in_dir, metadata, out_file):
     """Creates a JAMS file given the path to a SALAMI track.
 
@@ -220,15 +238,18 @@ def create_JAMS(in_dir, metadata, out_file):
     # New JAMS and annotation
     jam = jams.JAMS()
 
-    # Global file metadata
-    fill_global_metadata(jam, metadata)
-
     # Create Annotations if they exist
     # Maximum 3 annotations per file
     for annotation_id in range(1, 4):
         if os.path.isfile(
             os.path.join(path, "textfile" + str(annotation_id) + ".txt")):
             create_annotations(jam, path, annotation_id, metadata)
+
+    # Get the duration from the annotations
+    dur = get_duration(jam)
+
+    # Global file metadata
+    fill_global_metadata(jam, metadata, dur)
 
     # Save JAMS
     jam.save(out_file)
