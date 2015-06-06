@@ -225,3 +225,22 @@ def test_ns_pitch_hz_invalid():
     for value in ['a', None, True]:
         yield __test, value
 
+
+def test_ns_key_mode():
+
+    def __test(keymode):
+        ann = Annotation(namespace='key_mode')
+
+        ann.append(time=0, duration=0, value=keymode, confidence=None)
+
+        ann.validate()
+
+    for line in ['B#locrian', u'Aminor']:
+        yield __test, line
+
+    for line in ['asdf', 'A&phrygian', 11, '', None]:
+        yield raises(SchemaError)(__test), line
+
+
+
+
