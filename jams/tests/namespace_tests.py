@@ -275,18 +275,69 @@ def test_ns_chord_roman_invalid():
         yield __test, value
 
     # test bad chords
-    for chord in [64, 'z', 'i/V64', 'Ab', False, None]:
+    for chord in [64, 'z', 'i/V64', 'Ab', 'iiii', False, None]:
         value = good_dict.copy()
         value['chord'] = chord
         yield __test, value
 
-    # And test missing fields
+    # test missing fields
     for field in good_dict.keys():
         value = good_dict.copy()
         del value[field]
         yield __test, value
 
-    # And test non-object values
+    # test non-object values
     yield __test, None
+
+
+def test_ns_pitch_class_valid():
+
+    def __test(pitch):
+        ann = Annotation(namespace='pitch_class')
+
+        ann.append(time=0, duration=1.0, value=pitch)
+        ann.append(time=1.0, duration=1.0, value=pitch)
+
+        ann.validate()
+
+    yield __test, dict(tonic='B', pitch=0)
+
+    yield __test, dict(tonic=u'Gb', pitch=11)
+
+
+def test_ns_pitch_class_invalid():
+
+    @raises(SchemaError)
+    def __test(pitch):
+        ann = Annotation(namespace='pitch_class')
+
+        ann.append(time=0, duration=1.0, value=pitch)
+        ann.append(time=1.0, duration=1.0, value=pitch)
+
+        ann.validate()
+
+    good_dict = dict(tonic='E', pitch=7)
+
+    # test bad tonics
+    for tonic in [42, 'H', 'a', 'F#b', True, None]:
+        value = good_dict.copy()
+        value['tonic'] = tonic
+        yield __test, value
+
+    # test bad pitches
+    for pitch in [-1, 12, 1.5, 'xyz', '3', False, None]:
+        value = good_dict.copy()
+        value['pitch'] = pitch
+        yield __test, value
+
+    # test missing fields
+    for field in good_dict.keys():
+        value = good_dict.copy()
+        del value[field]
+        yield __test, value
+
+    # test non-object values
+    yield __test, None
+
 
 
