@@ -235,12 +235,58 @@ def test_ns_key_mode():
 
         ann.validate()
 
-    for line in ['B#locrian', u'Aminor']:
-        yield __test, line
+    for val in ['B#locrian', u'Aminor']:
+        yield __test, val
 
-    for line in ['asdf', 'A&phrygian', 11, '', None]:
-        yield raises(SchemaError)(__test), line
+    for val in ['asdf', 'A&phrygian', 11, '', None]:
+        yield raises(SchemaError)(__test), val
 
 
+def test_ns_chord_roman_valid():
+
+    def __test(chord):
+        ann = Annotation(namespace='chord_roman')
+
+        ann.append(time=0, duration=1.0, value=chord)
+
+        ann.validate()
+
+    yield __test, dict(tonic='B', chord='bII7')
+
+    yield __test, dict(tonic=u'Gb', chord=u'ii7/#V')
+
+
+def test_ns_chord_roman_invalid():
+
+    @raises(SchemaError)
+    def __test(chord):
+        ann = Annotation(namespace='chord_roman')
+
+        ann.append(time=0, duration=1.0, value=chord)
+
+        ann.validate()
+
+    good_dict = dict(tonic='E', chord='iv64')
+
+    # test bad tonics
+    for tonic in [42, 'H', 'a', 'F#b', True, None]:
+        value = good_dict.copy()
+        value['tonic'] = tonic
+        yield __test, value
+
+    # test bad chords
+    for chord in [64, 'z', 'i/V64', 'Ab', False, None]:
+        value = good_dict.copy()
+        value['chord'] = chord
+        yield __test, value
+
+    # And test missing fields
+    for field in good_dict.keys():
+        value = good_dict.copy()
+        del value[field]
+        yield __test, value
+
+    # And test non-object values
+    yield __test, None
 
 
