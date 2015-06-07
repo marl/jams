@@ -79,6 +79,12 @@ def get_duration_from_annot(annot):
     return dur.total_seconds()
 
 
+def fix_chords(annot):
+    """Fixes the name of the chords."""
+    for i, label in enumerate(annot.data["value"]):
+        annot.data.loc[i, "value"] = CHORDS_DICT.get(label, label)
+
+
 def lab_to_range_annotation(lab_file, annot):
     """Populate a range annotation with a given lab file."""
     table = pd.read_table(lab_file, header=None, sep="\s+", names=range(20),
@@ -136,9 +142,14 @@ def process(in_dir, out_dir):
             lab_to_event_annotation(lab_file, annot)
             jam.annotations.append(annot)
         elif ISO_ATTRS['chord'] in lab_file:
+            #jam, annot = jams.util.import_lab(NS_DICT['chord'], lab_file,
+                                              #jam=jam)
+            #jam.annotations[-1].annotation_metadata = ann_meta
+            #fix_chords(jam.annotations[-1])
             annot = jams.Annotation(NS_DICT['chord'],
                                     annotation_metadata=ann_meta)
             lab_to_range_annotation(lab_file, annot)
+            #import pdb; pdb.set_trace()  # XXX BREAKPOINT
             jam.file_metadata.duration = get_duration_from_annot(annot)
             jam.annotations.append(annot)
         elif ISO_ATTRS['key'] in lab_file:
@@ -155,6 +166,7 @@ def process(in_dir, out_dir):
 
     for title in all_jams:
         # Save JAMS
+        import pdb; pdb.set_trace()  # XXX BREAKPOINT
         out_file = output_paths[title]
         jams.util.smkdirs(os.path.split(out_file)[0])
         all_jams[title].save(out_file)
