@@ -235,10 +235,10 @@ def test_ns_key_mode():
 
         ann.validate()
 
-    for val in ['B#locrian', u'Aminor']:
+    for val in ['B#:locrian', u'A:minor']:
         yield __test, val
 
-    for val in ['asdf', 'A&phrygian', 11, '', None]:
+    for val in ['asdf', 'A&:phrygian', 11, '', ':dorian', None]:
         yield raises(SchemaError)(__test), val
 
 
