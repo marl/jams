@@ -325,7 +325,7 @@ def test_ns_pitch_class_invalid():
         yield __test, value
 
     # test bad pitches
-    for pitch in [-1, 12, 1.5, 'xyz', '3', False, None]:
+    for pitch in [1.5, 'xyz', '3', False, None]:
         value = good_dict.copy()
         value['pitch'] = pitch
         yield __test, value
