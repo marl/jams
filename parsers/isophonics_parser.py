@@ -79,36 +79,19 @@ def get_duration_from_annot(annot):
     return dur.total_seconds()
 
 
-def fix_chords(annot):
+def fix_chord_labels(annot):
     """Fixes the name of the chords."""
     for i, label in enumerate(annot.data["value"]):
         annot.data.loc[i, "value"] = CHORDS_DICT.get(label, label)
 
 
-def lab_to_range_annotation(lab_file, annot):
-    """Populate a range annotation with a given lab file."""
-    table = pd.read_table(lab_file, header=None, sep="\s+", names=range(20),
-                          squeeze=True).dropna(axis=1)
-    intervals = np.array(table[table.columns[:2]])
-    labels = table[table.columns[2]]
-    for interval, label in zip(intervals, labels):
-        time = float(interval[0])
-        dur = float(interval[1]) - time
-        if dur <= 0:
-            continue
-        label = CHORDS_DICT.get(label, label)
-        annot.data.add_observation(time=time, duration=dur, value=label)
-
-
-def lab_to_event_annotation(lab_file, annot):
-    """Populate an event annotation with a given lab file."""
-    table = pd.read_table(lab_file, sep="\s+", names=range(20),
-                          squeeze=True).dropna(axis=1)
-    times = table[table.columns[0]]
-    labels = table[table.columns[1]]
-    for time, label in zip(times, labels):
-        time = float(time)
-        annot.data.add_observation(time=time, duration=0, value=int(label))
+def fix_ranges(annot):
+    """Remove the empty ranges from the annotation."""
+    idxs = []
+    for i, dur in enumerate(annot.data["duration"]):
+        if dur.total_seconds() <= 0:
+            idxs.append(i)
+    annot.data.drop(idxs, inplace=True)
 
 
 def process(in_dir, out_dir):
@@ -130,43 +113,36 @@ def process(in_dir, out_dir):
             six.print_(title, "->", output_paths[title])
 
         jam = all_jams[title]
+        if ISO_ATTRS['beat'] in lab_file:
+            tmp_jam, annot = jams.util.import_lab(NS_DICT['beat'], lab_file,
+                                                  jam=jam)
+        elif ISO_ATTRS['chord'] in lab_file:
+            tmp_jam, annot = jams.util.import_lab(NS_DICT['chord'], lab_file,
+                                                  jam=jam)
+            fix_chord_labels(jam.annotations[-1])
+            fix_ranges(jam.annotations[-1])
+            jam.file_metadata.duration = get_duration_from_annot(annot)
+        elif ISO_ATTRS['key'] in lab_file:
+            tmp_jam, annot = jams.util.import_lab(NS_DICT['key'], lab_file,
+                                                  jam=jam)
+            fix_ranges(jam.annotations[-1])
+        elif ISO_ATTRS['segment'] in lab_file:
+            tmp_jam, annot = jams.util.import_lab(NS_DICT['segment'], lab_file,
+                                                  jam=jam)
+            fix_ranges(jam.annotations[-1])
+            jam.file_metadata.duration = get_duration_from_annot(annot)
+
+        # Add Metadata
         curator = jams.Curator(name="Matthias Mauch",
                                email="m.mauch@qmul.ac.uk")
         ann_meta = jams.AnnotationMetadata(curator=curator,
                                            version=1.0,
                                            corpus="Isophonics",
                                            annotator=None)
-        if ISO_ATTRS['beat'] in lab_file:
-            annot = jams.Annotation(NS_DICT['beat'],
-                                    annotation_metadata=ann_meta)
-            lab_to_event_annotation(lab_file, annot)
-            jam.annotations.append(annot)
-        elif ISO_ATTRS['chord'] in lab_file:
-            #jam, annot = jams.util.import_lab(NS_DICT['chord'], lab_file,
-                                              #jam=jam)
-            #jam.annotations[-1].annotation_metadata = ann_meta
-            #fix_chords(jam.annotations[-1])
-            annot = jams.Annotation(NS_DICT['chord'],
-                                    annotation_metadata=ann_meta)
-            lab_to_range_annotation(lab_file, annot)
-            #import pdb; pdb.set_trace()  # XXX BREAKPOINT
-            jam.file_metadata.duration = get_duration_from_annot(annot)
-            jam.annotations.append(annot)
-        elif ISO_ATTRS['key'] in lab_file:
-            annot = jams.Annotation(NS_DICT['key'],
-                                    annotation_metadata=ann_meta)
-            lab_to_range_annotation(lab_file, annot)
-            jam.annotations.append(annot)
-        elif ISO_ATTRS['segment'] in lab_file:
-            annot = jams.Annotation(NS_DICT['segment'],
-                                    annotation_metadata=ann_meta)
-            lab_to_range_annotation(lab_file, annot)
-            jam.annotations.append(annot)
-            jam.file_metadata.duration = get_duration_from_annot(annot)
+        jam.annotations[-1].annotation_metadata = ann_meta
 
     for title in all_jams:
         # Save JAMS
-        import pdb; pdb.set_trace()  # XXX BREAKPOINT
         out_file = output_paths[title]
         jams.util.smkdirs(os.path.split(out_file)[0])
         all_jams[title].save(out_file)
