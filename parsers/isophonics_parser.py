@@ -94,6 +94,15 @@ def fix_ranges(annot):
     annot.data.drop(idxs, inplace=True)
 
 
+def fix_silence(annot):
+    """Removes the silences for the keys."""
+    idxs = []
+    for i, label in enumerate(annot.data["value"]):
+        if label.lower() == "silence":
+            idxs.append(i)
+    annot.data.drop(idxs, inplace=True)
+
+
 def process(in_dir, out_dir):
     """Converts the original Isophonic files into the JAMS format, and saves
     them in the out_dir folder."""
@@ -126,6 +135,7 @@ def process(in_dir, out_dir):
             tmp_jam, annot = jams.util.import_lab(NS_DICT['key'], lab_file,
                                                   jam=jam)
             fix_ranges(jam.annotations[-1])
+            fix_silence(jam.annotations[-1])
         elif ISO_ATTRS['segment'] in lab_file:
             tmp_jam, annot = jams.util.import_lab(NS_DICT['segment'], lab_file,
                                                   jam=jam)
@@ -139,7 +149,10 @@ def process(in_dir, out_dir):
                                            version=1.0,
                                            corpus="Isophonics",
                                            annotator=None)
-        jam.annotations[-1].annotation_metadata = ann_meta
+        try:
+            jam.annotations[-1].annotation_metadata = ann_meta
+        except:
+            pass
 
     for title in all_jams:
         # Save JAMS
