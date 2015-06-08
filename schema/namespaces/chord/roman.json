@@ -4,10 +4,10 @@
             "type": "object",
             "properties": {
                 "tonic": { "type": "string",
-                           "pattern": "^[A-G][b#]*$" },
+                           "pattern": "^[A-G][b#]?$" },
                 "chord": { 
                     "type": "string",
-                    "pattern": "^([#]?(i|I))|([b#]?(ii|II))|([b]?(iii|III))|([#]?(iv|IV))|([b#]?(v|V))|([b#]?(vi|VI))|([b]?(vii|VII))[oasdhx+]?[0-9]?[0-9]?(/([#]?(i|I))|([b#]?(ii|II))|([b]?(iii|III))|([#]?(iv|IV))|([b#]?(v|V))|([b#]?(vi|VI))|([b]?(vii|VII)))?$"
+                    "pattern": "^([b#]?(i|I|ii|II|iii|III|iv|IV|v|V|vi|VI|vii|VII))[oasdhx+]?[0-9]?[0-9]?(/([b#]?(i|I|ii|II|iii|III|iv|IV|v|V|vi|VI|vii|VII)))?$"
                 }
             },
             "required": ["tonic", "chord"]

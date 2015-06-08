@@ -3,7 +3,7 @@
         "value": { 
             "type": "object",
             "properties": {
-                "tonic": { "type": "string", "pattern": "^[A-G][b#]*$" },
+                "tonic": { "type": "string", "pattern": "^[A-G][b#]?$" },
                 "pitch": { "type": "integer" }
             },
             "required": ["tonic", "pitch"]
