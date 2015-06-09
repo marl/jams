@@ -13,13 +13,11 @@ etc) is something like the following:
             /Album  # -- may not exist --
                 /*.lab / *.txt
 
-To parse the entire dataset, you simply need the path to the Isophonics dataset
-and an optional output folder.
+To parse the entire dataset, you simply need the path to the part of the
+Isophonics dataset to parse and an optional output folder.
 
 Example:
-./isohpnics_parser.py ~/datasets/Isophonics/Carole King \
--o ~/datasets/Isophonics/Carole_King_jams
-
+./isohpnics_parser.py ~/datasets/Isophonics/Carole King IsophonicsJAMS
 """
 
 __author__ = "Oriol Nieto"
@@ -33,7 +31,6 @@ import logging
 import numpy as np
 import os
 import pandas as pd
-import six
 import time
 
 import jams
@@ -50,7 +47,7 @@ NS_DICT = {'beat': 'beat',
            'key': 'key_mode',
            'segment': 'segment_isophonics'}
 
-# Map chords that doesn't make much sense
+# Map chords that don't make much sense
 CHORDS_DICT = {
     "E:4": "E:sus4",
     "Db:6": "Db:maj6",
@@ -64,6 +61,11 @@ CHORDS_DICT = {
     "A:6": "A:maj6",
     "E:sus": "E",
     "E:7sus": "E:maj7"
+}
+
+# Map keys that don't make much sense
+KEYS_DICT = {
+    "C#:modal" : "C#"
 }
 
 def fill_file_metadata(jam, artist, title):
@@ -83,6 +85,23 @@ def fix_chord_labels(annot):
     """Fixes the name of the chords."""
     for i, label in enumerate(annot.data["value"]):
         annot.data.loc[i, "value"] = CHORDS_DICT.get(label, label)
+
+
+def fix_key_labels(annot):
+    """Fixes the name of the keys."""
+    for i, label in enumerate(annot.data["value"]):
+        annot.data.loc[i, "value"] = KEYS_DICT.get(label, label)
+
+
+def fix_beats_values(annot):
+    """Fixes the beat labels."""
+    for i, value in enumerate(annot.data["value"]):
+        try:
+            annot.data.loc[i, "value"] = float(value)
+        except ValueError:
+            annot.data.loc[i, "value"] = None
+    # Convert to float
+    annot.data["value"] = annot.data["value"].astype("float")
 
 
 def fix_ranges(annot):
@@ -119,12 +138,17 @@ def process(in_dir, out_dir):
             fill_file_metadata(all_jams[title], artist=parts[1], title=title)
             output_paths[title] = os.path.join(
                 out_dir, *parts[1:]).replace(".lab", ".jams")
-            six.print_(title, "->", output_paths[title])
+            logging.info("%s -> %s" % (title, output_paths[title]))
 
         jam = all_jams[title]
         if ISO_ATTRS['beat'] in lab_file:
-            tmp_jam, annot = jams.util.import_lab(NS_DICT['beat'], lab_file,
-                                                  jam=jam)
+            try:
+                tmp_jam, annot = jams.util.import_lab(NS_DICT['beat'], lab_file,
+                                                      jam=jam)
+            except TypeError:
+                tmp_jam, annot = jams.util.import_lab(NS_DICT['beat'], lab_file,
+                                                      jam=jam, sep="\t+")
+            fix_beats_values(annot)
         elif ISO_ATTRS['chord'] in lab_file:
             tmp_jam, annot = jams.util.import_lab(NS_DICT['chord'], lab_file,
                                                   jam=jam)
@@ -134,6 +158,7 @@ def process(in_dir, out_dir):
         elif ISO_ATTRS['key'] in lab_file:
             tmp_jam, annot = jams.util.import_lab(NS_DICT['key'], lab_file,
                                                   jam=jam)
+            fix_key_labels(jam.annotations[-1])
             fix_ranges(jam.annotations[-1])
             fix_silence(jam.annotations[-1])
         elif ISO_ATTRS['segment'] in lab_file:
@@ -149,13 +174,10 @@ def process(in_dir, out_dir):
                                            version=1.0,
                                            corpus="Isophonics",
                                            annotator=None)
-        try:
-            jam.annotations[-1].annotation_metadata = ann_meta
-        except:
-            pass
+        jam.annotations[-1].annotation_metadata = ann_meta
 
+    logging.info("Saving and validating JAMS...")
     for title in all_jams:
-        # Save JAMS
         out_file = output_paths[title]
         jams.util.smkdirs(os.path.split(out_file)[0])
         all_jams[title].save(out_file)
