@@ -79,7 +79,7 @@ __SCHEMA__ = __load_schema()
 
 
 @contextlib.contextmanager
-def _open(name_or_fdesc, mode='rb', fmt='auto'):
+def _open(name_or_fdesc, mode='r', fmt='auto'):
     '''An intelligent wrapper for ``open``.
 
     Parameters
@@ -182,7 +182,7 @@ def load(path_or_file, validate=True, strict=True, fmt='auto'):
     JAMS.save
     """
 
-    with _open(path_or_file, mode='rb', fmt=fmt) as fdesc:
+    with _open(path_or_file, mode='r', fmt=fmt) as fdesc:
         jam = JAMS(**json.load(fdesc))
 
     if validate:
@@ -1173,7 +1173,7 @@ class JAMS(JObject):
 
         self.validate(strict=strict)
 
-        with _open(path_or_file, mode='wb', fmt=fmt) as fdesc:
+        with _open(path_or_file, mode='w', fmt=fmt) as fdesc:
             json.dump(self.__json__, fdesc, indent=2)
 
     def validate(self, strict=True):
