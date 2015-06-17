@@ -579,7 +579,7 @@ def test_load_fail():
     tdir = tempfile.mkdtemp()
     yield raises(IOError)(__test), os.path.join(tdir, 'nonexistent.jams'), 'jams'
     os.rmdir(tdir)
-    
+
     # Make a non-json file
     tdir = tempfile.mkdtemp()
     badfile = os.path.join(tdir, 'nonexistent.jams')
@@ -589,10 +589,13 @@ def test_load_fail():
     os.unlink(badfile)
     os.rmdir(tdir)
 
+    tdir = tempfile.mkdtemp()
     for ext in ['txt', '']:
-        yield raises(jams.ParameterError)(__test), 'nonexistent.{:s}'.format(ext), 'auto'
-        yield raises(jams.ParameterError)(__test), 'nonexistent.{:s}'.format(ext), ext
-        yield raises(jams.ParameterError)(__test), 'nonexistent.jams', ext
+        badfile = os.path.join(tdir, 'nonexistent')
+        yield raises(jams.ParameterError)(__test), '{:s}.{:s}'.format(badfile, ext), 'auto'
+        yield raises(jams.ParameterError)(__test), '{:s}.{:s}'.format(badfile, ext), ext
+        yield raises(jams.ParameterError)(__test), '{:s}.jams'.format(badfile), ext
+    os.rmdir(tdir)
 
 
 def test_load_valid():
