@@ -438,22 +438,24 @@ def test_jams():
 
 def test_jams_save():
 
-    fn = 'fixtures/valid.jams'
+    def __test(ext):
+        fn = 'fixtures/valid.{:s}'.format(ext)
+        jam = jams.load(fn)
 
-    jam = jams.load(fn)
+        # Save to a temp file
+        _, jam_out = tempfile.mkstemp(suffix='.{:s}'.format(ext))
 
-    # Save to a temp file
-    _, jam_out = tempfile.mkstemp(suffix='.jams')
+        try:
+            jam.save(jam_out)
 
-    try:
-        jam.save(jam_out)
+            jam2 = jams.load(jam_out)
 
-        jam2 = jams.load(jam_out)
+            eq_(jam, jam2)
+        finally:
+            os.unlink(jam_out)
 
-        eq_(jam, jam2)
-    finally:
-        os.unlink(jam_out)
-
+    for ext in ['jams', 'jamz']:
+        yield __test, ext
 
 def test_jams_add():
 
