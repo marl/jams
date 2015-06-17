@@ -41,6 +41,8 @@ import os
 import re
 import six
 import warnings
+import contextlib
+import gzip
 
 from pkg_resources import resource_filename
 
@@ -76,20 +78,90 @@ def __load_schema():
 __SCHEMA__ = __load_schema()
 
 
-def load(filepath, validate=True, strict=True):
+@contextlib.contextmanager
+def _open(name_or_fdesc, mode='rb', fmt='auto'):
+    '''An intelligent wrapper for ``open``.
+
+    Parameters
+    ----------
+    name_or_fdesc : string-type or open file descriptor
+        If a string type, refers to the path to a file on disk.
+
+        If an open file descriptor, it is returned as-is.
+
+    mode : string
+        The mode with which to open the file.
+        See ``open`` for details.
+
+    fmt : string ['auto', 'jams', 'json', 'jamz']
+        The encoding for the input/output stream.
+
+        If `auto`, the format is inferred from the filename extension.
+
+        Otherwise, use the specified coding.
+
+
+    See Also
+    --------
+    open
+    gzip.open
+    '''
+
+    open_map = {'jams': open,
+                'json': open,
+                'jamz': gzip.open,
+                'gz': gzip.open}
+
+    # If we've been given an open descriptor, do the right thing
+    if hasattr(name_or_fdesc, 'read') or hasattr(name_or_fdesc, 'write'):
+        yield name_or_fdesc
+
+    elif isinstance(name_or_fdesc, six.string_types):
+        # Infer the opener from the extension
+
+        if fmt == 'auto':
+            _, ext = os.path.splitext(name_or_fdesc)
+
+            # Pull off the extension separator
+            ext = ext[1:]
+        elif fmt:
+            ext = fmt
+
+        try:
+            with open_map[ext.lower()](name_or_fdesc, mode=mode) as fdesc:
+                yield fdesc
+        except KeyError:
+            raise ParameterError('Unknown JAMS extension format: "{:s}"'.format(ext))
+
+    else:
+        # Don't know how to handle this. Raise a parameter error
+        raise ParameterError('Invalid filename or descriptor: {:r}'.format(name_or_fdesc))
+
+
+def load(path_or_file, validate=True, strict=True, fmt='auto'):
     r"""Load a JAMS Annotation from a file.
 
 
     Parameters
     ----------
-    filepath : str
+    path_or_file : str or file-like
         Path to the JAMS file to load
+        OR
+        An open file handle to load from.
 
     validate : bool
         Attempt to validate the JAMS object
 
     strict : bool
         if `validate == True`, enforce strict schema validation
+
+    fmt : str ['auto', 'jams', 'jamz']
+        The encoding format of the input
+
+        If `auto`, encoding is inferred from the file name.
+
+        If the input is an open file handle, `jams` encoding
+        is used.
 
 
     Returns
@@ -110,7 +182,7 @@ def load(filepath, validate=True, strict=True):
     JAMS.save
     """
 
-    with open(filepath, 'r') as fdesc:
+    with _open(path_or_file, mode='r', fmt=fmt) as fdesc:
         jam = JAMS(**json.load(fdesc))
 
     if validate:
@@ -1066,16 +1138,27 @@ class JAMS(JObject):
 
         return self.annotations.search(**kwargs)
 
-    def save(self, filepath, strict=True):
+    def save(self, path_or_file, strict=True, fmt='auto'):
         """Serialize annotation as a JSON formatted stream to file.
 
         Parameters
         ----------
-        filepath : str
+        path_or_file : str or file-like
             Path to save the JAMS object on disk
+            OR
+            An open file descriptor to write into
 
         strict : bool
             Force strict schema validation
+
+        fmt : str ['auto', 'jams', 'jamz']
+            The output encoding format.
+
+            If `auto`, it is inferred from the file name.
+
+            If the input is an open file handle, `jams` encoding
+            is used.
+
 
         Raises
         ------
@@ -1090,7 +1173,7 @@ class JAMS(JObject):
 
         self.validate(strict=strict)
 
-        with open(filepath, 'w') as fdesc:
+        with _open(path_or_file, mode='w', fmt=fmt) as fdesc:
             json.dump(self.__json__, fdesc, indent=2)
 
     def validate(self, strict=True):

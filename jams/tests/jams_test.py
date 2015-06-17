@@ -443,7 +443,7 @@ def test_jams_save():
     jam = jams.load(fn)
 
     # Save to a temp file
-    _, jam_out = tempfile.mkstemp()
+    _, jam_out = tempfile.mkstemp(suffix='.jams')
 
     try:
         jam.save(jam_out)
