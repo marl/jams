@@ -124,7 +124,7 @@ def _open(name_or_fdesc, mode='rb', fmt='auto'):
 
             # Pull off the extension separator
             ext = ext[1:]
-        elif fmt:
+        else:
             ext = fmt
 
         try:

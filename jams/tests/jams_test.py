@@ -569,13 +569,15 @@ def test_jobject_bad_field():
 def test_load_fail():
     # 1. test bad file path
     # 2. test non-json file
+    # 3. test bad extensions
+    # 4. test bad codecs
 
-    def __test(filename):
-        jams.load(filename)
+    def __test(filename, fmt):
+        jams.load(filename, fmt=fmt)
 
     # Make a non-existent file
     tdir = tempfile.mkdtemp()
-    yield raises(IOError)(__test), os.path.join(tdir, 'nonexistent.jams')
+    yield raises(IOError)(__test), os.path.join(tdir, 'nonexistent.jams'), 'jams'
     os.rmdir(tdir)
     
     # Make a non-json file
@@ -583,9 +585,14 @@ def test_load_fail():
     badfile = os.path.join(tdir, 'nonexistent.jams')
     with open(badfile, mode='w') as fp:
         fp.write('some garbage')
-    yield raises(ValueError)(__test), os.path.join(tdir, 'nonexistent.jams')
+    yield raises(ValueError)(__test), os.path.join(tdir, 'nonexistent.jams'), 'jams'
     os.unlink(badfile)
     os.rmdir(tdir)
+
+    for ext in ['txt', '']:
+        yield raises(jams.ParameterError)(__test), 'nonexistent.{:s}'.format(ext), 'auto'
+        yield raises(jams.ParameterError)(__test), 'nonexistent.{:s}'.format(ext), ext
+        yield raises(jams.ParameterError)(__test), 'nonexistent.jams', ext
 
 
 def test_load_valid():
