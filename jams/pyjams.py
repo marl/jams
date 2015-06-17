@@ -128,8 +128,15 @@ def _open(name_or_fdesc, mode='r', fmt='auto'):
             ext = fmt
 
         try:
-            with open_map[ext.lower()](name_or_fdesc, mode=mode) as fdesc:
+            ext = ext.lower()
+
+            # Force text mode if we're using gzip
+            if ext in ['jamz', 'gz'] and 't' not in mode:
+                mode = '{:s}t'.format(mode)
+
+            with open_map[ext](name_or_fdesc, mode=mode) as fdesc:
                 yield fdesc
+
         except KeyError:
             raise ParameterError('Unknown JAMS extension format: "{:s}"'.format(ext))
 
