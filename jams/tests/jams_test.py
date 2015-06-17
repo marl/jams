@@ -595,11 +595,12 @@ def test_load_valid():
         jams.load(filename, validate=valid, strict=strict)
 
 
-    fn = 'fixtures/valid.jams'
+    fn = 'fixtures/valid'
 
-    for validate in [False, True]:
-        for strict in [False, True]:
-            yield __test, fn, validate, strict
+    for ext in ['jams', 'jamz']:
+        for validate in [False, True]:
+            for strict in [False, True]:
+                yield __test, '{:s}.{:s}'.format(fn, ext), validate, strict
 
 
 def test_load_invalid():
