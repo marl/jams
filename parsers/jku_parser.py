@@ -18,6 +18,13 @@ import os
 import time
 
 
+def fill_file_metadata(jam, artist, title):
+    """Fills the global metada into the JAMS jam."""
+    jam.file_metadata.artist = artist
+    jam.file_metadata.duration = None
+    jam.file_metadata.title = title
+
+
 def get_out_file(patterns, out_dir):
     """Given a set of patterns corresponding to a single musical piece and the
     output directory, get the output file path.
@@ -41,11 +48,57 @@ def get_out_file(patterns, out_dir):
                         name_split[idx_offset + 3] + ".txt")
 
 
-def parse_patterns(patterns, out_file):
+def find_in_csv(csv_file, occ_file):
+    """Finds the data of the occ_file in the csv_file.
+
+    Parameters
+    ----------
+    csv_file : str
+        Path to the main csv_file.
+    occ_file : str
+        Path to the occurrence csv occ_file.
+
+    Returns
+    -------
+    start : int
+        Start index of the csv_file.
+    end : int
+        End index of the csv_file.
+    """
+    # Read CSV files
+    with open(occ_file, "r") as f:
+        occurrences = list(csv.reader(f))
+    with open(csv_file, "r") as f:
+        full_track = list(csv.reader(f))
+
+    # Find the indeces
+    start = None
+    for i, row in enumerate(full_track):
+        if row[0] == occurrences[0][0] and row[1] == occurrences[0][1]:
+            start = i
+            break
+    end = None
+    for i, row in enumerate(full_track):
+        if row[0] == occurrences[-1][0] and row[1] == occurrences[-1][1]:
+            end = i + 1     # End correct position + 1
+            break
+
+    # Make sure we found the data
+    assert start is not None
+    assert end is not None
+
+    return start, end
+
+
+def parse_patterns(csv_file, kern_file, patterns, out_file):
     """Parses the set of patterns and saves the results into the output file.
 
     Parameters
     ----------
+    csv_file : str
+        Path to the main csv file from which the pattern is extracted.
+    kern_file : str
+        Path to the main kern file from which to extract the metadata.
     patterns: list of list of strings (files)
         Set of all the patterns with the occurrences of a given piece.
     out_file: string (path)
@@ -55,6 +108,7 @@ def parse_patterns(patterns, out_file):
     # Create JAMS and add some metada
     jam = jams.JAMS()
     curator = jams.Curator(name="Tom Collins", email="tom.collins@dmu.ac.uk")
+    fill_file_metadata(jam, artist, title)
     ann_meta = jams.AnnotationMetadata(curator=curator,
                                        version="August2013",
                                        corpus="JKU Development Dataset")
@@ -67,18 +121,19 @@ def parse_patterns(patterns, out_file):
     for pattern in patterns:
         occ_n = 1
         for occ_file in pattern:
-            with open(occ_file, "r") as f:
-                file_reader = csv.reader(f)
-                for fields in file_reader:
+            start, end = find_in_csv(csv_file, occ_file)
+            with open(csv_file, "r") as f:
+                file_reader = list(csv.reader(f))
+                for i in range(start, end):
                     value = {
-                        "midi_pitch" : float(fields[1]),
-                        "morph_pitch" : float(fields[2]),
-                        "staff" : int(fields[4]),
-                        "pattern_id" : pattern_n,
-                        "occurrence_id" : occ_n
+                        "midi_pitch": float(file_reader[i][1]),
+                        "morph_pitch": float(file_reader[i][2]),
+                        "staff": int(float(file_reader[i][4])),  # Hack to convert 0.000000000 into an int
+                        "pattern_id": pattern_n,
+                        "occurrence_id": occ_n
                     }
-                    annot.data.add_observation(time=float(fields[0]),
-                                               duration=float(fields[3]),
+                    annot.data.add_observation(time=float(file_reader[i][0]),
+                                               duration=float(file_reader[i][3]),
                                                value=value)
             occ_n += 1
         pattern_n += 1
@@ -114,9 +169,7 @@ def get_gt_patterns(annotators):
                 # Get all the occurrences for the current pattern
                 occurrences = glob.glob(os.path.join(pattern, "occurrences",
                                                      "csv", "*.csv"))
-                O = []
-                [O.append(occurrence) for occurrence in occurrences]
-                P.append(O)
+                P.append(occurrences)
     return P
 
 
@@ -142,9 +195,17 @@ def process(jku_dir, out_dir):
 
     # Main loop to retrieve all the patterns from the GT
     all_patterns = []
+    csv_files = []
+    kern_files = []
     for piece in pieces:
         logging.info("Parsing piece %s" % piece)
         for type in types:
+            # Get the main csv and kern file
+            csv_files.append(glob.glob(os.path.join(piece, type, "csv",
+                                                    "*.csv"))[0])
+            kern_files.append(glob.glob(os.path.join(piece, type, "kern",
+                                                    "*.krn"))[0])
+
             # Get all the annotators for the current piece
             annotators = glob.glob(os.path.join(piece, type,
                                                 "repeatedPatterns", "*"))
@@ -164,9 +225,10 @@ def process(jku_dir, out_dir):
             all_patterns.append(get_gt_patterns(annotators))
 
     # For the patterns of one given file, parse them into a single file
-    for patterns in all_patterns:
+    for csv_file, kern_file, patterns in zip(csv_files, kern_files,
+                                             all_patterns):
         out_file = get_out_file(patterns, out_dir)
-        parse_patterns(patterns, out_file)
+        parse_patterns(csv_file, kern_file, patterns, out_file)
 
 
 if __name__ == '__main__':
