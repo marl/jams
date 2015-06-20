@@ -18,11 +18,52 @@ import os
 import time
 
 
-def fill_file_metadata(jam, artist, title):
+def get_bpm(kern_file):
+    """Gets the beats per minute from a kern_file."""
+    with open(kern_file) as f:
+        lines = f.readlines()
+        for line in lines:
+            if "*MM" in line:
+                bpm = float(line.split(" ")[0].split("*MM")[-1])
+    return bpm
+
+
+def get_first_last_onset(csv_file):
+    """Gets the first and last onset times."""
+    with open(csv_file) as f:
+        full_track = list(csv.reader(f))
+    first_onset = float(full_track[0][0])
+    if first_onset < 0:
+        first_onset = abs(first_onset)  # we only store the first onset if it is
+                                        # negative (i.e., starts in an upbeat)
+    else:
+        first_onset = 0
+    last_onset = float(full_track[-1][0])
+    return first_onset, last_onset
+
+
+def fill_file_metadata(jam, kern_file, csv_file):
     """Fills the global metada into the JAMS jam."""
-    jam.file_metadata.artist = artist
-    jam.file_metadata.duration = None
-    jam.file_metadata.title = title
+    artist = None
+    title = None
+
+    # Get first and last onset
+    first_onset, last_onset = get_first_last_onset(csv_file)
+
+    # Get the rest of metadata
+    bpm = get_bpm(kern_file)
+    with open(kern_file) as f:
+        lines = f.readlines()
+        for line in lines:
+            if "!!!COM" in line:
+                artist = line.split(": ")[-1]
+            if "!!!OTL" in line:
+                title = line.split(": ")[-1]
+
+    # Assign metadata
+    jam.file_metadata.artist = artist.strip("\n")
+    jam.file_metadata.duration = (first_onset + last_onset) / float(bpm)
+    jam.file_metadata.title = title.strip("\n")
 
 
 def get_out_file(patterns, out_dir):
@@ -45,7 +86,7 @@ def get_out_file(patterns, out_dir):
     name_split = patterns[0][0].split("/")
     idx_offset = name_split.index("groundTruth") - 1
     return os.path.join(out_dir, name_split[idx_offset + 2] + "-" +
-                        name_split[idx_offset + 3] + ".txt")
+                        name_split[idx_offset + 3] + ".jams")
 
 
 def find_in_csv(csv_file, occ_file):
@@ -108,7 +149,7 @@ def parse_patterns(csv_file, kern_file, patterns, out_file):
     # Create JAMS and add some metada
     jam = jams.JAMS()
     curator = jams.Curator(name="Tom Collins", email="tom.collins@dmu.ac.uk")
-    fill_file_metadata(jam, artist, title)
+    fill_file_metadata(jam, kern_file, csv_file)
     ann_meta = jams.AnnotationMetadata(curator=curator,
                                        version="August2013",
                                        corpus="JKU Development Dataset")
@@ -116,6 +157,10 @@ def parse_patterns(csv_file, kern_file, patterns, out_file):
     # Create actual annotation
     annot = jams.Annotation(namespace="pattern_jku",
                             annotation_metadata=ann_meta)
+
+    # Get bpm and first and last onsets
+    bpm = get_bpm(kern_file)
+    first_onset, last_onset = get_first_last_onset(csv_file)
 
     pattern_n = 1
     for pattern in patterns:
@@ -132,7 +177,9 @@ def parse_patterns(csv_file, kern_file, patterns, out_file):
                         "pattern_id": pattern_n,
                         "occurrence_id": occ_n
                     }
-                    annot.data.add_observation(time=float(file_reader[i][0]),
+                    # Transform onset to time
+                    time = (first_onset + float(file_reader[i][0])) / float(bpm)
+                    annot.data.add_observation(time=time,
                                                duration=float(file_reader[i][3]),
                                                value=value)
             occ_n += 1
@@ -142,7 +189,7 @@ def parse_patterns(csv_file, kern_file, patterns, out_file):
     jam.annotations.append(annot)
 
     # Save file
-    jam.save("test.jams")
+    jam.save(out_file)
 
 
 def get_gt_patterns(annotators):
@@ -198,7 +245,7 @@ def process(jku_dir, out_dir):
     csv_files = []
     kern_files = []
     for piece in pieces:
-        logging.info("Parsing piece %s" % piece)
+        logging.info("Reading piece %s" % piece)
         for type in types:
             # Get the main csv and kern file
             csv_files.append(glob.glob(os.path.join(piece, type, "csv",
@@ -227,6 +274,7 @@ def process(jku_dir, out_dir):
     # For the patterns of one given file, parse them into a single file
     for csv_file, kern_file, patterns in zip(csv_files, kern_files,
                                              all_patterns):
+        logging.info("Parsing file %s" % os.path.basename(csv_file))
         out_file = get_out_file(patterns, out_dir)
         parse_patterns(csv_file, kern_file, patterns, out_file)
 
