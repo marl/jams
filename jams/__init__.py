@@ -6,7 +6,7 @@ from .exceptions import *
 from . import util
 from . import ns
 from . import eval
-from .version import version as __VERSION__
+from .version import version as __version__
 
 from .pyjams import *
 
