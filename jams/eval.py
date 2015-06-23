@@ -353,7 +353,7 @@ def pattern_to_mireval(ann):
         patterns[pattern_id][occurrence_id].append(obs)
 
     # Convert to list-list-tuple format for mir_eval
-    return [_.values() for _ in six.itervalues(patterns)]
+    return [list(_.values()) for _ in six.itervalues(patterns)]
 
 
 def pattern(ref, est, **kwargs):
