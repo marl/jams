@@ -24,7 +24,7 @@ import mir_eval
 
 from .exceptions import NamespaceError
 
-__all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'tempo']
+__all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'tempo', 'pattern']
 
 
 def validate_annotation(ann, namespace):
