@@ -13,7 +13,10 @@ Evaluation
     onset
     segment
     tempo
+    pattern
 '''
+
+from collections import defaultdict
 
 import numpy as np
 import mir_eval
@@ -311,5 +314,85 @@ def melody(ref, est, **kwargs):
                                     est_interval[:, 0], np.asarray(est_freq),
                                     **kwargs)
 
-# TODO
-# pattern
+
+# pattern detection
+def pattern_to_mireval(ann):
+    '''Convert a pattern_jku annotation object to mir_eval format.
+
+    Parameters
+    ----------
+    ann : jams.Annotation
+        Must have `namespace='pattern_jku'`
+
+    Returns
+    -------
+    patterns : list of list of tuples
+        - `patterns[x]` is a list containing all occurrences of pattern x
+
+        - `patterns[x][y]` is a list containing all notes for
+           occurrence y of pattern x
+
+        - `patterns[x][y][z]` contains a time-note tuple
+          `(time, midi note)`
+    '''
+
+    # It's easier to work with dictionaries, since we can't assume
+    # sequential pattern or occurrence identifiers
+
+    patterns = defaultdict(lambda: defaultdict(list))
+
+    # Iterate over the data in interval-value format
+    for interval, observation in zip(*ann.data.to_interval_values()):
+
+        pattern_id = observation['pattern_id']
+        occurrence_id = observation['occurrence_id']
+        obs = (interval[0], observation['midi_pitch'])
+
+        # Push this note observation into the correct pattern/occurrence
+        patterns[pattern_id][occurrence_id].append(obs)
+
+    # Convert to list-list-tuple format for mir_eval
+    return [_.values() for _ in patterns.values()]
+
+
+def pattern(ref, est, **kwargs):
+    r'''Pattern detection evaluation
+
+    Parameters
+    ----------
+    ref : jams.Annotation
+        Reference annotation object
+    est : jams.Annotation
+        Estimated annotation object
+    kwargs
+        Additional keyword arguments
+
+    Returns
+    -------
+    scores : dict
+        Dictionary of scores, where the key is the metric name (str) and
+        the value is the (float) score achieved.
+
+    See Also
+    --------
+    mir_eval.pattern.evaluate
+
+    Examples
+    --------
+    >>> # Load in the JAMS objects
+    >>> ref_jam = jams.load('reference.jams')
+    >>> est_jam = jams.load('estimated.jams')
+    >>> # Select the first relevant annotations
+    >>> ref_ann = ref_jam.search(namespace='pattern_jku')[0]
+    >>> est_ann = est_jam.search(namespace='pattern_jku')[0]
+    >>> scores = jams.eval.pattern(ref_ann, est_ann)
+    '''
+
+    namespace = 'pattern_jku'
+    validate_annotation(ref, namespace)
+    validate_annotation(est, namespace)
+
+    ref_patterns = pattern_to_mireval(ref)
+    est_patterns = pattern_to_mireval(est)
+
+    return mir_eval.pattern.evaluate(ref_patterns, est_patterns, **kwargs)
