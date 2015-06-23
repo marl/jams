@@ -226,6 +226,37 @@ def test_ns_pitch_hz_invalid():
         yield __test, value
 
 
+def test_ns_pitch_midi_valid():
+
+    ann = Annotation(namespace='pitch_midi')
+
+    seq_len = 21 # should be odd
+    times = np.arange(seq_len)
+    durations = np.zeros(seq_len)
+    values = np.linspace(-108., 108, seq_len) # includes 0 (odd symmetric)
+    confidences = np.linspace(0, 1., seq_len)
+    confidences[seq_len//2] = None # throw in a None confidence value
+
+    for (t, d, v, c) in zip(times, durations, values, confidences):
+        ann.append(time=t, duration=d, value=v, confidence=c)
+
+    ann.validate()
+
+
+def test_ns_pitch_midi_invalid():
+
+    @raises(SchemaError)
+    def __test(value):
+        ann = Annotation(namespace='pitch_midi')
+        ann.append(time=0, duration=0, value=value, confidence=0.5)
+        ann.validate()
+
+    # note: 1j should also be invalid, but currently not caught
+    # by the schema validation and hence removed from the test
+    for value in ['a', None, True]:
+        yield __test, value
+
+
 def test_ns_key_mode():
 
     def __test(keymode):
