@@ -219,5 +219,39 @@ def test_melody_invalid():
     yield raises(jams.SchemaError)(jams.eval.melody), ref_ann, est_ann
     yield raises(jams.SchemaError)(jams.eval.melody), est_ann, ref_ann
 
-# TODO
 # Pattern discovery
+def test_pattern_valid():
+
+    ref_jam = jams.load('fixtures/pattern_data.jams')
+
+    ref_ann = ref_jam.search(namespace='pattern_jku')[0]
+
+    jams.eval.pattern(ref_ann, ref_ann)
+
+
+def test_pattern_invalid():
+
+    ref_jam = jams.load('fixtures/pattern_data.jams')
+    ref_ann = ref_jam.search(namespace='pattern_jku')[0]
+
+    est_ann = create_annotation(values=np.arange(9) % 4 + 1.,
+                                namespace='beat',
+                                offset=0.01)
+
+
+    yield raises(jams.NamespaceError)(jams.eval.pattern), ref_ann, est_ann
+    yield raises(jams.NamespaceError)(jams.eval.pattern), est_ann, ref_ann
+
+    # Check for failure on a badly formed pattern
+    pattern = {'midi_pitch': 3, 'morph_pitch': 5, 'staff': 1,
+               'pattern_id': None, 'occurrence_id': 1}
+
+    est_ann = create_annotation(values=[pattern],
+                                confidence=1.0,
+                                duration=0.01,
+                                namespace='pattern_jku')
+
+    yield raises(jams.SchemaError)(jams.eval.pattern), ref_ann, est_ann
+    yield raises(jams.SchemaError)(jams.eval.pattern), est_ann, ref_ann
+
+
