@@ -19,6 +19,18 @@ indicating the metrical position within the bar of the observed beat.
 If no metrical position is provided for the annotation, the ``value`` field will be
 ``null``.
 
+*Example*
+
+    ===== ======== ===== ==========
+    time  duration value confidence
+    ===== ======== ===== ==========
+    0.250 0.000    1        null
+    0.500 0.000    2        null
+    0.750 0.000    3        null
+    1.000 0.000    4        null
+    1.250 0.000    1        null
+    ===== ======== ===== ==========
+
 .. note::
     ``duration`` is typically zero for beat events, but this is not enforced.
 
@@ -30,14 +42,14 @@ beat_position
 ~~~~~~~~~~~~~
 Beat events with time signature information.
 
-    ===== ======== ==================== ==========
-    time  duration value                confidence
-    ===== ======== ==================== ==========
-    [sec] [sec]    - position: number   --
-                   - measure: integer
-                   - num_beats: integer
-                   - beat_units: enum
-    ===== ======== ==================== ==========
+    +-------+----------+--------------+------------+
+    | time  | duration | value        | confidence |
+    +=======+==========+==============+============+
+    | [sec] | [sec]    | - position   | --         |
+    |       |          | - measure    |            |
+    |       |          | - num_beats  |            |
+    |       |          | - beat_units |            |
+    +-------+----------+--------------+------------+
 
 Each observation corresponds to a single beat event.
 
@@ -53,6 +65,37 @@ The ``value`` field is a structure containing the following fields:
     ``1, 2, 4, 8, 16, 32, 64, 128, 256``.
 
 All fields are required for each observation.
+
+*Example*
+
+    +-------+----------+-----------------+------------+
+    | time  | duration | value           | confidence |
+    +=======+==========+=================+============+
+    | 0.250 | 0.000    | - position: 1   | --         |
+    |       |          | - measure: 0    |            |
+    |       |          | - num_beats: 4  |            |
+    |       |          | - beat_units: 4 |            |
+    +-------+----------+-----------------+------------+
+    | 0.500 | 0.000    | - position: 2   | --         |
+    |       |          | - measure: 0    |            |
+    |       |          | - num_beats: 4  |            |
+    |       |          | - beat_units: 4 |            |
+    +-------+----------+-----------------+------------+
+    | 0.750 | 0.000    | - position: 3   | --         |
+    |       |          | - measure: 0    |            |
+    |       |          | - num_beats: 4  |            |
+    |       |          | - beat_units: 4 |            |
+    +-------+----------+-----------------+------------+
+    | 1.000 | 0.000    | - position: 4   | --         |
+    |       |          | - measure: 0    |            |
+    |       |          | - num_beats: 4  |            |
+    |       |          | - beat_units: 4 |            |
+    +-------+----------+-----------------+------------+
+    | 1.250 | 0.000    | - position: 1   | --         |
+    |       |          | - measure: 1    |            |
+    |       |          | - num_beats: 4  |            |
+    |       |          | - beat_units: 4 |            |
+    +-------+----------+-----------------+------------+
 
 .. note::
     ``duration`` is typically zero for beat events, but this is not enforced.
