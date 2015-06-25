@@ -371,4 +371,19 @@ def test_ns_pitch_class_invalid():
     yield __test, None
 
 
+def test_ns_segment_open():
+
+    def __test(label):
+        ann = Annotation(namespace='segment_open')
+
+        ann.append(time=0, duration=1, value=label)
+
+        ann.validate()
+
+    for line in ['a segment', u'a unicode segment']:
+        yield __test, line
+
+    for line in [23, None]:
+        yield raises(SchemaError)(__test), line
+
 
