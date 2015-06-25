@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 r'''
-Task Namespaces
-===============
+Namespace management
+====================
 
 .. autosummary::
     :toctree: generated/

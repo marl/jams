@@ -14,6 +14,7 @@ JAMS
     ns
     util
 
+    namespace
 
 Indices and tables
 ==================
