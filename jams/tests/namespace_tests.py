@@ -398,6 +398,21 @@ def test_ns_segment_salami_lower():
     for line in ['a', "a'", "a'''", "silence", "Silence", u'a']:
         yield __test, line
 
-    for line in [23, None, 'A', 'S', 'a23']:
+    for line in [23, None, 'A', 'S', 'a23', '  Silence  23']:
+        yield raises(SchemaError)(__test), line
+
+def test_ns_segment_salami_upper():
+
+    def __test(label):
+        ann = Annotation(namespace='segment_salami_upper')
+
+        ann.append(time=0, duration=1, value=label)
+
+        ann.validate()
+
+    for line in ['A', "A'", "A'''", "silence", "Silence", u'A']:
+        yield __test, line
+
+    for line in [23, None, 'a', 'a', 'A23', '  Silence  23']:
         yield raises(SchemaError)(__test), line
 
