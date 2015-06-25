@@ -431,3 +431,18 @@ def test_ns_segment_salami_function():
     for line in [23, None, 'a', 'a', 'A23', '  Silence  23', 'Some Garbage']:
         yield raises(SchemaError)(__test), line
 
+def test_ns_segment_tut():
+
+    def __test(label):
+        ann = Annotation(namespace='segment_tut')
+
+        ann.append(time=0, duration=1, value=label)
+
+        ann.validate()
+
+    for line in ['verse', "refrain", "Si", "bridge", "Bridge", u'verse']:
+        yield __test, line
+
+    for line in [23, None, 'chorus', 'a', 'a', 'A23', '  Silence  23', 'Some Garbage']:
+        yield raises(SchemaError)(__test), line
+
