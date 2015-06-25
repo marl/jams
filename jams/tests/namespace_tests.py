@@ -386,4 +386,18 @@ def test_ns_segment_open():
     for line in [23, None]:
         yield raises(SchemaError)(__test), line
 
+def test_ns_segment_salami_lower():
+
+    def __test(label):
+        ann = Annotation(namespace='segment_salami_lower')
+
+        ann.append(time=0, duration=1, value=label)
+
+        ann.validate()
+
+    for line in ['a', "a'", "a'''", "silence", "Silence", u'a']:
+        yield __test, line
+
+    for line in [23, None, 'A', 'S', 'a23']:
+        yield raises(SchemaError)(__test), line
 
