@@ -24,11 +24,11 @@ If no metrical position is provided for the annotation, the ``value`` field will
     ===== ======== ===== ==========
     time  duration value confidence
     ===== ======== ===== ==========
-    0.250 0.000    1        null
-    0.500 0.000    2        null
-    0.750 0.000    3        null
-    1.000 0.000    4        null
-    1.250 0.000    1        null
+    0.500 0.000    1     null
+    1.000 0.000    2     null
+    1.500 0.000    3     null
+    2.000 0.000    4     null
+    2.500 0.000    1     null
     ===== ======== ===== ==========
 
 .. note::
@@ -71,27 +71,27 @@ All fields are required for each observation.
     +-------+----------+-----------------+------------+
     | time  | duration | value           | confidence |
     +=======+==========+=================+============+
-    | 0.250 | 0.000    | - position: 1   | --         |
+    | 0.500 | 0.000    | - position: 1   | null       |
     |       |          | - measure: 0    |            |
     |       |          | - num_beats: 4  |            |
     |       |          | - beat_units: 4 |            |
     +-------+----------+-----------------+------------+
-    | 0.500 | 0.000    | - position: 2   | --         |
+    | 1.000 | 0.000    | - position: 2   | null       |
     |       |          | - measure: 0    |            |
     |       |          | - num_beats: 4  |            |
     |       |          | - beat_units: 4 |            |
     +-------+----------+-----------------+------------+
-    | 0.750 | 0.000    | - position: 3   | --         |
+    | 1.500 | 0.000    | - position: 3   | null       |
     |       |          | - measure: 0    |            |
     |       |          | - num_beats: 4  |            |
     |       |          | - beat_units: 4 |            |
     +-------+----------+-----------------+------------+
-    | 1.000 | 0.000    | - position: 4   | --         |
+    | 2.000 | 0.000    | - position: 4   | null       |
     |       |          | - measure: 0    |            |
     |       |          | - num_beats: 4  |            |
     |       |          | - beat_units: 4 |            |
     +-------+----------+-----------------+------------+
-    | 1.250 | 0.000    | - position: 1   | --         |
+    | 2.500 | 0.000    | - position: 1   | null       |
     |       |          | - measure: 1    |            |
     |       |          | - num_beats: 4  |            |
     |       |          | - beat_units: 4 |            |
