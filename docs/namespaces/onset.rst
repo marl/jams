@@ -8,7 +8,7 @@ Note onset event markers.
     ===== ======== ===== ==========
     time  duration value confidence
     ===== ======== ===== ==========
-    [sec] [sec]    -- --
+    [sec] [sec]    --    --
     ===== ======== ===== ==========
 
 This namespace can be used to encode timing of arbitrary instantaneous events.
