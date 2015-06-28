@@ -3,6 +3,27 @@ Tag
 
 tag_cal10k
 ~~~~~~~~~~
+Tags from the CAL10K_ vocabulary.
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    [sec] [sec]    string             --
+    ===== ======== ================== ==========
+
+.. _CAL10K: http://theremin.ucsd.edu/~gert/datasets/cal10k/README_CAL_10K.txt
+
+The ``value`` is constrained to a set of 1053 terms, spanning mood, instrumentation,
+style, and genre.
+
+    ===== ======== ================= ==========
+    time  duration value             confidence
+    ===== ======== ================= ==========
+    0.000 30.000   "bop influences"  null
+    0.000 30.000   "bright beats"    null
+    0.000 30.000   "hip hop roots"   null
+    ===== ======== ================= ==========
+
 
 tag_cal500
 ~~~~~~~~~~
