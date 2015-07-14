@@ -1,5 +1,8 @@
 jams
 ====
+[![Build Status](https://travis-ci.org/marl/jams.svg?branch=develop)](https://travis-ci.org/marl/jams)
+[![Coverage Status](https://coveralls.io/repos/marl/jams/badge.svg?branch=develop)](https://coveralls.io/r/marl/jams?branch=develop)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/marl/jams/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/marl/jams/?branch=develop)
 
 A JSON Annotated Music Specification for Reproducible MIR Research.
 

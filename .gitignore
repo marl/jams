@@ -37,3 +37,15 @@ Thumbs.db
 
 # Vim
 *.swp
+
+# Sphinx
+docs/_*
+docs/generated
+.idea/.name
+.idea/encodings.xml
+.idea/jams.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/scopes/scope_settings.xml
