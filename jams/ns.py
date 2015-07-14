@@ -16,6 +16,8 @@ import json
 import os
 import copy
 
+from .exceptions import NamespaceError
+
 __all__ = ['add_namespace', 'schema', 'is_dense']
 
 __NAMESPACE__ = dict()
@@ -53,6 +55,9 @@ def schema(namespace, default=None):
         JSON schema of `namespace`
     '''
 
+    if namespace not in __NAMESPACE__:
+        raise NamespaceError('Unknown namespace: {:s}'.format(namespace))
+
     if default is None:
         default = dict(type='object', properties=dict())
 
@@ -81,6 +86,9 @@ def is_dense(namespace):
         True if `namespace` has a dense packing
         False otherwise.
     '''
+
+    if namespace not in __NAMESPACE__:
+        raise NamespaceError('Unknown namespace: {:s}'.format(namespace))
 
     return __NAMESPACE__[namespace]['dense']
 
