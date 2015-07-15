@@ -44,7 +44,6 @@ import warnings
 import contextlib
 import gzip
 
-from pkg_resources import resource_filename
 
 from .version import version as __VERSION__
 from . import _schema as schema
@@ -58,24 +57,6 @@ __all__ = ['load',
 
 
 __OBJECT_TYPE__ = 'object_type'
-
-
-def __load_schema():
-    '''Load the schema file from the package.'''
-
-    schema_file = os.path.join('schema', 'jams_schema.json')
-
-    jams_schema = None
-    with open(resource_filename(__name__, schema_file), mode='r') as fdesc:
-        jams_schema = json.load(fdesc)
-
-    if jams_schema is None:
-        raise JamsError('Unable to load JAMS schema')
-
-    return jams_schema
-
-
-__SCHEMA__ = __load_schema()
 
 
 @contextlib.contextmanager
@@ -236,7 +217,7 @@ class JObject(object):
         -------
         schema : dict or None
         '''
-        return __SCHEMA__['definitions'].get(self.type, None)
+        return schema.JAMS_SCHEMA['definitions'].get(self.type, None)
 
     @property
     def __json__(self):
@@ -481,7 +462,7 @@ class JObject(object):
         valid = True
 
         try:
-            jsonschema.validate(self.__json__, __SCHEMA__)
+            jsonschema.validate(self.__json__, schema.JAMS_SCHEMA)
 
         except jsonschema.ValidationError as invalid:
             if strict:
@@ -840,7 +821,7 @@ class Annotation(JObject):
 
         # Get the schema for this annotation
         ann_schema = schema.namespace(self.namespace,
-                                      default=__SCHEMA__['definitions']['SparseObservation'])
+                                      default=schema.JAMS_SCHEMA['definitions']['SparseObservation'])
 
         try:
             records = self.data.__json__
@@ -1074,7 +1055,7 @@ class JAMS(JObject):
 
     @property
     def __schema__(self):
-        return __SCHEMA__
+        return schema.JAMS_SCHEMA
 
     def add(self, jam, on_conflict='fail'):
         """Add the contents of another jam to this object.

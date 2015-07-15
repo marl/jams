@@ -15,8 +15,9 @@ Namespace management
 import json
 import os
 import copy
+from pkg_resources import resource_filename
 
-from .exceptions import NamespaceError
+from .exceptions import NamespaceError, JamsError
 
 __all__ = ['add_namespace', 'namespace', 'is_dense']
 
@@ -93,5 +94,22 @@ def is_dense(ns_key):
     return __NAMESPACE__[ns_key]['dense']
 
 
+def __load_jams_schema():
+    '''Load the schema file from the package.'''
+
+    schema_file = os.path.join('schema', 'jams_schema.json')
+
+    jams_schema = None
+    with open(resource_filename(__name__, schema_file), mode='r') as fdesc:
+        jams_schema = json.load(fdesc)
+
+    if jams_schema is None:
+        raise JamsError('Unable to load JAMS schema')
+
+    return jams_schema
+
 # Populate the schemata
-SCHEMA_DIR = os.path.join('schema', 'namespaces')
+NS_SCHEMA_DIR = os.path.join('schema', 'namespaces')
+
+JAMS_SCHEMA = __load_jams_schema()
+

@@ -13,7 +13,7 @@ from .core import *
 # Populate the namespace mapping
 from pkg_resources import resource_filename
 
-for _ in util.find_with_extension(resource_filename(__name__, schema.SCHEMA_DIR),
+for _ in util.find_with_extension(resource_filename(__name__, schema.NS_SCHEMA_DIR),
                                   'json'):
     schema.add_namespace(_)
 
