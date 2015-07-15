@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Top-level module for pyjams."""
+"""Top-level module for JAMS"""
 
 # Import the necessary modules
 from .exceptions import *
@@ -8,7 +8,7 @@ from . import ns
 from . import eval
 from .version import version as __version__
 
-from .pyjams import *
+from .core import *
 
 # Populate the namespace mapping
 from pkg_resources import resource_filename

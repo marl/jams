@@ -1,3 +1,3 @@
 .. _jams:
 
-.. automodule:: jams.pyjams
+.. automodule:: jams.core

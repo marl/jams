@@ -18,7 +18,7 @@ import os
 import glob
 import pandas as pd
 
-from . import pyjams
+from . import core
 
 
 def import_lab(namespace, filename, jam=None, **parse_options):
@@ -36,7 +36,7 @@ def import_lab(namespace, filename, jam=None, **parse_options):
     filename : str
         Path to the .lab file
 
-    jam : pyjams.JAMS (optional)
+    jam : jams.JAMS (optional)
         An optional pre-existing JAMS object to append into.
         If `None`, a new, blank JAMS object is created.
 
@@ -53,10 +53,10 @@ def import_lab(namespace, filename, jam=None, **parse_options):
     '''
 
     # Create a new annotation object
-    annotation = pyjams.Annotation(namespace)
+    annotation = core.Annotation(namespace)
 
     if jam is None:
-        jam = pyjams.JAMS()
+        jam = core.JAMS()
 
     parse_options.setdefault('sep', r'\s+')
     parse_options.setdefault('engine', 'python')
