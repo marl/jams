@@ -39,16 +39,13 @@ def add_namespace(filename):
         __NAMESPACE__.update(json.load(fileobj))
 
 
-def namespace(ns_key, default=None):
+def namespace(ns_key):
     '''Construct a validation schema for a given namespace.
 
     Parameters
     ----------
     ns_key : str
         Namespace key identifier (eg, 'beat' or 'segment_tut')
-
-    default : schema
-        A pre-existing schema to append into
 
     Returns
     -------
@@ -59,10 +56,7 @@ def namespace(ns_key, default=None):
     if ns_key not in __NAMESPACE__:
         raise NamespaceError('Unknown namespace: {:s}'.format(ns_key))
 
-    if default is None:
-        default = dict(type='object', properties=dict())
-
-    sch = copy.deepcopy(default)
+    sch = copy.deepcopy(JAMS_SCHEMA['definitions']['SparseObservation'])
 
     for key in ['value', 'confidence']:
         try:

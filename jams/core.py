@@ -820,8 +820,7 @@ class Annotation(JObject):
         valid = super(Annotation, self).validate(strict=strict)
 
         # Get the schema for this annotation
-        ann_schema = schema.namespace(self.namespace,
-                                      default=schema.JAMS_SCHEMA['definitions']['SparseObservation'])
+        ann_schema = schema.namespace(self.namespace)
 
         try:
             records = self.data.__json__
