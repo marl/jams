@@ -47,7 +47,7 @@ import gzip
 from pkg_resources import resource_filename
 
 from .version import version as __VERSION__
-from . import ns
+from . import _schema as schema
 from .exceptions import JamsError, SchemaError, ParameterError
 
 
@@ -65,14 +65,14 @@ def __load_schema():
 
     schema_file = os.path.join('schema', 'jams_schema.json')
 
-    schema = None
+    jams_schema = None
     with open(resource_filename(__name__, schema_file), mode='r') as fdesc:
-        schema = json.load(fdesc)
+        jams_schema = json.load(fdesc)
 
-    if schema is None:
+    if jams_schema is None:
         raise JamsError('Unable to load JAMS schema')
 
-    return schema
+    return jams_schema
 
 
 __SCHEMA__ = __load_schema()
@@ -757,7 +757,7 @@ class Annotation(JObject):
         self.namespace = namespace
 
         # Set the data export coding to match the namespace
-        self.data.dense = ns.is_dense(self.namespace)
+        self.data.dense = schema.is_dense(self.namespace)
 
     def append(self, **kwargs):
         '''Append an observation to the data field
@@ -839,8 +839,8 @@ class Annotation(JObject):
         valid = super(Annotation, self).validate(strict=strict)
 
         # Get the schema for this annotation
-        schema = ns.schema(self.namespace,
-                           default=__SCHEMA__['definitions']['SparseObservation'])
+        ann_schema = schema.namespace(self.namespace,
+                                      default=__SCHEMA__['definitions']['SparseObservation'])
 
         try:
             records = self.data.__json__
@@ -853,7 +853,7 @@ class Annotation(JObject):
 
             # validate each record in the frame
             for rec in records:
-                jsonschema.validate(rec, schema)
+                jsonschema.validate(rec, ann_schema)
 
         except jsonschema.ValidationError as invalid:
             if strict:

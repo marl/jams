@@ -8,7 +8,7 @@ Namespace management
     :toctree: generated/
 
     add_namespace
-    schema
+    namespace
     is_dense
 '''
 
@@ -18,7 +18,7 @@ import copy
 
 from .exceptions import NamespaceError
 
-__all__ = ['add_namespace', 'schema', 'is_dense']
+__all__ = ['add_namespace', 'namespace', 'is_dense']
 
 __NAMESPACE__ = dict()
 
@@ -38,12 +38,12 @@ def add_namespace(filename):
         __NAMESPACE__.update(json.load(fileobj))
 
 
-def schema(namespace, default=None):
+def namespace(ns_key, default=None):
     '''Construct a validation schema for a given namespace.
 
     Parameters
     ----------
-    namespace : str
+    ns_key : str
         Namespace key identifier (eg, 'beat' or 'segment_tut')
 
     default : schema
@@ -55,8 +55,8 @@ def schema(namespace, default=None):
         JSON schema of `namespace`
     '''
 
-    if namespace not in __NAMESPACE__:
-        raise NamespaceError('Unknown namespace: {:s}'.format(namespace))
+    if ns_key not in __NAMESPACE__:
+        raise NamespaceError('Unknown namespace: {:s}'.format(ns_key))
 
     if default is None:
         default = dict(type='object', properties=dict())
@@ -65,32 +65,32 @@ def schema(namespace, default=None):
 
     for key in ['value', 'confidence']:
         try:
-            sch['properties'][key] = __NAMESPACE__[namespace][key]
+            sch['properties'][key] = __NAMESPACE__[ns_key][key]
         except KeyError:
             pass
 
     return sch
 
 
-def is_dense(namespace):
+def is_dense(ns_key):
     '''Determine whether a namespace has dense formatting.
 
     Parameters
     ----------
-    namespace : str
+    ns_key : str
         Namespace key identifier
 
     Returns
     -------
     dense : bool
-        True if `namespace` has a dense packing
+        True if `ns_key` has a dense packing
         False otherwise.
     '''
 
-    if namespace not in __NAMESPACE__:
-        raise NamespaceError('Unknown namespace: {:s}'.format(namespace))
+    if ns_key not in __NAMESPACE__:
+        raise NamespaceError('Unknown namespace: {:s}'.format(ns_key))
 
-    return __NAMESPACE__[namespace]['dense']
+    return __NAMESPACE__[ns_key]['dense']
 
 
 # Populate the schemata
