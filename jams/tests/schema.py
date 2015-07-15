@@ -7,10 +7,10 @@ from jams import NamespaceError
 import jams
 
 
-def test_ns_is_dense():
+def test_schema_is_dense():
 
     def __test(ns, dense):
-        assert dense == jams.ns.is_dense(ns)
+        assert dense == jams.schema.is_dense(ns)
 
     yield __test, 'pitch_hz', True
     yield __test, 'beat', False

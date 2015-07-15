@@ -11,7 +11,7 @@ JAMS
 
     jams
     eval
-    ns
+    schema
     util
 
     namespace
