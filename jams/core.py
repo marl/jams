@@ -44,7 +44,6 @@ import warnings
 import contextlib
 import gzip
 
-
 from .version import version as __VERSION__
 from . import _schema as schema
 from .exceptions import JamsError, SchemaError, ParameterError
@@ -54,9 +53,6 @@ __all__ = ['load',
            'JObject', 'Sandbox', 'JamsFrame',
            'Annotation', 'Curator', 'AnnotationMetadata',
            'FileMetadata', 'AnnotationArray', 'JAMS']
-
-
-__OBJECT_TYPE__ = 'object_type'
 
 
 @contextlib.contextmanager
