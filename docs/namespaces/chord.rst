@@ -1,6 +1,45 @@
 Chord
 -----
 
+chord
+~~~~~
+Chord annotations described by an extended version of the grammar defined by Harte, et al. [1]_
+
+    ===== ======== ====== ==========
+    time  duration value  confidence
+    ===== ======== ====== ==========
+    [sec] [sec]    string --
+    ===== ======== ====== ==========
+
+.. [1] Harte, Christopher, Mark B. Sandler, Samer A. Abdallah, and Emilia Gómez.
+    "Symbolic Representation of Musical Chords: A Proposed Syntax for Text Annotations."
+    In ISMIR, vol. 5, pp. 66-71. 2005.
+
+This namespace is similar to `chord_harte`, with the following modifications:
+
+    * Sharps and flats may not be mixed in a note symbol.  For instance, `A#b#` is legal in `chord_harte` but
+      not in `chord`.  `A###` is legal in both.
+    * The following quality values have been added: 
+        - *sus2*, *1*, *5*, *13*
+
+*Example*
+
+    ===== ======== ============= ==========
+    time  duration value         confidence
+    ===== ======== ============= ==========
+    0.000 1.000    ``N``         null
+    0.000 1.000    ``Bb:5``      null
+    0.000 1.000    ``E:(*5)``    null
+    0.000 1.000    ``E#:min9/9`` null
+    0.000 1.000    ``G##:maj6``  null
+    0.000 1.000    ``D:13/6``    null
+    0.000 1.000    ``A:sus2``    null
+    ===== ======== ============= ==========
+
+.. note::
+    ``confidence`` is an unconstrained field, and may contain arbitrary data.
+
+
 chord_harte
 ~~~~~~~~~~~
 Chord annotations described according to the grammar defined by Harte, et al. [1]_
@@ -25,8 +64,7 @@ Each observed value is a text representation of a chord annotation.
         - *maj7*, *min7*, *7*, *dim7*, *hdim7*, *minmaj7*
         - *maj6*, *min6*
         - *9*, *maj9*, *min9*
-        - *sus4*, *sus2*
-        - *5*, *1*
+        - *sus4*
     * Inversions are specified by a slash (``/``) followed by the interval number, e.g., ``G/3``.
     * Extensions are denoted in parentheses, e.g., ``G(b11,13)``.
       Suppressed notes are indicated with an asterisk, e.g., ``G(*3)``
@@ -42,15 +80,13 @@ A complete description of the chord grammar is provided in [1]_, table 1.
     0.000 1.000    ``Bb``        null
     0.000 1.000    ``E:(*5)``    null
     0.000 1.000    ``E#:min9/9`` null
-    0.000 1.000    ``G#:maj6``   null
+    0.000 1.000    ``G#b:maj6``  null
     0.000 1.000    ``D/6``       null
-    0.000 1.000    ``A:sus2``    null
+    0.000 1.000    ``A:sus4``    null
     ===== ======== ============= ==========
 
 
 .. note::
-    The grammar defined in [1]_ has been extended to support ``sus2``, ``5`` and ``1`` qualities.
-
     ``confidence`` is an unconstrained field, and may contain arbitrary data.
 
 
