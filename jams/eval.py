@@ -173,12 +173,12 @@ def chord(ref, est, **kwargs):
     >>> ref_jam = jams.load('reference.jams')
     >>> est_jam = jams.load('estimated.jams')
     >>> # Select the first relevant annotations
-    >>> ref_ann = ref_jam.search(namespace='chord_harte')[0]
-    >>> est_ann = est_jam.search(namespace='chord_harte')[0]
+    >>> ref_ann = ref_jam.search(namespace='chord')[0]
+    >>> est_ann = est_jam.search(namespace='chord')[0]
     >>> scores = jams.eval.chord(ref_ann, est_ann)
     '''
 
-    namespace = 'chord_harte'
+    namespace = '^chord(_harte)?$'
     validate_annotation(ref, namespace)
     validate_annotation(est, namespace)
     ref_interval, ref_value = ref.data.to_interval_values()
