@@ -20,7 +20,10 @@ This namespace is similar to `chord_harte`, with the following modifications:
     * Sharps and flats may not be mixed in a note symbol.  For instance, `A#b#` is legal in `chord_harte` but
       not in `chord`.  `A###` is legal in both.
     * The following quality values have been added: 
-        - *sus2*, *1*, *5*, *13*
+        - *sus2*, *1*, *5*
+        - *aug7*
+        - *11*, *maj11*, *min11*
+        - *13*, *maj13*, *min13*
 
 *Example*
 
