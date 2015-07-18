@@ -391,6 +391,24 @@ def test_ns_tag_gtzan():
     for tag in [23, None]:
         yield raises(SchemaError)(__test), tag
 
+def test_ns_tag_medleydb():
+
+    def __test(tag):
+        ann = Annotation(namespace='tag_medleydb_instruments')
+
+        ann.append(time=0, duration=1, value=tag)
+
+        ann.validate()
+
+    for tag in ['accordion', 'alto saxophone', 'fx/processed sound']:
+        yield __test, tag
+        yield __test, unicode(tag)
+        yield raises(SchemaError)(__test), tag.upper()
+
+
+    for tag in [23, None]:
+        yield raises(SchemaError)(__test), tag
+
 def test_ns_tag_open():
 
     def __test(label):
