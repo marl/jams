@@ -391,6 +391,21 @@ def test_ns_tag_gtzan():
     for tag in [23, None]:
         yield raises(SchemaError)(__test), tag
 
+def test_ns_tag_open():
+
+    def __test(label):
+        ann = Annotation(namespace='tag_open')
+
+        ann.append(time=0, duration=1, value=label)
+
+        ann.validate()
+
+    for line in ['a tag', u'a unicode tag']:
+        yield __test, line
+
+    for line in [23, None]:
+        yield raises(SchemaError)(__test), line
+
 def test_ns_segment_open():
 
     def __test(label):
