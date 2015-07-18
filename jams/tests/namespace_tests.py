@@ -371,6 +371,26 @@ def test_ns_pitch_class_invalid():
     yield __test, None
 
 
+def test_ns_tag_gtzan():
+
+    def __test(tag):
+        ann = Annotation(namespace='tag_gtzan')
+
+        ann.append(time=0, duration=1, value=tag)
+
+        ann.validate()
+
+    for tag in ['blues', 'classical', 'country', 'disco',
+                'hip-hop', 'jazz', 'metal', 'pop', 'reggae', 'rock']:
+
+        yield __test, tag
+        yield __test, unicode(tag)
+        yield raises(SchemaError)(__test), tag.upper()
+
+
+    for tag in [23, None]:
+        yield raises(SchemaError)(__test), tag
+
 def test_ns_segment_open():
 
     def __test(label):
