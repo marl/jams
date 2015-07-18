@@ -370,6 +370,41 @@ def test_ns_pitch_class_invalid():
     # test non-object values
     yield __test, None
 
+def test_ns_tag_cal500():
+
+    def __test(tag):
+        ann = Annotation(namespace='tag_cal500')
+
+        ann.append(time=0, duration=1, value=tag)
+
+        ann.validate()
+
+    for tag in ['Emotion-Angry_/_Aggressive', 'Genre--_Metal/Hard_Rock', 'Genre-Best-Jazz']:
+        yield __test, tag
+        yield __test, unicode(tag)
+        yield raises(SchemaError)(__test), tag.upper()
+
+
+    for tag in [23, None]:
+        yield raises(SchemaError)(__test), tag
+
+def test_ns_tag_cal10k():
+
+    def __test(tag):
+        ann = Annotation(namespace='tag_cal10k')
+
+        ann.append(time=0, duration=1, value=tag)
+
+        ann.validate()
+
+    for tag in ['a dub production', "boomin' kick drum", 'rock & roll ? roots']:
+        yield __test, tag
+        yield __test, unicode(tag)
+        yield raises(SchemaError)(__test), tag.upper()
+
+
+    for tag in [23, None]:
+        yield raises(SchemaError)(__test), tag
 
 def test_ns_tag_gtzan():
 
