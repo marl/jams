@@ -40,13 +40,13 @@ def test_ns_beat_valid():
 
     # A valid example
     ann = Annotation(namespace='beat')
-    
+
     for time in np.arange(5.0):
         ann.append(time=time, duration=0.0, value=1, confidence=None)
 
     for time in np.arange(5.0, 10.0):
         ann.append(time=time, duration=0.0, value=None, confidence=None)
-    
+
     ann.validate()
 
 
@@ -54,7 +54,7 @@ def test_ns_beat_valid():
 def test_ns_beat_invalid():
 
     ann = Annotation(namespace='beat')
-    
+
     for time in np.arange(5.0):
         ann.append(time=time, duration=0.0, value='foo', confidence=None)
 
@@ -69,7 +69,7 @@ def test_ns_beat_position_valid():
                                                 measure=1,
                                                 num_beats=3,
                                                 beat_units=4))
-    
+
     ann.validate()
 
 
@@ -142,13 +142,13 @@ def test_ns_onset():
 
     # A valid example
     ann = Annotation(namespace='onset')
-    
+
     for time in np.arange(5.0):
         ann.append(time=time, duration=0.0, value=1, confidence=None)
 
     for time in np.arange(5.0, 10.0):
         ann.append(time=time, duration=0.0, value=None, confidence=None)
-    
+
     ann.validate()
 
 
@@ -316,6 +316,45 @@ def test_ns_chord_roman_invalid():
         value = good_dict.copy()
         del value[field]
         yield __test, value
+
+    # test non-object values
+    yield __test, None
+
+
+def test_ns_chord_harte_valid():
+
+    def __test(chord):
+        ann = Annotation(namespace='chord_harte')
+
+        ann.append(time=0, duration=1.0, value=chord)
+
+        ann.validate()
+
+    for chord in ['B:7', 'Gb:(1,3,5)', 'A#:(*3)', 'C:13(*9)/b7']:
+        yield __test, chord
+
+
+def test_ns_chord_harte_invalid():
+
+    @raises(SchemaError)
+    def __test(chord):
+        ann = Annotation(namespace='chord_harte')
+
+        ann.append(time=0, duration=1.0, value=chord)
+
+        ann.validate()
+
+    # test bad roots
+    for root in [42, 'H', 'a', 'F#b', True, None]:
+        yield __test, '{0}:maj'.format(root)
+
+    # test bad qualities
+    for quality in [64, 'z', 'mj', 'Ab', 'iiii', False, None]:
+        yield __test, 'C:{0}'.format(quality)
+
+    # test bad bass
+    for bass in ['A', 7.5, '8b']:
+        yield __test, 'C/{0}'.format(bass)
 
     # test non-object values
     yield __test, None
