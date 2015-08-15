@@ -231,12 +231,12 @@ def test_ns_pitch_midi_valid():
 
     ann = Annotation(namespace='pitch_midi')
 
-    seq_len = 21 # should be odd
+    seq_len = 21  # should be odd
     times = np.arange(seq_len)
     durations = np.zeros(seq_len)
-    values = np.linspace(-108., 108, seq_len) # includes 0 (odd symmetric)
+    values = np.linspace(-108., 108, seq_len)  # includes 0 (odd symmetric)
     confidences = np.linspace(0, 1., seq_len)
-    confidences[seq_len//2] = None # throw in a None confidence value
+    confidences[seq_len//2] = None  # throw in a None confidence value
 
     for (t, d, v, c) in zip(times, durations, values, confidences):
         ann.append(time=t, duration=d, value=v, confidence=c)
@@ -272,6 +272,84 @@ def test_ns_key_mode():
 
     for val in ['asdf', 'A&:phrygian', 11, '', ':dorian', None]:
         yield raises(SchemaError)(__test), val
+
+
+def test_ns_chord_valid():
+
+    def __test(chord):
+        ann = Annotation(namespace='chord')
+
+        ann.append(time=0, duration=1.0, value=chord)
+
+        ann.validate()
+
+    for chord in ['A:9', 'Gb:sus2(1,3,5)', 'X', 'C:13(*9)/b7']:
+        yield __test, chord
+
+
+def test_ns_chord_invalid():
+
+    @raises(SchemaError)
+    def __test(chord):
+        ann = Annotation(namespace='chord')
+
+        ann.append(time=0, duration=1.0, value=chord)
+
+        ann.validate()
+
+    # test bad roots
+    for root in [42, 'H', 'a', 'F1', True, None]:
+        yield __test, '{0}:maj'.format(root)
+
+    # test bad qualities
+    for quality in [64, 'z', 'mj', 'Ab', 'iiii', False, None]:
+        yield __test, 'C:{0}'.format(quality)
+
+    # test bad bass
+    for bass in ['A', 7.5, '8b']:
+        yield __test, 'C/{0}'.format(bass)
+
+    # test non-object values
+    yield __test, None
+
+
+def test_ns_chord_harte_valid():
+
+    def __test(chord):
+        ann = Annotation(namespace='chord_harte')
+
+        ann.append(time=0, duration=1.0, value=chord)
+
+        ann.validate()
+
+    for chord in ['B:7', 'Gb:(1,3,5)', 'A#:(*3)', 'C:sus4(*5)/b7']:
+        yield __test, chord
+
+
+def test_ns_chord_harte_invalid():
+
+    @raises(SchemaError)
+    def __test(chord):
+        ann = Annotation(namespace='chord_harte')
+
+        ann.append(time=0, duration=1.0, value=chord)
+
+        ann.validate()
+
+    # test bad roots
+    for root in [42, 'X', 'a', 'F1', True, None]:
+        yield __test, '{0}:maj'.format(root)
+
+    # test bad qualities
+    for quality in [64, 'z', 'mj', 'Ab', 'iiii', False, None]:
+        yield __test, 'C:{0}'.format(quality)
+
+    # test bad bass
+    for bass in ['A', 7.5, '8b']:
+        yield __test, 'C/{0}'.format(bass)
+
+    # test non-object values
+    yield __test, None
 
 
 def test_ns_chord_roman_valid():
@@ -317,45 +395,6 @@ def test_ns_chord_roman_invalid():
         value = good_dict.copy()
         del value[field]
         yield __test, value
-
-    # test non-object values
-    yield __test, None
-
-
-def test_ns_chord_harte_valid():
-
-    def __test(chord):
-        ann = Annotation(namespace='chord_harte')
-
-        ann.append(time=0, duration=1.0, value=chord)
-
-        ann.validate()
-
-    for chord in ['B:7', 'Gb:(1,3,5)', 'A#:(*3)', 'C:13(*9)/b7']:
-        yield __test, chord
-
-
-def test_ns_chord_harte_invalid():
-
-    @raises(SchemaError)
-    def __test(chord):
-        ann = Annotation(namespace='chord_harte')
-
-        ann.append(time=0, duration=1.0, value=chord)
-
-        ann.validate()
-
-    # test bad roots
-    for root in [42, 'H', 'a', 'F#b', True, None]:
-        yield __test, '{0}:maj'.format(root)
-
-    # test bad qualities
-    for quality in [64, 'z', 'mj', 'Ab', 'iiii', False, None]:
-        yield __test, 'C:{0}'.format(quality)
-
-    # test bad bass
-    for bass in ['A', 7.5, '8b']:
-        yield __test, 'C/{0}'.format(bass)
 
     # test non-object values
     yield __test, None
