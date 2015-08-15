@@ -2,6 +2,7 @@
 #CREATED:2015-05-26 12:47:35 by Brian McFee <brian.mcfee@nyu.edu>
 """Namespace schema tests"""
 
+import six
 import numpy as np
 
 from nose.tools import raises
@@ -161,7 +162,7 @@ def test_ns_lyrics():
 
         ann.validate()
 
-    for line in ['Check yourself', u'before you wreck yourself']:
+    for line in ['Check yourself', six.u('before you wreck yourself')]:
         yield __test, line
 
     for line in [23, None]:
@@ -266,7 +267,7 @@ def test_ns_key_mode():
 
         ann.validate()
 
-    for val in ['B#:locrian', u'A:minor', 'N', 'E']:
+    for val in ['B#:locrian', six.u('A:minor'), 'N', 'E']:
         yield __test, val
 
     for val in ['asdf', 'A&:phrygian', 11, '', ':dorian', None]:
@@ -284,7 +285,7 @@ def test_ns_chord_roman_valid():
 
     yield __test, dict(tonic='B', chord='bII7')
 
-    yield __test, dict(tonic=u'Gb', chord=u'ii7/#V')
+    yield __test, dict(tonic=six.u('Gb'), chord=six.u('ii7/#V'))
 
 
 def test_ns_chord_roman_invalid():
@@ -372,7 +373,7 @@ def test_ns_pitch_class_valid():
 
     yield __test, dict(tonic='B', pitch=0)
 
-    yield __test, dict(tonic=u'Gb', pitch=11)
+    yield __test, dict(tonic=six.u('Gb'), pitch=11)
 
 
 def test_ns_pitch_class_invalid():
@@ -409,6 +410,94 @@ def test_ns_pitch_class_invalid():
     # test non-object values
     yield __test, None
 
+def test_ns_tag_cal500():
+
+    def __test(tag):
+        ann = Annotation(namespace='tag_cal500')
+
+        ann.append(time=0, duration=1, value=tag)
+
+        ann.validate()
+
+    for tag in ['Emotion-Angry_/_Aggressive', 'Genre--_Metal/Hard_Rock', 'Genre-Best-Jazz']:
+        yield __test, tag
+        yield __test, six.u(tag)
+        yield raises(SchemaError)(__test), tag.upper()
+
+
+    for tag in [23, None]:
+        yield raises(SchemaError)(__test), tag
+
+def test_ns_tag_cal10k():
+
+    def __test(tag):
+        ann = Annotation(namespace='tag_cal10k')
+
+        ann.append(time=0, duration=1, value=tag)
+
+        ann.validate()
+
+    for tag in ['a dub production', "boomin' kick drum", 'rock & roll ? roots']:
+        yield __test, tag
+        yield __test, six.u(tag)
+        yield raises(SchemaError)(__test), tag.upper()
+
+
+    for tag in [23, None]:
+        yield raises(SchemaError)(__test), tag
+
+def test_ns_tag_gtzan():
+
+    def __test(tag):
+        ann = Annotation(namespace='tag_gtzan')
+
+        ann.append(time=0, duration=1, value=tag)
+
+        ann.validate()
+
+    for tag in ['blues', 'classical', 'country', 'disco',
+                'hip-hop', 'jazz', 'metal', 'pop', 'reggae', 'rock']:
+
+        yield __test, tag
+        yield __test, six.u(tag)
+        yield raises(SchemaError)(__test), tag.upper()
+
+
+    for tag in [23, None]:
+        yield raises(SchemaError)(__test), tag
+
+def test_ns_tag_medleydb():
+
+    def __test(tag):
+        ann = Annotation(namespace='tag_medleydb_instruments')
+
+        ann.append(time=0, duration=1, value=tag)
+
+        ann.validate()
+
+    for tag in ['accordion', 'alto saxophone', 'fx/processed sound']:
+        yield __test, tag
+        yield __test, six.u(tag)
+        yield raises(SchemaError)(__test), tag.upper()
+
+
+    for tag in [23, None]:
+        yield raises(SchemaError)(__test), tag
+
+def test_ns_tag_open():
+
+    def __test(label):
+        ann = Annotation(namespace='tag_open')
+
+        ann.append(time=0, duration=1, value=label)
+
+        ann.validate()
+
+    for line in ['a tag', six.u('a unicode tag')]:
+        yield __test, line
+
+    for line in [23, None]:
+        yield raises(SchemaError)(__test), line
 
 def test_ns_segment_open():
 
@@ -419,7 +508,7 @@ def test_ns_segment_open():
 
         ann.validate()
 
-    for line in ['a segment', u'a unicode segment']:
+    for line in ['a segment', six.u('a unicode segment')]:
         yield __test, line
 
     for line in [23, None]:
@@ -434,7 +523,7 @@ def test_ns_segment_salami_lower():
 
         ann.validate()
 
-    for line in ['a', "a'", "a'''", "silence", "Silence", u'a']:
+    for line in ['a', "a'", "a'''", "silence", "Silence", six.u('a')]:
         yield __test, line
 
     for line in [23, None, 'A', 'S', 'a23', '  Silence  23']:
@@ -449,7 +538,7 @@ def test_ns_segment_salami_upper():
 
         ann.validate()
 
-    for line in ['A', "A'", "A'''", "silence", "Silence", u'A']:
+    for line in ['A', "A'", "A'''", "silence", "Silence", six.u('A')]:
         yield __test, line
 
     for line in [23, None, 'a', 'a', 'A23', '  Silence  23']:
@@ -464,7 +553,7 @@ def test_ns_segment_salami_function():
 
         ann.validate()
 
-    for line in ['verse', "chorus", "theme", "voice", "silence", u'verse']:
+    for line in ['verse', "chorus", "theme", "voice", "silence", six.u('verse')]:
         yield __test, line
 
     for line in [23, None, 'a', 'a', 'A23', '  Silence  23', 'Some Garbage']:
@@ -479,7 +568,7 @@ def test_ns_segment_tut():
 
         ann.validate()
 
-    for line in ['verse', "refrain", "Si", "bridge", "Bridge", u'verse']:
+    for line in ['verse', "refrain", "Si", "bridge", "Bridge", six.u('verse')]:
         yield __test, line
 
     for line in [23, None, 'chorus', 'a', 'a', 'A23', '  Silence  23', 'Some Garbage']:

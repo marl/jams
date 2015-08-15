@@ -1,8 +1,8 @@
 Beat
 ----
 
-beat_beat
-~~~~~~~~~
+beat
+~~~~
 Beat event markers with optional metrical position.
 
     ===== ======== ================== ==========

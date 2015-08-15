@@ -89,7 +89,7 @@ def test_onset_invalid():
 def test_chord_valid():
 
     ref_ann = create_annotation(values=['C', 'E', 'G:min7'],
-                                namespace='chord_harte')
+                                namespace='chord')
 
     est_ann = create_annotation(values=['D', 'E', 'G:maj'],
                                 namespace='chord_harte')
@@ -99,7 +99,7 @@ def test_chord_valid():
 def test_chord_invalid():
 
     ref_ann = create_annotation(values=['C', 'E', 'G:min7'],
-                                namespace='chord_harte')
+                                namespace='chord')
 
     est_ann = create_annotation(values=[{'tonic': 'C', 'chord': 'I'}],
                                 namespace='chord_roman')

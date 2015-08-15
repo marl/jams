@@ -8,7 +8,7 @@ from nose.tools import eq_, raises
 import numpy as np
 
 import jams
-from jams import pyjams, util
+from jams import core, util
 
 
 import six
@@ -30,9 +30,9 @@ def test_import_lab():
     def __test(ns, lab, ints, y):
         _, ann = util.import_lab(ns, six.StringIO(lab))
 
-        assert np.allclose(pyjams.timedelta_to_float(ann.data['time'].values),
+        assert np.allclose(core.timedelta_to_float(ann.data['time'].values),
                            ints[:, 0])
-        assert np.allclose(pyjams.timedelta_to_float(ann.data['duration'].values),
+        assert np.allclose(core.timedelta_to_float(ann.data['duration'].values),
                            ints[:, 1] - ints[:, 0])
         for y1, y2 in zip(list(ann.data['value'].values), y):
             eq_(y1, y2)
@@ -46,7 +46,7 @@ def test_timedelta_to_float():
     # 2.5 seconds
     t = 2.5
     x = np.timedelta64(int(t * 1e9))
-    tn = pyjams.timedelta_to_float(x)
+    tn = core.timedelta_to_float(x)
 
     # convert back
     assert np.allclose(t, tn)
@@ -55,7 +55,7 @@ def test_timedelta_to_float():
 def test_query_pop():
 
     def __test(query, prefix, sep, target):
-        eq_(pyjams.query_pop(query, prefix, sep=sep), target)
+        eq_(core.query_pop(query, prefix, sep=sep), target)
 
     yield __test, 'alpha.beta.gamma', 'alpha', '.', 'beta.gamma'
     yield __test, 'alpha/beta/gamma', 'alpha', '/', 'beta/gamma'
@@ -67,7 +67,7 @@ def test_query_pop():
 def test_match_query():
 
     def __test(needle, haystack, result):
-        eq_(pyjams.match_query(haystack, needle), result)
+        eq_(core.match_query(haystack, needle), result)
 
     haystack = 'abcdeABCDE123'
 
