@@ -20,9 +20,10 @@ before_install:
     - conda update -q conda
     - conda config --add channels pypi
     - conda info -a
-    - deps='pip numpy scipy sphinx nose pandas jsonschema six decorator'
+    - deps='pip numpy scipy sphinx nose pandas six decorator'
     - conda create -q -n test-environment "python=$TRAVIS_PYTHON_VERSION" $deps 
     - source activate test-environment
+    - pip install jsonschema
     - pip install python-coveralls
     - pip install numpydoc
     - pip install git+https://github.com/craffel/mir_eval.git@develop
