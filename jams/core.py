@@ -45,7 +45,7 @@ import contextlib
 import gzip
 
 from .version import version as __VERSION__
-from . import _schema as schema
+from . import schema
 from .exceptions import JamsError, SchemaError, ParameterError
 
 

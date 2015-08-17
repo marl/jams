@@ -4,7 +4,7 @@
 # Import the necessary modules
 from .exceptions import *
 from . import util
-from . import _schema as schema
+from . import schema
 from . import eval
 from .version import version as __version__
 

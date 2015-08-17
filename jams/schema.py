@@ -91,7 +91,7 @@ def is_dense(ns_key):
 def __load_jams_schema():
     '''Load the schema file from the package.'''
 
-    schema_file = os.path.join('schema', 'jams_schema.json')
+    schema_file = os.path.join(SCHEMA_DIR, 'jams_schema.json')
 
     jams_schema = None
     with open(resource_filename(__name__, schema_file), mode='r') as fdesc:
@@ -103,7 +103,8 @@ def __load_jams_schema():
     return jams_schema
 
 # Populate the schemata
-NS_SCHEMA_DIR = os.path.join('schema', 'namespaces')
+SCHEMA_DIR = 'schemata'
+NS_SCHEMA_DIR = os.path.join(SCHEMA_DIR, 'namespaces')
 
 JAMS_SCHEMA = __load_jams_schema()
 
