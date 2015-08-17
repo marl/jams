@@ -613,3 +613,49 @@ def test_ns_segment_tut():
     for line in [23, None, 'chorus', 'a', 'a', 'A23', '  Silence  23', 'Some Garbage']:
         yield raises(SchemaError)(__test), line
 
+
+def test_ns_pattern_valid():
+    def __test(pattern):
+        ann = Annotation(namespace='pattern_jku')
+
+        ann.append(time=0, duration=1.0, value=pattern)
+        ann.append(time=1.0, duration=1.0, value=pattern)
+
+        ann.validate()
+
+    yield __test, dict(midi_pitch=3, morph_pitch=5, staff=1, pattern_id=1, occurrence_id=1)
+    yield __test, dict(midi_pitch=-3, morph_pitch=-1.5, staff=1.0, pattern_id=1, occurrence_id=1)
+
+
+
+
+def test_ns_pattern_invalid():
+
+    @raises(SchemaError)
+    def __test(pattern):
+        ann = Annotation(namespace='pattern_jku')
+
+        ann.append(time=0, duration=1.0, value=pattern)
+        ann.append(time=1.0, duration=1.0, value=pattern)
+
+        ann.validate()
+
+    good_pattern = dict(midi_pitch=3,
+                        morph_pitch=5,
+                        staff=1,
+                        pattern_id=1,
+                        occurrence_id=1)
+
+    # Test that all values are only numeric
+    for key in good_pattern.keys():
+        for bad_value in ['foo', None, dict(), []]:
+            pattern = good_pattern.copy()
+            pattern[key] = bad_value
+            yield __test, pattern
+
+    # Test bounded values
+    for key in ['pattern_id', 'occurrence_id']:
+        for bad_value in [-1, 0, 0.5]:
+            pattern = good_pattern.copy()
+            pattern[key] = bad_value
+            yield __test, pattern
