@@ -11,10 +11,8 @@ What
 JAMS is a JSON-based music annotation format.
 
 We provide:
-* A formal JSON schema
-* Python and MATLAB software libraries
-* Some popular datasets in JAMS format
-* Python scripts demonstrating how to convert datasets into the JAMS format
+* A formal JSON schema for generic annotations
+* Schema definitions for a wide range of annotation types (beats, chords, segments, tags, etc.)
 
 Why
 ----
@@ -41,12 +39,7 @@ repository into a working directory and proceed thusly.
 Who
 ----
 To date, the initial JAMS effort has evolved out of internal needs at MARL@NYU,
-with some great feedback from our friends at LibROSA. Having reached a
-reasonable state, we're now actively seeking greater input from the larger MIR
-community, in any of the following roles:
-* Users
-* Designers
-* Collaborators
+with some great feedback from our friends at LabROSA.
 
 If you want to get involved, do let us know!
 
