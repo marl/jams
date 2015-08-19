@@ -17,6 +17,7 @@ We provide:
     :maxdepth: 1
 
     quickstart
+    jams_structure
 
 API reference
 -------------
