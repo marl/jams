@@ -135,20 +135,23 @@ def expand_filepaths(base_dir, rel_paths):
     return [os.path.join(base_dir, os.path.normpath(rp)) for rp in rel_paths]
 
 
-def smkdirs(dpath):
-    """Safely make a directory path if it doesn't exist.
+def smkdirs(dpath, mode=0777):
+    """Safely make a full directory path if it doesn't exist.
 
     Parameters
     ----------
     dpath : str
         Path of directory/directories to create
 
+    mode : int [default=0777]
+        Permissions for the new directories
+
     See also
     --------
     os.makedirs
     """
     if not os.path.exists(dpath):
-        os.makedirs(dpath)
+        os.makedirs(dpath, mode=mode)
 
 
 def filebase(filepath):
