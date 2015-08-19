@@ -770,7 +770,7 @@ class Annotation(JObject):
 
         Examples
         --------
-        >>> ann = jams.Annotation(namespace='chord_harte')
+        >>> ann = jams.Annotation(namespace='chord')
         >>> ann.append(time=0, duration=3, value='C#')
         >>> ann.append(time=3, duration=2, value='E#')
         >>> ann
