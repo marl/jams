@@ -18,7 +18,7 @@ The ``file_metadata`` field contains the following properties:
     * ``identifiers``: an unstructured ``sandbox``-type object for storing identifier mappings, e.g., MusicBrainz
       ID;
     * ``artist``, ``title``, ``release`` : meta-data strings for the track in question;
-    * ``duration`` : non-negative number describing the length (in seconds) of the track;
+    * ``duration`` : non-negative number describing the length (in seconds) of the track; and
     * ``jams_version`` : string describing the JAMS version for this file.
 
 Annotation
@@ -28,9 +28,9 @@ Each annotation object contains the following properties:
     * ``data`` : a list of observations, each containing:
         * ``time`` : non-negative number denoting the time of the observation (in seconds)
         * ``duration`` : non-negative number denoting the duration of the observation (in seconds)
-        * ``value``
-        * ``confidence``
-    * ``annotation_metadata`` : see Annotation_Metadata_
+        * ``value`` : actual annotation (e.g., chord, segment label)
+        * ``confidence`` : certainty of the annotation
+    * ``annotation_metadata`` : see Annotation_Metadata_; and
     * ``sandbox`` : additional un-structured storage space for this annotation.
 
 The permissible contents of the ``value`` and ``confidence`` fields are defined by the ``namespace``.
@@ -45,7 +45,7 @@ The ``annotation_metadata`` property has the following fields:
     * ``curator`` : a structured object containing contact information (``name`` and ``email``) for the curator of this data;
     * ``annotator`` : a ``sandbox`` object to describe the individual annotator --- which can be a person or a program --- that generated this annotation;
     * ``annotation_tools``, ``annotation_rules``, ``validation``: strings to describe the process by which
-      annotations were collected and pre-processed
+      annotations were collected and pre-processed; and
     * ``data_source`` : string describing the type of annotator, e.g., "program", "expert human",
       "crowdsource".
 
