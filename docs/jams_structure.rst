@@ -1,6 +1,8 @@
 JAMS Structure
 ~~~~~~~~~~~~~~
 
+This section describes the anatomy of JAMS objects.
+
 JAMS
 ^^^^
 
@@ -50,3 +52,18 @@ The ``annotation_metadata`` property has the following fields:
 
 Namespaces
 ~~~~~~~~~~
+In JAMS v0.2.0, the concept of task `namespaces` was introduced.  Broadly speaking, a `namespace`
+defines the syntax (and some semantics) of a particular type of annotation.
+
+For example, the `chord` namespace requires that all observed `value` fields are valid strings within a
+pre-defined grammar.  Similarly, the `tempo` namespace requires that `value` fields be non-negative numbers,
+and the `confidence` fields lie within the range `[0, 1]`.
+
+JAMS ships with 24 pre-defined namespaces, covering a variety of common music informatics tasks.  This
+collection should not be assumed to be complete, however, and more namespaces may be added in subsequent
+versions.  Please refer to :ref:`namespace` for a comprehensive description of the existing namespaces.
+
+The namespace management architecture is modular and extensible, so it is relatively straightforward to create
+a new namespace schema and add it to JAMS at run-time:
+
+    >>> jams.schema.add_namespace('/path/to/my/new/namespace.json')
