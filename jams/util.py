@@ -26,7 +26,18 @@ def import_lab(namespace, filename, jam=None, **parse_options):
 
     .lab files are assumed to have the following format:
 
-    TIME_START\tTIME_END\tANNOTATION
+        ``TIME_START\tTIME_END\tANNOTATION``
+
+    By default, .lab files are assumed to have columns separated by one
+    or more white-space characters, and have no header or index column
+    information.
+
+    If the .lab file contains only two columns, then an empty duration
+    field is inferred.
+
+    If the .lab file contains more than three columns, each row's
+    annotation value is assigned the contents of last non-empty column.
+
 
     Parameters
     ----------
@@ -41,7 +52,7 @@ def import_lab(namespace, filename, jam=None, **parse_options):
         If `None`, a new, blank JAMS object is created.
 
     parse_options : additional keyword arguments
-        See `pandas.DataFrame.read_csv`
+        Passed to ``pandas.DataFrame.read_csv``
 
     Returns
     -------
@@ -50,6 +61,10 @@ def import_lab(namespace, filename, jam=None, **parse_options):
 
     annotation : Annotation
         A handle to the newly constructed annotation object
+
+    See Also
+    --------
+    pandas.DataFrame.read_csv
     '''
 
     # Create a new annotation object
@@ -120,20 +135,23 @@ def expand_filepaths(base_dir, rel_paths):
     return [os.path.join(base_dir, os.path.normpath(rp)) for rp in rel_paths]
 
 
-def smkdirs(dpath):
-    """Safely make a directory path if it doesn't exist.
+def smkdirs(dpath, mode=0o777):
+    """Safely make a full directory path if it doesn't exist.
 
     Parameters
     ----------
     dpath : str
         Path of directory/directories to create
 
+    mode : int [default=0777]
+        Permissions for the new directories
+
     See also
     --------
     os.makedirs
     """
     if not os.path.exists(dpath):
-        os.makedirs(dpath)
+        os.makedirs(dpath, mode=mode)
 
 
 def filebase(filepath):

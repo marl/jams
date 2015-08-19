@@ -164,6 +164,19 @@ def load(path_or_file, validate=True, strict=True, fmt='auto'):
     --------
     JAMS.validate
     JAMS.save
+
+
+    Examples
+    --------
+    >>> # Load a jams object from a file name
+    >>> J = jams.load('data.jams')
+    >>> # Or from an open file descriptor
+    >>> with open('data.jams', 'r') as fdesc:
+    ...     J = jams.load(fdesc)
+    >>> # Non-strict validation
+    >>> J = jams.load('data.jams', strict=False)
+    >>> # No validation at all
+    >>> J = jams.load('data.jams', validate=False)
     """
 
     with _open(path_or_file, mode='r', fmt=fmt) as fdesc:
@@ -757,7 +770,7 @@ class Annotation(JObject):
 
         Examples
         --------
-        >>> ann = jams.Annotation(namespace='chord_harte')
+        >>> ann = jams.Annotation(namespace='chord')
         >>> ann.append(time=0, duration=3, value='C#')
         >>> ann.append(time=3, duration=2, value='E#')
         >>> ann
@@ -847,7 +860,7 @@ class Curator(JObject):
     Container object for curator metadata.
     """
     def __init__(self, name='', email=''):
-        """Create an Curator.
+        """Create a Curator.
 
         Parameters
         ----------
