@@ -26,7 +26,7 @@ def import_lab(namespace, filename, jam=None, **parse_options):
 
     .lab files are assumed to have the following format:
 
-        ``TIME_START\\tTIME_END\\tANNOTATION``
+        ``TIME_START\tTIME_END\tANNOTATION``
 
     By default, .lab files are assumed to have columns separated by one
     or more white-space characters, and have no header or index column
