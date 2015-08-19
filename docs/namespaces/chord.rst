@@ -116,12 +116,11 @@ The ``value`` field is a structure containing the following fields:
     - Qualities are encoded as one of the following symbols:
     
         - ``o`` : diminished (triad)
-        - ``a`` : augmented (triad)
+        - ``+`` : augmented (triad)
         - ``s`` : suspension
         - ``d`` : dominant (seventh)
         - ``h`` : half-diminished (seventh)
         - ``x`` : fully-diminished (seventh)
-        - ``+`` : 
     - Inversions are encoded by arabic numerals, e.g., ``V6`` for a first-inversion triad, ``V64``
       for second inversion.
     

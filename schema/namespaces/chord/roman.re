@@ -1,1 +1,1 @@
-^([b#]?(i|I|ii|II|iii|III|iv|IV|v|V|vi|VI|vii|VII))[oasdhx+]?[0-9]?[0-9]?(/([b#]?(i|I|ii|II|iii|III|iv|IV|v|V|vi|VI|vii|VII)))?$
+^([b#]?(i|I|ii|II|iii|III|iv|IV|v|V|vi|VI|vii|VII))[osdhx+]?[0-9]?[0-9]?(/([b#]?(i|I|ii|II|iii|III|iv|IV|v|V|vi|VI|vii|VII)))?$
