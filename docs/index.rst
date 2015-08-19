@@ -7,13 +7,16 @@ JAMS
 ====
 
 .. toctree:: 
-    :maxdepth: 2
+    :maxdepth: 1
+
+    quickstart
+
+API reference
+-------------
+.. toctree:: 
+    :maxdepth: 1
 
     jams
-    eval
-    schema
-    util
-
     namespace
 
 Indices and tables
