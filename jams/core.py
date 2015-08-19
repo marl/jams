@@ -860,7 +860,7 @@ class Curator(JObject):
     Container object for curator metadata.
     """
     def __init__(self, name='', email=''):
-        """Create an Curator.
+        """Create a Curator.
 
         Parameters
         ----------
