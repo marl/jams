@@ -164,6 +164,19 @@ def load(path_or_file, validate=True, strict=True, fmt='auto'):
     --------
     JAMS.validate
     JAMS.save
+
+
+    Examples
+    --------
+    >>> # Load a jams object from a file name
+    >>> J = jams.load('data.jams')
+    >>> # Or from an open file descriptor
+    >>> with open('data.jams', 'r') as fdesc:
+    ...     J = jams.load(fdesc)
+    >>> # Non-strict validation
+    >>> J = jams.load('data.jams', strict=False)
+    >>> # No validation at all
+    >>> J = jams.load('data.jams', validate=False)
     """
 
     with _open(path_or_file, mode='r', fmt=fmt) as fdesc:
