@@ -135,7 +135,7 @@ def expand_filepaths(base_dir, rel_paths):
     return [os.path.join(base_dir, os.path.normpath(rp)) for rp in rel_paths]
 
 
-def smkdirs(dpath, mode=0777):
+def smkdirs(dpath, mode=0o777):
     """Safely make a full directory path if it doesn't exist.
 
     Parameters
