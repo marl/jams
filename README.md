@@ -12,6 +12,7 @@ JAMS is a JSON-based music annotation format.
 
 We provide:
     * A formal JSON schema for generic annotations
+    * The ability to store multiple annotations per file
     * Schema definitions for a wide range of annotation types (beats, chords, segments, tags, etc.)
     * Error detection and validation for annotations
     * A translation layer to interface with [mir eval](https://craffel.github.io/mir_eval>)
