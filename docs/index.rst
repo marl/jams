@@ -18,6 +18,7 @@ We provide:
 
     quickstart
     jams_structure
+    namespace_structure
 
 API reference
 -------------
