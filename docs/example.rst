@@ -526,3 +526,465 @@ example_eval.py
         # Print them out
         pprint(dict(scores))
 
+
+Data conversion
+^^^^^^^^^^^^^^^
+
+JAMS provides some basic functionality to help convert from flat file formats (e.g., CSV or LAB).
+
+example_chord_import.py
+~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block:: python
+    :linenos:
+
+    #!/usr/bin/env python
+
+    import jams
+    import sys
+
+    def import_chord_jams(infile, outfile):
+
+        # import_lab returns a new jams object,
+        # and a handle to the newly created annotation
+        jam, chords = jams.util.import_lab('chord', infile)
+
+        # Infer the track duration from the end of the last annotation
+        duration = (chords.data['time'] + chords.data['duration']).max()
+
+        # this timing will be in pandas timedelta.
+        # calling duration.total_seconds() converts to float
+        jam.file_metadata.duration = duration.total_seconds()
+
+        # save to disk
+        jam.save(outfile)
+
+
+    if __name__ == '__main__':
+
+        infile, outfile = sys.argv[1:]
+        import_chord_jams(infile, outfile)
+
+chord_output.jams
+~~~~~~~~~~~~~~~~~
+
+Calling the above script on `01_-_I_Saw_Her_Standing_There.lab
+<http://isophonics.net/files/annotations/chordlab/The%20Beatles/01_-_Please_Please_Me/01_-_I_Saw_Her_Standing_There.lab>`_
+from `IsoPhonics <http://isophonics.net/>`_ should produce the following JAMS object:
+
+.. code-block:: javascript
+
+    {
+      "sandbox": {}, 
+      "annotations": [
+        {
+          "data": [
+            {
+              "duration": 2.612267, 
+              "confidence": 1.0, 
+              "value": "N", 
+              "time": 0.0
+            }, 
+            {
+              "duration": 8.846803, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 2.612267
+            }, 
+            {
+              "duration": 1.462857, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 11.45907
+            }, 
+            {
+              "duration": 4.521547, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 12.921927
+            }, 
+            {
+              "duration": 2.966888, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 17.443474
+            }, 
+            {
+              "duration": 1.497687, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 20.410362
+            }, 
+            {
+              "duration": 1.462858, 
+              "confidence": 1.0, 
+              "value": "E:7/3", 
+              "time": 21.908049
+            }, 
+            {
+              "duration": 1.486077, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 23.370907
+            }, 
+            {
+              "duration": 1.486077, 
+              "confidence": 1.0, 
+              "value": "A:min/b3", 
+              "time": 24.856984
+            }, 
+            {
+              "duration": 1.497687, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 26.343061
+            }, 
+            {
+              "duration": 1.509297, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 27.840748
+            }, 
+            {
+              "duration": 5.955918, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 29.350045
+            }, 
+            {
+              "duration": 1.497687, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 35.305963
+            }, 
+            {
+              "duration": 4.459452, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 36.80365
+            }, 
+            {
+              "duration": 2.982544, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 41.263102
+            }, 
+            {
+              "duration": 1.474467, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 44.245646
+            }, 
+            {
+              "duration": 1.486077, 
+              "confidence": 1.0, 
+              "value": "E:7/3", 
+              "time": 45.720113
+            }, 
+            {
+              "duration": 1.486077, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 47.20619
+            }, 
+            {
+              "duration": 1.462857, 
+              "confidence": 1.0, 
+              "value": "A:min/b3", 
+              "time": 48.692267
+            }, 
+            {
+              "duration": 1.497687, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 50.155124
+            }, 
+            {
+              "duration": 1.486077, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 51.652811
+            }, 
+            {
+              "duration": 2.972155, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 53.138888
+            }, 
+            {
+              "duration": 9.020952, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 56.111043
+            }, 
+            {
+              "duration": 3.018594, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 65.131995
+            }, 
+            {
+              "duration": 3.041814, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 68.150589
+            }, 
+            {
+              "duration": 3.006984, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 71.192403
+            }, 
+            {
+              "duration": 1.497687, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 74.199387
+            }, 
+            {
+              "duration": 4.539501, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 75.697074
+            }, 
+            {
+              "duration": 2.972155, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 80.236575
+            }, 
+            {
+              "duration": 3.012963, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 83.20873
+            }, 
+            {
+              "duration": 1.514928, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 86.221693
+            }, 
+            {
+              "duration": 1.520907, 
+              "confidence": 1.0, 
+              "value": "A:min/b3", 
+              "time": 87.736621
+            }, 
+            {
+              "duration": 1.462857, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 89.257527
+            }, 
+            {
+              "duration": 1.437068, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 90.720385
+            }, 
+            {
+              "duration": 11.949236, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 92.157453
+            }, 
+            {
+              "duration": 3.018594, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 104.106689
+            }, 
+            {
+              "duration": 3.053424, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 107.125283
+            }, 
+            {
+              "duration": 2.94538, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 110.178707
+            }, 
+            {
+              "duration": 1.489631, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 113.124087
+            }, 
+            {
+              "duration": 1.486077, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 114.613718
+            }, 
+            {
+              "duration": 2.845166, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 116.099795
+            }, 
+            {
+              "duration": 9.101501, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 118.944961
+            }, 
+            {
+              "duration": 3.006984, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 128.046462
+            }, 
+            {
+              "duration": 2.983764, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 131.053446
+            }, 
+            {
+              "duration": 3.006985, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 134.03721
+            }, 
+            {
+              "duration": 1.431329, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 137.044195
+            }, 
+            {
+              "duration": 4.582639, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 138.475524
+            }, 
+            {
+              "duration": 2.983764, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 143.058163
+            }, 
+            {
+              "duration": 1.509297, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 146.041927
+            }, 
+            {
+              "duration": 1.509297, 
+              "confidence": 1.0, 
+              "value": "E:7/3", 
+              "time": 147.551224
+            }, 
+            {
+              "duration": 1.451247, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 149.060521
+            }, 
+            {
+              "duration": 1.509297, 
+              "confidence": 1.0, 
+              "value": "A:min/b3", 
+              "time": 150.511768
+            }, 
+            {
+              "duration": 1.509297, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 152.021065
+            }, 
+            {
+              "duration": 1.532517, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 153.530362
+            }, 
+            {
+              "duration": 4.469842, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 155.062879
+            }, 
+            {
+              "duration": 1.532517, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 159.532721
+            }, 
+            {
+              "duration": 4.516281, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 161.065238
+            }, 
+            {
+              "duration": 1.532517, 
+              "confidence": 1.0, 
+              "value": "B", 
+              "time": 165.581519
+            }, 
+            {
+              "duration": 1.532517, 
+              "confidence": 1.0, 
+              "value": "A", 
+              "time": 167.114036
+            }, 
+            {
+              "duration": 1.090856, 
+              "confidence": 1.0, 
+              "value": "E", 
+              "time": 168.646553
+            }, 
+            {
+              "duration": 1.949764, 
+              "confidence": 1.0, 
+              "value": "E:9", 
+              "time": 169.737409
+            }, 
+            {
+              "duration": 4.116909, 
+              "confidence": 1.0, 
+              "value": "N", 
+              "time": 171.687173
+            }
+          ], 
+          "annotation_metadata": {
+            "annotation_tools": "", 
+            "curator": {
+              "name": "", 
+              "email": ""
+            }, 
+            "annotator": {}, 
+            "version": "", 
+            "corpus": "", 
+            "annotation_rules": "", 
+            "validation": "", 
+            "data_source": ""
+          }, 
+          "namespace": "chord", 
+          "sandbox": {}
+        }
+      ], 
+      "file_metadata": {
+        "jams_version": "0.2.0", 
+        "title": "", 
+        "identifiers": {}, 
+        "release": "", 
+        "duration": 175.804082, 
+        "artist": ""
+      }
+    }
+
+
+More examples
+~~~~~~~~~~~~~
+In general, converting a dataset to JAMS format will require a bit more work to ensure that value fields
+conform to the specified namespace schema, but the import script above should serve as a simple starting
+point.
+
+For further reference, a separate repository `jams-data <https://github.com/marl/jams-data>`_ has been 
+created to house conversion scripts for publicly available datasets.
+Note that development of converters is a work in progress, so proceed with caution!
