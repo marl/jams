@@ -8,6 +8,11 @@ First, create the top-level JAMS container:
     >>> import jams
     >>> jam = jams.JAMS()
 
+A track in JAMS must have a duration (in seconds).  For this example, we'll make up a fake number, but in
+reality, you would compute the track duration from the source audio.
+
+    >>> jam.file_metadata.duration = 8.0
+
 Now we can create a beat annotation:
 
     >>> ann = jams.Annotation(namespace='beat')
@@ -71,7 +76,7 @@ Once you've added all your data, you can serialize the annotation to a string:
         "title": "", 
         "identifiers": {}, 
         "release": "", 
-        "duration": null, 
+        "duration": 8.0, 
         "artist": ""
       }
     }
