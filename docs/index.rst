@@ -22,7 +22,7 @@ For the most recent information, please refer to `JAMS on github <https://github
     quickstart
     jams_structure
     namespace_structure
-    example
+    examples
 
 API reference
 -------------
