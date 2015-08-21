@@ -1,12 +1,15 @@
-Example: beat and tempo
------------------------
+Examples 
+--------
+
+Storing annotations
+^^^^^^^^^^^^^^^^^^^
 
 This section demonstrates a complete use-case of JAMS for storing estimated annotations.
 The example uses `librosa <https://bmcfee.github.io/librosa/>`_ to estimate global tempo 
 and beat timings.
 
-example.py
-~~~~~~~~~~
+example_beat.py
+~~~~~~~~~~~~~~~
 
 The following script loads the librosa example audio clip, estimates the track duration,
 tempo, and beat timings, and constructs a JAMS object to store the estimations.
@@ -42,16 +45,19 @@ tempo, and beat timings, and constructs a JAMS object to store the estimations.
         beat_a = jams.Annotation(namespace='beat')
         beat_a.annotation_metadata = jams.AnnotationMetadata(data_source='librosa beat tracker')
 
-        tempo_a = jams.Annotation(namespace='tempo')
-        tempo_a.annotation_metadata = jams.AnnotationMetadata(data_source='librosa tempo estimator')
-
         # Add beat timings to the annotation record.
         # The beat namespace does not require value or confidence fields,
         # so we can leave those blank.
         for t in beat_times:
             beat_a.append(time=t, duration=0.0)
 
+        # Store the new annotation in the jam
+        jam.annotations.append(beat_a)
+
         # Add tempo estimation to the annotation.
+        tempo_a = jams.Annotation(namespace='tempo')
+        tempo_a.annotation_metadata = jams.AnnotationMetadata(data_source='librosa tempo estimator')
+
         # The tempo estimate is global, so it should start at time=0 and cover the full
         # track duration.
         # If we had a likelihood score on the estimation, it could be stored in 
@@ -61,8 +67,7 @@ tempo, and beat timings, and constructs a JAMS object to store the estimations.
                        value=tempo,
                        confidence=1.0)
 
-        # Store the new annotations in the jam
-        jam.annotations.append(beat_a)
+        # Store the new annotation in the jam
         jam.annotations.append(tempo_a)
 
         # Save to disk
@@ -464,3 +469,60 @@ The above script generates the following JAMS object.
         "artist": ""
       }
     }
+
+
+Evaluating annotations
+^^^^^^^^^^^^^^^^^^^^^^
+
+The following script illustrates how to evaluate one JAMS annotation object against another using the
+built-in `eval` submodule to wrap `mir_eval <https://craffel.github.io/mir_eval>`_.
+
+Given two jams files, say, `reference.jams` and `estimate.jams`, the script first loads them as objects
+(``j_ref`` and ``j_est``, respectively).  It then uses the :ref:`jams.JAMS.search` method to locate all
+annotations of namespace ``"beat"``.  If no matching annotations are found, an empty list is returned.
+
+In this example, we are assuming that each JAMS file contains only a
+single annotation of interest, so the first result is taken by indexing the results at 0.  (In general, you
+may want to use `annotation_metadata` to select a specific annotation from the JAMS object, if multiple are
+present.)
+
+Finally, the two annotations are compared by calling :ref:`jams.eval.beat`, which returns an ordered
+dictionary of evaluation metrics for the annotations in question.
+
+example_eval.py
+~~~~~~~~~~~~~~~
+
+.. code-block:: python
+    :linenos:
+
+    #!/usr/bin/env python
+
+    import sys
+    import jams
+
+    from pprint import pprint
+
+    def compare_beats(f_ref, f_est):
+
+        # f_ref contains the reference annotations
+        j_ref = jams.load(f_ref)
+
+        # f_est contains the estimated annotations
+        j_est = jams.load(f_est)
+
+        # Get the first reference beats
+        beat_ref = j_ref.search(namespace='beat')[0]
+        beat_est = j_est.search(namespace='beat')[0]
+
+        # Get the scores
+        return jams.eval.beat(beat_ref, beat_est)
+
+
+    if __name__ == '__main__':
+
+        f_ref, f_est = sys.argv[1:]
+        scores = compare_beats(f_ref, f_est)
+
+        # Print them out
+        pprint(dict(scores))
+
