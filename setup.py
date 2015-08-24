@@ -12,9 +12,9 @@ setup(
     url='http://github.com/marl/jams',
     download_url='http://github.com/marl/jams/releases',
     packages=find_packages(),
-    package_data={'': ['schema/*.json',
-                       'schema/namespaces/*.json',
-                       'schema/namespaces/*/*.json']},
+    package_data={'': ['schemata/*.json',
+                       'schemata/namespaces/*.json',
+                       'schemata/namespaces/*/*.json']},
     include_package_data=True,
     long_description="""A python module for audio and music processing.""",
     classifiers=[
