@@ -3,35 +3,34 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to jams's documentation!
-================================
+JAMS
+====
+A JSON Annotated Music Specification for Reproducible MIR Research.
 
-Contents:
+JAMS provides:
+    * A formal JSON schema for generic annotations
+    * The ability to store multiple annotations per file
+    * Schema definitions for a wide range of annotation types (beats, chords, segments, tags, etc.)
+    * Error detection and validation
+    * A translation layer to interface with `mir_eval <https://craffel.github.io/mir_eval>`_ for evaluating annotations
 
-.. toctree::
-   :maxdepth: 2
+For the most recent information, please refer to `JAMS on github <https://github.com/marl/jams>`_.
 
-:mod:`PyJAMS`
-----------------
+.. toctree:: 
+    :maxdepth: 1
 
-.. automodule:: pyjams
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :member-order: bysource
+    quickstart
+    jams_structure
+    namespace_structure
+    examples
 
-.. automodule:: pyjams.pyjams
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :member-order: bysource
+API reference
+-------------
+.. toctree:: 
+    :maxdepth: 1
 
-.. automodule:: pyjams.util
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :member-order: bysource
-
+    jams
+    namespace
 
 Indices and tables
 ==================

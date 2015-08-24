@@ -1,0 +1,20 @@
+{"tag_gtzan":
+    {
+        "value": { 
+            "enum": [
+                "blues",
+                "classical",
+                "country",
+                "disco",
+                "hip-hop",
+                "jazz",
+                "metal",
+                "pop",
+                "reggae",
+                "rock"
+            ]
+        },
+        "dense": false,
+        "description": "GTZAN 10-class genre annotation"
+    }
+}

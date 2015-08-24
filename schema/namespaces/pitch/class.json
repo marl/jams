@@ -1,0 +1,15 @@
+{"pitch_class":
+    {
+        "value": { 
+            "type": "object",
+            "properties": {
+                "tonic": { "type": "string", "pattern": "^[A-G][b#]?$" },
+                "pitch": { "type": "integer" }
+            },
+            "required": ["tonic", "pitch"]
+        },
+        "dense": true,
+        "description": "Pitch class in (tonic, pitch class) format"
+    }
+}
+

@@ -1,6 +1,5 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "#root",
 
     "definitions": {
 
@@ -16,7 +15,7 @@
                 "artist": { "type": "string"},
                 "title": { "type": "string"},
                 "release": { "type": "string"},
-                "duration": { "type": "string", "pattern": "[0-9][0-9]:[0-9][0-9]:[0-9][0-9]"},
+                "duration": { "type": "number", "minimum": 0.0},
                 "jams_version" : { "type": "string", "pattern": "[0-9].[0-9].[0-9]"}
             }
         },
@@ -38,7 +37,7 @@
             "description": "All metadata required to describe an annotation",
             "properties": {
                 "corpus": { "type": "string" },
-                "version": { "type": "string" },
+                "version": { "type": ["string", "number"] },
                 "curator": { "$ref": "#/definitions/Curator" },
                 "annotator": {
                     "type": "object",
@@ -49,144 +48,62 @@
                 "annotation_rules": { "type": "string"},
                 "validation": { "type": "string"},
                 "data_source": { "type": "string"}
-            },
-            "required": ["version", "curator"]
+            }
         },
 
-        "Observation": {
+        "SparseObservation": {
             "type": "object",
-            "title": "Observation",
-            "description": "An observation with a single value and confidence, e.g. a time, a frequency value, or a chord label",
+            "title": "SparseObservation",
+            "description": "An observation that spans an interval of time",
             "properties": {
-                "value": { "type": ["number", "string", "boolean"] },
-                "confidence": { "type": "number" },
-                "secondary_value": { "type": ["number", "string", "boolean"] }
+                "value": { },
+                "confidence": { },
+                "time": {"type": "number", "minimum": 0.0},
+                "duration": {"type": "number", "minimum": 0.0}
             },
-            "required": ["value"]
+            "required": ["value", "time", "duration", "confidence"]
         },
 
-        "Event": {
+        "DenseObservation": {
             "type": "object",
-            "title": "Event",
-            "description": "An event that occurs in a single point in time, e.g. an onset",
+            "title": "DenseObservation",
+            "description": "A dense series of observations",
             "properties": {
-                "time": { "$ref": "#/definitions/Observation" },
-                "label": { "$ref": "#/definitions/Observation" }
+                "value": {"type": "array"}, 
+                "confidence": {"type": "array" },
+                "time": {"type": "array", "items": { "type": "number", "minimum": 0.0 }},
+                "duration": {"type": "array", "items": { "type": "number", "minimum": 0.0 }}
             },
-            "required": ["time"]
+            "required": ["value", "time", "duration", "confidence"]
         },
 
-        "Range": {
-            "type": "object",
-            "title": "Range",
-            "description": "A concept that spans a certain time range, e.g. a chord",
-            "properties": {
-                "start": { "$ref": "#/definitions/Observation" },
-                "end": { "$ref": "#/definitions/Observation" },
-                "label": { "$ref": "#/definitions/Observation" }
-            },
-            "required": ["start", "end"]
+        "SparseObservationList": {
+            "type": "array",
+            "title": "Sparse Observation List",
+            "id": "#sparse-observation-list",
+            "description": "A list of sparse observation objects",
+            "items": { "$ref": "#/definitions/SparseObservation" }
         },
 
-        "TimeSeries": {
+        "Annotation": {
+            "id": "#annotation",
             "type": "object",
-            "title": "Time Series",
-            "description": "A sequence of values with corresponding timestamps and confidence esitmates",
-            "properties": {
-                "label": { "type": "string" },
-                "value": {
-                    "type": "array",
-                    "title": "Value",
-                    "description": "The values of the time series",
-                    "items": { "type": ["number","string","boolean"] }
-                },
-                "time": {
-                    "type": "array",
-                    "title": "Time",
-                    "description": "The timestamps of the time series",
-                    "items": { "type": "number" }
-                },
-                "confidence": {
-                    "type": "array",
-                    "title": "Confidence",
-                    "description": "The per-value confidence of the time series",
-                    "items": { "type": "number" }
-                }
-            },
-            "required": ["value", "time"]
-        },
-
-        "ObservationAnnotation": {
-            "id": "#observation-annotation",
-            "type": "object",
-            "title": "Observation Annotation",
+            "title": "Annotation",
             "description": "An annotation of a single observation, e.g. tags",
             "properties": {
-                "annotation_metadata": { "$ref": "#/definitions/annotation_metadata" },
+                "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
                 "data": {
-                    "type": "array",
                     "title": "Data",
                     "description": "An array of observations",
-                    "items": { "$ref": "#/definitions/Observation" }
+                    "oneOf": [  { "$ref": "#/definitions/DenseObservation" },
+                                { "$ref": "#/definitions/SparseObservationList" } ]
                 },
+                "namespace": {"type": "string"},
                 "sandbox": { "type": "object"}
             },
-            "required": ["annotation_metadata","file_metadata","data"]
-        },
-
-        "EventAnnotation" : {
-            "id": "#event-annotation",
-            "type": "object",
-            "title": "Event Annotation",
-            "description": "An annotation of events, e.g. beats, onsets",
-            "properties": {
-                "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
-                "data": {
-                    "type": "array",
-                    "title": "Data",
-                    "description": "An array of events",
-                    "items": { "$ref": "#/definitions/Event" }
-                },
-                "sandbox": { "type": "object"}
-            },
-            "required": ["annotation_metadata","file_metadata","data"]
-        },
-
-        "RangeAnnotation" : {
-            "id": "#range-annotation",
-            "type": "object",
-            "title": "Range Annotation",
-            "description": "An annotation of ranges, e.g. chords, sections",
-            "properties": {
-                "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
-                "data": {
-                    "type": "array",
-                    "title": "Data",
-                    "description": "An array of ranges",
-                    "items": { "$ref": "#/definitions/Range" }
-                },
-                "sandbox": { "type": "object"}
-            },
-            "required": ["annotation_metadata", "file_metadata", "data"]
-        },
-
-        "TimeSeriesAnnotation" : {
-            "id": "#time-series-annotation",
-            "type": "object",
-            "title": "Time Series Annotation",
-            "description": "An annotation of a time series, e.g. melody (f0)",
-            "properties": {
-                "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
-                "data": {
-                    "type": "array",
-                    "title": "Data",
-                    "description": "An array of time series",
-                    "items": { "$ref": "#/definitions/TimeSeries" }
-                },
-                "sandbox": { "type": "object"}
-            },
-            "required": ["annotation_metadata", "file_metadata", "data"]
+            "required": ["annotation_metadata", "data", "namespace"]
         }
+
     },
 
     "type": "object",
@@ -196,95 +113,11 @@
 
         "file_metadata": { "$ref": "#/definitions/FileMetadata" },
 
-        "genre": {
+        "annotations": {
             "type": "array",
-            "title": "Genre",
-            "description": "Genre annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
-        },
-
-        "mood": {
-            "type": "array",
-            "title": "Mood",
-            "description": "Mood annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
-        },
-
-        "tag": {
-            "type": "array",
-            "title": "Tag",
-            "description": "Semantic tag annotations",
-            "items": { "$ref": "#/definitions/ObservationAnnotation" }
-        },
-
-        "beat": {
-            "type": "array",
-            "title": "Beats",
-            "description": "Beat annotations",
-            "items": { "$ref": "#/definitions/EventAnnotation" }
-        },
-
-        "onset": {
-            "type": "array",
-            "title": "Onsets",
-            "description": "Onset annotations",
-            "items": { "$ref": "#/definitions/EventAnnotation" }
-        },
-
-        "chord": {
-            "type": "array",
-            "title": "Chords",
-            "description": "Chord annotations",
-            "items": { "$ref": "#/definitions/RangeAnnotation" }
-        },
-
-        "key": {
-            "type": "array",
-            "title": "key",
-            "description": "Key annotations",
-            "items": { "$ref": "#/definitions/RangeAnnotation" }
-        },
-
-        "segment": {
-            "type": "array",
-            "title": "Segment",
-            "description": "Structural segmentation annotations",
-            "items": { "$ref": "#/definitions/RangeAnnotation" }
-        },
-
-        "source": {
-            "type": "array",
-            "title": "Source",
-            "description": "Source activation annotations",
-            "items": { "$ref": "#/definitions/RangeAnnotation" }
-        },
-
-        "note": {
-            "type": "array",
-            "title": "Notes",
-            "description": "Notes (symbolic) annotations",
-            "items": { "$ref": "#/definitions/RangeAnnotation" }
-        },
-
-        "melody": {
-            "type": "array",
-            "title": "Melody",
-            "description": "Melody (continuous predominant f0) annotations",
-            "items": { "$ref": "#/definitions/TimeSeriesAnnotation" }
-        },
-
-        "pitch": {
-            "type": "array",
-            "title": "Pitch",
-            "description": "Pitch (continuous f0) annotations",
-            "items": { "$ref": "#/definitions/TimeSeriesAnnotation" }
-        },
-
-        "pattern": {
-            "type": "array",
-            "title": "Patterns",
-            "description": "Pattern annotations",
-            "items": { "$ref": "#/definitions/TimeSeriesAnnotation" }
+            "title": "Annotations",
+            "description": "Array of annotations",
+            "items": { "$ref": "#/definitions/Annotation" }
         },
 
         "sandbox": { "type": "object" }

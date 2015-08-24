@@ -1,0 +1,16 @@
+{"beat_position": {
+    "value": {
+        "type": "object",
+        "properties": {
+            "position": {"type": "number", "minimum": 1},
+            "measure": {"type": "integer", "minimum": 0},
+            "num_beats": { "type": "integer", "minimum": 1},
+            "beat_units": { "enum": [1, 2, 4, 8, 16, 32, 64, 128, 256]}
+        },
+        "required": ["position", "measure", "num_beats", "beat_units"]
+    },
+    "dense": false,
+    "description": "Tuples of (position, measure, beats per measure, beat units)"
+    }
+}
+

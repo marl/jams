@@ -1,0 +1,23 @@
+{"pattern_jku":
+    {
+        "value": {
+            "type": "object",
+            "properties": {
+                "midi_pitch": {"type": "number"},
+                "morph_pitch": {"type": "number"},
+                "staff": {"type": "number"},
+                "pattern_id": {
+                    "type": "number",
+                    "minimum": 1
+                },
+                "occurrence_id": {
+                    "type": "number",
+                    "minimum": 1
+                }
+            },
+            "required": ["midi_pitch", "morph_pitch", "staff", "pattern_id", "occurrence_id"]
+        },
+        "dense": false,
+        "description": "Musical pattern information (MIDI pitch associated with a time onset and a duration), including staff height, voice number, occurrence identification, and pattern identification."
+    }
+}

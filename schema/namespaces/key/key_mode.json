@@ -1,0 +1,11 @@
+{"key_mode":
+    {
+        "value": { 
+            "type": "string",
+            "pattern":
+            "^N|([A-G][b#]?)(:(major|minor|ionian|dorian|phrygian|lydian|mixolydian|aeolian|locrian))?$"
+        },
+        "dense": false,
+        "description": "Key and optional mode (major/minor or Greek modes)"
+    }
+}
