@@ -2,9 +2,9 @@ jams
 ====
 [![PyPI](https://img.shields.io/pypi/v/jams.svg)](https://pypi.python.org/pypi/jams)
 [![License](https://img.shields.io/pypi/l/jams.svg)](https://github.com/marl/jams/blob/master/LICENSE.md)
-[![Build Status](https://travis-ci.org/marl/jams.svg?branch=develop)](https://travis-ci.org/marl/jams)
-[![Coverage Status](https://coveralls.io/repos/marl/jams/badge.svg?branch=develop)](https://coveralls.io/r/marl/jams?branch=develop)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/marl/jams/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/marl/jams/?branch=develop)
+[![Build Status](https://travis-ci.org/marl/jams.svg?branch=master)](https://travis-ci.org/marl/jams)
+[![Coverage Status](https://coveralls.io/repos/marl/jams/badge.svg?branch=master)](https://coveralls.io/r/marl/jams?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/marl/jams/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/marl/jams/?branch=master)
 
 A JSON Annotated Music Specification for Reproducible MIR Research.
 
