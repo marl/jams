@@ -15,7 +15,6 @@ setup(
     package_data={'': ['schemata/*.json',
                        'schemata/namespaces/*.json',
                        'schemata/namespaces/*/*.json']},
-    include_package_data=True,
     long_description="""A python module for audio and music processing.""",
     classifiers=[
         "License :: OSI Approved :: ISC License (ISCL)",
