@@ -230,7 +230,7 @@ class JObject(object):
 
     @property
     def __json__(self):
-        r"""Return the JObject as a set of native datatypes for serialization.
+        r"""Return the JObject as a set of native data types for serialization.
 
         Note: attributes beginning with underscores are suppressed.
         """
@@ -249,7 +249,7 @@ class JObject(object):
 
     @classmethod
     def __json_init__(cls, **kwargs):
-        """TODO(ejhumphrey@nyu.edu): writeme."""
+        """Initialize the object from a dictionary of values"""
         return cls(**kwargs)
 
     def __eq__(self, other):
@@ -260,7 +260,7 @@ class JObject(object):
         return bool(self.__json__)
 
     def __getitem__(self, key):
-        """TODO(ejhumphrey@nyu.edu): writeme."""
+        """Dict-style interface"""
         return self.__dict__[key]
 
     def __setattr__(self, name, value):
@@ -326,7 +326,7 @@ class JObject(object):
 
     def update(self, **kwargs):
         '''Update the attributes of a JObject.
-        
+
         Parameters
         ----------
         kwargs
@@ -351,7 +351,7 @@ class JObject(object):
 
     @classmethod
     def loads(cls, string):
-        '''Deserialize a JObject
+        '''De-serialize a JObject
 
         Parameters
         ----------
@@ -493,7 +493,7 @@ class Sandbox(JObject):
 
 
 class JamsFrame(pd.DataFrame):
-    '''A dataframe class for JAMS.
+    '''A data-frame class for JAMS.
 
     This automates certain niceties, such as timestamp
     conversion and serialization.
@@ -1038,7 +1038,7 @@ class JAMS(JObject):
         Parameters
         ----------
         annotations : list of Annotations
-            Zero or more Annotation objcets
+            Zero or more Annotation objects
 
         file_metadata : FileMetadata (or dict), default=None
             Metadata corresponding to the audio file.
@@ -1266,7 +1266,7 @@ def match_query(string, query):
     -------
     match : bool
         `True` if `query` is a callable and `query(string) == True`
-        or if `query` is a regexp and `re.match(query, regexp)`
+        or if `query` is a regular expression and `re.match(query, string)`
 
         `False` otherwise
 
@@ -1288,7 +1288,7 @@ def match_query(string, query):
 def serialize_obj(obj):
     '''Custom serialization functionality for working with advanced data types.
 
-    - Timedelta objects are convered to floats (in seconds)
+    - Timedelta objects are converted to floats (in seconds)
     - numpy arrays are converted to lists
     - lists are recursively serialized element-wise
 
