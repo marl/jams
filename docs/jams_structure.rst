@@ -9,7 +9,7 @@ JAMS
 A JAMS object consists of three basic properties:
     * ``file_metadata``, which describes the audio file to which these annotations are attached;
     * ``annotations``, a list of Annotation_ objects (described below); and
-    * ``sandbox``, an un-restricted place to store any additional data.
+    * ``sandbox``, an unrestricted place to store any additional data.
 
 
 FileMetadata
@@ -32,13 +32,13 @@ Each annotation object contains the following properties:
         * ``value`` : actual annotation (e.g., chord, segment label)
         * ``confidence`` : certainty of the annotation
     * ``annotation_metadata`` : see Annotation_Metadata_; and
-    * ``sandbox`` : additional un-structured storage space for this annotation.
+    * ``sandbox`` : additional unstructured storage space for this annotation.
 
 The permissible contents of the ``value`` and ``confidence`` fields are defined by the ``namespace``.
 
 Annotation_Metadata
 ~~~~~~~~~~~~~~~~~~~
-The metadata associated with each annotation describes the process by which the annotation was generated.
+The meta-data associated with each annotation describes the process by which the annotation was generated.
 The ``annotation_metadata`` property has the following fields:
 
     * ``corpus``: a string describing a corpus to which this annotation belongs;
