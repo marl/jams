@@ -8,6 +8,9 @@ jams
 
 A JSON Annotated Music Specification for Reproducible MIR Research.
 
+Please, refer to [documentation](http://pythonhosted.org/jams/) for a comprehensive
+description of JAMS.
+
 What
 ----
 JAMS is a JSON-based music annotation format.
