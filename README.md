@@ -42,7 +42,7 @@ This library is offered as a proof-of-concept, demonstrating the promise of a
 JSON-based schema to meet the needs of the MIR community. To install, clone the
 repository into a working directory and proceed thusly.
 
-The full documentation can be found [here](git@github.com:marl/jams.git).
+The full documentation can be found [here](http://pythonhosted.org/jams/).
 
 Who
 ----
