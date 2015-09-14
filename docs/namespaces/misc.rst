@@ -1,5 +1,11 @@
+Miscellaneous
+-------------
+
+Vector
+~~~~~~
+
 Blob
-----
+~~~~
 
 Arbitrary data blobs.
 

@@ -26,5 +26,5 @@ Namespace definitions
 
 .. include:: namespaces/tempo.rst
 
-.. include:: namespaces/blob.rst
+.. include:: namespaces/misc.rst
 
