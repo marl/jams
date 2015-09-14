@@ -659,3 +659,16 @@ def test_ns_pattern_invalid():
             pattern = good_pattern.copy()
             pattern[key] = bad_value
             yield __test, pattern
+
+
+def test_ns_blob():
+
+    def __test(label):
+        ann = Annotation(namespace='blob')
+
+        ann.append(time=0, duration=1, value=label)
+
+        ann.validate()
+
+    for line in ['a tag', six.u('a unicode tag'), 23, None, dict(), list()]:
+        yield __test, line
