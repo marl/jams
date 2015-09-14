@@ -25,3 +25,6 @@ Namespace definitions
 .. include:: namespaces/tag.rst
 
 .. include:: namespaces/tempo.rst
+
+.. include:: namespaces/blob.rst
+
