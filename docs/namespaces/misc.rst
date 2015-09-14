@@ -4,6 +4,19 @@ Miscellaneous
 Vector
 ~~~~~~
 
+Numerical vector data.  This is useful for generic regression problems where the output is
+a vector of numbers.
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    [sec] [sec]    [array of numbers]    --
+    ===== ======== ================== ==========
+
+Each observation value must be an array of at least one number.  Different observations
+may have different length arrays, so it is up to the user to verify that arrays have the
+desired length.
+
 Blob
 ~~~~
 
