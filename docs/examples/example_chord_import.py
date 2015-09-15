@@ -16,6 +16,9 @@ def import_chord_jams(infile, outfile):
     # calling duration.total_seconds() converts to float
     jam.file_metadata.duration = duration.total_seconds()
 
+    chords.time = 0
+    chords.duration = duration.total_seconds()
+
     # save to disk
     jam.save(outfile)
 

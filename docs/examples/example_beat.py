@@ -36,7 +36,7 @@ def beat_track(infile, outfile):
     jam.annotations.append(beat_a)
 
     # Add tempo estimation to the annotation.
-    tempo_a = jams.Annotation(namespace='tempo')
+    tempo_a = jams.Annotation(namespace='tempo', time=0, duration=track_duration)
     tempo_a.annotation_metadata = jams.AnnotationMetadata(data_source='librosa tempo estimator')
 
     # The tempo estimate is global, so it should start at time=0 and cover the full

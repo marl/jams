@@ -2,6 +2,23 @@
   "sandbox": {}, 
   "annotations": [
     {
+      "namespace": "chord", 
+      "sandbox": {}, 
+      "time": 0, 
+      "duration": 175.804082, 
+      "annotation_metadata": {
+        "annotation_tools": "", 
+        "curator": {
+          "name": "", 
+          "email": ""
+        }, 
+        "annotator": {}, 
+        "version": "", 
+        "corpus": "", 
+        "annotation_rules": "", 
+        "validation": "", 
+        "data_source": ""
+      }, 
       "data": [
         {
           "duration": 2.612267, 
@@ -375,22 +392,7 @@
           "value": "N", 
           "time": 171.687173
         }
-      ], 
-      "annotation_metadata": {
-        "annotation_tools": "", 
-        "curator": {
-          "name": "", 
-          "email": ""
-        }, 
-        "annotator": {}, 
-        "version": "", 
-        "corpus": "", 
-        "annotation_rules": "", 
-        "validation": "", 
-        "data_source": ""
-      }, 
-      "namespace": "chord", 
-      "sandbox": {}
+      ]
     }
   ], 
   "file_metadata": {
