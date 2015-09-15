@@ -1,0 +1,11 @@
+{"vector":
+    {
+        "value": {
+            "type": "array",
+            "items": {"type": "number"},
+            "minItems": 1
+        },
+        "dense": false,
+        "description": "Numerical vector annotations"
+    }
+}

@@ -662,7 +662,6 @@ def test_ns_pattern_invalid():
 
 
 def test_ns_blob():
-
     def __test(label):
         ann = Annotation(namespace='blob')
 
@@ -672,3 +671,19 @@ def test_ns_blob():
 
     for line in ['a tag', six.u('a unicode tag'), 23, None, dict(), list()]:
         yield __test, line
+
+
+def test_ns_vector():
+
+    def __test(label):
+        ann = Annotation(namespace='vector')
+
+        ann.append(time=0, duration=1, value=label)
+
+        ann.validate()
+
+    for line in [[1], [1, 2], np.asarray([1]), np.asarray([1, 2])]:
+        yield __test, line
+
+    for line in ['a tag', six.u('a unicode tag'), 23, None, dict(), list()]:
+        yield raises(SchemaError)(__test), line
