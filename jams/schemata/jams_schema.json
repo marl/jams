@@ -99,7 +99,15 @@
                                 { "$ref": "#/definitions/SparseObservationList" } ]
                 },
                 "namespace": {"type": "string"},
-                "sandbox": { "type": "object"}
+                "sandbox": { "type": "object"},
+                "time": {
+                    "oneOf": [ {"type": "number", "minimum": 0.0},
+                               {"type": "null"} ]
+                },
+                "duration": {
+                    "oneOf": [ {"type": "number", "minimum": 0.0},
+                               {"type": "null"} ]
+                }
             },
             "required": ["annotation_metadata", "data", "namespace"]
         }

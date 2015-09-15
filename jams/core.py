@@ -705,7 +705,7 @@ class Annotation(JObject):
     """Annotation base class."""
 
     def __init__(self, namespace, data=None, annotation_metadata=None,
-                 sandbox=None):
+                 sandbox=None, time=0, duration=None):
         """Create an Annotation.
 
         Note that, if an argument is None, an empty Annotation is created in
@@ -725,6 +725,12 @@ class Annotation(JObject):
 
         sandbox : Sandbox (dict), default=None
             Miscellaneous information; keep to native datatypes if possible.
+
+        time : non-negative number
+            The starting time for this annotation
+
+        duration : non-negative number
+            The duration of this annotation
         """
 
         super(Annotation, self).__init__()
@@ -748,6 +754,10 @@ class Annotation(JObject):
 
         # Set the data export coding to match the namespace
         self.data.dense = schema.is_dense(self.namespace)
+
+        self.time = time
+        self.duration = duration
+
 
     def append(self, **kwargs):
         '''Append an observation to the data field
