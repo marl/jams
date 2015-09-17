@@ -687,3 +687,24 @@ def test_ns_vector():
 
     for line in ['a tag', six.u('a unicode tag'), 23, None, dict(), list()]:
         yield raises(SchemaError)(__test), line
+
+
+def test_ns_multi_segment():
+
+    def __test(label, level):
+        ann = Annotation(namespace='multi_segment')
+
+        ann.append(time=0, duration=1, value=dict(label=label, level=level))
+
+        ann.validate()
+
+    for label in ['a segment', six.u('a unicode segment')]:
+        for level in [0, 1, 2]:
+            yield __test, label, level
+        for level in [-1, None, 'foo']:
+            yield raises(SchemaError)(__test), label, level
+
+    for label in [23, None]:
+        for level in [0, 1, 2]:
+            yield raises(SchemaError)(__test), label, level
+
