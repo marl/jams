@@ -691,20 +691,22 @@ def test_ns_vector():
 
 def test_ns_multi_segment():
 
-    def __test(label, level):
+    def __test(value):
         ann = Annotation(namespace='multi_segment')
 
-        ann.append(time=0, duration=1, value=dict(label=label, level=level))
+        ann.append(time=0, duration=1, value=value)
 
         ann.validate()
 
     for label in ['a segment', six.u('a unicode segment')]:
+        yield raises(SchemaError)(__test), label
         for level in [0, 1, 2]:
-            yield __test, label, level
+            yield __test, dict(label=label, level=level)
         for level in [-1, None, 'foo']:
-            yield raises(SchemaError)(__test), label, level
+            yield raises(SchemaError)(__test), dict(label=label, level=level)
 
     for label in [23, None]:
+        yield raises(SchemaError)(__test), label
         for level in [0, 1, 2]:
-            yield raises(SchemaError)(__test), label, level
+            yield raises(SchemaError)(__test), dict(label=label, level=level)
 
