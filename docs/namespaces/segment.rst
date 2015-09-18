@@ -125,3 +125,47 @@ The ``value`` field is a string describing the function of the segment.
     30.00 50.000   bridge               null
     50.00 70.000   RefrainA             null
     ===== ======== ==================== ==========
+
+
+multi_segment
+~~~~~~~~~~~~~
+Multi-level structural segmentations.
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    [sec] [sec]    * label : string   --
+                   * level : int >= 0
+    ===== ======== ================== ==========
+
+In a multi-level segmentation, the track is partitioned many times --- 
+possibly recursively --- which results in a collection of segmentations of varying degrees
+of specificity.  In the ``multi_segment`` namespace, all of the resulting segments are
+collected together, and the ``level`` field is used to encode the segment's corresponding
+partition.
+
+Level values must be non-negative, and ordered by increasing specificity.  For example,
+``level==0`` may correspond to a single segment spanning the entire track, and each
+subsequent level value corresponds to a more refined segmentation.
+
+*Example*
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    0.000 60.000   * label : A        null
+                   * level : 0
+    0.000 30.000   * label : B        null
+                   * level : 1
+    30.00 60.000   * label : C        null
+                   * level : 1
+    0.000 15.000   * label : a        null
+                   * level : 2
+    15.00 30.000   * label : b        null
+                   * level : 2
+    30.00 45.000   * label : a        null
+                   * level : 2
+    45.00 60.000   * label : c        null
+                   * level : 2
+    ===== ======== ================== ==========
+
+
