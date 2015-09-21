@@ -15,7 +15,7 @@ reality, you would compute the track duration from the source audio.
 
 Now we can create a beat annotation:
 
-    >>> ann = jams.Annotation(namespace='beat')
+    >>> ann = jams.Annotation(namespace='beat', time=0, duration=jam.file_metadata.duration)
     >>> ann.append(time=0.33, duration=0.0, confidence=1, value=1)
 
 Then, we'll update the annotation's metadata by directly setting its fields:

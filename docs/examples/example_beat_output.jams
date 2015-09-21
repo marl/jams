@@ -2,6 +2,23 @@
   "sandbox": {}, 
   "annotations": [
     {
+      "namespace": "beat", 
+      "sandbox": {}, 
+      "time": 0, 
+      "duration": null, 
+      "annotation_metadata": {
+        "annotation_tools": "", 
+        "curator": {
+          "name": "", 
+          "email": ""
+        }, 
+        "annotator": {}, 
+        "version": "", 
+        "corpus": "", 
+        "annotation_rules": "", 
+        "validation": "", 
+        "data_source": "librosa beat tracker"
+      }, 
       "data": [
         {
           "duration": 0.0, 
@@ -327,32 +344,13 @@
           "value": NaN, 
           "time": 57.051429
         }
-      ], 
-      "annotation_metadata": {
-        "annotation_tools": "", 
-        "curator": {
-          "name": "", 
-          "email": ""
-        }, 
-        "annotator": {}, 
-        "version": "", 
-        "corpus": "", 
-        "annotation_rules": "", 
-        "validation": "", 
-        "data_source": "librosa beat tracker"
-      }, 
-      "namespace": "beat", 
-      "sandbox": {}
+      ]
     }, 
     {
-      "data": [
-        {
-          "duration": 61.458866, 
-          "confidence": 1.0, 
-          "value": 64.599609375, 
-          "time": 0.0
-        }
-      ], 
+      "namespace": "tempo", 
+      "sandbox": {}, 
+      "time": 0, 
+      "duration": 61.45886621315193, 
       "annotation_metadata": {
         "annotation_tools": "", 
         "curator": {
@@ -366,8 +364,14 @@
         "validation": "", 
         "data_source": "librosa tempo estimator"
       }, 
-      "namespace": "tempo", 
-      "sandbox": {}
+      "data": [
+        {
+          "duration": 61.458866, 
+          "confidence": 1.0, 
+          "value": 64.599609375, 
+          "time": 0.0
+        }
+      ]
     }
   ], 
   "file_metadata": {

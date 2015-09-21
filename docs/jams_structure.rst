@@ -33,8 +33,15 @@ Each annotation object contains the following properties:
         * ``confidence`` : certainty of the annotation
     * ``annotation_metadata`` : see Annotation_Metadata_; and
     * ``sandbox`` : additional unstructured storage space for this annotation.
+    * ``time`` : optional non-negative number indicating the beginning point at which this annotation is valid
+    * ``duration`` : optional non-negative number indicating the duration of the valid portion of this
+      annotation.
 
 The permissible contents of the ``value`` and ``confidence`` fields are defined by the ``namespace``.
+
+.. note:: The ``time`` and ``duration`` fields of ``annotation`` are considered optional.  If left blank,
+          the annotation should be assumed to be valid for the entirety of the track.
+
 
 Annotation_Metadata
 ~~~~~~~~~~~~~~~~~~~
