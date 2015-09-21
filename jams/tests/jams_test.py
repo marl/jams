@@ -529,6 +529,8 @@ def test_jams_search():
     yield __test, jam, dict(namespace='beat'), jam.annotations[0:1]
     yield __test, jam, dict(namespace='tag_open'), jam.annotations[1:]
     yield __test, jam, dict(namespace='segment_tut'), jams.AnnotationArray()
+    yield __test, jam.file_metadata, dict(duration=40.0), True
+    yield __test, jam.file_metadata, dict(duration=39.0), False
 
 
 def test_jams_validate_good():

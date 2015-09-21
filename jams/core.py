@@ -390,8 +390,9 @@ class JObject(object):
             `key` must be a string, and should correspond to a property in
             the JAMS object hierarchy, e.g., 'Annotation.namespace` or `email`
 
-            `value` must be either a string describing a search pattern (regular
-            expression) or a lambda function which evaluates to `True` if the candidate
+            `value` must be either an object (tested for equality), a
+            string describing a search pattern (regular expression), or a
+            lambda function which evaluates to `True` if the candidate
             object matches the search criteria and `False` otherwise.
 
         Returns
@@ -399,11 +400,6 @@ class JObject(object):
         match : bool
             `True` if any of the search keys match the specified value,
             `False` otherwise, or if the search keys do not exist within the object.
-
-        Raises
-        ------
-        ParameterError
-            If a search value is not a string or callable
 
         Examples
         --------
@@ -413,6 +409,10 @@ class JObject(object):
         >>> J.search(needle='.*orange.*')
         False
         >>> J.search(badger='.*brown.*')
+        False
+        >>> J.search(foo=5)
+        True
+        >>> J.search(foo=10)
         False
         >>> J.search(foo=lambda x: x < 10)
         True
@@ -1252,28 +1252,26 @@ def query_pop(query, prefix, sep='.'):
 
 
 def match_query(string, query):
-    '''Test if a string matches a functional query.
+    '''Test if a string matches a query.
 
     Parameters
     ----------
     string : str
         The string to test
 
-    query : string or callable
-        Either a regular expression or a callable function
+    query : string, callable, or object
+        Either a regular expression, callable function, or object.
 
     Returns
     -------
     match : bool
-        `True` if `query` is a callable and `query(string) == True`
-        or if `query` is a regular expression and `re.match(query, string)`
+        `True` if:
+        - `query` is a callable and `query(string) == True`
+        - `query` is a regular expression and `re.match(query, string)`
+        - or `string == query` for any other query
 
         `False` otherwise
 
-    Raises
-    ------
-    ParameterError
-        if `query` is not a string or callable
     '''
 
     if six.callable(query):
@@ -1282,7 +1280,8 @@ def match_query(string, query):
     elif isinstance(query, six.string_types):
         return re.match(query, string) is not None
 
-    raise ParameterError('Invalid query type: {}'.format(type(query)))
+    else:
+        return query == string
 
 
 def serialize_obj(obj):

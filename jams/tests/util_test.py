@@ -80,7 +80,8 @@ def test_match_query():
     yield __test, lambda x: True, haystack, True
     yield __test, lambda x: False, haystack, False
 
-    yield raises(jams.ParameterError)(__test), None, haystack, False
+    yield __test, 5, 5, True
+    yield __test, 5, 4, False
 
 
 def test_smkdirs():
