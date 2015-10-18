@@ -21,7 +21,7 @@ before_install:
       elif [[ "$TRAVIS_PYTHON_VERSION" == "3.4" ]]; then
         export PATH="$HOME/env/miniconda34/bin:$PATH";
       else
-        export PATH="$HOME/env/miniconda34/bin:$PATH";
+        export PATH="$HOME/env/miniconda35/bin:$PATH";
       fi
     - hash -r
     - source activate test-environment
