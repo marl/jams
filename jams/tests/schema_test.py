@@ -4,6 +4,8 @@
 
 from pkg_resources import resource_filename
 
+from six.moves import reload_module
+
 import os
 
 from nose.tools import raises
