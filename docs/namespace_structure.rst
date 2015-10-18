@@ -58,8 +58,16 @@ but dense coding is more space-efficient for high-frequency observations such as
 
 Finally, line 13 contains a brief description of the namespace and corresponding task.
 
+
+Local namespaces
+~~~~~~~~~~~~~~~~
+
 The JAMS namespace management architecture is modular and extensible, so it is relatively straightforward 
 to create a new namespace schema and add it to JAMS at run-time:
 
     >>> jams.schema.add_namespace('/path/to/my/new/namespace.json')
 
+Beginning with JAMS 0.2.1, a custom schema directory can be provided by setting the
+``JAMS_SCHEMA_DIR`` environment variable prior to importing ``jams``.  This allows local
+customizations to be added automatically at run-time without having to manually add each
+schema file individually.
