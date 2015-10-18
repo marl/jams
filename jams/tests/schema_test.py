@@ -62,9 +62,15 @@ def test_schema_local():
                                                       os.path.join('tests',
                                                                    'fixtures',
                                                                    'schema'))
+
+    # Namespace should not exist yet
+    test_ns = 'testing_tag_upper'
+    yield raises(NamespaceError)(__test), test_ns
+
     reload_module(jams)
 
-    yield __test, 'testing_tag_upper'
+    # Now it should
+    yield __test, test_ns
     
     del os.environ['JAMS_SCHEMA_DIR']
 
