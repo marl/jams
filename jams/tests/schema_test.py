@@ -62,7 +62,7 @@ def test_schema_local():
                                                       os.path.join('tests',
                                                                    'fixtures',
                                                                    'schema'))
-    reload(jams)
+    reload_module(jams)
 
     yield __test, 'testing_tag_upper'
     
