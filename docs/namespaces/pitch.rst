@@ -14,7 +14,7 @@ Pitch measurements in ``(tonic, pitch class)`` format.
 
 Each ``value`` field is a structure containing a ``tonic`` (note string, e.g., ``"A#"`` or
 ``"D"``)
-and a pitch class as an integer scale degree.  The ``confidence`` field is unconstrained.
+and a pitch class ``pitch`` as an integer scale degree.  The ``confidence`` field is unconstrained.
 
 
 *Example*
@@ -23,16 +23,16 @@ and a pitch class as an integer scale degree.  The ``confidence`` field is uncon
     | time  | duration | value            | confidence |
     +=======+==========+==================+============+
     | 0.000 | 30.0     | - tonic: ``C``   | null       |
-    |       |          | - pitch class: 0 |            |
+    |       |          | - pitch: 0       |            |
     +-------+----------+------------------+------------+
     | 0.000 | 30.0     | - tonic: ``C``   | null       |
-    |       |          | - pitch class: 4 |            |
+    |       |          | - pitch: 4       |            |
     +-------+----------+------------------+------------+
     | 0.000 | 30.0     | - tonic: ``C``   | null       |
-    |       |          | - pitch class: 7 |            |
+    |       |          | - pitch: 7       |            |
     +-------+----------+------------------+------------+
     | 30.00 | 35.0     | - tonic: ``G``   | null       |
-    |       |          | - pitch class: 0 |            |
+    |       |          | - pitch: 0       |            |
     +-------+----------+------------------+------------+
 
 
