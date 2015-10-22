@@ -22,6 +22,7 @@ before_install:
 
 install:
     # install your own package into the environment
+    - pip install --upgrade git+https://github.com/craffel/mir_eval.git
     - pip install -e .
 
 script:
