@@ -1,0 +1,7 @@
+{"testing_tag_upper":
+    {
+        "value": { "type": "string", "pattern": "^[A-Z]*$"},
+        "dense": false,
+        "description": "(testing) Upper-case strings only"
+    }
+}

@@ -17,3 +17,11 @@ for _ in util.find_with_extension(resource_filename(__name__, schema.NS_SCHEMA_D
                                   'json'):
     schema.add_namespace(_)
 
+# Populate local namespaces
+import os
+
+try:
+    for _ in util.find_with_extension(os.environ['JAMS_SCHEMA_DIR'], 'json'):
+        schema.add_namespace(_)
+except KeyError:
+    pass
