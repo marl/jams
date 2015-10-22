@@ -118,16 +118,16 @@ pygments_style = 'sphinx'
 
 
 # Mock
-#if six.PY3:
-    #    from unittest.mock import MagicMock
-#else:
-    #    from mock import Mock as MagicMock
+from mock import Mock as MagicMock
 
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+        return Mock()
 
-#class Mock(MagicMock):
-#    @classmethod
-#    def __getattr__(cls, name):
-#        return Mock()
+MOCK_MODULES = ['jsonschema']
+
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # -- Options for HTML output ----------------------------------------------
 
