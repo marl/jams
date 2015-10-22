@@ -14,6 +14,7 @@ Evaluation
     segment
     tempo
     pattern
+    hierarchy
 '''
 
 from collections import defaultdict
@@ -24,7 +25,7 @@ import mir_eval
 
 from .exceptions import NamespaceError
 
-__all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'tempo', 'pattern']
+__all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'hierarchy', 'tempo', 'pattern']
 
 
 def validate_annotation(ann, namespace):
@@ -228,6 +229,83 @@ def segment(ref, est, **kwargs):
 
     return mir_eval.segment.evaluate(ref_interval, ref_value,
                                      est_interval, est_value, **kwargs)
+
+
+def hierarchy_flatten(annotation):
+    '''Flatten a multi_segment annotation into mir_eval style.
+
+    Parameters
+    ----------
+    annotation : jams.Annotation
+        An annotation in the `multi_segment` namespace
+
+    Returns
+    -------
+    hier_intervalss : list
+        A list of lists of intervals, ordered by increasing specificity.
+
+    hier_labels : list
+        A list of lists of labels, ordered by increasing specificity.
+    '''
+
+    intervals, values = annotation.data.to_interval_values()
+
+    ordering = dict()
+
+    for interval, value in zip(intervals, values):
+        level = value['level']
+        if level not in ordering:
+            ordering[level] = dict(intervals=list(), labels=list())
+
+        ordering[level]['interval'].append(interval)
+        ordering[level]['labels'].append(value['label'])
+
+    levels = sorted(list(ordering.keys()))
+    hier_intervals = [ordering[level]['interval'] for level in levels]
+    hier_labels = [ordering[level]['interval'] for level in levels]
+
+    return hier_intervals, hier_labels
+
+
+def hierarchy(ref, est, **kwargs):
+    r'''Multi-level segmentation evaluation
+
+    Parameters
+    ----------
+    ref : jams.Annotation
+        Reference annotation object
+    est : jams.Annotation
+        Estimated annotation object
+    kwargs
+        Additional keyword arguments
+
+    Returns
+    -------
+    scores : dict
+        Dictionary of scores, where the key is the metric name (str) and
+        the value is the (float) score achieved.
+
+    See Also
+    --------
+    mir_eval.hierarchy.evaluate
+
+    Examples
+    --------
+    >>> # Load in the JAMS objects
+    >>> ref_jam = jams.load('reference.jams')
+    >>> est_jam = jams.load('estimated.jams')
+    >>> # Select the first relevant annotations
+    >>> ref_ann = ref_jam.search(namespace='multi_segment')[0]
+    >>> est_ann = est_jam.search(namespace='multi_segment')[0]
+    >>> scores = jams.eval.hierarchy(ref_ann, est_ann)
+    '''
+    namespace = 'multi_segment'
+    validate_annotation(ref, namespace)
+    validate_annotation(est, namespace)
+    ref_hier, _ = hierarchy_flatten(ref)
+    est_hier, _ = hierarchy_flatten(est)
+
+    return mir_eval.hierarchy.evaluate(ref_hier, est_hier, **kwargs)
 
 
 def tempo(ref, est, **kwargs):
