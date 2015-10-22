@@ -257,12 +257,12 @@ def hierarchy_flatten(annotation):
         if level not in ordering:
             ordering[level] = dict(intervals=list(), labels=list())
 
-        ordering[level]['interval'].append(interval)
+        ordering[level]['intervals'].append(interval)
         ordering[level]['labels'].append(value['label'])
 
     levels = sorted(list(ordering.keys()))
-    hier_intervals = [ordering[level]['interval'] for level in levels]
-    hier_labels = [ordering[level]['interval'] for level in levels]
+    hier_intervals = [ordering[level]['intervals'] for level in levels]
+    hier_labels = [ordering[level]['labels'] for level in levels]
 
     return hier_intervals, hier_labels
 
