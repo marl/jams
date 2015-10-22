@@ -125,7 +125,7 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
         return Mock()
 
-MOCK_MODULES = ['jsonschema', 'pandas', 'numpy']
+MOCK_MODULES = ['jsonschema', 'mir_eval', 'pandas', 'numpy']
 
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
