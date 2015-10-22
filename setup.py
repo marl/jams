@@ -36,7 +36,8 @@ setup(
         'numpy>=1.8.0',
         'six',
         'decorator',
-        'mir_eval>=0.2',
+        #        'mir_eval>=0.2',
+        'mir_eval',
     ],
     scripts=['scripts/jams_to_lab.py']
 )
