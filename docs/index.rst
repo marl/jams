@@ -43,7 +43,7 @@ Changelog
 .. toctree::
     :maxdepth: 1
 
-    changelog
+    changes
 
 * :ref:`genindex`
 
