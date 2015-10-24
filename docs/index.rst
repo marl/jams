@@ -32,10 +32,18 @@ API reference
     jams
     namespace
 
-Indices and tables
-==================
+Contribute
+----------
+- `Issue Tracker <http://github.com/marl/jams/issues>`_
+- `Source Code <http://github.com/marl/jams>`_
+
+
+Changelog
+=========
+.. toctree::
+    :maxdepth: 1
+
+    changelog
 
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
