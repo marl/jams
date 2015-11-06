@@ -23,3 +23,9 @@ Schema changes
   - ``Annotation`` objects now have ``time`` and ``duration`` fields which encode the
     interval over which the annotation is valid.
     (`PR #67 <https://github.com/marl/jams/pull/67>`_).
+
+Bug fixes
+  - Appending data to ``Annotation`` or ``JamsFrame`` objects now fails if ``time`` or ``duration`` are
+    ill-specified.
+    (`PR #87 <https://github.com/marl/jams/pull/87>`_).
+
