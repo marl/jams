@@ -675,6 +675,12 @@ class JamsFrame(pd.DataFrame):
         1 00:00:05 00:00:00.500000  C#:min        0.8
         '''
 
+        if time is None or not (time >= 0.0):
+            raise ParameterError('time={} must be a non-negative number'.format(time))
+
+        if duration is None or not (duration >= 0.0):
+            raise ParameterError('duration={} must be a non-negative number'.format(duration))
+
         n = len(self)
         self.loc[n] = {'time': pd.to_timedelta(time, unit='s'),
                        'duration': pd.to_timedelta(duration, unit='s'),
