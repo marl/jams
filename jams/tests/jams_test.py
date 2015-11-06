@@ -186,6 +186,10 @@ def test_jamsframe_add_observation_fail():
     yield __test, ann, 0.0, None, 'foo', 1
     yield __test, ann, None, 1.0, 'foo', 1
 
+    yield __test, ann, -1, -1, 'foo', 1
+    yield __test, ann, 0.0, -1, 'foo', 1
+    yield __test, ann, -1, 1.0, 'foo', 1
+
 
 def test_jamsframe_interval_values():
 
