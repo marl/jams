@@ -505,6 +505,71 @@ def test_ns_tag_gtzan():
     for tag in [23, None]:
         yield raises(SchemaError)(__test), tag
 
+def test_ns_tag_msd_tagtraum_cd1():
+
+    def __test(tag):
+        ann = Annotation(namespace='tag_msd_tagtraum_cd1')
+
+        ann.append(time=0, duration=1, value=tag)
+
+        ann.validate()
+
+    for tag in ['reggae',
+                'pop/rock',
+                'rnb',
+                'jazz',
+                'vocal',
+                'new age',
+                'latin',
+                'rap',
+                'country',
+                'international',
+                'blues',
+                'electronic',
+                'folk']:
+
+        yield __test, tag
+        yield __test, six.u(tag)
+        yield raises(SchemaError)(__test), tag.upper()
+
+
+    for tag in [23, None]:
+        yield raises(SchemaError)(__test), tag
+
+
+def test_ns_tag_msd_tagtraum_cd2():
+
+    def __test(tag):
+        ann = Annotation(namespace='tag_msd_tagtraum_cd2')
+
+        ann.append(time=0, duration=1, value=tag)
+
+        ann.validate()
+
+    for tag in ['reggae',
+                'latin',
+                'metal',
+                'rnb',
+                'jazz',
+                'punk',
+                'pop',
+                'new age',
+                'country',
+                'rap',
+                'rock',
+                'world',
+                'blues',
+                'electronic',
+                'folk']:
+
+        yield __test, tag
+        yield __test, six.u(tag)
+        yield raises(SchemaError)(__test), tag.upper()
+
+
+    for tag in [23, None]:
+        yield raises(SchemaError)(__test), tag
+        
 def test_ns_tag_medleydb():
 
     def __test(tag):
