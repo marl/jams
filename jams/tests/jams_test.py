@@ -171,6 +171,22 @@ def test_jamsframe_add_observation():
     eq_(list(jf['confidence']), [0.0, 0.0, 0.0])
 
 
+def test_jamsframe_add_observation_fail():
+
+    @raises(jams.ParameterError)
+    def __test(ann, time, duration, value, confidence):
+        ann.data.add_observation(time=time,
+                                 duration=duration,
+                                 value=value,
+                                 confidence=confidence)
+
+    ann = jams.Annotation(namespace='tag_open')
+
+    yield __test, ann, None, None, 'foo', 1
+    yield __test, ann, 0.0, None, 'foo', 1
+    yield __test, ann, None, 1.0, 'foo', 1
+
+
 def test_jamsframe_interval_values():
 
     df = pd.DataFrame(data=[[0.0, 1.0, 'a', 0.0],
