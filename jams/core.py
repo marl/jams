@@ -676,10 +676,10 @@ class JamsFrame(pd.DataFrame):
         '''
 
         if time is None or not (time >= 0.0):
-            raise ParameterError('time must be a non-negative number')
+            raise ParameterError('time={} must be a non-negative number'.format(time))
 
         if duration is None or not (duration >= 0.0):
-            raise ParameterError('duration must be a non-negative number')
+            raise ParameterError('duration={} must be a non-negative number'.format(duration))
 
         n = len(self)
         self.loc[n] = {'time': pd.to_timedelta(time, unit='s'),

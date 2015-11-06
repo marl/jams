@@ -48,11 +48,6 @@ def test_beat_invalid():
     yield raises(jams.NamespaceError)(jams.eval.beat), ref_ann, est_ann
     yield raises(jams.NamespaceError)(jams.eval.beat), est_ann, ref_ann
 
-    est_ann = create_annotation(values=np.arange(9) % 4 + 1.,
-                                namespace='beat',
-                                offset=-10)
-    yield raises(jams.SchemaError)(jams.eval.beat), ref_ann, est_ann
-    yield raises(jams.SchemaError)(jams.eval.beat), est_ann, ref_ann
 
 # Onset detection
 def test_onset_valid():
@@ -77,12 +72,6 @@ def test_onset_invalid():
 
     yield raises(jams.NamespaceError)(jams.eval.onset), ref_ann, est_ann
     yield raises(jams.NamespaceError)(jams.eval.onset), est_ann, ref_ann
-
-    est_ann = create_annotation(values=np.arange(9) % 4 + 1.,
-                                namespace='onset',
-                                offset=-10)
-    yield raises(jams.SchemaError)(jams.eval.onset), ref_ann, est_ann
-    yield raises(jams.SchemaError)(jams.eval.onset), est_ann, ref_ann
 
 
 # Chord estimation

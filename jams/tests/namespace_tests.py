@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#CREATED:2015-05-26 12:47:35 by Brian McFee <brian.mcfee@nyu.edu>
+# CREATED:2015-05-26 12:47:35 by Brian McFee <brian.mcfee@nyu.edu>
 """Namespace schema tests"""
 
 import six
@@ -9,6 +9,7 @@ from nose.tools import raises
 from jams import SchemaError
 
 from jams import Annotation
+import pandas as pd
 
 
 def test_ns_time_valid():
@@ -26,7 +27,13 @@ def test_ns_time_invalid():
     @raises(SchemaError)
     def __test(data):
         ann = Annotation(namespace='onset')
-        ann.append(**data)
+
+        # Bypass the safety chceks in add_observation
+        ann.data.loc[0] = {'time': pd.to_timedelta(data['time'], unit='s'),
+                           'duration': pd.to_timedelta(data['duration'],
+                                                       unit='s'),
+                           'value': None,
+                           'confdence': None}
 
         ann.validate()
 
