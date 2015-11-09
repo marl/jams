@@ -85,7 +85,90 @@ by the schema.
     0.000 30.000   "reggae" null
     ===== ======== ======== ==========
 
+tag_msd_tagtraum_cd1
+~~~~~~~~~~~~~~~~~~~~
+Genre classes from the `msd tagtraum cd1`_ dataset.
 
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    [sec] [sec]    string             --
+    ===== ======== ================== ==========
+
+The ``value`` field is constrained to one of 13 strings:
+
+    - ``reggae``
+    - ``pop/rock``
+    - ``rnb``
+    - ``jazz``
+    - ``vocal``
+    - ``new age``
+    - ``latin``
+    - ``rap``
+    - ``country``
+    - ``international``
+    - ``blues``
+    - ``electronic``
+    - ``folk``
+
+.. _msd tagtraum cd1: http://www.tagtraum.com/msd_genre_datasets.html
+
+By convention, one or two tags per track are possible in this namespace.
+The sum of the confidence values should equal ``1.0``.
+This is not enforced by the schema.
+
+
+*Example*
+
+    ===== ======== ======== ==========
+    time  duration value    confidence
+    ===== ======== ======== ==========
+    0.000 0.000    "reggae" 1.0
+    ===== ======== ======== ==========
+
+tag_msd_tagtraum_cd2
+~~~~~~~~~~~~~~~~~~~~
+Genre classes from the `msd tagtraum cd2`_ dataset.
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    [sec] [sec]    string             --
+    ===== ======== ================== ==========
+
+The ``value`` field is constrained to one of 15 strings:
+
+    - ``reggae``
+    - ``latin``
+    - ``metal``
+    - ``rnb``
+    - ``jazz``
+    - ``punk``
+    - ``pop``
+    - ``new age``
+    - ``country``
+    - ``rap``
+    - ``rock``
+    - ``world``
+    - ``blues``
+    - ``electronic``
+    - ``folk``
+
+.. _msd tagtraum cd2: http://www.tagtraum.com/msd_genre_datasets.html
+
+By convention, one or two tags per track are possible in this namespace.
+The sum of the confidence values should equal ``1.0``.
+This is not enforced by the schema.
+
+
+*Example*
+
+    ===== ======== ======== ==========
+    time  duration value    confidence
+    ===== ======== ======== ==========
+    0.000 0.000    "reggae" 0.6666667
+    0.000 0.000    "rock"   0.3333333
+    ===== ======== ======== ==========
 
 tag_medleydb_instruments
 ~~~~~~~~~~~~~~~~~~~~~~~~
