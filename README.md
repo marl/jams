@@ -30,7 +30,7 @@ simple formatting schema (comma or tab separated) when possible. However, as
 the field of MIR has continued to evolve, such annotations have become
 increasingly complex, and more often custom conventions are employed to
 represent this information. And, as a result, these custom conventions can be
-unweildy and non-trivial to parse and use.
+unwieldy and non-trivial to parse and use.
 
 Therefore, JAMS provides a simple, structured, and sustainable approach to
 representing rich information in a human-readable, language agnostic format.
