@@ -1,0 +1,29 @@
+{"tag_msd_tagtraum_cd2":
+    {
+        "value": {
+            "enum": [
+                "reggae",
+                "latin",
+                "metal",
+                "rnb",
+                "jazz",
+                "punk",
+                "pop",
+                "new age",
+                "country",
+                "rap",
+                "rock",
+                "world",
+                "blues",
+                "electronic",
+                "folk"
+            ]
+        },
+        "confidence": {
+            "oneOf": [ {"type": "number", "minimum": 0.0, "maximum": 1.0},
+                       {"type": "null"} ]
+        },
+        "dense": false,
+        "description": "msd tagtraum cd2 15-class genre annotation"
+    }
+}

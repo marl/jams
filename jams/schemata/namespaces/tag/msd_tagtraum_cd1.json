@@ -1,0 +1,27 @@
+{"tag_msd_tagtraum_cd1":
+    {
+        "value": {
+            "enum": [
+                "reggae",
+                "pop/rock",
+                "rnb",
+                "jazz",
+                "vocal",
+                "new age",
+                "latin",
+                "rap",
+                "country",
+                "international",
+                "blues",
+                "electronic",
+                "folk"
+            ]
+        },
+        "confidence": {
+            "oneOf": [ {"type": "number", "minimum": 0.0, "maximum": 1.0},
+                       {"type": "null"} ]
+        },
+        "dense": false,
+        "description": "msd tagtraum cd1 13-class genre annotation"
+    }
+}

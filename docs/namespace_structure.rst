@@ -7,7 +7,7 @@ For example, the `chord` namespace requires that all observed `value` fields are
 pre-defined grammar.  Similarly, the `tempo` namespace requires that `value` fields be non-negative numbers,
 and the `confidence` fields lie within the range `[0, 1]`.
 
-JAMS ships with 24 pre-defined namespaces, covering a variety of common music informatics tasks.  This
+JAMS ships with 26 pre-defined namespaces, covering a variety of common music informatics tasks.  This
 collection should not be assumed to be complete, however, and more namespaces may be added in subsequent
 versions.  Please refer to :ref:`namespace` for a comprehensive description of the existing namespaces.
 
