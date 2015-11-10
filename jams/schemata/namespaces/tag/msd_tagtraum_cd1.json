@@ -17,6 +17,10 @@
                 "folk"
             ]
         },
+        "confidence": {
+            "oneOf": [ {"type": "number", "minimum": 0.0, "maximum": 1.0},
+                       {"type": "null"} ]
+        },
         "dense": false,
         "description": "msd tagtraum cd1 13-class genre annotation"
     }
