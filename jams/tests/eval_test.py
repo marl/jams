@@ -244,3 +244,44 @@ def test_pattern_invalid():
     yield raises(jams.SchemaError)(jams.eval.pattern), est_ann, ref_ann
 
 
+
+# Hierarchical segmentation
+def create_hierarchy(values, offset=0.0, duration=20):
+    ann = jams.Annotation(namespace='multi_segment')
+
+    for level, labels in enumerate(values):
+        times = np.linspace(offset, offset + duration, num=len(labels), endpoint=False)
+
+        durations = list(np.diff(times))
+        durations.append(duration + offset - times[-1])
+
+        for t, d, v in zip(times, durations, labels):
+            ann.append(time=t, duration=d, value=dict(label=v, level=level))
+
+    return ann
+
+def test_hierarchy_valid():
+
+    ref_ann = create_hierarchy(values=['AB', 'abac'])
+    est_ann = create_hierarchy(values=['ABCD', 'abacbcbd'])
+
+    jams.eval.hierarchy(ref_ann, est_ann)
+
+
+def test_hierarchy_invalid():
+
+    ref_ann = create_hierarchy(values=['AB', 'abac'])
+    est_ann = create_hierarchy(values=['ABCD', 'abacbcbd'])
+
+    est_ann.namespace = 'segment_open'
+
+    yield raises(jams.NamespaceError)(jams.eval.hierarchy), ref_ann, est_ann
+    yield raises(jams.NamespaceError)(jams.eval.hierarchy), est_ann, ref_ann
+
+    est_ann = create_annotation(values=['E', 'B', 'E', 'B'],
+                                namespace='segment_tut')
+    est_ann.namespace = 'multi_segment'
+
+    yield raises(jams.SchemaError)(jams.eval.hierarchy), ref_ann, est_ann
+    yield raises(jams.SchemaError)(jams.eval.hierarchy), est_ann, ref_ann
+
