@@ -35,7 +35,6 @@ if [ ! -d "$src" ]; then
         pip install jsonschema
         pip install python-coveralls
         pip install numpydoc
-        pip install git+https://github.com/craffel/mir_eval.git
 
         source deactivate
     popd
