@@ -124,10 +124,10 @@ def convert_jams(jams_file, output_prefix, csv=False, comment_char='#', namespac
     # Make a counter object for each namespace type
     counter = collections.Counter()
 
-    annotations = set()
+    annotations = []
 
     for query in namespaces:
-        annotations.update(jam.search(namespace=query))
+        annotations.extend(jam.search(namespace=query))
 
     if csv:
         suffix = 'csv'
