@@ -278,6 +278,21 @@ class JObject(object):
         """Render the object alongside its attributes."""
         return '<{}: {:s}>'.format(self.type, ', '.join(self.keys()))
 
+    def _repr_html_(self):
+        '''HTML-formatter repr'''
+
+        items = list()
+        for key in sorted(list(self.keys())):
+            
+            try:
+                value = self[key]._repr_html_()
+            except AttributeError:
+                value = str(self[key])
+
+            items.append('<dt>{0}</dt><dd>{1}</dd>'.format(key, value))
+
+        return '<dl class="dl-horizontal">{0}</dl>'.format(''.join(items))
+
     def __str__(self):
         return json.dumps(self.__json__, indent=2)
 
