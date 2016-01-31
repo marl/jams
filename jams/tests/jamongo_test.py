@@ -29,11 +29,14 @@ def test_mock_jamsmongo():
 
 
 def test_context_manager():
+
     with JamsMongo(client=mongomock.MongoClient()) as mongo:
         assert mongo.db is not None
 
         assert isinstance(mongo.audio, mongomock.Collection)
         assert isinstance(mongo.annotations, mongomock.Collection)
+
+        yield raises(KeyError)(mongo.__getattr__), "fred"
 
 
 def test_insert_jams_metadata():

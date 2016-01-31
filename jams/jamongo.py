@@ -80,7 +80,7 @@ class JamsMongo(object):
         if key in self._collections:
             return self._db['key']
         else:
-            return None
+            raise KeyError("Invalid collection: {}".format(key))
 
     def _connect_to_mongo(self):
         """Connect to mongo database using the connection string
