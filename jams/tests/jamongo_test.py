@@ -61,7 +61,10 @@ def test_convert_annotation_list():
 
         for ref_ann, res_ann in zip(input_annotations, result):
             eq_(res_ann.audio_id, audio_id)
-            eq_(ref_ann.__json__, res_ann.__json__)
+
+            out  = res_ann.__json__
+            del out['audio_id']
+            eq_(ref_ann.__json__, out)
 
     fn = 'fixtures/valid.jams'
     jam = jams.load(fn)
