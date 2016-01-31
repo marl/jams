@@ -33,7 +33,7 @@ def convert_annotation_list(annotations_array, audio_id):
     for _ann in annotations_array:
         ann = deepcopy(_ann)
         ann.audio_id = audio_id
-        anns.append(anns)
+        anns.append(ann)
 
     return anns
 

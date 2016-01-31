@@ -56,15 +56,20 @@ def test_insert_jams_metadata():
 
 
 def test_convert_annotation_list():
-    def __test(input_annotations, result, audio_id):
+    def __test(input_annotations, results, audio_id):
+
         assert isinstance(input_annotations, jams.AnnotationArray)
 
-        for ref_ann, res_ann in zip(input_annotations, result):
+        for ref_ann, res_ann in zip(input_annotations, results):
             eq_(res_ann.audio_id, audio_id)
 
-            out  = res_ann.__json__
-            del out['audio_id']
-            eq_(ref_ann.__json__, out)
+            ref = ref_ann.__json__
+            out = res_ann.__json__
+
+            # Clobber the audio_id for the rest of the equivalence test
+            ref['audio_id'] = None
+            out['audio_id'] = None
+            eq_(jams.Annotation(**ref), jams.Annotation(**out))
 
     fn = 'fixtures/valid.jams'
     jam = jams.load(fn)
@@ -72,7 +77,7 @@ def test_convert_annotation_list():
     garbage_id = ObjectId()
     result = convert_annotation_list(jam.annotations, garbage_id)
 
-    yield __test, jam['annotations'], result, garbage_id
+    yield __test, jam.annotations, result, garbage_id
 
 
 def test_insert_annotations():
