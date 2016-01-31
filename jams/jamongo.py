@@ -7,7 +7,10 @@ instance.
 
 """
 
+from .core import AnnotationArray
+
 import pymongo
+from copy import deepcopy
 
 
 def convert_annotation_list(annotations_array, audio_id):
@@ -25,7 +28,14 @@ def convert_annotation_list(annotations_array, audio_id):
     -------
     converted_annotations : list of Annotation
     """
-    return []
+    anns = AnnotationArray()
+
+    for _ann in annotations_array:
+        ann = _ann.copy()
+        ann.audio_id = audio_id
+        anns.append(anns)
+
+    return anns
 
 
 class JamsMongo(object):
