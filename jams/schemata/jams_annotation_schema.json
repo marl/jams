@@ -91,11 +91,11 @@
                                {"type": "null"} ]
                 },
                 "audio_id": {
-                    "$ref": "file://object_id_schema.json",
+                    "$ref": "object_id_schema.json#/object_id",
                     "description": "Object ID pointing to the audio object to which this annotation corresponds."
                 },
-                "_id": {
-                    "$ref": "file://object_id_schema.json",
+                "doc_id": {
+                    "$ref": "object_id_schema.json#/object_id",
                     "description": "Object ID of this annotation document."
                 },
                 "schema_version" : { "type": "string", "pattern": "[0-9].[0-9].[0-9]"}

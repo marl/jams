@@ -31,7 +31,8 @@ Object reference
     JObject
 
 """
-
+from bson import ObjectId
+import bson.json_util as bjson
 import json
 import jsonschema
 
@@ -241,9 +242,11 @@ class JObject(object):
                 continue
 
             if hasattr(item, '__json__'):
-                filtered_dict[k] = item.__json__
-            else:
-                filtered_dict[k] = item
+                item = item.__json__
+            elif isinstance(item, ObjectId):
+                item = bjson.dumps(item)
+
+            filtered_dict[k] = item
 
         return filtered_dict
 
@@ -376,7 +379,7 @@ class JObject(object):
         >>> jams.JObject.loads(J.dumps())
         <JObject foo, bar>
         '''
-        return cls.__json_init__(**json.loads(string))
+        return cls.__json_init__(**bjson.loads(string))
 
     def search(self, **kwargs):
         '''Query this object (and its descendants).
@@ -711,7 +714,8 @@ class Annotation(JObject):
     """Annotation base class."""
 
     def __init__(self, namespace, data=None, annotation_metadata=None,
-                 sandbox=None, time=0, duration=None):
+                 sandbox=None, time=0, duration=None, audio_id=None,
+                 doc_id=None):
         """Create an Annotation.
 
         Note that, if an argument is None, an empty Annotation is created in
@@ -737,6 +741,12 @@ class Annotation(JObject):
 
         duration : non-negative number
             The duration of this annotation
+
+        audio_id : ObjectId or None
+            Identifier of the audio object to which this annotation corresponds.
+
+        doc_id : ObjectId or None
+            Identifier of this annotation document.
         """
 
         super(Annotation, self).__init__()
@@ -763,7 +773,8 @@ class Annotation(JObject):
 
         self.time = time
         self.duration = duration
-
+        self.doc_id = doc_id
+        self.audio_id = audio_id
 
     def append(self, **kwargs):
         '''Append an observation to the data field

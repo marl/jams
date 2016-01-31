@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 # CREATED:2015-03-06 14:24:58 by Brian McFee <brian.mcfee@nyu.edu>
 '''Unit tests for JAMS core objects'''
-
+from bson import ObjectId
 import os
 import tempfile
 import json
@@ -148,7 +148,7 @@ def test_jamsframe_from_df():
     # 4. Check the values
     eq_(list(jf['time']),
         list(pd.to_timedelta([0.0, 1.0], unit='s')))
-    eq_(list(jf['duration']), 
+    eq_(list(jf['duration']),
         list(pd.to_timedelta([1.0, 2.0], unit='s')))
     eq_(list(jf['value']), ['a', 'b'])
     eq_(list(jf['confidence']), [0.0, 0.0])
@@ -165,7 +165,7 @@ def test_jamsframe_add_observation():
 
     eq_(list(jf['time']),
         list(pd.to_timedelta([0.0, 1.0, 3.0], unit='s')))
-    eq_(list(jf['duration']), 
+    eq_(list(jf['duration']),
         list(pd.to_timedelta([1.0, 2.0, 1.0], unit='s')))
     eq_(list(jf['value']), ['a', 'b', 'c'])
     eq_(list(jf['confidence']), [0.0, 0.0, 0.0])
@@ -281,11 +281,11 @@ def test_annotation_metadata():
 # Annotation
 def test_annotation():
 
-    def __test(namespace, data, amd, sandbox):
+    def __test(namespace, data, amd, sandbox, doc_id):
         ann = jams.Annotation(namespace,
                               data=data,
                               annotation_metadata=amd,
-                              sandbox=sandbox)
+                              sandbox=sandbox, doc_id=doc_id)
 
         eq_(namespace, ann.namespace)
 
@@ -298,6 +298,9 @@ def test_annotation():
         if data is not None:
             assert ann.data.equals(jams.JamsFrame.from_dict(data))
 
+        if doc_id is not None:
+            assert ann.doc_id == doc_id
+
     real_sandbox = jams.Sandbox(description='none')
     real_amd = jams.AnnotationMetadata(corpus='test collection')
     real_data = dict(time=[0.0, 1.0],
@@ -306,11 +309,14 @@ def test_annotation():
                      confidence=[0.9, 0.9])
 
     namespace = 'tag_open'
+    doc_id = ObjectId("1"*24)
 
     for data in [None, real_data]:
         for amd in [None, real_amd]:
             for sandbox in [None, real_sandbox]:
-                yield __test, namespace, data, amd, sandbox
+                yield __test, namespace, data, amd, sandbox, doc_id
+
+    yield __test, namespace, real_data, real_amd, real_sandbox, None
 
 
 def test_annotation_append():
@@ -536,7 +542,7 @@ def test_jams_add():
 
 def test_jams_search():
     def __test(jam, query, expected):
-        
+
         result = jam.search(**query)
 
         eq_(result, expected)
