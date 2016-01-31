@@ -55,6 +55,16 @@ class JamsMongo(object):
     def db(self):
         return self._db
 
+    @property
+    def audio(self):
+        """Return a pointer to the audio collection."""
+        return self._db['audio']
+
+    @property
+    def annotations(self):
+        """Return a pointer to the annotations collection."""
+        return self._annotations['annotations']
+
     def _connect_to_mongo(self):
         """Connect to mongo database using the connection string
         provided in the constructor.
