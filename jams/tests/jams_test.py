@@ -320,6 +320,17 @@ def test_annotation():
     yield __test, namespace, real_data, real_amd, real_sandbox, None
 
 
+def test_annotation_validate():
+
+    ann = jams.Annotation('tag_open', doc_id=ObjectId("1"*24))
+
+    yield ann.validate
+
+    ann = jams.Annotation('tag_open', doc_id='purple monkey')
+
+    yield raises(jams.SchemaError)(ann.validate)
+
+
 def test_annotation_append():
 
     data = dict(time=[0.0, 1.0],

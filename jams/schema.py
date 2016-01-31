@@ -67,6 +67,31 @@ def namespace(ns_key):
     return sch
 
 
+def definition_schema(def_name):
+    '''Construct a validation schema for a given schema defined in a top-level
+    schema.
+
+    TODO: definition of `name` + all other definitions
+
+    Parameters
+    ----------
+    def_name : str
+        Key of the defined object.
+
+    Returns
+    -------
+    schema : dict
+        JSON schema of `definition`
+    '''
+    if def_name not in JAMS_SCHEMA['definitions']:
+        raise JamsError('Unknown definition: {:s}'.format(def_name))
+
+    sch = copy.deepcopy(JAMS_SCHEMA)
+
+    sch.update(**sch['definitions'].pop(def_name))
+    return sch
+
+
 def is_dense(ns_key):
     '''Determine whether a namespace has dense formatting.
 

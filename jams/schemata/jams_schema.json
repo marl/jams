@@ -3,7 +3,6 @@
 
     "definitions": {
         "ObjectId": {
-            "id": "#object_id",
             "type": "object",
             "properties": {
                 "$oid": { "type": "string" }
@@ -91,13 +90,11 @@
         "SparseObservationList": {
             "type": "array",
             "title": "Sparse Observation List",
-            "id": "#sparse-observation-list",
             "description": "A list of sparse observation objects",
             "items": { "$ref": "#/definitions/SparseObservation" }
         },
 
         "Annotation": {
-            "id": "#annotation",
             "type": "object",
             "title": "JAMS Annotation Document",
             "description": "Annotation of observations from a single namespace, e.g. tags",
@@ -120,12 +117,16 @@
                                {"type": "null"} ]
                 },
                 "audio_id": {
-                    "$ref": "#/definitions/ObjectId",
+                    "oneOf": [
+                        {"$ref": "#/definitions/ObjectId" },
+                        {"type": "null"} ],
                     "description": "Object ID pointing to the audio object to which this annotation corresponds."
                 },
                 "doc_id": {
-                    "$ref": "#/definitions/ObjectId",
-                    "description": "Object ID of this annotation document."
+                    "description": "Object ID of this annotation document.",
+                    "oneOf": [
+                        { "$ref": "#/definitions/ObjectId" },
+                        {"type": "null"} ]
                 },
                 "schema_version" : { "type": "string", "pattern": "[0-9].[0-9].[0-9]"}
             },
