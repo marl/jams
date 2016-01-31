@@ -218,3 +218,8 @@ class JamsMongo(object):
         cursor = self['annotations'].find(
             query, projection={'_id': True})
         return [x['_id'] for x in cursor]
+
+    def get_annotations_by_audio_id(self, audio_id):
+        annotations = self['annotations'].find(
+            query={"audio_id": {"$in": audio_id}})
+        return annotations
