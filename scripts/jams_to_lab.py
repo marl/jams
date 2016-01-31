@@ -112,6 +112,9 @@ def convert_jams(jams_file, output_prefix, csv=False, comment_char='#', namespac
         The set of namespace patterns to match for output
     '''
 
+    if namespaces is None:
+        raise ValueError('No namespaces provided. Try ".*" for all namespaces.')
+
     jam = jams.load(jams_file)
 
     # Get all the annotations
