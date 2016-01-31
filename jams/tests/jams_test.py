@@ -536,7 +536,7 @@ def test_jams_add():
 
 def test_jams_search():
     def __test(jam, query, expected):
-        
+
         result = jam.search(**query)
 
         eq_(result, expected)
