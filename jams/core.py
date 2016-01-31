@@ -31,7 +31,8 @@ Object reference
     JObject
 
 """
-
+from bson import ObjectId
+import bson.json_util as bjson
 import json
 import jsonschema
 
@@ -225,8 +226,9 @@ class JObject(object):
         Returns
         -------
         schema : dict or None
+            If dict, must have k-v pair for 'properties'.
         '''
-        return schema.JAMS_SCHEMA['definitions'].get(self.type, None)
+        return schema.definition_schema(self.type, raise_if_missing=False)
 
     @property
     def __json__(self):
@@ -240,10 +242,12 @@ class JObject(object):
             if k.startswith('_'):
                 continue
 
-            if hasattr(item, '__json__'):
-                filtered_dict[k] = item.__json__
-            else:
-                filtered_dict[k] = item
+            if isinstance(item, ObjectId):
+                item = json.loads(bjson.dumps(item))
+            elif hasattr(item, '__json__'):
+                item = item.__json__
+
+            filtered_dict[k] = item
 
         return filtered_dict
 
@@ -264,7 +268,7 @@ class JObject(object):
         return self.__dict__[key]
 
     def __setattr__(self, name, value):
-        if self.__schema__ is not None:
+        if self.__schema__:
             props = self.__schema__['properties']
             if name not in props:
                 raise SchemaError("Attribute {} not in {}"
@@ -376,7 +380,7 @@ class JObject(object):
         >>> jams.JObject.loads(J.dumps())
         <JObject foo, bar>
         '''
-        return cls.__json_init__(**json.loads(string))
+        return cls.__json_init__(**bjson.loads(string))
 
     def search(self, **kwargs):
         '''Query this object (and its descendants).
@@ -469,11 +473,10 @@ class JObject(object):
         '''
 
         valid = True
-
         try:
-            jsonschema.validate(self.__json__, schema.JAMS_SCHEMA)
+            jsonschema.validate(self.__json__, self.__schema__)
 
-        except jsonschema.ValidationError as invalid:
+        except (JamsError, jsonschema.ValidationError) as invalid:
             if strict:
                 raise SchemaError(str(invalid))
             else:
@@ -711,7 +714,8 @@ class Annotation(JObject):
     """Annotation base class."""
 
     def __init__(self, namespace, data=None, annotation_metadata=None,
-                 sandbox=None, time=0, duration=None):
+                 sandbox=None, time=0, duration=None, audio_id=None,
+                 doc_id=None):
         """Create an Annotation.
 
         Note that, if an argument is None, an empty Annotation is created in
@@ -737,6 +741,12 @@ class Annotation(JObject):
 
         duration : non-negative number
             The duration of this annotation
+
+        audio_id : ObjectId or None
+            Identifier of the audio object to which this annotation corresponds.
+
+        doc_id : ObjectId or None
+            Identifier of this annotation document.
         """
 
         super(Annotation, self).__init__()
@@ -763,7 +773,8 @@ class Annotation(JObject):
 
         self.time = time
         self.duration = duration
-
+        self.doc_id = doc_id
+        self.audio_id = audio_id
 
     def append(self, **kwargs):
         '''Append an observation to the data field

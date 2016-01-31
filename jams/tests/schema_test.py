@@ -58,7 +58,7 @@ def test_schema_local():
         for key in ['time', 'duration']:
             assert key in schema['properties']
 
-    os.environ['JAMS_SCHEMA_DIR'] = resource_filename(jams.__name__, 
+    os.environ['JAMS_SCHEMA_DIR'] = resource_filename(jams.__name__,
                                                       os.path.join('tests',
                                                                    'fixtures',
                                                                    'schema'))
@@ -71,6 +71,6 @@ def test_schema_local():
 
     # Now it should
     yield __test, test_ns
-    
+
     del os.environ['JAMS_SCHEMA_DIR']
 

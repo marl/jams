@@ -7,7 +7,10 @@ instance.
 
 """
 
+from .core import AnnotationArray
+
 import pymongo
+from copy import deepcopy
 
 
 def convert_annotation_list(annotations_array, audio_id):
@@ -25,7 +28,14 @@ def convert_annotation_list(annotations_array, audio_id):
     -------
     converted_annotations : list of Annotation
     """
-    return []
+    anns = AnnotationArray()
+
+    for _ann in annotations_array:
+        ann = deepcopy(_ann)
+        ann.audio_id = audio_id
+        anns.append(ann)
+
+    return anns
 
 
 class JamsMongo(object):
@@ -74,11 +84,11 @@ class JamsMongo(object):
     def db(self):
         return self._db
 
-    def __getattr__(self, key):
+    def __getitem__(self, key):
         """Get a collection object from the db, if it is an allowable
         collection specified."""
         if key in self._collections:
-            return self._db['key']
+            return self._db[key]
         else:
             raise KeyError("Invalid collection: {}".format(key))
 
@@ -104,7 +114,8 @@ class JamsMongo(object):
         jams_object : jams.JAMS
         """
         # Extract the JAMS metadata & insert it into the Audio collection
-        audio_id = self.insert_jams_metadata(jams_object.file_metadata)
+        audio_id = self.insert_jams_metadata(
+            jams_object.file_metadata.__json__)
 
         # Extract the JAMS Annotations and prepare them for mongification.
         annotation_list = convert_annotation_list(
@@ -122,14 +133,14 @@ class JamsMongo(object):
 
         Parameters
         ----------
-        jams_metadata : jams.FileMetadata
+        jams_metadata : dict
 
         Returns
         -------
         audio_id : ObjectId
             The ID for the object inserted into 'Audio'.
         """
-        result = self.audio.insert_one(jams_metadata.__json__)
+        result = self['audio'].insert_one(jams_metadata)
         return result.inserted_id
 
     def insert_annotations(self, mongified_annotations_array):
@@ -146,7 +157,7 @@ class JamsMongo(object):
         annotation_ids : list of ObjectId
             List of IDs pointing to the new Annotation documents.
         """
-        result = self.annotations.insert_many(mongified_annotations_array)
+        result = self['annotations'].insert_many(mongified_annotations_array)
         return result.inserted_ids
 
     def insert_annotation(self, annotation):
@@ -181,3 +192,44 @@ class JamsMongo(object):
             Pointer to the new object in the pivot table.
         """
         pass
+
+    def find_audio(self, query):
+        """Query the audio collection for IDs.
+
+        Parameters
+        ----------
+        query : dict
+            Mongo query dict.
+
+        Returns
+        -------
+        audio_ids : list of ObjectIds
+            A list of ObjectIds pointing to the items
+            returned by the query.
+        """
+        cursor = self['audio'].find(query,
+                                    projection={'_id': True})
+        return [x['_id'] for x in cursor]
+
+    def find_annotations(self, query):
+        """Query the annotations for IDs.
+
+        Parameters
+        ----------
+        query : dict
+            Mongo query dict.
+
+        Returns
+        -------
+        annotation_ids : list of ObjectIds
+            A list of ObjectIds pointing to the items
+            returned by the query.
+        """
+        cursor = self['annotations'].find(
+            query, projection={'_id': True})
+        return [x['_id'] for x in cursor]
+
+    def get_annotations_by_audio_id(self, audio_id):
+        annotations = self['annotations'].find(
+            query={"audio_id": {"$in": audio_id}})
+        return annotations
