@@ -226,6 +226,7 @@ class JObject(object):
         Returns
         -------
         schema : dict or None
+            If dict, must have k-v pair for 'properties'.
         '''
         return schema.JAMS_SCHEMA['definitions'].get(self.type, None)
 
@@ -267,7 +268,7 @@ class JObject(object):
         return self.__dict__[key]
 
     def __setattr__(self, name, value):
-        if self.__schema__ is not None:
+        if self.__schema__:
             props = self.__schema__['properties']
             if name not in props:
                 raise SchemaError("Attribute {} not in {}"
@@ -472,11 +473,10 @@ class JObject(object):
         '''
 
         valid = True
-
         try:
-            jsonschema.validate(self.__json__, schema.JAMS_SCHEMA)
+            jsonschema.validate(self.__json__, self.__schema__)
 
-        except jsonschema.ValidationError as invalid:
+        except (JamsError, jsonschema.ValidationError) as invalid:
             if strict:
                 raise SchemaError(str(invalid))
             else:
