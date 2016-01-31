@@ -7,9 +7,20 @@ from jams.jamongo import JamsMongo, convert_annotation_list
 
 
 def test_local_jamsmongo():
-    """TODO: Bad idea?"""
+    """TODO: Is this a bad idea?
+    Maybe you don't want to have these tests rely on
+    a local mongo instance."""
     mongo = JamsMongo()
     assert mongo is not None
+
+
+def test_remote_jamsmongo():
+    """TODO: Is this test useful? Don't know
+    what you would actually connect to, but it would
+    be nice to make sure you can do it."""
+    connection_str = "mongodb://foo.bar.com:27017"
+    mongo = JamsMongo(connection_str)
+    assert mongo.connection_str == connection_str
 
 
 def test_mock_jamsmongo():
@@ -49,7 +60,8 @@ def test_convert_annotation_list():
     fn = 'fixtures/valid.jams'
     jam = jams.load(fn)
 
-    result = convert_annotation_list(jam.annotations)
+    garbage_id = ObjectId()
+    result = convert_annotation_list(jam.annotations, garbage_id)
 
     yield __test, jam.annotations, result
 
@@ -61,17 +73,14 @@ def test_insert_annotations():
             projection={"_id": False})
 
         assert cursor.count() == len(input_list)
-        for document in cursor:
-            assert document['audio_id'] == garbage_audio_id
 
-    garbage_audio_id = ObjectId()
     garbage_annotations = [
         dict(garbage="in"),
         dict(garbage="out")
     ]
 
     with JamsMongo(client=mongomock.MongoClient()) as mongo:
-        new_ids = mongo.insert_annotations(garbage_annotations, garbage_audio_id)
+        new_ids = mongo.insert_annotations(garbage_annotations)
 
         yield __test, mongo.annotations, garbage_annotations, new_ids
 

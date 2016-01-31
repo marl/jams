@@ -10,23 +10,27 @@ instance.
 import pymongo
 
 
-def convert_annotation_list(annotations_array):
-        """Take a "Jams-document" style annotations array,
-        and convert it into a mongo-able annotationsl list.
+def convert_annotation_list(annotations_array, audio_id):
+    """Take a "Jams-document" style annotations array,
+    and convert it into a mongo-able annotationsl list.
 
-        Parameters
-        ----------
-        annotations_list : jams.AnnotationArray
+    Parameters
+    ----------
+    annotations_list : jams.AnnotationArray
 
-        Returns
-        -------
-        converted_annotations : list
-        """
-        return []
+    audio_id : ObjectId
+        Pointer to an audio document.
+
+    Returns
+    -------
+    converted_annotations : list of Annotation
+    """
+    return []
 
 
 class JamsMongo(object):
     """Model class for interfacing with JAMS Mongo Collection."""
+    _collections = ["audio", "annotations"]
 
     def __init__(self, connection_str=None,
                  client=None,
@@ -70,15 +74,13 @@ class JamsMongo(object):
     def db(self):
         return self._db
 
-    @property
-    def audio(self):
-        """Return a pointer to the audio collection."""
-        return self._db['audio']
-
-    @property
-    def annotations(self):
-        """Return a pointer to the annotations collection."""
-        return self._db['annotations']
+    def __getattr__(self, key):
+        """Get a collection object from the db, if it is an allowable
+        collection specified."""
+        if key in self._collections:
+            return self._db['key']
+        else:
+            return None
 
     def _connect_to_mongo(self):
         """Connect to mongo database using the connection string
@@ -105,10 +107,11 @@ class JamsMongo(object):
         audio_id = self.insert_jams_metadata(jams_object.file_metadata)
 
         # Extract the JAMS Annotations and prepare them for mongification.
-        annotation_list = convert_annotation_list(jams_object.annotations)
+        annotation_list = convert_annotation_list(
+            jams_object.annotations, audio_id=audio_id)
 
         # insert them into the Annotations collection.
-        annotation_ids = self.insert_annotations(annotation_list, audio_id)
+        annotation_ids = self.insert_annotations(annotation_list)
 
         # [Optionally] Build the pivot table
         self.build_pivot_map(audio_id, annotation_ids)
@@ -129,7 +132,7 @@ class JamsMongo(object):
         result = self.audio.insert_one(jams_metadata.__json__)
         return result.inserted_id
 
-    def insert_annotations(self, mongified_annotations_array, audio_id):
+    def insert_annotations(self, mongified_annotations_array):
         """Take an already mongo-prepared annotations array and insert all of
         the documents into 'annotations'.
 
@@ -138,19 +141,28 @@ class JamsMongo(object):
         mongified_annotations_array : list of Annotations
             List of Annoation documents ready for mongo.
 
-        audio_id : ObjectId
-            ID pointing to the source metadata.
-
         Returns
         -------
         annotation_ids : list of ObjectId
             List of IDs pointing to the new Annotation documents.
         """
-        # Do this before the insert so there's only one db op.
-        for document in mongified_annotations_array:
-            document['audio_id'] = audio_id
         result = self.annotations.insert_many(mongified_annotations_array)
         return result.inserted_ids
+
+    def insert_annotation(self, annotation):
+        """Insert a single annotation into the annotation collection.
+
+        Parameters
+        ----------
+        annotation : JAMongo Annotation (TODO)
+
+        Returns
+        -------
+        annotation_id : ObjectId
+            The new id created on insertion.
+        """
+        result_ids = self.insert_annotation([annotation])
+        return result_ids[0]
 
     def build_pivot_map(self, audio_id, annotation_ids):
         """Build a pivot table of audio_id -> annotation_ids
