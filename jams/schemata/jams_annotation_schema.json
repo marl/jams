@@ -2,35 +2,6 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
 
     "definitions": {
-        "ObjectId": {
-            "type": "object",
-            "properties": {
-                "$oid": { "type": "string" }
-            }
-        },
-        "FileMetadata": {
-            "type": "object",
-            "title": "Audio File Metadata",
-            "properties": {
-                "audio_id": {
-                    "$ref": "#/definitions/ObjectId"
-                },
-                "identifiers": {
-                    "type": "object",
-                    "title": "Namespace Identifiers",
-                    "description": "Sandbox for file ID information (e.g. echonest ID, musicbrainz ID, etc.)."
-                },
-                "artist": { "type": "string"},
-                "title": { "type": "string"},
-                "release": { "type": "string"},
-                "duration": { "type": "number", "minimum": 0.0},
-                "jams_version" : {
-                    "type": "string", "pattern": "[0-9].[0-9].[0-9]",
-                    "description": "TODO: Do we want to change this to `schema_version`."
-                }
-            },
-            "description": "Does this not have / need required fields?"
-        },
         "Curator": {
             "type": "object",
             "title": "Curator",
@@ -91,14 +62,16 @@
         "SparseObservationList": {
             "type": "array",
             "title": "Sparse Observation List",
+            "id": "#sparse-observation-list",
             "description": "A list of sparse observation objects",
             "items": { "$ref": "#/definitions/SparseObservation" }
         },
 
         "Annotation": {
+            "id": "#annotation",
             "type": "object",
-            "title": "JAMS Annotation Document",
-            "description": "Annotation of observations from a single namespace, e.g. tags",
+            "title": "Annotation",
+            "description": "An annotation of a single observation, e.g. tags",
             "properties": {
                 "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
                 "data": {
@@ -118,16 +91,12 @@
                                {"type": "null"} ]
                 },
                 "audio_id": {
-                    "oneOf": [
-                        {"$ref": "#/definitions/ObjectId" },
-                        {"type": "null"} ],
+                    "$ref": "object_id_schema.json#/object_id",
                     "description": "Object ID pointing to the audio object to which this annotation corresponds."
                 },
                 "doc_id": {
-                    "description": "Object ID of this annotation document.",
-                    "oneOf": [
-                        { "$ref": "#/definitions/ObjectId" },
-                        {"type": "null"} ]
+                    "$ref": "object_id_schema.json#/object_id",
+                    "description": "Object ID of this annotation document."
                 },
                 "schema_version" : { "type": "string", "pattern": "[0-9].[0-9].[0-9]"}
             },
@@ -136,21 +105,9 @@
     },
 
     "type": "object",
-    "title": "JAMS Annotation Container",
-    "description": "JSON Annotated Music Specification -- JAMS Annotation Container for grouping a plurality of annotations together.",
+    "title": "JAMS Annotation Document",
+    "description": "JSON Annotated Music Specification -- Annotation Document",
     "properties": {
-
-        "file_metadata": { "$ref": "#/definitions/FileMetadata" },
-
-        "annotations": {
-            "type": "array",
-            "title": "Annotations",
-            "description": "Array of annotations",
-            "items": {
-                "$ref": "#/definitions/Annotation"
-            }
-        },
-
-        "sandbox": { "type": "object" }
+        "$ref": "#/definitions/Annotation"
     }
 }
