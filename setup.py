@@ -37,6 +37,7 @@ setup(
         'six',
         'decorator',
         'mir_eval>=0.2',
+        'bson'
     ],
     scripts=['scripts/jams_to_lab.py']
 )
