@@ -67,24 +67,32 @@ def namespace(ns_key):
     return sch
 
 
-def definition_schema(def_name):
+def definition_schema(def_name, raise_if_missing=True):
     '''Construct a validation schema for a given schema defined in a top-level
     schema.
-
-    TODO: definition of `name` + all other definitions
 
     Parameters
     ----------
     def_name : str
         Key of the defined object.
 
+    raise_if_missing : bool, default=True
+        If False and `def_name` does not exist in the schema, returns None.
+
     Returns
     -------
     schema : dict
-        JSON schema of `definition`
+        JSON schema of `definition`, or an empty dict if not found.
+
+    Raises
+    ------
+    JamsError if def_name is required and missing.
     '''
     if def_name not in JAMS_SCHEMA['definitions']:
-        raise JamsError('Unknown definition: {:s}'.format(def_name))
+        if raise_if_missing:
+            raise JamsError('Unknown definition: {:s}'.format(def_name))
+        else:
+            return dict()
 
     sch = copy.deepcopy(JAMS_SCHEMA)
 

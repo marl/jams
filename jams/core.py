@@ -228,7 +228,7 @@ class JObject(object):
         schema : dict or None
             If dict, must have k-v pair for 'properties'.
         '''
-        return schema.definition_schema(self.type)
+        return schema.definition_schema(self.type, raise_if_missing=False)
 
     @property
     def __json__(self):

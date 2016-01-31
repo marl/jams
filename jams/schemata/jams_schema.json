@@ -24,8 +24,9 @@
                 "title": { "type": "string"},
                 "release": { "type": "string"},
                 "duration": { "type": "number", "minimum": 0.0},
-                "schema_version" : {
-                    "type": "string", "pattern": "[0-9].[0-9].[0-9]"
+                "jams_version" : {
+                    "type": "string", "pattern": "[0-9].[0-9].[0-9]",
+                    "description": "TODO: Do we want to change this to `schema_version`."
                 }
             },
             "description": "Does this not have / need required fields?"
