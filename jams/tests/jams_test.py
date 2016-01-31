@@ -3,6 +3,7 @@
 # CREATED:2015-03-06 14:24:58 by Brian McFee <brian.mcfee@nyu.edu>
 '''Unit tests for JAMS core objects'''
 from bson import ObjectId
+import bson.json_util as bjson
 import os
 import tempfile
 import json
@@ -45,16 +46,16 @@ def test_jobject_dict():
 
 def test_jobject_serialize():
 
-    data = dict(key1='value 1', key2='value 2')
+    data = dict(key1='value 1', key2='value 2', key3=ObjectId("1"*24))
 
-    json_data = json.dumps(data, indent=2)
+    json_data = bjson.dumps(data, indent=2)
 
     J = jams.JObject(**data)
 
     json_jobject = J.dumps(indent=2)
 
     # De-serialize into dicts
-    eq_(json.loads(json_data), json.loads(json_jobject))
+    eq_(bjson.loads(json_data), bjson.loads(json_jobject))
 
 
 def test_jobject_deserialize():

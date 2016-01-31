@@ -241,10 +241,10 @@ class JObject(object):
             if k.startswith('_'):
                 continue
 
-            if hasattr(item, '__json__'):
+            if isinstance(item, ObjectId):
+                item = json.loads(bjson.dumps(item))
+            elif hasattr(item, '__json__'):
                 item = item.__json__
-            elif isinstance(item, ObjectId):
-                item = bjson.dumps(item)
 
             filtered_dict[k] = item
 
