@@ -5,8 +5,9 @@
 
         "FileMetadata": {
             "type": "object",
-            "title": "File Metadata",
+            "title": "Audio File Metadata",
             "properties": {
+                "audio_id": { "$ref": "file://object_id_schema.json" },
                 "identifiers": {
                     "type": "object",
                     "title": "Namespace Identifiers",
@@ -16,107 +17,17 @@
                 "title": { "type": "string"},
                 "release": { "type": "string"},
                 "duration": { "type": "number", "minimum": 0.0},
-                "jams_version" : { "type": "string", "pattern": "[0-9].[0-9].[0-9]"}
-            }
-        },
-
-        "Curator": {
-            "type": "object",
-            "title": "Curator",
-            "description": "Curator contact information: name and email",
-            "properties": {
-                "name": { "type": "string"},
-                "email": { "type": "string", "format": "email" }
-            },
-            "required": ["name", "email"]
-        },
-
-        "AnnotationMetadata": {
-            "type": "object",
-            "title": "Annotation metadata",
-            "description": "All metadata required to describe an annotation",
-            "properties": {
-                "corpus": { "type": "string" },
-                "version": { "type": ["string", "number"] },
-                "curator": { "$ref": "#/definitions/Curator" },
-                "annotator": {
-                    "type": "object",
-                    "title": "Annotator",
-                    "description": "Sandbox for information about the annotator."
-                },
-                "annotation_tools": { "type": "string"},
-                "annotation_rules": { "type": "string"},
-                "validation": { "type": "string"},
-                "data_source": { "type": "string"}
-            }
-        },
-
-        "SparseObservation": {
-            "type": "object",
-            "title": "SparseObservation",
-            "description": "An observation that spans an interval of time",
-            "properties": {
-                "value": { },
-                "confidence": { },
-                "time": {"type": "number", "minimum": 0.0},
-                "duration": {"type": "number", "minimum": 0.0}
-            },
-            "required": ["value", "time", "duration", "confidence"]
-        },
-
-        "DenseObservation": {
-            "type": "object",
-            "title": "DenseObservation",
-            "description": "A dense series of observations",
-            "properties": {
-                "value": {"type": "array"}, 
-                "confidence": {"type": "array" },
-                "time": {"type": "array", "items": { "type": "number", "minimum": 0.0 }},
-                "duration": {"type": "array", "items": { "type": "number", "minimum": 0.0 }}
-            },
-            "required": ["value", "time", "duration", "confidence"]
-        },
-
-        "SparseObservationList": {
-            "type": "array",
-            "title": "Sparse Observation List",
-            "id": "#sparse-observation-list",
-            "description": "A list of sparse observation objects",
-            "items": { "$ref": "#/definitions/SparseObservation" }
-        },
-
-        "Annotation": {
-            "id": "#annotation",
-            "type": "object",
-            "title": "Annotation",
-            "description": "An annotation of a single observation, e.g. tags",
-            "properties": {
-                "annotation_metadata": { "$ref": "#/definitions/AnnotationMetadata" },
-                "data": {
-                    "title": "Data",
-                    "description": "An array of observations",
-                    "oneOf": [  { "$ref": "#/definitions/DenseObservation" },
-                                { "$ref": "#/definitions/SparseObservationList" } ]
-                },
-                "namespace": {"type": "string"},
-                "sandbox": { "type": "object"},
-                "time": {
-                    "oneOf": [ {"type": "number", "minimum": 0.0},
-                               {"type": "null"} ]
-                },
-                "duration": {
-                    "oneOf": [ {"type": "number", "minimum": 0.0},
-                               {"type": "null"} ]
+                "schema_version" : {
+                    "type": "string", "pattern": "[0-9].[0-9].[0-9]"
                 }
             },
-            "required": ["annotation_metadata", "data", "namespace"]
+            "description": "Does this not have / need required fields?"
         }
-
     },
 
     "type": "object",
-    "title": "JAMS file",
-    "description": "JSON Annotated Music Specification",
+    "title": "JAMS Annotation Container",
+    "description": "JSON Annotated Music Specification -- JAMS Annotation Container for grouping a plurality of annotations together.",
     "properties": {
 
         "file_metadata": { "$ref": "#/definitions/FileMetadata" },
@@ -125,7 +36,7 @@
             "type": "array",
             "title": "Annotations",
             "description": "Array of annotations",
-            "items": { "$ref": "#/definitions/Annotation" }
+            "items": { "$ref": "file://jams_annotation_schema.json" }
         },
 
         "sandbox": { "type": "object" }
