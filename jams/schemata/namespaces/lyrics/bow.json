@@ -2,15 +2,18 @@
     {
         "value": {
             "type": "array",
-            "items": [
-                {"oneOf": [
-                        {"type": "string"},
-                        {"type": "array",
-                         "items": {"type": "string"}}
-                    ]
-                },
-                {"type": "number", "minimum": 0}
-            ]
+            "items": {
+                "type": "array",
+                "items": [
+                    {"oneOf": [
+                            {"type": "string"},
+                            {"type": "array",
+                            "items": {"type": "string"}}
+                        ]
+                    },
+                    {"type": "number", "minimum": 0}
+                ]
+            }
         },
         "dense": false,
         "description": "Bag of words or n-grams"
