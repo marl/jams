@@ -67,9 +67,30 @@ def pitch_midi(annotation, sr=22050, length=None, **kwargs):
                          **kwargs)
 
 
+def pitch_hz(annotation, sr=22050, length=None, **kwargs):
+    '''Sonify pitches in Hz'''
+
+    intervals, pitches = annotation.data.to_interval_values()
+
+    # Collapse down to a unique set of frequency values
+    freqs = np.unique(pitches)
+
+    # Build the piano roll
+    pitch_index = {p: i for i, p in enumerate(freqs)}
+    gram = np.zeros((len(freqs), len(pitches)))
+    for t, n in enumerate(pitches):
+        gram[pitch_index[n], t] = 1.0
+
+    return filter_kwargs(mir_eval.sonify.time_frequency,
+                         gram, freqs, intervals,
+                         fs=sr, length=length,
+                         **kwargs)
+
+
 SONIFY_MAPPING = {'beat.*|segment.*|onset.*': clicks,
                   'chord|chord_harte': chord,
-                  'pitch_midi': pitch_midi}
+                  'pitch_midi': pitch_midi,
+                  'pitch_hz': pitch_hz}
 
 
 def sonify(annotation, sr=22050, duration=None, **kwargs):
