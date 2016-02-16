@@ -9,6 +9,7 @@ from . import eval
 from .version import version as __version__
 
 from .core import *
+from .nsconvert import convert
 
 # Populate the namespace mapping
 from pkg_resources import resource_filename
