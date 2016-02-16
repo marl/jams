@@ -285,3 +285,28 @@ def test_hierarchy_invalid():
     yield raises(jams.SchemaError)(jams.eval.hierarchy), ref_ann, est_ann
     yield raises(jams.SchemaError)(jams.eval.hierarchy), est_ann, ref_ann
 
+
+def test_transcription_valid():
+
+    ref_jam = jams.load('fixtures/transcription_ref.jams')
+    est_jam = jams.load('fixtures/transcription_est.jams')
+
+    ref_ann = ref_jam.search(namespace='pitch_hz')[0]
+    est_ann = est_jam.search(namespace='pitch_hz')[0]
+
+    jams.eval.transcription(ref_ann, est_ann)
+
+
+def test_transcription_invalid():
+
+    ref_jam = jams.load('fixtures/transcription_ref.jams')
+    est_jam = jams.load('fixtures/transcription_est.jams')
+    ref_ann = ref_jam.search(namespace='pitch_hz')[0]
+    est_ann = est_jam.search(namespace='pitch_hz')[0]
+
+    ref_ann.append(time=2., duration=1., value='A', confidence=1)
+    est_ann.append(time=2., duration=1., value='B', confidence=1)
+
+    yield raises(jams.SchemaError)(jams.eval.transcription), ref_ann, est_ann
+    yield raises(jams.SchemaError)(jams.eval.transcription), est_ann, ref_ann
+
