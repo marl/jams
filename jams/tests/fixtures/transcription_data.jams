@@ -1,0 +1,58 @@
+{
+  "sandbox": {}, 
+  "annotations": [
+    {
+      "namespace": "pitch_hz", 
+      "sandbox": {}, 
+      "time": 0, 
+      "duration": 0.65000000000000002, 
+      "annotation_metadata": {
+        "annotation_tools": "", 
+        "curator": {
+          "name": "Justin Salamon", 
+          "email": "justin.salamon@nyu.edu"
+        }, 
+        "annotator": {}, 
+        "version": "", 
+        "corpus": "", 
+        "annotation_rules": "", 
+        "validation": "", 
+        "data_source": "Manually generated for test purposes"
+      }, 
+      "data": {
+        "duration": [
+          0.2, 
+          0.1, 
+          0.1, 
+          0.1
+        ], 
+        "confidence": [
+          1.0, 
+          1.0, 
+          1.0, 
+          1.0
+        ], 
+        "value": [
+          220.0, 
+          246.94200000000001, 
+          277.18299999999999, 
+          293.66500000000002
+        ], 
+        "time": [
+          0.1, 
+          0.3, 
+          0.5, 
+          0.55
+        ]
+      }
+    }
+  ], 
+  "file_metadata": {
+    "jams_version": "0.2.1", 
+    "title": "ref00", 
+    "identifiers": {}, 
+    "release": "", 
+    "duration": 0.65000000000000002, 
+    "artist": ""
+  }
+}

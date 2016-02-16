@@ -15,6 +15,7 @@ Evaluation
     tempo
     pattern
     hierarchy
+    transcription
 '''
 
 from collections import defaultdict
@@ -25,7 +26,7 @@ import mir_eval
 
 from .nsconvert import convert
 
-__all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'hierarchy', 'tempo', 'pattern']
+__all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'hierarchy', 'tempo', 'pattern', 'transcription']
 
 
 def coerce_annotation(ann, namespace):
@@ -481,3 +482,47 @@ def pattern(ref, est, **kwargs):
     est_patterns = pattern_to_mireval(est)
 
     return mir_eval.pattern.evaluate(ref_patterns, est_patterns, **kwargs)
+
+
+def transcription(ref, est, **kwargs):
+    r'''Note transcription evaluation
+
+    Parameters
+    ----------
+    ref : jams.Annotation
+        Reference annotation object
+    est : jams.Annotation
+        Estimated annotation object
+    kwargs
+        Additional keyword arguments
+
+    Returns
+    -------
+    scores : dict
+        Dictionary of scores, where the key is the metric name (str) and
+        the value is the (float) score achieved.
+
+    See Also
+    --------
+    mir_eval.transcription.evaluate
+
+    Examples
+    --------
+    >>> # Load in the JAMS objects
+    >>> ref_jam = jams.load('reference.jams')
+    >>> est_jam = jams.load('estimated.jams')
+    >>> # Select the first relevant annotations
+    >>> ref_ann = ref_jam.search(namespace='pitch_hz')[0]
+    >>> est_ann = est_jam.search(namespace='pitch_hz')[0]
+    >>> scores = jams.eval.transcription(ref_ann, est_ann)
+    '''
+
+    namespace = 'pitch_hz'
+    validate_annotation(ref, namespace)
+    validate_annotation(est, namespace)
+    ref_intervals, ref_pitches = ref.data.to_interval_values()
+    est_intervals, est_pitches = est.data.to_interval_values()
+
+    return mir_eval.transcription.evaluate(
+        ref_intervals, np.asarray(ref_pitches), est_intervals,
+        np.asarray(est_pitches), **kwargs)
