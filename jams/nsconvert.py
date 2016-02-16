@@ -1,7 +1,15 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 # CREATED:2016-02-16 15:40:04 by Brian McFee <brian.mcfee@nyu.edu>
-'''Automatic namespace conversion'''
+r'''
+Namespace conversion
+====================
+
+.. autosummary::
+    :toctree: generated
+
+    convert
+'''
 
 import numpy as np
 
@@ -12,6 +20,7 @@ from .exceptions import NamespaceError
 # The structure that handles all conversion mappings
 __CONVERSION__ = defaultdict(defaultdict)
 
+__all__ = ['convert']
 
 def _conversion(target, source):
     '''A decorator to register namespace conversions.
@@ -56,6 +65,18 @@ def convert(annotation, target_namespace):
     ------
     NamespaceError
         if no conversion is possible
+
+
+    Examples
+    --------
+
+    Convert frequency measurements in Hz to MIDI
+    
+    >>> ann_midi = jams.convert(ann_hz, 'pitch_midi')
+
+    And back to Hz
+    
+    >>> ann_hz2 = jams.convert(ann_midi, 'pitch_hz')
     '''
 
     # If we're already in the target namespace, do nothing

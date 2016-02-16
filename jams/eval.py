@@ -23,7 +23,7 @@ import six
 import numpy as np
 import mir_eval
 
-from .exceptions import NamespaceError
+from .nsconvert import convert
 
 __all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'hierarchy', 'tempo', 'pattern']
 
@@ -54,10 +54,7 @@ def validate_annotation(ann, namespace):
         If `ann` fails schema validation
     '''
 
-    if not ann.search(namespace=namespace):
-        raise NamespaceError('Expected namespace="{:s}", found "{:s}"'
-                             .format(namespace, ann.namespace))
-
+    ann = convert(ann, namespace)
     ann.validate(strict=True)
 
     return True
@@ -179,7 +176,7 @@ def chord(ref, est, **kwargs):
     >>> scores = jams.eval.chord(ref_ann, est_ann)
     '''
 
-    namespace = '^chord(_harte)?$'
+    namespace = 'chord'
     validate_annotation(ref, namespace)
     validate_annotation(est, namespace)
     ref_interval, ref_value = ref.data.to_interval_values()
@@ -221,7 +218,7 @@ def segment(ref, est, **kwargs):
     >>> est_ann = est_jam.search(namespace='segment_.*')[0]
     >>> scores = jams.eval.segment(ref_ann, est_ann)
     '''
-    namespace = 'segment_.*'
+    namespace = 'segment_open'
     validate_annotation(ref, namespace)
     validate_annotation(est, namespace)
     ref_interval, ref_value = ref.data.to_interval_values()
@@ -302,8 +299,8 @@ def hierarchy(ref, est, **kwargs):
     namespace = 'multi_segment'
     validate_annotation(ref, namespace)
     validate_annotation(est, namespace)
-    ref_hier, _ = hierarchy_flatten(ref)
-    est_hier, _ = hierarchy_flatten(est)
+    ref_hier, ref_hier_lab = hierarchy_flatten(ref)
+    est_hier, est_hier_lab = hierarchy_flatten(est)
 
     return mir_eval.hierarchy.evaluate(ref_hier, est_hier, **kwargs)
 
