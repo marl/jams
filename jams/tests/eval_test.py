@@ -126,7 +126,7 @@ def test_segment_invalid():
     yield raises(jams.NamespaceError)(jams.eval.segment), ref_ann, est_ann
     yield raises(jams.NamespaceError)(jams.eval.segment), est_ann, ref_ann
 
-    est_ann = create_annotation(values=['E', 'B', 'E', 'B'],
+    est_ann = create_annotation(values=[['F'], 'E', 'B', 'E', 'B'],
                                 namespace='segment_tut')
 
     yield raises(jams.SchemaError)(jams.eval.segment), ref_ann, est_ann
@@ -194,7 +194,7 @@ def test_melody_invalid():
     est_ann = create_annotation(values=f1 * v2,
                                 confidence=1.0,
                                 duration=0.01,
-                                namespace='pitch_midi')
+                                namespace='blob')
 
 
     yield raises(jams.NamespaceError)(jams.eval.melody), ref_ann, est_ann
