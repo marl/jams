@@ -14,7 +14,7 @@ import six
 import numpy as np
 import mir_eval.sonify
 from mir_eval.util import filter_kwargs
-from .eval import validate_annotation
+from .eval import coerce_annotation
 from .exceptions import NamespaceError
 
 __all__ = ['sonify']
@@ -43,30 +43,6 @@ def chord(annotation, sr=22050, length=None, **kwargs):
                          **kwargs)
 
 
-def pitch_midi(annotation, sr=22050, length=None, **kwargs):
-    '''Sonify midi pitches'''
-
-    intervals, notes = annotation.data.to_interval_values()
-
-    freqs = 440.0 * (2.0 ** ((np.arange(128) - 69.0)/12.0))
-
-    gram = np.zeros((len(freqs), len(notes)))
-
-    for t, n in enumerate(notes):
-        gram[n, t] = 1.0
-
-    # Compress for efficiency
-    idx = gram.max(axis=1) > 0
-
-    gram = gram[idx]
-    freqs = freqs[idx]
-
-    return filter_kwargs(mir_eval.sonify.time_frequency,
-                         gram, freqs, intervals,
-                         fs=sr, length=length,
-                         **kwargs)
-
-
 def pitch_hz(annotation, sr=22050, length=None, **kwargs):
     '''Sonify pitches in Hz'''
 
@@ -87,9 +63,10 @@ def pitch_hz(annotation, sr=22050, length=None, **kwargs):
                          **kwargs)
 
 
-SONIFY_MAPPING = {'beat.*|segment.*|onset.*': clicks,
-                  'chord|chord_harte': chord,
-                  'pitch_midi': pitch_midi,
+SONIFY_MAPPING = {'beat': clicks,
+                  'segment_open': clicks,
+                  'onset': clicks,
+                  'chord': chord,
                   'pitch_hz': pitch_hz}
 
 
@@ -127,7 +104,7 @@ def sonify(annotation, sr=22050, duration=None, **kwargs):
 
     for namespace, func in six.iteritems(SONIFY_MAPPING):
         try:
-            validate_annotation(annotation, namespace)
+            coerce_annotation(annotation, namespace)
             return func(annotation, sr=sr, length=length, **kwargs)
         except NamespaceError:
             pass
