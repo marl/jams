@@ -28,7 +28,7 @@ from .nsconvert import convert
 __all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'hierarchy', 'tempo', 'pattern']
 
 
-def validate_annotation(ann, namespace):
+def coerce_annotation(ann, namespace):
     '''Validate that the annotation has the correct namespace,
     and is well-formed.
 
@@ -101,8 +101,8 @@ def beat(ref, est, **kwargs):
     '''
 
     namespace = 'beat'
-    ref = validate_annotation(ref, namespace)
-    est = validate_annotation(est, namespace)
+    ref = coerce_annotation(ref, namespace)
+    est = coerce_annotation(est, namespace)
     ref_interval, _ = ref.data.to_interval_values()
     est_interval, _ = est.data.to_interval_values()
 
@@ -142,8 +142,8 @@ def onset(ref, est, **kwargs):
     >>> scores = jams.eval.onset(ref_ann, est_ann)
     '''
     namespace = 'onset'
-    ref = validate_annotation(ref, namespace)
-    est = validate_annotation(est, namespace)
+    ref = coerce_annotation(ref, namespace)
+    est = coerce_annotation(est, namespace)
     ref_interval, _ = ref.data.to_interval_values()
     est_interval, _ = est.data.to_interval_values()
 
@@ -184,8 +184,8 @@ def chord(ref, est, **kwargs):
     '''
 
     namespace = 'chord'
-    ref = validate_annotation(ref, namespace)
-    est = validate_annotation(est, namespace)
+    ref = coerce_annotation(ref, namespace)
+    est = coerce_annotation(est, namespace)
     ref_interval, ref_value = ref.data.to_interval_values()
     est_interval, est_value = est.data.to_interval_values()
 
@@ -226,8 +226,8 @@ def segment(ref, est, **kwargs):
     >>> scores = jams.eval.segment(ref_ann, est_ann)
     '''
     namespace = 'segment_open'
-    ref = validate_annotation(ref, namespace)
-    est = validate_annotation(est, namespace)
+    ref = coerce_annotation(ref, namespace)
+    est = coerce_annotation(est, namespace)
     ref_interval, ref_value = ref.data.to_interval_values()
     est_interval, est_value = est.data.to_interval_values()
 
@@ -304,8 +304,8 @@ def hierarchy(ref, est, **kwargs):
     >>> scores = jams.eval.hierarchy(ref_ann, est_ann)
     '''
     namespace = 'multi_segment'
-    ref = validate_annotation(ref, namespace)
-    est = validate_annotation(est, namespace)
+    ref = coerce_annotation(ref, namespace)
+    est = coerce_annotation(est, namespace)
     ref_hier, ref_hier_lab = hierarchy_flatten(ref)
     est_hier, est_hier_lab = hierarchy_flatten(est)
 
@@ -345,8 +345,8 @@ def tempo(ref, est, **kwargs):
     >>> scores = jams.eval.tempo(ref_ann, est_ann)
     '''
 
-    ref = validate_annotation(ref, 'tempo')
-    est = validate_annotation(est, 'tempo')
+    ref = coerce_annotation(ref, 'tempo')
+    est = coerce_annotation(est, 'tempo')
     ref_tempi = ref.data['value'].values
     ref_weight = ref.data['confidence'][0]
     est_tempi = est.data['value'].values
@@ -388,8 +388,8 @@ def melody(ref, est, **kwargs):
     '''
 
     namespace = 'pitch_hz'
-    ref = validate_annotation(ref, namespace)
-    est = validate_annotation(est, namespace)
+    ref = coerce_annotation(ref, namespace)
+    est = coerce_annotation(est, namespace)
     ref_interval, ref_freq = ref.data.to_interval_values()
     est_interval, est_freq = est.data.to_interval_values()
 
@@ -472,8 +472,8 @@ def pattern(ref, est, **kwargs):
     '''
 
     namespace = 'pattern_jku'
-    ref = validate_annotation(ref, namespace)
-    est = validate_annotation(est, namespace)
+    ref = coerce_annotation(ref, namespace)
+    est = coerce_annotation(est, namespace)
 
     ref_patterns = pattern_to_mireval(ref)
     est_patterns = pattern_to_mireval(est)
