@@ -309,7 +309,9 @@ def hierarchy(ref, est, **kwargs):
     ref_hier, ref_hier_lab = hierarchy_flatten(ref)
     est_hier, est_hier_lab = hierarchy_flatten(est)
 
-    return mir_eval.hierarchy.evaluate(ref_hier, est_hier, **kwargs)
+    return mir_eval.hierarchy.evaluate(ref_hier, ref_hier_lab,
+                                       est_hier, est_hier_lab,
+                                       **kwargs)
 
 
 def tempo(ref, est, **kwargs):
