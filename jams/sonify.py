@@ -10,6 +10,7 @@ Sonification
     sonify
 '''
 
+from collections import OrderedDict
 import six
 import numpy as np
 import mir_eval.sonify
@@ -51,10 +52,15 @@ def pitch_hz(annotation, sr=22050, length=None, **kwargs):
     # Collapse down to a unique set of frequency values
     freqs = np.unique(pitches)
 
+    # Drop the non-positive values
+    freqs = freqs[freqs > 0]
+
     # Build the piano roll
     pitch_index = {p: i for i, p in enumerate(freqs)}
     gram = np.zeros((len(freqs), len(pitches)))
     for t, n in enumerate(pitches):
+        if n not in pitch_index:
+            continue
         gram[pitch_index[n], t] = 1.0
 
     return filter_kwargs(mir_eval.sonify.time_frequency,
@@ -63,11 +69,12 @@ def pitch_hz(annotation, sr=22050, length=None, **kwargs):
                          **kwargs)
 
 
-SONIFY_MAPPING = {'beat': clicks,
-                  'segment_open': clicks,
-                  'onset': clicks,
-                  'chord': chord,
-                  'pitch_hz': pitch_hz}
+SONIFY_MAPPING = OrderedDict()
+SONIFY_MAPPING['beat'] = clicks
+SONIFY_MAPPING['segment_open'] = clicks
+SONIFY_MAPPING['onset'] = clicks
+SONIFY_MAPPING['chord'] = chord
+SONIFY_MAPPING['pitch_hz'] = pitch_hz
 
 
 def sonify(annotation, sr=22050, duration=None, **kwargs):
