@@ -49,18 +49,38 @@ def pitch_hz(annotation, sr=22050, length=None, **kwargs):
 
     intervals, pitches = annotation.data.to_interval_values()
 
+    # Handle instantaneous pitch measurements: if at least 98% of
+    # observations have zero duration, call it continuous
+    if np.percentile(intervals[:, 0] - intervals[:, 1], 98) == 0:
+        intervals[:-1, 1] = intervals[:-1, 0] + np.diff(intervals[:, 0])
+        if annotation.duration is not None:
+            intervals[-1, 1] = annotation.duration
+        elif length is not None:
+            intervals[-1, 1] = length / float(sr)
+
+    if length is None:
+        if np.any(intervals):
+            length = int(np.max(intervals[:, 1]) * sr)
+        else:
+            length = 0
+
+    # Discard anything unvoiced or zero-duration
+    pitches = np.asarray(pitches)
+    good_idx = (intervals[:, 1] > intervals[:, 0]) & (pitches > 0)
+    intervals = intervals[good_idx]
+    pitches = pitches[good_idx]
+
     # Collapse down to a unique set of frequency values
     freqs = np.unique(pitches)
 
-    # Drop the non-positive values
-    freqs = freqs[freqs > 0]
+    if freqs.size == 0:
+        # We have no usable data.  Return an empty signal
+        return np.zeros(length)
 
     # Build the piano roll
     pitch_index = {p: i for i, p in enumerate(freqs)}
     gram = np.zeros((len(freqs), len(pitches)))
     for t, n in enumerate(pitches):
-        if n not in pitch_index:
-            continue
         gram[pitch_index[n], t] = 1.0
 
     return filter_kwargs(mir_eval.sonify.time_frequency,
