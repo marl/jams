@@ -45,7 +45,7 @@ def chord(annotation, sr=22050, length=None, **kwargs):
 
 
 def pitch_hz(annotation, sr=22050, length=None, **kwargs):
-    '''Sonify pitches in Hz'''
+    '''Sonify pitch contours in Hz'''
 
     intervals, pitches = annotation.data.to_interval_values()
 
@@ -70,21 +70,9 @@ def pitch_hz(annotation, sr=22050, length=None, **kwargs):
     intervals = intervals[good_idx]
     pitches = pitches[good_idx]
 
-    # Collapse down to a unique set of frequency values
-    freqs = np.unique(pitches)
-
-    if freqs.size == 0:
-        # We have no usable data.  Return an empty signal
-        return np.zeros(length)
-
-    # Build the piano roll
-    pitch_index = {p: i for i, p in enumerate(freqs)}
-    gram = np.zeros((len(freqs), len(pitches)))
-    for t, n in enumerate(pitches):
-        gram[pitch_index[n], t] = 1.0
-
-    return filter_kwargs(mir_eval.sonify.time_frequency,
-                         gram, freqs, intervals,
+    # Sonify
+    return filter_kwargs(mir_eval.sonify.pitch_contour,
+                         intervals[:, 0], pitches,
                          fs=sr, length=length,
                          **kwargs)
 
