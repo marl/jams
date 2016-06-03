@@ -11,7 +11,7 @@ conda_create ()
     conda update -q conda
     conda config --add channels pypi
     conda info -a
-    deps='six nose coverage numpy scipy pandas decorator sphinx'
+    deps='six nose coverage numpy scipy pandas decorator sphinx matplotlib'
 
     conda create -q -n $ENV_NAME "python=$TRAVIS_PYTHON_VERSION" $deps
 }

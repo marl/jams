@@ -38,5 +38,8 @@ setup(
         'decorator',
         'mir_eval>=0.3',
     ],
+    extras_require={
+        'display': ['matplotlib>=1.5.0']
+    },
     scripts=['scripts/jams_to_lab.py']
 )

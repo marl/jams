@@ -22,7 +22,7 @@ before_install:
 
 install:
     # install your own package into the environment
-    - pip install -e .
+    - pip install -e .[display]
 
 script:
     - nosetests -v -w jams/tests/ --with-coverage --cover-erase --cover-package=jams
