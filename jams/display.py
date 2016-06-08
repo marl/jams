@@ -14,6 +14,8 @@ from collections import OrderedDict
 
 import six
 
+import numpy as np
+
 import matplotlib.pyplot as plt
 import mir_eval.display
 
@@ -34,6 +36,7 @@ def hierarchy(annotation, **kwargs):
     '''Plotting wrapper for hierarchical segmentations'''
     htimes, hlabels = hierarchy_flatten(annotation)
 
+    htimes = [np.asarray(_) for _ in htimes]
     return mir_eval.display.hierarchy(htimes, hlabels, **kwargs)
 
 
