@@ -47,22 +47,51 @@ def pitch(annotation, **kwargs):
     return mir_eval.display.pitch(times[:, 0], values, unvoiced=True, **kwargs)
 
 
+def event(annotation, **kwargs):
+    '''Plotting wrapper for events'''
+
+    times, values = annotation.data.to_interval_values()
+
+    if any(values):
+        labels = values
+    else:
+        labels = None
+
+    return mir_eval.display.events(times, labels=labels, **kwargs)
+
+
+def beat_position(annotation, **kwargs):
+    '''Plotting wrapper for beat-position data'''
+
+    times, values = annotation.data.to_interval_values()
+
+    labels = [_['position'] for _ in values]
+
+    # TODO: plot time signature, measure number
+    return mir_eval.display.events(times, labels=labels, **kwargs)
+
+
 VIZ_MAPPING = OrderedDict()
 
 VIZ_MAPPING['segment_open'] = intervals
 VIZ_MAPPING['chord'] = intervals
 VIZ_MAPPING['multi_segment'] = hierarchy
 VIZ_MAPPING['pitch_hz'] = pitch
+VIZ_MAPPING['beat_position'] = beat_position
+VIZ_MAPPING['beat'] = event
+VIZ_MAPPING['onset'] = event
 
 
-
-def display(annotation, **kwargs):
+def display(annotation, meta=True, **kwargs):
     '''Visualize a jams annotation through mir_eval
 
     Parameters
     ----------
     annotation : jams.Annotation
         The annotation to display
+
+    meta : bool
+        If `True`, include annotation metadata in the figure
 
     kwargs
         Additional keyword arguments to mir_eval.display functions
@@ -82,8 +111,9 @@ def display(annotation, **kwargs):
         try:
             coerce_annotation(annotation, namespace)
             ax = func(annotation, **kwargs)
-            ax.set_title('{} | {}'.format(annotation.namespace,
-                                          annotation.annotation_metadata.annotator.name))
+            # FIXME: how do we include metadata?
+#            ax.set_title('{} | {}'.format(annotation.namespace,
+#                                          annotation.annotation_metadata.annotator.name))
             return ax
         except NamespaceError:
             pass
