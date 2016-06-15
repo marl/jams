@@ -12,17 +12,51 @@ Display
 
 from collections import OrderedDict
 
+import json
+import re
 import six
 
 import numpy as np
 
 import matplotlib.pyplot as plt
+from matplotlib.offsetbox import AnchoredOffsetbox, TextArea
+
 import mir_eval.display
 
 from .eval import hierarchy_flatten
 from .exceptions import NamespaceError
 from .eval import coerce_annotation
 from .nsconvert import can_convert
+
+
+def pprint_jobject(obj, **kwargs):
+    '''Pretty-print a jobject.
+
+    Parameters
+    ----------
+    obj : jams.JObject
+
+    kwargs
+        additional parameters to `json.dumps`
+
+    Returns
+    -------
+    string
+        A simplified display of `obj` contents.
+    '''
+
+    string = json.dumps(obj.__json__, **kwargs)
+    
+    # Suppress braces and quotes
+    string = re.sub(r'[{}"]', '', string)
+    
+    # Kill trailing commas
+    string = re.sub(r',\n', '\n', string)
+    
+    # Kill blank lines
+    string = re.sub(r'^\s*$', '', string)
+    
+    return string
 
 
 def intervals(annotation, **kwargs):
@@ -110,10 +144,23 @@ def display(annotation, meta=True, **kwargs):
     for namespace, func in six.iteritems(VIZ_MAPPING):
         try:
             coerce_annotation(annotation, namespace)
+
             ax = func(annotation, **kwargs)
-            # FIXME: how do we include metadata?
-#            ax.set_title('{} | {}'.format(annotation.namespace,
-#                                          annotation.annotation_metadata.annotator.name))
+
+            ax.set_title(annotation.namespace)
+            if meta:
+                description = pprint_jobject(annotation.annotation_metadata, indent=2)
+
+                anchored_box = AnchoredOffsetbox(loc=2,
+                                                 child=TextArea(description.strip()),
+                                                 frameon=True,
+                                                 bbox_to_anchor=(1.02, 1.0),
+                                                 bbox_transform=ax.transAxes,
+                                                 borderpad=0.)
+                ax.add_artist(anchored_box)
+
+                ax.figure.subplots_adjust(right=0.8)
+
             return ax
         except NamespaceError:
             pass
@@ -122,7 +169,7 @@ def display(annotation, meta=True, **kwargs):
                          .format(annotation.namespace))
 
 
-def display_multi(annotations, fig_kw=None, **kwargs):
+def display_multi(annotations, fig_kw=None, meta=True, **kwargs):
     '''Display multiple annotations with shared axes
 
     Parameters
@@ -132,6 +179,9 @@ def display_multi(annotations, fig_kw=None, **kwargs):
 
     fig_kw : dict
         Keyword arguments to `plt.figure`
+
+    meta : bool
+        If `True`, display annotation metadata for each annotation
 
     kwargs
         Additional keyword arguments to the `mir_eval.display` routines
@@ -159,6 +209,6 @@ def display_multi(annotations, fig_kw=None, **kwargs):
 
     for ann, ax in zip(display_annotations, axs):
         kwargs['ax'] = ax
-        display(ann, **kwargs)
+        display(ann, meta=meta, **kwargs)
 
     return axs
