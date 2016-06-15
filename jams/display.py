@@ -45,17 +45,19 @@ def pprint_jobject(obj, **kwargs):
         A simplified display of `obj` contents.
     '''
 
-    string = json.dumps(obj.__json__, **kwargs)
-    
+    obj_simple = {k: v for k, v in six.iteritems(obj.__json__) if v}
+
+    string = json.dumps(obj_simple, **kwargs)
+
     # Suppress braces and quotes
     string = re.sub(r'[{}"]', '', string)
-    
+
     # Kill trailing commas
     string = re.sub(r',\n', '\n', string)
-    
+
     # Kill blank lines
     string = re.sub(r'^\s*$', '', string)
-    
+
     return string
 
 
@@ -188,6 +190,8 @@ def display_multi(annotations, fig_kw=None, meta=True, **kwargs):
 
     Returns
     -------
+    fig
+        The created figure
     axs
         List of subplot axes corresponding to each displayed annotation
     '''
@@ -205,10 +209,10 @@ def display_multi(annotations, fig_kw=None, meta=True, **kwargs):
                 display_annotations.append(ann)
                 break
 
-    _, axs = plt.subplots(nrows=len(display_annotations), ncols=1, **fig_kw)
+    fig, axs = plt.subplots(nrows=len(display_annotations), ncols=1, **fig_kw)
 
     for ann, ax in zip(display_annotations, axs):
         kwargs['ax'] = ax
         display(ann, meta=meta, **kwargs)
 
-    return axs
+    return fig, axs
