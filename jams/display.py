@@ -19,7 +19,7 @@ import six
 import numpy as np
 
 import matplotlib.pyplot as plt
-from matplotlib.offsetbox import AnchoredOffsetbox, TextArea
+from matplotlib.offsetbox import AnchoredText
 
 import mir_eval.display
 
@@ -145,25 +145,26 @@ def display(annotation, meta=True, **kwargs):
 
     for namespace, func in six.iteritems(VIZ_MAPPING):
         try:
-            coerce_annotation(annotation, namespace)
+            ann = coerce_annotation(annotation, namespace)
 
-            ax = func(annotation, **kwargs)
+            axes = func(ann, **kwargs)
 
-            ax.set_title(annotation.namespace)
+            # Title should correspond to original namespace, not the coerced version
+            axes.set_title(annotation.namespace)
             if meta:
                 description = pprint_jobject(annotation.annotation_metadata, indent=2)
 
-                anchored_box = AnchoredOffsetbox(loc=2,
-                                                 child=TextArea(description.strip()),
-                                                 frameon=True,
-                                                 bbox_to_anchor=(1.02, 1.0),
-                                                 bbox_transform=ax.transAxes,
-                                                 borderpad=0.)
-                ax.add_artist(anchored_box)
+                anchored_box = AnchoredText(description.strip('\n'),
+                                            loc=2,
+                                            frameon=True,
+                                            bbox_to_anchor=(1.02, 1.0),
+                                            bbox_transform=axes.transAxes,
+                                            borderpad=0.0)
+                axes.add_artist(anchored_box)
 
-                ax.figure.subplots_adjust(right=0.8)
+                axes.figure.subplots_adjust(right=0.8)
 
-            return ax
+            return axes
         except NamespaceError:
             pass
 
