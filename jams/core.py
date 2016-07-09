@@ -995,7 +995,10 @@ class AnnotationArray(list):
 
     This list subclass provides serialization and search/filtering
     for annotation collections.
+
     """
+    # TODO
+    #   document fancy indexing
     def __init__(self, annotations=None):
         """Create an AnnotationArray.
 
@@ -1039,6 +1042,20 @@ class AnnotationArray(list):
                 results.append(annotation)
 
         return results
+
+    def __getitem__(self, args):
+        '''Overloaded getitem for syntactic search sugar'''
+
+        # if we have only one argument, it can be an int, slice or query
+        if isinstance(args, int):
+            return list.__getitem__(self, args)
+        elif isinstance(args, slice):
+            return list.__getitem__(self, args)
+        elif isinstance(args, tuple):
+            return self.search(namespace=args[0])[args[1]]
+        elif isinstance(args, (six.string_types, six.callable, JObject)):
+            return self.search(namespace=args)
+        raise IndexError('Invalid index: {}'.format(args))
 
     @property
     def __json__(self):
