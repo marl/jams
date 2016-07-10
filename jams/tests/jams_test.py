@@ -470,6 +470,16 @@ def test_annotation_array_composite():
 
     eq_(len(jam.annotations['beat', 2::2]), 4)
 
+@raises(IndexError)
+def test_annotation_array_index_error():
+
+    jam = jams.JAMS()
+    ann = jams.Annotation(namespace='beat')
+    jam.annotations.append(ann)
+
+    res = jam.annotations[None]
+
+
 # JAMS
 def test_jams():
 
