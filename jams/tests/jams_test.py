@@ -417,6 +417,59 @@ def test_annotation_array_serialize():
     eq_(arr, arr2)
 
 
+def test_annotation_array_index_simple():
+
+    jam = jams.JAMS()
+
+    anns = [jams.Annotation('beat') for _ in range(5)]
+
+    for ann in anns:
+        jam.annotations.append(ann)
+
+    assert len(jam.annotations) == len(anns)
+    for i in range(5):
+        a1, a2 = anns[i], jam.annotations[i]
+        eq_(a1, a2)
+
+def test_annotation_array_slice_simple():
+
+    jam = jams.JAMS()
+
+    anns = [jams.Annotation('beat') for _ in range(5)]
+
+    for ann in anns:
+        jam.annotations.append(ann)
+
+    res = jam.annotations[:3]
+    eq_(len(res), 3)
+    assert anns[0] in res
+
+def test_annotation_array_index_fancy():
+
+    jam = jams.JAMS()
+    ann = jams.Annotation(namespace='beat')
+    jam.annotations.append(ann)
+    # We should have exactly one beat annotation
+    res = jam.annotations['beat']
+    eq_(len(res), 1)
+    eq_(res[0], ann)
+    # Any other namespace should give an empty list
+    eq_(jam.annotations['segment'], [])
+
+
+def test_annotation_array_composite():
+
+    jam = jams.JAMS()
+    for _ in range(10):
+        ann = jams.Annotation(namespace='beat')
+        jam.annotations.append(ann)
+
+    eq_(len(jam.annotations['beat', :3]), 3)
+
+    eq_(len(jam.annotations['beat', 3:]), 7)
+
+    eq_(len(jam.annotations['beat', 2::2]), 4)
+
 # JAMS
 def test_jams():
 

@@ -996,9 +996,23 @@ class AnnotationArray(list):
     This list subclass provides serialization and search/filtering
     for annotation collections.
 
+    Fancy-indexing can be used to directly search for annotations
+    belonging to a particular namespace.
+
+    Examples
+    --------
+    >>> # Retrieve the first annotation with simple indexing
+    >>> ann = jam.annotations[0]
+
+    >>> # Retrieve a list of beat annotations
+    >>> beat_anns = jam.annotations['beat']
+
+    >>> # Retrieve the second beat annotation
+    >>> beat2 = jam.annotations['beat', 1]
+
+    >>> # Retrieve everything after the second salami annotation
+    >>> seg_anns = jam.annotations['segment_salami_.*', 2:]
     """
-    # TODO
-    #   document fancy indexing
     def __init__(self, annotations=None):
         """Create an AnnotationArray.
 
@@ -1043,19 +1057,17 @@ class AnnotationArray(list):
 
         return results
 
-    def __getitem__(self, args):
+    def __getitem__(self, idx):
         '''Overloaded getitem for syntactic search sugar'''
 
         # if we have only one argument, it can be an int, slice or query
-        if isinstance(args, int):
-            return list.__getitem__(self, args)
-        elif isinstance(args, slice):
-            return list.__getitem__(self, args)
-        elif isinstance(args, tuple):
-            return self.search(namespace=args[0])[args[1]]
-        elif isinstance(args, (six.string_types, six.callable, JObject)):
-            return self.search(namespace=args)
-        raise IndexError('Invalid index: {}'.format(args))
+        if isinstance(idx, (int, slice)):
+            return list.__getitem__(self, idx)
+        elif isinstance(idx, six.string_types) or six.callable(idx):
+            return self.search(namespace=idx)
+        elif isinstance(idx, tuple):
+            return self.search(namespace=idx[0])[idx[1]]
+        raise IndexError('Invalid index: {}'.format(idx))
 
     @property
     def __json__(self):
