@@ -202,6 +202,35 @@ def test_ns_tempo_invalid():
     for confidence in [-1, -0.5, 2.0, 'a']:
         yield __test, 120.0, confidence
 
+def test_ns_note_hz_valid():
+
+    ann = Annotation(namespace='note_hz')
+
+    seq_len = 21
+    times = np.arange(seq_len)
+    durations = np.zeros(seq_len)
+    values = np.linspace(0, 22050, seq_len) # includes 0 (odd symmetric)
+    confidences = np.linspace(0, 1., seq_len)
+    confidences[seq_len//2] = None # throw in a None confidence value
+
+    for (t, d, v, c) in zip(times, durations, values, confidences):
+        ann.append(time=t, duration=d, value=v, confidence=c)
+
+    ann.validate()
+
+def test_ns_note_hz_invalid():
+
+    @raises(SchemaError)
+    def __test(value):
+        ann = Annotation(namespace='note_hz')
+        ann.append(time=0, duration=0, value=value, confidence=0.5)
+        ann.validate()
+
+    # note: 1j should also be invalid, but currently not caught
+    # by the schema validation and hence removed from the test
+    for value in ['a', -23, None, True]:
+        yield __test, value
+
 
 def test_ns_pitch_hz_valid():
 
@@ -225,6 +254,36 @@ def test_ns_pitch_hz_invalid():
     @raises(SchemaError)
     def __test(value):
         ann = Annotation(namespace='pitch_hz')
+        ann.append(time=0, duration=0, value=value, confidence=0.5)
+        ann.validate()
+
+    # note: 1j should also be invalid, but currently not caught
+    # by the schema validation and hence removed from the test
+    for value in ['a', None, True]:
+        yield __test, value
+
+
+def test_ns_note_midi_valid():
+
+    ann = Annotation(namespace='note_midi')
+
+    seq_len = 21
+    times = np.arange(seq_len)
+    durations = np.zeros(seq_len)
+    values = np.linspace(-108., 108, seq_len)  # includes 0 (odd symmetric)
+    confidences = np.linspace(0, 1., seq_len)
+    confidences[seq_len//2] = None  # throw in a None confidence value
+
+    for (t, d, v, c) in zip(times, durations, values, confidences):
+        ann.append(time=t, duration=d, value=v, confidence=c)
+
+    ann.validate()
+
+def test_ns_note_midi_invalid():
+
+    @raises(SchemaError)
+    def __test(value):
+        ann = Annotation(namespace='note_midi')
         ann.append(time=0, duration=0, value=value, confidence=0.5)
         ann.validate()
 
@@ -264,6 +323,43 @@ def test_ns_pitch_midi_invalid():
     for value in ['a', None, True]:
         yield __test, value
 
+def test_ns_contour_valid():
+
+    ann = Annotation(namespace='pitch_contour')
+
+    seq_len = 21
+    times = np.arange(seq_len)
+    durations = np.zeros(seq_len)
+    values = np.linspace(0, 22050, seq_len)  # includes 0 (odd symmetric)
+    ids = np.arange(len(values)) // 4
+    voicing = np.random.randn(len(ids)) > 0
+
+    confidences = np.linspace(0, 1., seq_len)
+    confidences[seq_len//2] = None  # throw in a None confidence value
+
+    for (t, d, v, c, i, b) in zip(times, durations, values, confidences, ids, voicing):
+        ann.append(time=t, duration=d, value={'pitch': v, 'id': i, 'voiced': b}, confidence=c)
+
+    ann.validate()
+
+def test_ns_contour_invalid():
+
+    ann = Annotation(namespace='pitch_contour')
+
+    seq_len = 21
+    times = np.arange(seq_len)
+    durations = np.zeros(seq_len)
+    values = np.linspace(0, 22050, seq_len)  # includes 0 (odd symmetric)
+    ids = np.arange(len(values)) // 4
+    voicing = np.random.randn(len(ids)) * 2
+
+    confidences = np.linspace(0, 1., seq_len)
+    confidences[seq_len//2] = None  # throw in a None confidence value
+
+    for (t, d, v, c, i, b) in zip(times, durations, values, confidences, ids, voicing):
+        ann.append(time=t, duration=d, value={'pitch': v, 'id': i, 'voiced': b}, confidence=c)
+
+    ann.validate()
 
 def test_ns_key_mode():
 

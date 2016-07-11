@@ -1,0 +1,13 @@
+{"pitch_contour":
+    {
+        "value": { "type": "object" },
+        "dense": true,
+        "properties": {
+            "index": {"type": "integer"},
+            "frequency": {"type": "number", "minimum": 0},
+            "voiced": {"type": "boolean"}
+        },
+        "description": "Continuous pitch contours"
+    }
+}
+
