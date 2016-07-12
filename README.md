@@ -4,7 +4,7 @@ jams
 [![License](https://img.shields.io/pypi/l/jams.svg)](https://github.com/marl/jams/blob/master/LICENSE.md)
 [![Build Status](https://travis-ci.org/marl/jams.svg?branch=master)](https://travis-ci.org/marl/jams)
 [![Coverage Status](https://coveralls.io/repos/marl/jams/badge.svg?branch=master)](https://coveralls.io/r/marl/jams?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/marl/jams/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/marl/jams/?branch=master)
+[![Dependency Status](https://dependencyci.com/github/marl/jams/badge)](https://dependencyci.com/github/marl/jams)
 
 A JSON Annotated Music Specification for Reproducible MIR Research.
 
