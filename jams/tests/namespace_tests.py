@@ -207,7 +207,7 @@ def test_ns_pitch_hz_valid():
 
     ann = Annotation(namespace='pitch_hz')
 
-    seq_len = 21 # should be odd
+    seq_len = 21
     times = np.arange(seq_len)
     durations = np.zeros(seq_len)
     values = np.linspace(-22050., 22050, seq_len) # includes 0 (odd symmetric)
@@ -238,7 +238,7 @@ def test_ns_pitch_midi_valid():
 
     ann = Annotation(namespace='pitch_midi')
 
-    seq_len = 21  # should be odd
+    seq_len = 21
     times = np.arange(seq_len)
     durations = np.zeros(seq_len)
     values = np.linspace(-108., 108, seq_len)  # includes 0 (odd symmetric)
