@@ -78,9 +78,14 @@ def hierarchy(annotation, **kwargs):
 
 def pitch(annotation, **kwargs):
     '''Plotting wrapper for monophonic pitch contours'''
+    # TODO: separate out contours by index
     times, values = annotation.data.to_interval_values()
 
-    return mir_eval.display.pitch(times[:, 0], values, unvoiced=True, **kwargs)
+    freqs = np.asarray([v['frequency'] for v in values])
+    unvoiced = ~np.asarray([v['voiced'] for v in values])
+    freqs[unvoiced] *= -1
+
+    return mir_eval.display.pitch(times[:, 0], freqs, unvoiced=True, **kwargs)
 
 
 def event(annotation, **kwargs):
@@ -112,7 +117,7 @@ VIZ_MAPPING = OrderedDict()
 VIZ_MAPPING['segment_open'] = intervals
 VIZ_MAPPING['chord'] = intervals
 VIZ_MAPPING['multi_segment'] = hierarchy
-VIZ_MAPPING['pitch_hz'] = pitch
+VIZ_MAPPING['pitch_contour'] = pitch
 VIZ_MAPPING['beat_position'] = beat_position
 VIZ_MAPPING['beat'] = event
 VIZ_MAPPING['onset'] = event
@@ -211,6 +216,11 @@ def display_multi(annotations, fig_kw=None, meta=True, **kwargs):
                 break
 
     fig, axs = plt.subplots(nrows=len(display_annotations), ncols=1, **fig_kw)
+
+    # MPL is stupid when making singleton subplots.
+    # We catch this and make it always iterable.
+    if len(display_annotations) == 1:
+        axs = [axs]
 
     for ann, ax in zip(display_annotations, axs):
         kwargs['ax'] = ax

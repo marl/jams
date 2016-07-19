@@ -73,11 +73,11 @@ def convert(annotation, target_namespace):
     --------
     Convert frequency measurements in Hz to MIDI
 
-    >>> ann_midi = jams.convert(ann_hz, 'pitch_midi')
+    >>> ann_midi = jams.convert(ann_hz, 'note_midi')
 
     And back to Hz
 
-    >>> ann_hz2 = jams.convert(ann_midi, 'pitch_hz')
+    >>> ann_hz2 = jams.convert(ann_midi, 'note_hz')
     '''
 
     # First, validate the input. If this fails, we can't auto-convert.
@@ -135,8 +135,42 @@ def can_convert(annotation, target_namespace):
     return False
 
 
+@_conversion('pitch_contour', 'pitch_hz')
+def pitch_hz_to_contour(annotation):
+    '''Convert a pitch_hz annotation to a contour'''
+    annotation.namespace = 'pitch_contour'
+    annotation.data.value = [dict(index=0, frequency=np.abs(f), voiced=f > 0)
+                             for f in annotation.data.value]
+    return annotation
+
+
+@_conversion('pitch_contour', 'pitch_midi')
+def pitch_midi_to_contour(annotation):
+    '''Convert a pitch_hz annotation to a contour'''
+    annotation = pitch_midi_to_hz(annotation)
+    return pitch_hz_to_contour(annotation)
+
+
+@_conversion('note_hz', 'note_midi')
+def note_midi_to_hz(annotation):
+    '''Convert a pitch_midi annotation to pitch_hz'''
+
+    annotation.namespace = 'note_hz'
+    annotation.data.value = 440 * (2.0 ** ((annotation.data.value - 69.0)/12.0))
+    return annotation
+
+
+@_conversion('note_midi', 'note_hz')
+def note_hz_to_midi(annotation):
+    '''Convert a pitch_hz annotation to pitch_midi'''
+
+    annotation.namespace = 'note_midi'
+    annotation.data.value = 12 * (np.log2(annotation.data.value) - np.log2(440.0)) + 69
+    return annotation
+
+
 @_conversion('pitch_hz', 'pitch_midi')
-def midi_to_hz(annotation):
+def pitch_midi_to_hz(annotation):
     '''Convert a pitch_midi annotation to pitch_hz'''
 
     annotation.namespace = 'pitch_hz'
@@ -145,7 +179,7 @@ def midi_to_hz(annotation):
 
 
 @_conversion('pitch_midi', 'pitch_hz')
-def hz_to_midi(annotation):
+def pitch_hz_to_midi(annotation):
     '''Convert a pitch_hz annotation to pitch_midi'''
 
     annotation.namespace = 'pitch_midi'
