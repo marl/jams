@@ -76,7 +76,7 @@ def hierarchy(annotation, **kwargs):
     return mir_eval.display.hierarchy(htimes, hlabels, **kwargs)
 
 
-def pitch(annotation, **kwargs):
+def pitch_contour(annotation, **kwargs):
     '''Plotting wrapper for pitch contours'''
     ax = kwargs.pop('ax', None)
 
@@ -120,15 +120,23 @@ def beat_position(annotation, **kwargs):
     return mir_eval.display.events(times, labels=labels, **kwargs)
 
 
+def piano_roll(annotation, **kwargs):
+    '''Plotting wrapper for piano rolls'''
+    times, midi = annotation.data.to_interval_values()
+
+    return mir_eval.display.piano_roll(times, midi=midi, **kwargs)
+
+
 VIZ_MAPPING = OrderedDict()
 
 VIZ_MAPPING['segment_open'] = intervals
 VIZ_MAPPING['chord'] = intervals
 VIZ_MAPPING['multi_segment'] = hierarchy
-VIZ_MAPPING['pitch_contour'] = pitch
+VIZ_MAPPING['pitch_contour'] = pitch_contour
 VIZ_MAPPING['beat_position'] = beat_position
 VIZ_MAPPING['beat'] = event
 VIZ_MAPPING['onset'] = event
+VIZ_MAPPING['note_midi'] = piano_roll
 
 
 def display(annotation, meta=True, **kwargs):
