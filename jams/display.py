@@ -77,15 +77,23 @@ def hierarchy(annotation, **kwargs):
 
 
 def pitch(annotation, **kwargs):
-    '''Plotting wrapper for monophonic pitch contours'''
-    # TODO: separate out contours by index
+    '''Plotting wrapper for pitch contours'''
+    ax = kwargs.pop('ax', None)
+
     times, values = annotation.data.to_interval_values()
 
-    freqs = np.asarray([v['frequency'] for v in values])
-    unvoiced = ~np.asarray([v['voiced'] for v in values])
-    freqs[unvoiced] *= -1
+    indices = np.unique([v['index'] for v in values])
 
-    return mir_eval.display.pitch(times[:, 0], freqs, unvoiced=True, **kwargs)
+    for idx in indices:
+        freqs = np.asarray([v['frequency'] for v in values if v['index'] == idx])
+        unvoiced = ~np.asarray([v['voiced'] for v in values if v['index'] == idx])
+        freqs[unvoiced] *= -1
+
+        ax = mir_eval.display.pitch(times[:, 0], freqs, unvoiced=True,
+                                    ax=ax,
+                                    **kwargs)
+
+    return ax
 
 
 def event(annotation, **kwargs):
