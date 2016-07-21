@@ -91,6 +91,12 @@ def is_dense(ns_key):
 def values(ns_key):
     '''Return the allowed values for an enumerated namespace.
 
+    Example
+    -------
+    >>> values = jams.schema.values('tag_gtzan')
+    ['blues', 'classical', 'country', 'disco', 'hip-hop', ...
+    'jazz', 'metal', 'pop', 'reggae', 'rock']
+
     Parameters
     ----------
     ns_key : str
