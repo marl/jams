@@ -27,3 +27,20 @@ def test_display():
 
             yield __test, namespace, meta
     yield raises(NamespaceError)(__test), 'tempo', False
+
+
+def test_display_multi():
+
+    jam = jams.JAMS()
+    jam.annotations.append(jams.Annotation(namespace='beat'))
+    jam.annotations.append(jams.Annotation(namespace='chord'))
+
+    jams.display.display_multi(jam.annotations)
+
+
+@raises(jams.ParameterError)
+def test_display_multi_fail():
+
+    anns = jams.AnnotationArray()
+    jams.display.display_multi(anns)
+
