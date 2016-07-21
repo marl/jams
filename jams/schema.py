@@ -10,6 +10,7 @@ Namespace management
     add_namespace
     namespace
     is_dense
+    values
 '''
 
 import json
@@ -91,12 +92,6 @@ def is_dense(ns_key):
 def values(ns_key):
     '''Return the allowed values for an enumerated namespace.
 
-    Example
-    -------
-    >>> values = jams.schema.values('tag_gtzan')
-    ['blues', 'classical', 'country', 'disco', 'hip-hop', ...
-    'jazz', 'metal', 'pop', 'reggae', 'rock']
-
     Parameters
     ----------
     ns_key : str
@@ -110,6 +105,12 @@ def values(ns_key):
     ------
     NamespaceError
         If `ns_key` is not found, or does not have enumerated values
+
+    Examples
+    --------
+    >>> jams.schema.values('tag_gtzan')
+    ['blues', 'classical', 'country', 'disco', 'hip-hop', 'jazz',
+     'metal', 'pop', 'reggae', 'rock']
     '''
 
     if ns_key not in __NAMESPACE__:
