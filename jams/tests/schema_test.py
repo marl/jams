@@ -8,7 +8,7 @@ from six.moves import reload_module
 
 import os
 
-from nose.tools import raises
+from nose.tools import raises, eq_
 from jams import NamespaceError
 import jams
 
@@ -74,3 +74,21 @@ def test_schema_local():
     
     del os.environ['JAMS_SCHEMA_DIR']
 
+
+def test_schema_values_pass():
+
+    values = jams.schema.values('tag_gtzan')
+
+    eq_(values, ['blues', 'classical', 'country',
+                 'disco', 'hip-hop', 'jazz', 'metal',
+                 'pop', 'reggae', 'rock'])
+
+
+@raises(NamespaceError)
+def test_schema_values_missing():
+    jams.schema.values('imaginary namespace')
+
+
+@raises(NamespaceError)
+def test_schema_values_notenum():
+    jams.schema.values('chord_harte')
