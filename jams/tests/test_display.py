@@ -60,6 +60,18 @@ def test_display_pitch_contour():
     jams.display.display(ann)
 
 
+def test_display_labeled_events():
+
+    times = np.arange(40)
+    values = times % 4
+
+    ann = jams.Annotation(namespace='beat', duration=60)
+
+    for t, v in zip(times, values):
+        ann.append(time=t, value=v, duration=0)
+
+    jams.display.display(ann)
+
 @raises(jams.ParameterError)
 def test_display_multi_fail():
 
