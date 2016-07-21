@@ -79,6 +79,43 @@ def test_pitch_hz_to_midi():
     pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
 
 
+def test_note_midi_to_hz():
+
+    ann = jams.Annotation(namespace='note_midi')
+    ann.append(time=0, duration=1, value=69, confidence=0.5)
+    ann2 = jams.convert(ann, 'note_hz')
+    ann.validate()
+    ann2.validate()
+
+    # Check the namespace
+    eq_(ann2.namespace, 'note_hz')
+    # midi 69 = 440.0 Hz
+    eq_(ann2.data.value.loc[0], 440.0)
+
+    # Check all else is equal
+    pdt.assert_series_equal(ann.data.time, ann2.data.time)
+    pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
+    pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
+
+
+def test_note_hz_to_midi():
+
+    ann = jams.Annotation(namespace='note_hz')
+    ann.append(time=0, duration=1, value=440.0, confidence=0.5)
+    ann2 = jams.convert(ann, 'note_midi')
+    ann.validate()
+    ann2.validate()
+
+    # Check the namespace
+    eq_(ann2.namespace, 'note_midi')
+    # midi 69 = 440.0 Hz
+    eq_(ann2.data.value.loc[0], 69)
+
+    # Check all else is equal
+    pdt.assert_series_equal(ann.data.time, ann2.data.time)
+    pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
+    pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
+
 def test_segment_open():
 
     ann = jams.Annotation(namespace='segment_salami_upper')
