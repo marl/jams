@@ -155,3 +155,24 @@ def test_beat_position():
     pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
     pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
 
+
+def test_can_convert_equal():
+
+    ann = jams.Annotation(namespace='chord')
+
+    assert jams.nsconvert.can_convert(ann, 'chord')
+
+
+def test_can_convert_cast():
+
+    ann = jams.Annotation(namespace='tag_gtzan')
+
+    assert jams.nsconvert.can_convert(ann, 'tag_open')
+
+
+def test_can_convert_fail():
+
+    ann = jams.Annotation(namespace='tag_gtzan')
+
+    assert not jams.nsconvert.can_convert(ann, 'chord')
+

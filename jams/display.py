@@ -24,7 +24,7 @@ from matplotlib.offsetbox import AnchoredText
 import mir_eval.display
 
 from .eval import hierarchy_flatten
-from .exceptions import NamespaceError
+from .exceptions import NamespaceError, ParameterError
 from .eval import coerce_annotation
 from .nsconvert import can_convert
 
@@ -231,7 +231,10 @@ def display_multi(annotations, fig_kw=None, meta=True, **kwargs):
                 display_annotations.append(ann)
                 break
 
-    # TODO: throw an exception if there are no annotations
+    # If there are no displayable annotations, fail here
+    if not len(display_annotations):
+        raise ParameterError('No displayable annotations found')
+
     fig, axs = plt.subplots(nrows=len(display_annotations), ncols=1, **fig_kw)
 
     # MPL is stupid when making singleton subplots.
