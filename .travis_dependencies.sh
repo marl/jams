@@ -32,6 +32,7 @@ if [ ! -d "$src" ]; then
 
         source activate $ENV_NAME
 
+        pip install git+https://github.com/craffel/mir_eval
         pip install jsonschema
         pip install python-coveralls
         pip install numpydoc
