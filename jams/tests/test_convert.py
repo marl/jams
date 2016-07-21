@@ -3,9 +3,6 @@
 '''namespace conversion tests'''
 
 import numpy as np
-import pandas as pd
-import numpy.testing as npt
-import pandas.util.testing as pdt
 
 from nose.tools import raises, eq_
 import jams
@@ -90,7 +87,6 @@ def test_pitch_midi_to_contour():
     eq_(ann2.data.value.iloc[-1]['index'], 0)
 
     # Check voicings
-#    assert not ann2.data.value.iloc[0]['voiced']
     assert ann2.data.value.iloc[-1]['voiced']
 
 
