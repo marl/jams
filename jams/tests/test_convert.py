@@ -3,10 +3,13 @@
 '''namespace conversion tests'''
 
 import numpy as np
+import numpy.testing as npt
+import pandas.util.testing as pdt
 
 from nose.tools import raises, eq_
 import jams
 from jams import NamespaceError
+
 
 @raises(NamespaceError)
 def test_bad_target():
