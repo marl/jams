@@ -997,17 +997,27 @@ class AnnotationArray(list):
     for annotation collections.
 
     Fancy-indexing can be used to directly search for annotations
-    belonging to a particular namespace.
+    belonging to a particular namespace.  Three types of indexing
+    are supported:
+
+    - integer or slice : acts just as in `list`, e.g., `arr[0]` or `arr[1:3]`
+    - string : acts like a search, e.g., `arr['beat'] == arr.search(namespace='beat')`
+    - (string, integer or slice) acts like a search followed by index/slice
 
     Examples
     --------
     >>> # Retrieve the first annotation with simple indexing
     >>> ann = jam.annotations[0]
 
+    >>> # Retrieve the first three annotations
+    >>> anns = jam.annotations[:3]
+
     >>> # Retrieve a list of beat annotations
+    >>> # equivalent to jam.search(namespace='beat')
     >>> beat_anns = jam.annotations['beat']
 
     >>> # Retrieve the second beat annotation
+    >>> # equivalent to jam.search(namespace='beat')[1]
     >>> beat2 = jam.annotations['beat', 1]
 
     >>> # Retrieve everything after the second salami annotation
