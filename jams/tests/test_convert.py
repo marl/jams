@@ -70,6 +70,30 @@ def test_pitch_hz_to_contour():
     assert not ann2.data.value.iloc[0]['voiced']
     assert ann2.data.value.iloc[-1]['voiced']
 
+def test_pitch_midi_to_contour():
+
+    ann = jams.Annotation(namespace='pitch_midi')
+    values = np.arange(100)
+
+    times = np.linspace(0, 1, num=len(values))
+
+    for t, v in zip(times, values):
+        ann.append(time=t, value=v, duration=0)
+
+    ann2 = jams.convert(ann, 'pitch_contour')
+    ann.validate()
+    ann2.validate()
+    eq_(ann2.namespace, 'pitch_contour')
+
+    # Check index values
+    eq_(ann2.data.value.iloc[0]['index'], 0)
+    eq_(ann2.data.value.iloc[-1]['index'], 0)
+
+    # Check voicings
+#    assert not ann2.data.value.iloc[0]['voiced']
+    assert ann2.data.value.iloc[-1]['voiced']
+
+
 def test_pitch_midi_to_hz():
 
     ann = jams.Annotation(namespace='pitch_midi')
