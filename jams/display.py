@@ -231,6 +231,7 @@ def display_multi(annotations, fig_kw=None, meta=True, **kwargs):
                 display_annotations.append(ann)
                 break
 
+    # TODO: throw an exception if there are no annotations
     fig, axs = plt.subplots(nrows=len(display_annotations), ncols=1, **fig_kw)
 
     # MPL is stupid when making singleton subplots.
