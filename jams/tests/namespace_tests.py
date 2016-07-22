@@ -889,3 +889,23 @@ def test_ns_multi_segment():
         for level in [0, 1, 2]:
             yield raises(SchemaError)(__test), dict(label=label, level=level)
 
+
+def test_ns_lyrics_bow():
+
+    def __test(label):
+        ann = Annotation(namespace='lyrics_bow')
+
+        ann.append(time=0, duration=1, value=label)
+
+        print(ann.data)
+        ann.validate()
+
+    yield __test, [['foo', 23]]
+    yield __test, [['foo', 23], ['bar', 35]]
+    yield __test, [['foo', 23], [['foo', 'bar'], 13]]
+    yield __test, []
+
+    yield raises(SchemaError)(__test), ('foo', 23)
+    yield raises(SchemaError)(__test), [('foo', -23)]
+    yield raises(SchemaError)(__test), [(23, 'foo')]
+
