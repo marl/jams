@@ -6,7 +6,6 @@ import numpy as np
 from nose.tools import raises
 import jams
 
-
 # Beat tracking
 def create_annotation(values, namespace='beat', offset=0.0, duration=1, confidence=1):
     ann = jams.Annotation(namespace=namespace)
@@ -149,7 +148,7 @@ def test_tempo_invalid():
     ref_ann = create_annotation(values=[120.0, 60.0], confidence=[0.75, 0.25],
                                 namespace='tempo')
 
-    est_ann = create_annotation(values=[120.0, 80.0], confidence=[0.5, 0.5],
+    est_ann = create_annotation(values=['120.0', '80.0'], confidence=[0.5, 0.5],
                                 namespace='tag_open')
 
     yield raises(jams.NamespaceError)(jams.eval.tempo), ref_ann, est_ann
@@ -271,16 +270,13 @@ def test_hierarchy_valid():
 def test_hierarchy_invalid():
 
     ref_ann = create_hierarchy(values=['AB', 'abac'])
-    est_ann = create_hierarchy(values=['ABCD', 'abacbcbd'])
-
-    est_ann.namespace = 'segment_open'
+    est_ann = create_annotation(values=['E', 'B', 'E', 'B'],
+                                namespace='tag_open')
 
     yield raises(jams.NamespaceError)(jams.eval.hierarchy), ref_ann, est_ann
     yield raises(jams.NamespaceError)(jams.eval.hierarchy), est_ann, ref_ann
 
-    est_ann = create_annotation(values=['E', 'B', 'E', 'B'],
-                                namespace='segment_tut')
-    est_ann.namespace = 'multi_segment'
+    est_ann = create_hierarchy(values=[[1, 2], [1, 2, 1, 3]])
 
     yield raises(jams.SchemaError)(jams.eval.hierarchy), ref_ann, est_ann
     yield raises(jams.SchemaError)(jams.eval.hierarchy), est_ann, ref_ann

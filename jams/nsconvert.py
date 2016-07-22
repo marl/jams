@@ -63,21 +63,25 @@ def convert(annotation, target_namespace):
 
     Raises
     ------
+    SchemaError
+        if the input annotation fails to validate
+    
     NamespaceError
         if no conversion is possible
 
-
     Examples
     --------
-
     Convert frequency measurements in Hz to MIDI
-    
+
     >>> ann_midi = jams.convert(ann_hz, 'pitch_midi')
 
     And back to Hz
-    
+
     >>> ann_hz2 = jams.convert(ann_midi, 'pitch_hz')
     '''
+
+    # First, validate the input. If this fails, we can't auto-convert.
+    annotation.validate(strict=True)
 
     # If we're already in the target namespace, do nothing
     if annotation.namespace == target_namespace:
