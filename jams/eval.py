@@ -385,19 +385,22 @@ def melody(ref, est, **kwargs):
     >>> ref_jam = jams.load('reference.jams')
     >>> est_jam = jams.load('estimated.jams')
     >>> # Select the first relevant annotations
-    >>> ref_ann = ref_jam.search(namespace='pitch_hz')[0]
-    >>> est_ann = est_jam.search(namespace='pitch_hz')[0]
+    >>> ref_ann = ref_jam.search(namespace='pitch_contour')[0]
+    >>> est_ann = est_jam.search(namespace='pitch_contour')[0]
     >>> scores = jams.eval.melody(ref_ann, est_ann)
     '''
 
-    namespace = 'pitch_hz'
+    namespace = 'pitch_contour'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
-    ref_interval, ref_freq = ref.data.to_interval_values()
-    est_interval, est_freq = est.data.to_interval_values()
+    ref_interval, ref_p = ref.data.to_interval_values()
+    est_interval, est_p = est.data.to_interval_values()
 
-    return mir_eval.melody.evaluate(ref_interval[:, 0], np.asarray(ref_freq),
-                                    est_interval[:, 0], np.asarray(est_freq),
+    ref_freq = np.asarray([p['frequency'] * (-1)**(~p['voiced']) for p in ref_p])
+    est_freq = np.asarray([p['frequency'] * (-1)**(~p['voiced']) for p in est_p])
+
+    return mir_eval.melody.evaluate(ref_interval[:, 0], ref_freq,
+                                    est_interval[:, 0], est_freq,
                                     **kwargs)
 
 
@@ -512,20 +515,20 @@ def transcription(ref, est, **kwargs):
     >>> ref_jam = jams.load('reference.jams')
     >>> est_jam = jams.load('estimated.jams')
     >>> # Select the first relevant annotations. You can use any annotation
-    >>> # type that can be converted to pitch_hz (such as pitch_midi)
-    >>> ref_ann = ref_jam.search(namespace='pitch_hz')[0]
-    >>> est_ann = est_jam.search(namespace='pitch_midi')[0]
+    >>> # type that can be converted to pitch_contour (such as pitch_midi)
+    >>> ref_ann = ref_jam.search(namespace='pitch_contour')[0]
+    >>> est_ann = est_jam.search(namespace='note_hz')[0]
     >>> scores = jams.eval.transcription(ref_ann, est_ann)
     '''
 
-    namespace = 'pitch_hz'
+    namespace = 'pitch_contour'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
-    ref_intervals, ref_pitches = ref.data.to_interval_values()
-    est_intervals, est_pitches = est.data.to_interval_values()
+    ref_intervals, ref_p = ref.data.to_interval_values()
+    est_intervals, est_p = est.data.to_interval_values()
 
-    ref_pitches = np.array(ref_pitches)
-    est_pitches = np.array(est_pitches)
+    ref_pitches = np.asarray([p['frequency'] * (-1)**(~p['voiced']) for p in ref_p])
+    est_pitches = np.asarray([p['frequency'] * (-1)**(~p['voiced']) for p in est_p])
 
     return mir_eval.transcription.evaluate(
         ref_intervals, ref_pitches, est_intervals, est_pitches, **kwargs)

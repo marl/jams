@@ -15,7 +15,9 @@ import numpy as np
 
 from copy import deepcopy
 from collections import defaultdict
+
 from .exceptions import NamespaceError
+
 
 # The structure that handles all conversion mappings
 __CONVERSION__ = defaultdict(defaultdict)
