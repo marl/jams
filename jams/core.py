@@ -684,8 +684,6 @@ class JamsFrame(pd.DataFrame):
         time = pd.to_timedelta(time, unit='s')
         duration = pd.to_timedelta(duration, unit='s')
         datum = dict(time=time, duration=duration, value=value, confidence=confidence)
-        
-#        n = self.index.max() + 1
         n = len(self)
         self.loc[n] = datum
         
