@@ -681,11 +681,13 @@ class JamsFrame(pd.DataFrame):
         if duration is None or not (duration >= 0.0):
             raise ParameterError('duration={} must be a non-negative number'.format(duration))
 
-        n = len(self)
-        self.loc[n] = {'time': pd.to_timedelta(time, unit='s'),
-                       'duration': pd.to_timedelta(duration, unit='s'),
-                       'value': value,
-                       'confidence': confidence}
+        time = pd.to_timedelta(time, unit='s')
+        duration = pd.to_timedelta(duration, unit='s')
+        datum = dict(time=time, duration=duration, value=value, confidence=confidence)
+        
+        n = self.index.max() + 1
+        self.loc[n] = datum
+        
 
     def to_interval_values(self):
         '''Extract observation data in a `mir_eval`-friendly format.
