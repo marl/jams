@@ -15,20 +15,30 @@ import six
 
 
 def test_import_lab():
-
+    # Test a lab-file import
     labs = [r'''1.0 1
-3.0 2''', r'''1.0 2.0 a
-2.0 4.0 b''']
+                3.0 2''',
+            r'''1.0 1
+                3.0 2''',
+            r'''1.0 2.0 a
+                2.0 4.0 b''',
+            r'''1.0 1.0 c
+                2.0 2.0 d''']
 
-    intervals = [np.array([[1.0, 1.0], [3.0, 3.0]]),
+    intervals = [np.array([[1.0, 3.0], [3.0, 3.0]]),
+                 np.array([[1.0, 1.0], [3.0, 3.0]]),
+                 np.array([[1.0, 2.0], [2.0, 4.0]]),
                  np.array([[1.0, 2.0], [2.0, 4.0]])]
 
-    labels = [[1, 2], ['a', 'b']]
+    labels = [[1, 2], [1, 2], ['a', 'b'], ['c', 'd']]
 
-    namespace = ['beat', 'chord_harte']
+    namespace = ['beat', 'beat', 'chord_harte', 'chord']
 
-    def __test(ns, lab, ints, y):
-        _, ann = util.import_lab(ns, six.StringIO(lab))
+    durations = [True, False, True, False]
+
+    def __test(ns, lab, ints, y, infer_duration):
+        _, ann = util.import_lab(ns, six.StringIO(lab),
+                                 infer_duration=infer_duration)
 
         assert np.allclose(core.timedelta_to_float(ann.data['time'].values),
                            ints[:, 0])
@@ -37,8 +47,8 @@ def test_import_lab():
         for y1, y2 in zip(list(ann.data['value'].values), y):
             eq_(y1, y2)
 
-    for ns, lab, ints, y in zip(namespace, labs, intervals, labels):
-        yield __test, ns, lab, ints, y
+    for ns, lab, ints, y, inf in zip(namespace, labs, intervals, labels, durations):
+        yield __test, ns, lab, ints, y, inf
 
 
 def test_timedelta_to_float():

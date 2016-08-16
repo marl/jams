@@ -21,7 +21,7 @@ import pandas as pd
 from . import core
 
 
-def import_lab(namespace, filename, jam=None, **parse_options):
+def import_lab(namespace, filename, jam=None, infer_duration=True, **parse_options):
     r'''Load a .lab file into a JAMS object.
 
     .lab files are assumed to have the following format:
@@ -50,6 +50,17 @@ def import_lab(namespace, filename, jam=None, **parse_options):
     jam : jams.JAMS (optional)
         An optional pre-existing JAMS object to append into.
         If `None`, a new, blank JAMS object is created.
+
+    infer_duration : bool
+        If `True`, interval durations are inferred from `(start, end)` columns,
+        or difference between successive times.
+
+        If `False`, interval durations are assumed to be explicitly coded as
+        `(start, duration)` columns.  If only one time column is given, then
+        durations are set to 0.
+
+        For instantaneous event annotations (e.g., beats or onsets), this should
+        be set to `False`.
 
     parse_options : additional keyword arguments
         Passed to ``pandas.DataFrame.read_csv``
@@ -91,9 +102,13 @@ def import_lab(namespace, filename, jam=None, **parse_options):
     if len(data.columns) == 2:
         # Insert a column of zeros after the timing
         data.insert(1, 'duration', 0)
+        if infer_duration:
+            data['duration'][:-1] = data.loc[:, 0].diff()[1:].values
+
     else:
         # Convert from time to duration
-        data.loc[:, 1] -= data[0]
+        if infer_duration:
+            data.loc[:, 1] -= data[0]
 
     for row in data.itertuples():
         time, duration = row[1:3]
