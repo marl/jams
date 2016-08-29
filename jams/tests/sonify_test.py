@@ -9,6 +9,7 @@ from nose.tools import raises, eq_
 
 import jams
 
+
 @raises(jams.NamespaceError)
 def test_no_sonify():
 
@@ -22,6 +23,7 @@ def test_bad_sonify():
     ann.append(time=0, duration=1, value='not a chord')
 
     jams.sonify.sonify(ann)
+
 
 def test_duration():
 
@@ -57,12 +59,33 @@ def test_note_hz_nolength():
     eq_(len(y), 8000 * 1)
     assert np.any(y)
 
+
 def test_note_midi():
     ann = jams.Annotation(namespace='note_midi')
     ann.append(time=0, duration=1, value=60)
     y = jams.sonify.sonify(ann, sr=8000, duration=2.0)
 
     eq_(len(y), 8000 * 2)
+
+
+def test_contour():
+    ann = jams.Annotation(namespace='pitch_contour')
+
+    duration = 5.0
+    fs = 0.01
+    # Generate a contour with deep vibrato and no voicing from 3s-4s
+    times = np.linspace(0, duration, num=int(duration / fs))
+    rate = 5
+    vibrato = 220 + 20 * np.sin(2 * np.pi * times * rate)
+
+    for t, v in zip(times, vibrato):
+        ann.append(time=t, duration=fs, value={'frequency': v,
+                                               'index': 0,
+                                               'voiced': (t < 3 or t > 4)})
+
+    y = jams.sonify.sonify(ann, sr=8000, duration=duration)
+
+    eq_(len(y), 8000 * duration)
 
 
 def test_chord():
