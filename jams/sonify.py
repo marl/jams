@@ -52,13 +52,15 @@ def pitch_contour(annotation, sr=22050, length=None, **kwargs):
 
     y_out = 0.0
     for ix in indices:
-        freqs = np.asarray([v['frequency'] for v in values
-                            if v['index'] == ix])
-        unv = ~np.asarray([v['voiced'] for v in values if v['index'] == ix])
+        rows = annotation.data.value.apply(lambda x: x['index'] == ix).nonzero()[0]
+
+        freqs = np.asarray([values[r]['frequency'] for r in rows])
+        unv = ~np.asarray([values[r]['voiced'] for r in rows])
         freqs[unv] *= -1
 
         y_out = y_out + filter_kwargs(mir_eval.sonify.pitch_contour,
-                                      times[:, 0], freqs,
+                                      times[rows, 0],
+                                      freqs,
                                       fs=sr, length=length,
                                       **kwargs)
 
