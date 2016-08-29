@@ -29,15 +29,6 @@ if [ ! -d "$src" ]; then
 
         export PATH="$src/bin:$PATH"
         conda_create 
-
-        source activate $ENV_NAME
-
-        pip install git+https://github.com/craffel/mir_eval
-        pip install jsonschema
-        pip install python-coveralls
-        pip install numpydoc
-
-        source deactivate
     popd
 else
     echo "Using cached dependencies"
