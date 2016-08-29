@@ -49,25 +49,16 @@ def test_note_hz():
     eq_(len(y), 8000 * 2)
 
 
-def test_pitch_hz_neg():
-    ann = jams.Annotation(namespace='pitch_hz')
-    ann.append(time=0, duration=1, value=-261.0)
-    ann.append(time=1, duration=1, value=0.0)
-    y = jams.sonify.sonify(ann, sr=8000, duration=2.0)
-
-    eq_(len(y), 8000 * 2)
-    assert not np.any(y)
-
-def test_pitch_hz_neg_nolength():
-    ann = jams.Annotation(namespace='pitch_hz')
-    ann.append(time=0, duration=1, value=-261.0)
+def test_note_hz_nolength():
+    ann = jams.Annotation(namespace='note_hz')
+    ann.append(time=0, duration=1, value=261.0)
     y = jams.sonify.sonify(ann, sr=8000)
 
     eq_(len(y), 8000 * 1)
-    assert not np.any(y)
+    assert np.any(y)
 
-def test_pitch_midi():
-    ann = jams.Annotation(namespace='pitch_midi')
+def test_note_midi():
+    ann = jams.Annotation(namespace='note_midi')
     ann.append(time=0, duration=1, value=60)
     y = jams.sonify.sonify(ann, sr=8000, duration=2.0)
 
