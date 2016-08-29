@@ -21,7 +21,6 @@ from .exceptions import NamespaceError
 __all__ = ['sonify']
 
 
-
 def clicks(annotation, sr=22050, length=None, **kwargs):
     '''Sonify clicks timings
 
@@ -44,37 +43,44 @@ def chord(annotation, sr=22050, length=None, **kwargs):
                          **kwargs)
 
 
-def pitch_hz(annotation, sr=22050, length=None, **kwargs):
+def pitch_contour(annotation, sr=22050, length=None, **kwargs):
     '''Sonify pitch contours in Hz'''
+
+    times, values = annotation.data.to_interval_values()
+
+    indices = np.unique([v['index'] for v in values])
+
+    y_out = 0.0
+    for ix in indices:
+        freqs = np.asarray([v['frequency'] for v in values
+                            if v['index'] == ix])
+        unv = ~np.asarray([v['voiced'] for v in values if v['index'] == ix])
+        freqs[unv] *= -1
+
+        y_out = y_out + filter_kwargs(mir_eval.sonify.pitch_contour,
+                                      times[:, 0], freqs,
+                                      fs=sr, length=length,
+                                      **kwargs)
+
+    return y_out
+
+
+def piano_roll(annotation, sr=22050, length=None, **kwargs):
+    '''Sonify a piano-roll'''
 
     intervals, pitches = annotation.data.to_interval_values()
 
-    # Handle instantaneous pitch measurements: if at least 98% of
-    # observations have zero duration, call it continuous
-    if np.percentile(intervals[:, 0] - intervals[:, 1], 98) == 0:
-        intervals[:-1, 1] = intervals[:-1, 0] + np.diff(intervals[:, 0])
-        if annotation.duration is not None:
-            intervals[-1, 1] = annotation.duration
-        elif length is not None:
-            intervals[-1, 1] = length / float(sr)
+    # Construct the pitchogram
+    pitch_map = {f: idx for idx, f in enumerate(np.unique(pitches))}
 
-    if length is None:
-        if np.any(intervals):
-            length = int(np.max(intervals[:, 1]) * sr)
-        else:
-            length = 0
+    gram = np.zeros((len(pitch_map), len(intervals)))
 
-    # Discard anything unvoiced or zero-duration
-    pitches = np.asarray(pitches)
-    good_idx = (intervals[:, 1] > intervals[:, 0]) & (pitches > 0)
-    intervals = intervals[good_idx]
-    pitches = pitches[good_idx]
+    for col, f in enumerate(pitches):
+        gram[pitch_map[f], col] = 1
 
-    # Sonify
-    return filter_kwargs(mir_eval.sonify.pitch_contour,
-                         intervals[:, 0], pitches,
-                         fs=sr, length=length,
-                         **kwargs)
+    return filter_kwargs(mir_eval.sonify.time_frequency,
+                         gram, pitches, intervals,
+                         sr, length=length, **kwargs)
 
 
 SONIFY_MAPPING = OrderedDict()
@@ -82,7 +88,8 @@ SONIFY_MAPPING['beat'] = clicks
 SONIFY_MAPPING['segment_open'] = clicks
 SONIFY_MAPPING['onset'] = clicks
 SONIFY_MAPPING['chord'] = chord
-SONIFY_MAPPING['pitch_hz'] = pitch_hz
+SONIFY_MAPPING['note_hz'] = piano_roll
+SONIFY_MAPPING['pitch_contour'] = pitch_contour
 
 
 def sonify(annotation, sr=22050, duration=None, **kwargs):
@@ -119,8 +126,8 @@ def sonify(annotation, sr=22050, duration=None, **kwargs):
 
     for namespace, func in six.iteritems(SONIFY_MAPPING):
         try:
-            coerce_annotation(annotation, namespace)
-            return func(annotation, sr=sr, length=length, **kwargs)
+            ann = coerce_annotation(annotation, namespace)
+            return func(ann, sr=sr, length=length, **kwargs)
         except NamespaceError:
             pass
 

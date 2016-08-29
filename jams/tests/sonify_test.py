@@ -41,8 +41,8 @@ def test_duration():
                 yield __test, ns, dur, sr
 
 
-def test_pitch_hz():
-    ann = jams.Annotation(namespace='pitch_hz')
+def test_note_hz():
+    ann = jams.Annotation(namespace='note_hz')
     ann.append(time=0, duration=1, value=261.0)
     y = jams.sonify.sonify(ann, sr=8000, duration=2.0)
 
