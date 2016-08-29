@@ -3,13 +3,13 @@
 '''namespace conversion tests'''
 
 import numpy as np
-import pandas as pd
 import numpy.testing as npt
 import pandas.util.testing as pdt
 
 from nose.tools import raises, eq_
 import jams
 from jams import NamespaceError
+
 
 @raises(NamespaceError)
 def test_bad_target():
@@ -40,6 +40,58 @@ def test_noop():
 
     for ns in jams.schema.__NAMESPACE__:
         yield __test, ns
+
+def test_pitch_hz_to_contour():
+
+    ann = jams.Annotation(namespace='pitch_hz')
+    values = np.linspace(110, 220, num=100)
+    # Unvoice the first half
+    values[::len(values)//2] *= -1
+
+    times = np.linspace(0, 1, num=len(values))
+
+    for t, v in zip(times, values):
+        ann.append(time=t, value=v, duration=0)
+
+    ann2 = jams.convert(ann, 'pitch_contour')
+    ann.validate()
+    ann2.validate()
+    eq_(ann2.namespace, 'pitch_contour')
+
+    # Check index values
+    eq_(ann2.data.value.iloc[0]['index'], 0)
+    eq_(ann2.data.value.iloc[-1]['index'], 0)
+
+    # Check frequency
+    eq_(np.abs(ann2.data.value.iloc[0]['frequency']), np.abs(values[0]))
+    eq_(np.abs(ann2.data.value.iloc[-1]['frequency']), np.abs(values[-1]))
+
+    # Check voicings
+    assert not ann2.data.value.iloc[0]['voiced']
+    assert ann2.data.value.iloc[-1]['voiced']
+
+def test_pitch_midi_to_contour():
+
+    ann = jams.Annotation(namespace='pitch_midi')
+    values = np.arange(100)
+
+    times = np.linspace(0, 1, num=len(values))
+
+    for t, v in zip(times, values):
+        ann.append(time=t, value=v, duration=0)
+
+    ann2 = jams.convert(ann, 'pitch_contour')
+    ann.validate()
+    ann2.validate()
+    eq_(ann2.namespace, 'pitch_contour')
+
+    # Check index values
+    eq_(ann2.data.value.iloc[0]['index'], 0)
+    eq_(ann2.data.value.iloc[-1]['index'], 0)
+
+    # Check voicings
+    assert ann2.data.value.iloc[-1]['voiced']
+
 
 def test_pitch_midi_to_hz():
 
@@ -78,6 +130,43 @@ def test_pitch_hz_to_midi():
     pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
     pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
 
+
+def test_note_midi_to_hz():
+
+    ann = jams.Annotation(namespace='note_midi')
+    ann.append(time=0, duration=1, value=69, confidence=0.5)
+    ann2 = jams.convert(ann, 'note_hz')
+    ann.validate()
+    ann2.validate()
+
+    # Check the namespace
+    eq_(ann2.namespace, 'note_hz')
+    # midi 69 = 440.0 Hz
+    eq_(ann2.data.value.loc[0], 440.0)
+
+    # Check all else is equal
+    pdt.assert_series_equal(ann.data.time, ann2.data.time)
+    pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
+    pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
+
+
+def test_note_hz_to_midi():
+
+    ann = jams.Annotation(namespace='note_hz')
+    ann.append(time=0, duration=1, value=440.0, confidence=0.5)
+    ann2 = jams.convert(ann, 'note_midi')
+    ann.validate()
+    ann2.validate()
+
+    # Check the namespace
+    eq_(ann2.namespace, 'note_midi')
+    # midi 69 = 440.0 Hz
+    eq_(ann2.data.value.loc[0], 69)
+
+    # Check all else is equal
+    pdt.assert_series_equal(ann.data.time, ann2.data.time)
+    pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
+    pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
 
 def test_segment_open():
 
@@ -127,7 +216,6 @@ def test_chord():
     pdt.assert_frame_equal(ann.data, ann2.data)
 
 
-
 def test_beat_position():
 
     ann = jams.Annotation(namespace='beat_position')
@@ -154,4 +242,25 @@ def test_beat_position():
     pdt.assert_series_equal(ann.data.time, ann2.data.time)
     pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
     pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
+
+
+def test_can_convert_equal():
+
+    ann = jams.Annotation(namespace='chord')
+
+    assert jams.nsconvert.can_convert(ann, 'chord')
+
+
+def test_can_convert_cast():
+
+    ann = jams.Annotation(namespace='tag_gtzan')
+
+    assert jams.nsconvert.can_convert(ann, 'tag_open')
+
+
+def test_can_convert_fail():
+
+    ann = jams.Annotation(namespace='tag_gtzan')
+
+    assert not jams.nsconvert.can_convert(ann, 'chord')
 

@@ -36,7 +36,10 @@ setup(
         'numpy>=1.8.0',
         'six',
         'decorator',
-        'mir_eval>=0.3',
+        'mir_eval>=0.4',
     ],
+    extras_require={
+        'display': ['matplotlib>=1.5.0']
+    },
     scripts=['scripts/jams_to_lab.py']
 )
