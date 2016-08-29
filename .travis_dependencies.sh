@@ -29,6 +29,9 @@ if [ ! -d "$src" ]; then
 
         export PATH="$src/bin:$PATH"
         conda_create 
+        source activate $ENV_NAME
+        pip install python-coveralls
+        source deactivate
     popd
 else
     echo "Using cached dependencies"
