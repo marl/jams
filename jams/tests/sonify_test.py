@@ -2,10 +2,11 @@
 # CREATED:2016-02-11 12:07:58 by Brian McFee <brian.mcfee@nyu.edu>
 """Sonification tests"""
 
-import six
 import numpy as np
 
 from nose.tools import raises, eq_
+
+from eval_test import create_hierarchy
 
 import jams
 
@@ -82,7 +83,6 @@ def test_contour():
                                                'index': 0,
                                                'voiced': (t < 3 or t > 4)})
 
-
     def __test(ann, duration):
         y = jams.sonify.sonify(ann, sr=8000, duration=duration)
         if duration is not None:
@@ -98,7 +98,7 @@ def test_chord():
         ann = jams.Annotation(namespace=namespace)
         ann.append(time=0.5, duration=1.0, value=value)
         y = jams.sonify.sonify(ann, sr=8000, duration=2.0)
-    
+
         eq_(len(y), 8000 * 2)
 
     yield __test, 'chord', 'C:maj/5'
@@ -136,3 +136,16 @@ def test_beat_position():
 
     for length in [None, 5, 15]:
         yield __test, ann, 8000, length
+
+
+def test_multi_segment():
+    ann = create_hierarchy(values=['AB', 'abac', 'xxyyxxzz'], duration=30)
+    sr = 8000
+
+    def __test(ann, duration):
+        y = jams.sonify.sonify(ann, sr=sr, duration=duration)
+        if duration:
+            eq_(len(y), duration * sr)
+
+    for duration in [None, 15, 30]:
+        yield __test, ann, duration

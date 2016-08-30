@@ -10,12 +10,13 @@ Sonification
     sonify
 '''
 
+from itertools import product
 from collections import OrderedDict
 import six
 import numpy as np
 import mir_eval.sonify
 from mir_eval.util import filter_kwargs
-from .eval import coerce_annotation
+from .eval import coerce_annotation, hierarchy_flatten
 from .exceptions import NamespaceError
 
 __all__ = ['sonify']
@@ -76,6 +77,29 @@ def downbeat(annotation, sr=22050, length=None, **kwargs):
                        np.asarray(downbeats),
                        fs=sr, length=length, click=downbeat_click)
 
+    return y
+
+
+def multi_segment(annotation, sr=22050, length=None, **kwargs):
+    '''Sonify multi-level segmentations'''
+
+    # Pentatonic scale, because why not
+    PENT = [1, 32./27, 4./3, 3./2, 16./9]
+    DURATION = 0.1
+
+    h_int, _ = hierarchy_flatten(annotation)
+
+    if length is None:
+        length = int(sr * (max(np.max(_) for _ in h_int) + 1. / DURATION) + 1)
+
+    y = 0.0
+    for ints, (oc, scale) in zip(h_int, product(range(3, 3 + len(h_int)),
+                                                PENT)):
+        click = mkclick(440.0 * scale * oc, sr=sr, duration=DURATION)
+        y = y + filter_kwargs(mir_eval.sonify.clicks,
+                              np.unique(ints),
+                              fs=sr, length=length,
+                              click=click)
     return y
 
 
@@ -153,6 +177,7 @@ def piano_roll(annotation, sr=22050, length=None, **kwargs):
 SONIFY_MAPPING = OrderedDict()
 SONIFY_MAPPING['beat_position'] = downbeat
 SONIFY_MAPPING['beat'] = clicks
+SONIFY_MAPPING['multi_segment'] = multi_segment
 SONIFY_MAPPING['segment_open'] = clicks
 SONIFY_MAPPING['onset'] = clicks
 SONIFY_MAPPING['chord'] = chord
@@ -189,6 +214,10 @@ def sonify(annotation, sr=22050, duration=None, **kwargs):
     '''
 
     length = None
+
+    if duration is None:
+        duration = annotation.duration
+
     if duration is not None:
         length = int(duration * sr)
 
