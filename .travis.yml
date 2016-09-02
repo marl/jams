@@ -25,7 +25,7 @@ install:
     - pip install -e .[display]
 
 script:
-    - nosetests -v -w jams/tests/ --with-coverage --cover-erase --cover-package=jams
+    - nosetests -v -w tests/ --with-coverage --cover-erase --cover-package=jams
 
 after_success:
     - coveralls
