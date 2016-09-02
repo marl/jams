@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-#CREATED:2015-07-15 10:21:30 by Brian McFee <brian.mcfee@nyu.edu>
+# CREATED:2015-07-15 10:21:30 by Brian McFee <brian.mcfee@nyu.edu>
 '''Namespace management tests'''
-
-from pkg_resources import resource_filename
 
 from six.moves import reload_module
 
@@ -68,7 +66,7 @@ def test_schema_local():
 
     # Now it should
     yield __test, test_ns
-    
+
     del os.environ['JAMS_SCHEMA_DIR']
 
 
