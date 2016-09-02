@@ -88,11 +88,12 @@ def pitch_contour(annotation, **kwargs):
     indices = np.unique([v['index'] for v in values])
 
     for idx in indices:
-        freqs = np.asarray([v['frequency'] for v in values if v['index'] == idx])
-        unvoiced = ~np.asarray([v['voiced'] for v in values if v['index'] == idx])
+        rows = annotation.data.value.apply(lambda x: x['index'] == idx).nonzero()[0]
+        freqs = np.asarray([values[r]['frequency'] for r in rows])
+        unvoiced = ~np.asarray([values[r]['voiced'] for r in rows])
         freqs[unvoiced] *= -1
 
-        ax = mir_eval.display.pitch(times[:, 0], freqs, unvoiced=True,
+        ax = mir_eval.display.pitch(times[rows, 0], freqs, unvoiced=True,
                                     ax=ax,
                                     **kwargs)
     return ax
