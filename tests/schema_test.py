@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-#CREATED:2015-07-15 10:21:30 by Brian McFee <brian.mcfee@nyu.edu>
+# CREATED:2015-07-15 10:21:30 by Brian McFee <brian.mcfee@nyu.edu>
 '''Namespace management tests'''
-
-from pkg_resources import resource_filename
 
 from six.moves import reload_module
 
@@ -58,10 +56,7 @@ def test_schema_local():
         for key in ['time', 'duration']:
             assert key in schema['properties']
 
-    os.environ['JAMS_SCHEMA_DIR'] = resource_filename(jams.__name__, 
-                                                      os.path.join('tests',
-                                                                   'fixtures',
-                                                                   'schema'))
+    os.environ['JAMS_SCHEMA_DIR'] = os.path.join('fixtures', 'schema')
 
     # Namespace should not exist yet
     test_ns = 'testing_tag_upper'
@@ -71,7 +66,7 @@ def test_schema_local():
 
     # Now it should
     yield __test, test_ns
-    
+
     del os.environ['JAMS_SCHEMA_DIR']
 
 
