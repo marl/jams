@@ -58,10 +58,7 @@ def test_schema_local():
         for key in ['time', 'duration']:
             assert key in schema['properties']
 
-    os.environ['JAMS_SCHEMA_DIR'] = resource_filename(jams.__name__, 
-                                                      os.path.join('tests',
-                                                                   'fixtures',
-                                                                   'schema'))
+    os.environ['JAMS_SCHEMA_DIR'] = os.path.join('fixtures', 'schema')
 
     # Namespace should not exist yet
     test_ns = 'testing_tag_upper'
