@@ -728,3 +728,11 @@ def test_load_invalid():
     yield __test_warn, fn, True, False
 
 
+def test_jf_append_type():
+    # Issue #126 --
+    #   pandas mistakenly coerced numeric strings to timedeltas
+    #   this will throw validation errors when value.type is str
+
+    an = jams.Annotation(namespace='tag_open')
+    an.append(time=0, duration=1, value='0')
+    an.validate()
