@@ -2,7 +2,7 @@
     {
         "value": { 
             "type": "string",
-            "pattern": "^([a-z]+'*|[Ss]ilence)$"
+            "pattern": "^([a-z])\\1*'*$|^[Ss]ilence$"
         },
         "dense": false,
         "description": "Lowercase label to identify the type of a segment based on the SALAMI guidelines."

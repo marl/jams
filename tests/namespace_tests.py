@@ -741,10 +741,10 @@ def test_ns_segment_salami_lower():
 
         ann.validate()
 
-    for line in ['a', "a'", "a'''", "silence", "Silence", six.u('a')]:
+    for line in ['a', "a'", "a'''", "silence", "Silence", six.u('a'), 'aa', "aa'"]:
         yield __test, line
 
-    for line in [23, None, 'A', 'S', 'a23', '  Silence  23']:
+    for line in [23, None, 'A', 'S', 'a23', '  Silence  23', 'aba', 'aab']:
         yield raises(SchemaError)(__test), line
 
 def test_ns_segment_salami_upper():
@@ -756,10 +756,10 @@ def test_ns_segment_salami_upper():
 
         ann.validate()
 
-    for line in ['A', "A'", "A'''", "silence", "Silence", six.u('A')]:
+    for line in ['A', "A'", "A'''", "silence", "Silence", six.u('A'), 'AA', "AA'"]:
         yield __test, line
 
-    for line in [23, None, 'a', 'a', 'A23', '  Silence  23']:
+    for line in [23, None, 'a', 'a', 'A23', '  Silence  23', 'ABA', 'AAB']:
         yield raises(SchemaError)(__test), line
 
 def test_ns_segment_salami_function():
