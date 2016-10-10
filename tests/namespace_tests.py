@@ -741,7 +741,7 @@ def test_ns_segment_salami_lower():
 
         ann.validate()
 
-    for line in ['a', "a'", "a'''", "silence", "Silence", six.u('a'), 'aa', "aa'"]:
+    for line in ['a', "a'", "a'''", "silence", "Silence", six.u('a'), 'aa', "aa'", 'ab']:
         yield __test, line
 
     for line in [23, None, 'A', 'S', 'a23', '  Silence  23', 'aba', 'aab']:
