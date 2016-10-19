@@ -1369,6 +1369,9 @@ class JAMS(JObject):
             ann_trimmed = ann.trim(start_time, end_time)
             jam_trimmed.annotations.append(ann_trimmed)
 
+        # Adjust duration in file_metadata
+        jam_trimmed.file_metadata.duration = end_time - start_time
+
         return jam_trimmed
 
 
