@@ -1259,6 +1259,33 @@ class JAMS(JObject):
 
         return valid
 
+    def trim(self, start_time, end_time):
+        '''
+        Return a new jams object in which every annotation has been trimmed,
+        only keeping observations that occur between `start_time` and
+        `end_time`. Observations that start before `start_time` but end after
+        it will be trimmed such that they start at `start_time`, and similarly
+        observations that start before `end_time` but end after it will be
+        trimmed to end at `end_time`. The new duration of the annotation will
+        be `end_time - start_time` (unless it was shorter to begin with). This
+        function also copies over all the file and annotation metadata from
+        the original jams file, but adds a note to their sandboxes noting that
+        they have been trimmed.
+
+        Parameters
+        ----------
+        start_time : float
+            The new start time for the annotation
+        end_time
+            The new end time for the annotation
+
+        Returns
+        -------
+        jam : jams.JAMS
+            A new jams object with the trimmed annotations.
+
+        '''
+
 
 # -- Helper functions -- #
 
