@@ -764,7 +764,6 @@ class Annotation(JObject):
         self.time = time
         self.duration = duration
 
-
     def append(self, **kwargs):
         '''Append an observation to the data field
 
@@ -850,7 +849,8 @@ class Annotation(JObject):
         try:
             records = self.data.__json__
 
-            # If the data has a dense packing, reshape it for record-wise validation
+            # If the data has a dense packing, reshape it for record-wise
+            # validation
             if self.data.dense:
                 records = [dict(_)
                            for _ in zip(*[[(k, v) for v in value]
@@ -868,6 +868,65 @@ class Annotation(JObject):
             valid = False
 
         return valid
+
+    def trim(self, start_time, end_time):
+        '''
+        Trim the annotation and return as new Annotation object. Trimming will
+        result in the new annotation only containing observations that occur
+        between `start_time` and `end_time`. Observations that start before
+        `start_time` but end after it will be trimmed such that they start at
+        `start_time`, and similarly observations that start before `end_time`
+        but end after it will be trimmed to end at `end_time`. The new
+        duration of the annotation will be `end_time - start_time`. Note that
+        depending on the values of `start_time` and `end_time` this function
+        can also pad the annotation. This function also copies over all the
+        annotation metadata from the original annotation, and adds a list of
+        tuples to the annotation's sandbox keyed by `trim`, which documents
+        the trim parameters: each trim operation adds a tuple to this list
+        containing two elements: the `start_time` and `end_time`.
+
+        Parameters
+        ----------
+        start_time : float
+            The new start time for the annotation
+        end_time
+            The new end time for the annotation
+
+        Returns
+        -------
+        ann_trimmed : jams.Annotation
+            The trimmed annotation, return as a new jams.Annotation object.
+        '''
+        # Create new annotation with same namespace/metadata
+        ann_trimmed = Annotation(
+            self.namespace,
+            data=None,
+            annotation_metadata=self.annotation_metadata,
+            sandbox=self.sandbox,
+            time=start_time,
+            duration=end_time - start_time)
+
+        # Selectively add observations based on their start time / duration
+        for idx, obs in self.data.iterrows():
+
+            obs_start = obs['time'].total_seconds()
+            obs_end = obs_start + obs['duration'].total_seconds()
+
+            if obs_start < end_time and obs_end > start_time:
+                new_start = max(obs_start, start_time)
+                new_end = min(obs_end, end_time)
+                new_duration = new_end - new_start
+                ann_trimmed.append(time=new_start,
+                                   duration=new_duration,
+                                   value=obs['value'],
+                                   confidence=obs['confidence'])
+
+            if 'trim' not in ann_trimmed.sandbox.keys():
+                ann_trimmed.sandbox.update(trim=[(start_time, end_time)])
+            else:
+                ann_trimmed.sandbox.trim.append((start_time, end_time))
+
+        return ann_trimmed
 
 
 class Curator(JObject):
@@ -1297,42 +1356,14 @@ class JAMS(JObject):
                 'start_time.'.format(self.file_metadata.duration))
 
         # Create a new jams
-        jam_trimmed = JAMS(file_metadata=self.file_metadata,
+        jam_trimmed = JAMS(annotations=None,
+                           file_metadata=self.file_metadata,
                            sandbox=self.sandbox)
 
         # Iterate over annotations
         for ann in self.annotations:
 
-            # Create new annotation with same namespace/metadata
-            ann_trimmed = Annotation(
-                ann.namespace,
-                data=None,
-                annotation_metadata=ann.annotation_metadata,
-                sandbox=ann.sandbox,
-                time=start_time,
-                duration=end_time - start_time)
-
-            # Selectively add observations based on their start time / duration
-            for idx, obs in ann.data.iterrows():
-
-                obs_start = obs['time'].total_seconds()
-                obs_end = obs_start + obs['duration'].total_seconds()
-
-                if obs_start < end_time and obs_end > start_time:
-
-                    new_start = max(obs_start, start_time)
-                    new_end = min(obs_end, end_time)
-                    new_duration = new_end - new_start
-                    ann_trimmed.append(time=new_start,
-                                       duration=new_duration,
-                                       value=obs['value'],
-                                       confidence=obs['confidence'])
-
-                if 'trim' not in ann_trimmed.sandbox.keys():
-                    ann_trimmed.sandbox.update(trim=[(start_time, end_time)])
-                else:
-                    ann_trimmed.sandbox.trim.append((start_time, end_time))
-
+            ann_trimmed = ann.trim(start_time, end_time)
             jam_trimmed.annotations.append(ann_trimmed)
 
         return jam_trimmed
