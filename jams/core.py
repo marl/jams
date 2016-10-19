@@ -921,10 +921,10 @@ class Annotation(JObject):
                                    value=obs['value'],
                                    confidence=obs['confidence'])
 
-            if 'trim' not in ann_trimmed.sandbox.keys():
-                ann_trimmed.sandbox.update(trim=[(start_time, end_time)])
-            else:
-                ann_trimmed.sandbox.trim.append((start_time, end_time))
+        if 'trim' not in ann_trimmed.sandbox.keys():
+            ann_trimmed.sandbox.update(trim=[(start_time, end_time)])
+        else:
+            ann_trimmed.sandbox.trim.append((start_time, end_time))
 
         return ann_trimmed
 
