@@ -881,7 +881,7 @@ class Annotation(JObject):
         depending on the values of `start_time` and `end_time` this function
         can also pad the annotation. This function also copies over all the
         annotation metadata from the original annotation, and adds a list of
-        tuples to the annotation's sandbox keyed by `trim`, which documents
+        tuples to the annotation's sandbox keyed by "trim", which documents
         the trim parameters: each trim operation adds a tuple to this list
         containing two elements: the `start_time` and `end_time`.
 
@@ -1326,11 +1326,14 @@ class JAMS(JObject):
         it will be trimmed such that they start at `start_time`, and similarly
         observations that start before `end_time` but end after it will be
         trimmed to end at `end_time`. The new duration of the annotation will
-        be `end_time - start_time`. This function also copies over all the
-        file and annotation metadata from the original jams file, and adds a
-        list of tuples to the sandbox of each annotation to document the trim
-        parameters (each trim operation adds a single tuple to this list
-        which contains two items: the `start_time` and `end_time`).
+        be `end_time - start_time`. Note that depending on the values of
+        `start_time` and `end_time` this function can also pad the annotation.
+        This function also copies over the file metadata from the original jams
+        and the annotation metadata from each original annotation, and adds a
+        list of tuples to each annotation's sandbox keyed by "trim", which
+        documents the trim parameters: each trim operation adds a tuple to
+        this list containing two elements: the `start_time` and `end_time`.
+
 
         Parameters
         ----------
