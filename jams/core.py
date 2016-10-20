@@ -1468,7 +1468,7 @@ class JAMS(JObject):
         # Iterate over annotations
         for ann in self.annotations:
 
-            ann_trimmed = ann.trim(start_time, end_time)
+            ann_trimmed = ann.trim(start_time, end_time, strict=strict)
             jam_trimmed.annotations.append(ann_trimmed)
 
         # Adjust duration in file_metadata
