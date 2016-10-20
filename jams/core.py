@@ -869,64 +869,129 @@ class Annotation(JObject):
 
         return valid
 
-    def trim(self, start_time, end_time):
+    def trim(self, start_time, end_time, strict=False):
         '''
-        Trim the annotation and return as new Annotation object. Trimming will
-        result in the new annotation only containing observations that occur
-        between `start_time` and `end_time`. Observations that start before
-        `start_time` but end after it will be trimmed such that they start at
-        `start_time`, and similarly observations that start before `end_time`
-        but end after it will be trimmed to end at `end_time`. The new
-        duration of the annotation will be `end_time - start_time`. Note that
-        depending on the values of `start_time` and `end_time` this function
-        can also pad the annotation. This function also copies over all the
-        annotation metadata from the original annotation, and adds a list of
-        tuples to the annotation's sandbox keyed by "trim", which documents
-        the trim parameters: each trim operation adds a tuple to this list
-        containing two elements: the `start_time` and `end_time`.
+        Trim the annotation and return as a new Annotation object. Trimming
+        will result in the new annotation only containing observations that
+        occur in the time range defined by the intersection of [`self.time`,
+        `self.time + self.duration`] (i.e. the time range spanned by the
+        original annotation) and [`start_time`,`end_time`]. The new annotation
+        will span the time range [`trim_start`, `trim_end`] where
+        `trim_start = max(self.time, start_time)` and `trim_end =
+        min(self.time + self.duration, end_time)`. Observations that start
+        before `trim_start` and end after it will be trimmed such that they
+        start at `trim_start`, and similarly observations that start before
+        `trim_end` and end after it will be trimmed to end at `trim_end`. The
+        new duration of the annotation will be `trim_end - trim_start`. Note
+        that if the range defined by [`start_time`, `end_time`] doesn't
+        intersect with the original time range spanned by the annotation then
+        trimming is not possible (would result in negative duration) and the
+        function will raise a warning and return `None`. When trimming is
+        possible, this function also copies over all the annotation metadata
+        from the original annotation and documents the trim operation by adding
+        a list of tuples to the annotation's sandbox keyed by `sandbox.trim`
+        which documents each trim operation with a tuple
+        `(start_time, end_time, trim_start, trim_end)`.
 
         Parameters
         ----------
         start_time : float
-            The new start time for the annotation
+            The desired start time for the trimmed annotation
         end_time
-            The new end time for the annotation
+            The desired new end time for trimmed annotation. Must be greater
+            than `start_time`.
+        strict : bool
+            When `True` (`False` by default) then the range defined by
+            [`start_time`,`end_time`] must be contained within the time range
+            spanned by the original annotation. Will raise an error when
+            `strict=True` and this condition is not satisfied.
 
         Returns
         -------
-        ann_trimmed : jams.Annotation
-            The trimmed annotation, return as a new jams.Annotation object.
+        ann_trimmed : jams.Annotation or None
+            The trimmed annotation, returned as a new jams.Annotation object.
+            If the trim range specified by [`start_time`,`end_time`] does not
+            intersect at all with the original time range of the annotation a
+            warning will be issued and None will be returned.
+
+        Raises
+        ------
+        ParameterError
+            When `strict=True` and the range defined by
+            [`start_time`,`end_time`] is not contained within the time range
+            spanned by the original annotation. Also raised if end_time is not
+            greater than start_time.
+
+        JamsError
+            If trimming is attempted but the annotation duration
+            `self.duration` hasn't been set.
+
         '''
-        # Create new annotation with same namespace/metadata
-        ann_trimmed = Annotation(
-            self.namespace,
-            data=None,
-            annotation_metadata=self.annotation_metadata,
-            sandbox=self.sandbox,
-            time=start_time,
-            duration=end_time - start_time)
+        # Check for basic start_time and end_time validity
+        if end_time <= start_time:
+            raise ParameterError(
+                'end_time must be greater than start_time.')
 
-        # Selectively add observations based on their start time / duration
-        for idx, obs in self.data.iterrows():
+        # The annotation must have it's duration value set for trimming
+        if self.duration is None:
+            raise JamsError(
+                "Trimming cannot be performed if the annotation's duration is "
+                "not set (i.e. is None).")
 
-            obs_start = obs['time'].total_seconds()
-            obs_end = obs_start + obs['duration'].total_seconds()
+        # Check for strict condition
+        if (strict and
+                (start_time < self.time or
+                 end_time > self.time + self.duration)):
+            raise ParameterError(
+                'When strict=True start_time cannot be smaller than self.time '
+                'and end_time cannot be greater than self.time + '
+                'self.duration.')
 
-            if obs_start < end_time and obs_end > start_time:
-                new_start = max(obs_start, start_time)
-                new_end = min(obs_end, end_time)
-                new_duration = new_end - new_start
-                ann_trimmed.append(time=new_start,
-                                   duration=new_duration,
-                                   value=obs['value'],
-                                   confidence=obs['confidence'])
-
-        if 'trim' not in ann_trimmed.sandbox.keys():
-            ann_trimmed.sandbox.update(trim=[(start_time, end_time)])
+        # Ensure there is intersection between the trim range and annotation
+        # If not raise warning and return None
+        if start_time > (self.time + self.duration) or (end_time < self.time):
+            warnings.warn(
+                'Time range defined by [start_time,end_time] does not '
+                'intersect with the time range spanned by this annotation, '
+                'returning None.')
+            return None
         else:
-            ann_trimmed.sandbox.trim.append((start_time, end_time))
+            # Determine new range
+            trim_start = max(self.time, start_time)
+            trim_end = min(self.time + self.duration, end_time)
 
-        return ann_trimmed
+            # Create new annotation with same namespace/metadata
+            ann_trimmed = Annotation(
+                self.namespace,
+                data=None,
+                annotation_metadata=self.annotation_metadata,
+                sandbox=self.sandbox,
+                time=trim_start,
+                duration=trim_end - trim_start)
+
+            # Selectively add observations based on their start time / duration
+            for idx, obs in self.data.iterrows():
+
+                obs_start = obs['time'].total_seconds()
+                obs_end = obs_start + obs['duration'].total_seconds()
+
+                if obs_start < trim_end and obs_end > trim_start:
+                    new_start = max(obs_start, trim_start)
+                    new_end = min(obs_end, trim_end)
+                    new_duration = new_end - new_start
+                    ann_trimmed.append(time=new_start,
+                                       duration=new_duration,
+                                       value=obs['value'],
+                                       confidence=obs['confidence'])
+
+            if 'trim' not in ann_trimmed.sandbox.keys():
+                ann_trimmed.sandbox.update(
+                    trim=[(start_time, end_time, trim_start, trim_end)])
+            else:
+                ann_trimmed.sandbox.trim.append(
+                    (start_time, end_time, trim_start, trim_end))
+
+            return ann_trimmed
 
 
 class Curator(JObject):
@@ -1318,34 +1383,65 @@ class JAMS(JObject):
 
         return valid
 
-    def trim(self, start_time, end_time):
+    def trim(self, start_time, end_time, strict=False):
         '''
-        Return a new jams object in which every annotation has been trimmed,
-        only keeping observations that occur between `start_time` and
-        `end_time`. Observations that start before `start_time` but end after
-        it will be trimmed such that they start at `start_time`, and similarly
-        observations that start before `end_time` but end after it will be
-        trimmed to end at `end_time`. The new duration of the annotation will
-        be `end_time - start_time`. Note that depending on the values of
-        `start_time` and `end_time` this function can also pad the annotation.
-        This function also copies over the file metadata from the original jams
-        and the annotation metadata from each original annotation, and adds a
-        list of tuples to each annotation's sandbox keyed by "trim", which
-        documents the trim parameters: each trim operation adds a tuple to
-        this list containing two elements: the `start_time` and `end_time`.
-
+        Trim the jams and all annotations inside it and return as a new JAMS
+        object. Every annotation in the trimmed jam will only contain
+        observations that occur in the time range defined by the intersection
+        of [`ann.time`,`ann.time + ann.duration`] (i.e. the time range spanned
+        by the original annotation) and [`start_time`,`end_time`]. The new
+        annotation will span the time range [`trim_start`, `trim_end`] where
+        `trim_start = max(ann.time, start_time)` and `trim_end =
+        min(ann.time + ann.duration, end_time)`. Observations that start
+        before `trim_start` and end after it will be trimmed such that they
+        start at `trim_start`, and similarly observations that start before
+        `trim_end` and end after it will be trimmed to end at `trim_end`. The
+        new duration of the annotation will be `trim_end - trim_start`. Note
+        that if the range defined by [`start_time`, `end_time`] doesn't
+        intersect with the original time range spanned by the annotation then
+        trimming is not possible (would result in negative duration) and the
+        annotation will not be included in the trimmed jam. When trimming is
+        possible, this function also copies over all the annotation metadata
+        from every original annotation to the trimmed annotation and documents
+        the trim operation by adding a list of tuples to the trimmed
+        annotation's sandbox keyed by `ann.sandbox.trim` which documents each
+        trim operation with a tuple `(start_time, end_time, a, b)`. Trimming is
+        also documented in the jam-level sandbox with a list keyed by
+        `sandbox.trim` containing a tuple for each jam-level trim of the form
+        `(start_time, end_time)`. This function also copies over all of the
+        file metadata from the original jam, and sets `file_metadata.duration`
+        to the trimmed duration `(end_time - start_time)`.
 
         Parameters
         ----------
         start_time : float
-            The new start time for the annotation
+            The desired start time for the trimmed annotation
         end_time
-            The new end time for the annotation
+            The desired new end time for trimmed annotation. Must be greater
+            than `start_time`.
+        strict : bool
+            When `True` (`False` by default) then the range defined by
+            [`start_time`,`end_time`] must be contained within the time range
+            spanned by the original annotation. Will raise an error when
+            `strict=True` and this condition is not satisfied.
 
         Returns
         -------
-        jam_trimmed : jams.JAMS
-            A new jams object with the trimmed annotations.
+        ann_trimmed : jams.Annotation or None
+            The trimmed annotation, returned as a new jams.Annotation object.
+            If the trim range specified by [`start_time`,`end_time`] does not
+            intersect at all with the original time range of the annotation a
+            warning will be issued and None will be returned.
+
+        Raises
+        ------
+        ParameterError
+            When `strict=True` and the range defined by
+            [`start_time`,`end_time`] is not contained within the time range
+            spanned by the original annotation.
+        JamsError
+            If trimming is attempted but the annotation duration
+            `self.duration` hasn't been set.
 
         '''
         # Make sure duration is set in file metadata
