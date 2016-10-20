@@ -1348,15 +1348,21 @@ class JAMS(JObject):
             A new jams object with the trimmed annotations.
 
         '''
+        # Make sure duration is set in file metadata
+        if self.file_metadata.duration is None:
+            raise JamsError(
+                'Duration must be set (jam.file_metadata.duration) before '
+                'trimming can be performed.')
+
         # Make sure start and end times are within the file start/end times
         if (start_time < 0 or
-                start_time > self.file_metadata.duration or
+                start_time > float(self.file_metadata.duration) or
                 end_time < start_time or
-                end_time > self.file_metadata.duration):
+                end_time > float(self.file_metadata.duration)):
             raise ParameterError(
                 'start_time and end_time must be within the original file '
                 'duration ({:f}) and end_time cannot be smaller than '
-                'start_time.'.format(self.file_metadata.duration))
+                'start_time.'.format(float(self.file_metadata.duration)))
 
         # Create a new jams
         jam_trimmed = JAMS(annotations=None,
@@ -1371,6 +1377,12 @@ class JAMS(JObject):
 
         # Adjust duration in file_metadata
         jam_trimmed.file_metadata.duration = end_time - start_time
+
+        # Document jam-level trim in top level sandbox
+        if 'trim' not in jam_trimmed.sandbox.keys():
+            jam_trimmed.sandbox.update(trim=[(start_time, end_time)])
+        else:
+            jam_trimmed.sandbox.trim.append((start_time, end_time))
 
         return jam_trimmed
 
