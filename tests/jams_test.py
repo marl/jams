@@ -779,6 +779,8 @@ def test_annotation_trim():
     assert ann_trim.time == 8
     assert ann_trim.duration == 4
     assert ann_trim.sandbox.trim == [(8, 12, 8, 12)]
+    assert ann_trim.namespace == ann.namespace
+    assert ann_trim.annotation_metadata == ann.annotation_metadata
 
     expected_data = dict(time=[8.0, 10.0],
                          duration=[1.0, 2.0],
@@ -795,6 +797,8 @@ def test_annotation_trim():
     assert ann_trim.time == 5
     assert ann_trim.duration == 3
     assert ann_trim.sandbox.trim == [(0, 8, 5, 8)]
+    assert ann_trim.namespace == ann.namespace
+    assert ann_trim.annotation_metadata == ann.annotation_metadata
 
     expected_data = dict(time=[5.0, 5.0],
                          duration=[2.0, 3.0],
@@ -811,6 +815,8 @@ def test_annotation_trim():
     assert ann_trim.time == 8
     assert ann_trim.duration == 7
     assert ann_trim.sandbox.trim == [(8, 20, 8, 15)]
+    assert ann_trim.namespace == ann.namespace
+    assert ann_trim.annotation_metadata == ann.annotation_metadata
 
     expected_data = dict(time=[8.0, 10.0],
                          duration=[1.0, 4.0],
@@ -825,6 +831,8 @@ def test_annotation_trim():
     assert ann_trim.time == 8
     assert ann_trim.duration == 2
     assert ann_trim.sandbox.trim == [(0, 10, 5, 10), (8, 20, 8, 10)]
+    assert ann_trim.namespace == ann.namespace
+    assert ann_trim.annotation_metadata == ann.annotation_metadata
 
     expected_data = dict(time=[8.0],
                          duration=[1.0],
@@ -834,3 +842,60 @@ def test_annotation_trim():
     expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
                                    duration=2.0)
     assert ann_trim.data.equals(expected_ann.data)
+
+
+def test_jams_trim():
+
+    @raises(jams.ParameterError, jams.JamsError)
+    def __test_error(jam, start_time, end_time, strict=False):
+        return jam.trim(start_time, end_time, strict=strict)
+
+    # Empty jam has no file metadata, can't trim!
+    jam = jams.JAMS()
+    __test_error(jam, 0, 1)
+
+    jam.file_metadata.duration = 15
+
+    # Can only trim if values are within time range spanned by jam and end_time
+    # > start_time
+    trim_times = [(-5, -1), (-5, 10), (-5, 20), (5, 20), (18, 20), (10, 8)]
+    for tt in trim_times:
+        __test_error(jam, *tt)
+
+    # For a valid scenario, ensure everything behaves as expected
+    namespace = 'tag_open'
+    data = dict(time=[5.0, 5.0, 10.0],
+                duration=[2.0, 4.0, 4.0],
+                value=['one', 'two', 'three'],
+                confidence=[0.9, 0.9, 0.9])
+    ann = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
+    for _ in range(5):
+        jam.annotations.append(ann)
+
+    ann_copy = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
+    ann_trim = ann_copy.trim(0, 10)
+    jam_trim = jam.trim(0, 10)
+
+    for ann in jam_trim.annotations:
+        assert ann.data.equals(ann_trim.data)
+
+    assert jam_trim.file_metadata.duration == 10
+    assert jam_trim.sandbox.trim == [(0, 10)]
+
+    # Multiple trims
+    jam_trim = jam.trim(0, 10).trim(8, 10)
+    ann_trim = ann_copy.trim(0, 10).trim(8, 10)
+
+    for ann in jam_trim.annotations:
+        assert ann.data.equals(ann_trim.data)
+
+    assert jam_trim.file_metadata.duration == 2
+    assert jam_trim.sandbox.trim == [(0, 10), (8, 10)]
+
+    # Make sure file metadata copied over correctly
+    # (need to exclude duration since it might have changed)
+    orig_file_metadata = dict(jam.file_metadata)
+    trim_file_metadata = dict(jam_trim.file_metadata)
+    del orig_file_metadata['duration']
+    del trim_file_metadata['duration']
+    assert trim_file_metadata == orig_file_metadata
