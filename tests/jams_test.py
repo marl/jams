@@ -728,3 +728,109 @@ def test_load_invalid():
     yield __test_warn, fn, True, False
 
 
+def test_annotation_trim():
+
+    @raises(jams.ParameterError, jams.JamsError)
+    def __test_error(ann, start_time, end_time, strict=False):
+        return ann.trim(start_time, end_time, strict=strict)
+
+    # end_time must be greater than start_time
+    ann = jams.Annotation('tag_open')
+    __test_error(ann, 5, 3)
+
+    # ann.duration must be set prior to trim
+    ann.duration = None
+    __test_error(ann, 3, 5)
+
+    # when strict=True, trim range must completely overlap with annotation
+    # range.
+    ann.time = 5
+    ann.duration = 10
+
+    trim_times = [(1, 2), (16, 20), (10, 20), (0, 10)]
+
+    for tt in trim_times:
+        __test_error(ann, *tt, strict=True)
+
+    # when strict=False and there's no overlap, a warning is raised and the
+    # returned annotation should be None
+    for tt in trim_times[:2]:
+
+        clean_warning_registry()
+        with warnings.catch_warnings(record=True) as out:
+            ann_trim = ann.trim(*tt, strict=False)
+
+        assert len(out) > 0
+        assert out[0].category is UserWarning
+        assert 'does not intersect' in str(out[0].message).lower()
+        assert ann_trim is None
+
+    # For a valid scenario, ensure everything behaves as expected
+    namespace = 'tag_open'
+    data = dict(time=[5.0, 5.0, 10.0],
+                duration=[2.0, 4.0, 4.0],
+                value=['one', 'two', 'three'],
+                confidence=[0.9, 0.9, 0.9])
+    ann = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
+
+    # When the trim region is completely inside the annotation time range
+    ann_trim = ann.trim(8, 12, strict=False)
+
+    assert ann_trim.time == 8
+    assert ann_trim.duration == 4
+    assert ann_trim.sandbox.trim == [(8, 12, 8, 12)]
+
+    expected_data = dict(time=[8.0, 10.0],
+                         duration=[1.0, 2.0],
+                         value=['two', 'three'],
+                         confidence=[0.9, 0.9])
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
+                                   duration=4.0)
+    assert ann_trim.data.equals(expected_ann.data)
+
+    # When the trim region only partially overlaps with the annotation time
+    # range: at the beginning
+    ann_trim = ann.trim(0, 8, strict=False)
+
+    assert ann_trim.time == 5
+    assert ann_trim.duration == 3
+    assert ann_trim.sandbox.trim == [(0, 8, 5, 8)]
+
+    expected_data = dict(time=[5.0, 5.0],
+                         duration=[2.0, 3.0],
+                         value=['one', 'two'],
+                         confidence=[0.9, 0.9])
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=5.0,
+                                   duration=3.0)
+    assert ann_trim.data.equals(expected_ann.data)
+
+    # When the trim region only partially overlaps with the annotation time
+    # range: at the end
+    ann_trim = ann.trim(8, 20, strict=False)
+
+    assert ann_trim.time == 8
+    assert ann_trim.duration == 7
+    assert ann_trim.sandbox.trim == [(8, 20, 8, 15)]
+
+    expected_data = dict(time=[8.0, 10.0],
+                         duration=[1.0, 4.0],
+                         value=['two', 'three'],
+                         confidence=[0.9, 0.9])
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
+                                   duration=7.0)
+    assert ann_trim.data.equals(expected_ann.data)
+
+    # Multiple trims
+    ann_trim = ann.trim(0, 10).trim(8, 20)
+    assert ann_trim.time == 8
+    assert ann_trim.duration == 2
+    assert ann_trim.sandbox.trim == [(0, 10, 5, 10), (8, 20, 8, 10)]
+
+    expected_data = dict(time=[8.0],
+                         duration=[1.0],
+                         value=['two'],
+                         confidence=[0.9])
+
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
+                                   duration=2.0)
+    assert ann_trim.data.equals(expected_ann.data)
