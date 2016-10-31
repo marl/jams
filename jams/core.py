@@ -909,9 +909,9 @@ class Annotation(JObject):
             If `False` (default), the annotation is trimmed but the start
             times of its observations are left unchanged (unless the
             observation intersects with `start_time` in which case it's
-            modified as described above). If `True`, the start time of every
-            observation in the annotation is re-computed with respect to
-            `start_time` (which is taken to be time 0).
+            modified as described above). If `True`, the start time of the
+            annotation is set to 0 and the start time of every observation in
+            the annotation is re-computed with respect to `start_time`.
 
         Returns
         -------
@@ -975,6 +975,9 @@ class Annotation(JObject):
                 sandbox=self.sandbox,
                 time=trim_start,
                 duration=trim_end - trim_start)
+
+            if adjust_times:
+                ann_trimmed.time = 0
 
             # Selectively add observations based on their start time / duration
             for idx, obs in self.data.iterrows():
@@ -1441,9 +1444,9 @@ class JAMS(JObject):
             If `False` (default), each annotation is trimmed but the start
             times of its observations are left unchanged (unless the
             observation intersects with `start_time` in which case it's
-            modified as described above). If `True`, the start time of every
-            observation in each annotation is re-computed with respect to
-            `start_time` (which is taken to be time 0).
+            modified as described above). If `True`, the start time of each
+            annotation is set to 0 and the start time of every observation in
+            each annotation is re-computed with respect to `start_time`.
 
         Returns
         -------
