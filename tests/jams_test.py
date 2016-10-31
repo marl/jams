@@ -843,6 +843,20 @@ def test_annotation_trim():
                                    duration=2.0)
     assert ann_trim.data.equals(expected_ann.data)
 
+    # Make sure annotation and observation times are adjusted when
+    # adjust_times = True
+    ann_trim = ann.trim(8, 10, adjust_times=True)
+    expected_data = dict(time=[0.0],
+                         duration=[1.0],
+                         value=['two'],
+                         confidence=[0.9])
+
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=0.0,
+                                   duration=2.0)
+    assert ann_trim.time == 0
+    assert ann_trim.duration == 2
+    assert ann_trim.data.equals(expected_ann.data)
+
 
 def test_jams_trim():
 
@@ -899,3 +913,9 @@ def test_jams_trim():
     del orig_file_metadata['duration']
     del trim_file_metadata['duration']
     assert trim_file_metadata == orig_file_metadata
+
+    # Trim with adjust times
+    jam_trim_adjust = jam.trim(8, 10, adjust_times=True)
+    ann_trim = ann_copy.trim(8, 10)
+    for ann in jam_trim.annotations:
+        assert ann.data.equals(ann_trim.data)
