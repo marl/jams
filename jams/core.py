@@ -869,7 +869,7 @@ class Annotation(JObject):
 
         return valid
 
-    def trim(self, start_time, end_time, strict=False):
+    def trim(self, start_time, end_time, strict=False, adjust_times=False):
         '''
         Trim the annotation and return as a new Annotation object. Trimming
         will result in the new annotation only containing observations that
@@ -905,6 +905,13 @@ class Annotation(JObject):
             [`start_time`,`end_time`] must be contained within the time range
             spanned by the original annotation. Will raise an error when
             `strict=True` and this condition is not satisfied.
+        adjust_times : bool
+            If `False` (default), the annotation is trimmed but the start
+            times of its observations are left unchanged (unless the
+            observation intersects with `start_time` in which case it's
+            modified as described above). If `True`, the start time of every
+            observation in the annotation is re-computed with respect to
+            `start_time` (which is taken to be time 0).
 
         Returns
         -------
@@ -979,6 +986,12 @@ class Annotation(JObject):
                     new_start = max(obs_start, trim_start)
                     new_end = min(obs_end, trim_end)
                     new_duration = new_end - new_start
+
+                    # Adjust the start time of every observation to be relative
+                    # to the start_time.
+                    if adjust_times:
+                        new_start -= start_time
+
                     ann_trimmed.append(time=new_start,
                                        duration=new_duration,
                                        value=obs['value'],
@@ -1383,7 +1396,7 @@ class JAMS(JObject):
 
         return valid
 
-    def trim(self, start_time, end_time, strict=False):
+    def trim(self, start_time, end_time, strict=False, adjust_times=False):
         '''
         Trim the jams and all annotations inside it and return as a new JAMS
         object. Every annotation in the trimmed jam will only contain
@@ -1424,24 +1437,19 @@ class JAMS(JObject):
             [`start_time`,`end_time`] must be contained within the time range
             spanned by the original annotation. Will raise an error when
             `strict=True` and this condition is not satisfied.
+        adjust_times : bool
+            If `False` (default), each annotation is trimmed but the start
+            times of its observations are left unchanged (unless the
+            observation intersects with `start_time` in which case it's
+            modified as described above). If `True`, the start time of every
+            observation in each annotation is re-computed with respect to
+            `start_time` (which is taken to be time 0).
 
         Returns
         -------
-        ann_trimmed : jams.Annotation or None
-            The trimmed annotation, returned as a new jams.Annotation object.
-            If the trim range specified by [`start_time`,`end_time`] does not
-            intersect at all with the original time range of the annotation a
-            warning will be issued and None will be returned.
-
-        Raises
-        ------
-        ParameterError
-            When `strict=True` and the range defined by
-            [`start_time`,`end_time`] is not contained within the time range
-            spanned by the original annotation.
-        JamsError
-            If trimming is attempted but the annotation duration
-            `self.duration` hasn't been set.
+        jam_trimmed : jams.JAMS
+            The trimmed jam with trimmed annotations, returned as a new
+            jams.JAMS object.
 
         '''
         # Make sure duration is set in file metadata
@@ -1468,7 +1476,8 @@ class JAMS(JObject):
         # Iterate over annotations
         for ann in self.annotations:
 
-            ann_trimmed = ann.trim(start_time, end_time, strict=strict)
+            ann_trimmed = ann.trim(start_time, end_time, strict=strict,
+                                   adjust_times=adjust_times)
             jam_trimmed.annotations.append(ann_trimmed)
 
         # Adjust duration in file_metadata
