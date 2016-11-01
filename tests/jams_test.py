@@ -742,28 +742,26 @@ def test_annotation_trim():
     ann.duration = None
     __test_error(ann, 3, 5)
 
-    # when strict=True, trim range must completely overlap with annotation
-    # range.
     ann.time = 5
     ann.duration = 10
 
     trim_times = [(1, 2), (16, 20), (10, 20), (0, 10)]
 
-    for tt in trim_times:
-        __test_error(ann, *tt, strict=True)
-
-    # when strict=False and there's no overlap, a warning is raised and the
-    # returned annotation should be None
+    # when there's no overlap, a warning is raised and the
+    # returned annotation should be empty
     for tt in trim_times[:2]:
 
         clean_warning_registry()
         with warnings.catch_warnings(record=True) as out:
-            ann_trim = ann.trim(*tt, strict=False)
+            ann_trim = ann.trim(*tt)
 
         assert len(out) > 0
         assert out[0].category is UserWarning
         assert 'does not intersect' in str(out[0].message).lower()
-        assert ann_trim is None
+
+        assert ann_trim.data.empty
+        assert ann_trim.time == ann.time
+        assert ann_trim.duration == 0
 
     # For a valid scenario, ensure everything behaves as expected
     namespace = 'tag_open'
@@ -774,6 +772,8 @@ def test_annotation_trim():
     ann = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
 
     # When the trim region is completely inside the annotation time range
+
+    # with strict=False
     ann_trim = ann.trim(8, 12, strict=False)
 
     assert ann_trim.time == 8
@@ -790,8 +790,23 @@ def test_annotation_trim():
                                    duration=4.0)
     assert ann_trim.data.equals(expected_ann.data)
 
+    # with strict=True
+    ann_trim = ann.trim(8, 12, strict=True)
+
+    assert ann_trim.time == 8
+    assert ann_trim.duration == 4
+    assert ann_trim.sandbox.trim == [(8, 12, 8, 12)]
+    assert ann_trim.namespace == ann.namespace
+    assert ann_trim.annotation_metadata == ann.annotation_metadata
+
+    expected_data = None
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
+                                   duration=4.0)
+    assert ann_trim.data.equals(expected_ann.data)
+
     # When the trim region only partially overlaps with the annotation time
     # range: at the beginning
+    # strict=False
     ann_trim = ann.trim(0, 8, strict=False)
 
     assert ann_trim.time == 5
@@ -808,8 +823,26 @@ def test_annotation_trim():
                                    duration=3.0)
     assert ann_trim.data.equals(expected_ann.data)
 
+    # strict=True
+    ann_trim = ann.trim(0, 8, strict=True)
+
+    assert ann_trim.time == 5
+    assert ann_trim.duration == 3
+    assert ann_trim.sandbox.trim == [(0, 8, 5, 8)]
+    assert ann_trim.namespace == ann.namespace
+    assert ann_trim.annotation_metadata == ann.annotation_metadata
+
+    expected_data = dict(time=[5.0],
+                         duration=[2.0],
+                         value=['one'],
+                         confidence=[0.9])
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=5.0,
+                                   duration=3.0)
+    assert ann_trim.data.equals(expected_ann.data)
+
     # When the trim region only partially overlaps with the annotation time
     # range: at the end
+    # strict=False
     ann_trim = ann.trim(8, 20, strict=False)
 
     assert ann_trim.time == 8
@@ -826,8 +859,26 @@ def test_annotation_trim():
                                    duration=7.0)
     assert ann_trim.data.equals(expected_ann.data)
 
+    # strict=True
+    ann_trim = ann.trim(8, 20, strict=True)
+
+    assert ann_trim.time == 8
+    assert ann_trim.duration == 7
+    assert ann_trim.sandbox.trim == [(8, 20, 8, 15)]
+    assert ann_trim.namespace == ann.namespace
+    assert ann_trim.annotation_metadata == ann.annotation_metadata
+
+    expected_data = dict(time=[10.0],
+                         duration=[4.0],
+                         value=['three'],
+                         confidence=[0.9])
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
+                                   duration=7.0)
+    assert ann_trim.data.equals(expected_ann.data)
+
     # Multiple trims
-    ann_trim = ann.trim(0, 10).trim(8, 20)
+    # strict=False
+    ann_trim = ann.trim(0, 10, strict=False).trim(8, 20, strict=False)
     assert ann_trim.time == 8
     assert ann_trim.duration == 2
     assert ann_trim.sandbox.trim == [(0, 10, 5, 10), (8, 20, 8, 10)]
@@ -843,18 +894,17 @@ def test_annotation_trim():
                                    duration=2.0)
     assert ann_trim.data.equals(expected_ann.data)
 
-    # Make sure annotation and observation times are adjusted when
-    # adjust_times = True
-    ann_trim = ann.trim(8, 10, adjust_times=True)
-    expected_data = dict(time=[0.0],
-                         duration=[1.0],
-                         value=['two'],
-                         confidence=[0.9])
-
-    expected_ann = jams.Annotation(namespace, data=expected_data, time=0.0,
-                                   duration=2.0)
-    assert ann_trim.time == 0
+    # strict=True
+    ann_trim = ann.trim(0, 10, strict=True).trim(8, 20, strict=True)
+    assert ann_trim.time == 8
     assert ann_trim.duration == 2
+    assert ann_trim.sandbox.trim == [(0, 10, 5, 10), (8, 20, 8, 10)]
+    assert ann_trim.namespace == ann.namespace
+    assert ann_trim.annotation_metadata == ann.annotation_metadata
+
+    expected_data = None
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
+                                   duration=2.0)
     assert ann_trim.data.equals(expected_ann.data)
 
 
@@ -887,13 +937,13 @@ def test_jams_trim():
         jam.annotations.append(ann)
 
     ann_copy = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
-    ann_trim = ann_copy.trim(0, 10)
-    jam_trim = jam.trim(0, 10)
+    ann_trim = ann_copy.trim(0, 10, strict=False)
+    jam_trim = jam.trim(0, 10, strict=False)
 
     for ann in jam_trim.annotations:
         assert ann.data.equals(ann_trim.data)
 
-    assert jam_trim.file_metadata.duration == 10
+    assert jam_trim.file_metadata.duration == jam.file_metadata.duration
     assert jam_trim.sandbox.trim == [(0, 10)]
 
     # Multiple trims
@@ -903,19 +953,7 @@ def test_jams_trim():
     for ann in jam_trim.annotations:
         assert ann.data.equals(ann_trim.data)
 
-    assert jam_trim.file_metadata.duration == 2
     assert jam_trim.sandbox.trim == [(0, 10), (8, 10)]
 
     # Make sure file metadata copied over correctly
-    # (need to exclude duration since it might have changed)
-    orig_file_metadata = dict(jam.file_metadata)
-    trim_file_metadata = dict(jam_trim.file_metadata)
-    del orig_file_metadata['duration']
-    del trim_file_metadata['duration']
-    assert trim_file_metadata == orig_file_metadata
-
-    # Trim with adjust times
-    jam_trim_adjust = jam.trim(8, 10, adjust_times=True)
-    ann_trim = ann_copy.trim(8, 10)
-    for ann in jam_trim.annotations:
-        assert ann.data.equals(ann_trim.data)
+    assert jam_trim.file_metadata == jam.file_metadata
