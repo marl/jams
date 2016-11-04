@@ -979,6 +979,7 @@ def test_annotation_slice():
     expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
                                    duration=2.0)
     assert ann_slice.data.equals(expected_ann.data)
+    assert ann_slice.sandbox.slice == [(8, 10, 8, 10)]
 
     # Slice out range that's partially inside the time range spanned by the
     # annotation (starts BEFORE annotation starts)
@@ -991,15 +992,73 @@ def test_annotation_slice():
     expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
                                    duration=5.0)
     assert ann_slice.data.equals(expected_ann.data)
+    assert ann_slice.sandbox.slice == [(3, 10, 5, 10)]
 
     # Slice out range that's partially inside the time range spanned by the
     # annotation (starts AFTER annotation starts)
-    ann_slice = ann.slice(8, 12, strict=False)
+    ann_slice = ann.slice(8, 20, strict=False)
     expected_data = dict(time=[0.0, 2.0],
-                         duration=[2.0, 2.0],
+                         duration=[2.0, 4.0],
                          value=['two', 'three'],
                          confidence=[0.9, 0.9])
 
     expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
                                    duration=2.0)
     assert ann_slice.data.equals(expected_ann.data)
+    assert ann_slice.sandbox.slice == [(8, 20, 8, 15)]
+
+
+def test_jams_slice():
+
+    @raises(jams.ParameterError, jams.JamsError)
+    def __test_error(jam, start_time, end_time, strict=False):
+        return jam.slice(start_time, end_time, strict=strict)
+
+    # Empty jam has no file metadata, can't slice!
+    jam = jams.JAMS()
+    __test_error(jam, 0, 1)
+
+    jam.file_metadata.duration = 15
+
+    # Can only trim if values are within time range spanned by jam and end_time
+    # > start_time
+    slice_times = [(-5, -1), (-5, 10), (-5, 20), (5, 20), (18, 20), (10, 8)]
+    for tt in slice_times:
+        __test_error(jam, *tt)
+
+    # For a valid scenario, ensure everything behaves as expected
+    namespace = 'tag_open'
+    data = dict(time=[5.0, 5.0, 10.0],
+                duration=[2.0, 4.0, 4.0],
+                value=['one', 'two', 'three'],
+                confidence=[0.9, 0.9, 0.9])
+    ann = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
+    for _ in range(5):
+        jam.annotations.append(ann)
+
+    ann_copy = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
+    ann_slice = ann_copy.slice(0, 10, strict=False)
+    jam_slice = jam.slice(0, 10, strict=False)
+
+    for ann in jam_slice.annotations:
+        assert ann.data.equals(ann_slice.data)
+
+    assert jam_slice.file_metadata.duration == 10
+    assert jam_slice.sandbox.slice == [(0, 10)]
+
+    # Multiple trims
+    jam_slice = jam.slice(0, 10).slice(3, 5)
+    ann_slice = ann_copy.slice(0, 10).slice(3, 5)
+
+    for ann in jam_slice.annotations:
+        assert ann.data.equals(ann_slice.data)
+
+    assert jam_slice.sandbox.slice == [(0, 10), (3, 5)]
+
+    # Make sure file metadata copied over correctly (except for duration)
+    orig_metadata = dict(jam.file_metadata)
+    slice_metadata = dict(jam_slice.file_metadata)
+    del orig_metadata['duration']
+    del slice_metadata['duration']
+    assert slice_metadata == orig_metadata
+    assert jam_slice.file_metadata.duration == 2
