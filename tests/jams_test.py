@@ -984,12 +984,12 @@ def test_annotation_slice():
     # Slice out range that's partially inside the time range spanned by the
     # annotation (starts BEFORE annotation starts)
     ann_slice = ann.slice(3, 10, strict=False)
-    expected_data = dict(time=[0.0, 1.0],
+    expected_data = dict(time=[2.0, 3.0],
                          duration=[2.0, 4.0],
                          value=['one', 'two'],
                          confidence=[0.9, 0.9])
 
-    expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=2.0,
                                    duration=5.0)
     assert ann_slice.data.equals(expected_ann.data)
     assert ann_slice.sandbox.slice == [(3, 10, 5, 10)]
@@ -1006,6 +1006,19 @@ def test_annotation_slice():
                                    duration=2.0)
     assert ann_slice.data.equals(expected_ann.data)
     assert ann_slice.sandbox.slice == [(8, 20, 8, 15)]
+
+    # Multiple slices
+    ann_slice = ann.slice(0, 10).slice(8, 10)
+    expected_data = dict(time=[0.0],
+                         duration=[2.0],
+                         value=['two'],
+                         confidence=[0.9])
+
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
+                                   duration=2.0)
+    assert ann_slice.data.equals(expected_ann.data)
+    print(ann_slice.sandbox.slice)
+    assert ann_slice.sandbox.slice == [(0, 10, 5, 10), (8, 10, 8, 10)]
 
 
 def test_jams_slice():
@@ -1047,13 +1060,13 @@ def test_jams_slice():
     assert jam_slice.sandbox.slice == [(0, 10)]
 
     # Multiple trims
-    jam_slice = jam.slice(0, 10).slice(3, 5)
-    ann_slice = ann_copy.slice(0, 10).slice(3, 5)
+    jam_slice = jam.slice(0, 10).slice(8, 10)
+    ann_slice = ann_copy.slice(0, 10).slice(8, 10)
 
     for ann in jam_slice.annotations:
         assert ann.data.equals(ann_slice.data)
 
-    assert jam_slice.sandbox.slice == [(0, 10), (3, 5)]
+    assert jam_slice.sandbox.slice == [(0, 10), (8, 10)]
 
     # Make sure file metadata copied over correctly (except for duration)
     orig_metadata = dict(jam.file_metadata)

@@ -1000,17 +1000,18 @@ class Annotation(JObject):
         '''
         Slice the annotation and return as a new Annotation object. Slicing has
         the same effect as trimming (see `Annotation.trim` for details) except
-        that while trimming does not modify the start time of the observations,
-        slicing will set the new annotation's start time to 0 and the start
-        time of its observations will be set with respect to this start time.
-        This function documents the slice operation by adding a list
-        of tuples to the annotation's sandbox keyed by `sandbox.slice` which
-        documents each slice operation with a tuple `(start_time, end_time,
-        slice_start, slice_end)`, where `slice_start` and `slice_end` are given
-        by `trim_start` and `trim_end` as described in `Annotation.trim`. Since
-        slicing is implemented using trimming, the trimming operation will also
-        be documented in `Annotation.sandbox.trim` as described in
-        `Annotation.trim`.
+        that while trimming does not modify the start time of the annotation or
+        the observations it contains, slicing will set the new annotation's
+        start time to `max(0, trimmed_annotation.time - start_time)` and the
+        start time of its observations will be set with respect to this new
+        reference start time. This function documents the slice operation by
+        adding a list of tuples to the annotation's sandbox keyed by
+        `sandbox.slice` which documents each slice operation with a tuple
+        `(start_time, end_time, slice_start, slice_end)`, where `slice_start`
+        and `slice_end` are given by `trim_start` and `trim_end` as described
+        in `Annotation.trim`. Since slicing is implemented using trimming, the
+        trimming operation will also be documented in `Annotation.sandbox.trim`
+        as described in `Annotation.trim`.
 
         This function is useful for example when trimming an audio file,
         allowing the user to trim the annotation while ensuring all time
@@ -1043,12 +1044,13 @@ class Annotation(JObject):
         # now adjust the start time of the annotation and the observations it
         # contains.
         ref_time = sliced_ann.time
-        sliced_ann.time = 0
+        sliced_ann.time = max(0, sliced_ann.time - start_time)
+        adjustment = ref_time - sliced_ann.time
 
         if sliced_ann.data is not None:
             for idx in range(len(sliced_ann.data.index)):
                 sliced_ann.data.loc[idx, 'time'] -= pd.to_timedelta(
-                    ref_time, unit='s')
+                    adjustment, unit='s')
 
         slice_start = ref_time
         slice_end = ref_time + sliced_ann.duration
@@ -1057,7 +1059,7 @@ class Annotation(JObject):
             sliced_ann.sandbox.update(
                 slice=[(start_time, end_time, slice_start, slice_end)])
         else:
-            sliced_ann.sandbox.trim.append(
+            sliced_ann.sandbox.slice.append(
                 (start_time, end_time, slice_start, slice_end))
 
         return sliced_ann
