@@ -957,3 +957,49 @@ def test_jams_trim():
 
     # Make sure file metadata copied over correctly
     assert jam_trim.file_metadata == jam.file_metadata
+
+
+def test_annotation_slice():
+
+    namespace = 'tag_open'
+    data = dict(time=[5.0, 6.0, 10.0],
+                duration=[2.0, 4.0, 4.0],
+                value=['one', 'two', 'three'],
+                confidence=[0.9, 0.9, 0.9])
+    ann = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
+
+    # Slice out range that's completely inside the time range spanned by the
+    # annotation
+    ann_slice = ann.slice(8, 10, strict=False)
+    expected_data = dict(time=[0.0],
+                         duration=[2.0],
+                         value=['two'],
+                         confidence=[0.9])
+
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
+                                   duration=2.0)
+    assert ann_slice.data.equals(expected_ann.data)
+
+    # Slice out range that's partially inside the time range spanned by the
+    # annotation (starts BEFORE annotation starts)
+    ann_slice = ann.slice(3, 10, strict=False)
+    expected_data = dict(time=[0.0, 1.0],
+                         duration=[2.0, 4.0],
+                         value=['one', 'two'],
+                         confidence=[0.9, 0.9])
+
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
+                                   duration=5.0)
+    assert ann_slice.data.equals(expected_ann.data)
+
+    # Slice out range that's partially inside the time range spanned by the
+    # annotation (starts AFTER annotation starts)
+    ann_slice = ann.slice(8, 12, strict=False)
+    expected_data = dict(time=[0.0, 2.0],
+                         duration=[2.0, 2.0],
+                         value=['two', 'three'],
+                         confidence=[0.9, 0.9])
+
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
+                                   duration=2.0)
+    assert ann_slice.data.equals(expected_ann.data)

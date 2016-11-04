@@ -43,6 +43,7 @@ import six
 import warnings
 import contextlib
 import gzip
+import datetime
 
 from .version import version as __VERSION__
 from . import schema
@@ -994,6 +995,54 @@ class Annotation(JObject):
                 (start_time, end_time, trim_start, trim_end))
 
         return ann_trimmed
+
+    def slice(self, start_time, end_time, strict=False):
+        '''
+        Slice the annotation and return as a new Annotation object. Slicing has
+        the same effect as trimming (see `Annotation.trim` for details) except
+        that while trimming does not modify the start time of the observations,
+        slicing will set the new annotation's start time to 0 and the start
+        time of its observations will be set with respect to this start time.
+
+        This function is useful for example when trimming an audio file,
+        allowing the user to trim the annotation while ensuring all time
+        information matches the new trimmed audio file.
+
+        Parameters
+        ----------
+        start_time : float
+            The desired start time for slicing.
+        end_time
+            The desired end time for slicing. Must be greater than
+            `start_time`.
+        strict : bool
+            When `False` (default) observations that lie at the boundaries of
+            the slice (see `Annotation.trim` for details) will have their time
+            and/or duration adjusted such that only the part of the observation
+            that lies within the slice range is kept. When `True` such
+            observations are discarded and not included in the sliced
+            annotation.
+
+        Returns
+        -------
+        sliced_annotation : Annotation
+            The sliced annotation.
+
+        '''
+        # start by trimming the annotation
+        trimmed_ann = self.trim(start_time, end_time, strict=strict)
+
+        # now adjust the start time of the annotation and the observations it
+        # contains.
+        ref_time = trimmed_ann.time
+        trimmed_ann.time = 0
+
+        if trimmed_ann.data is not None:
+            for idx in range(len(trimmed_ann.data.index)):
+                trimmed_ann.data.loc[idx, 'time'] -= pd.to_timedelta(
+                    ref_time, unit='s')
+
+        return trimmed_ann
 
 
 class Curator(JObject):
