@@ -728,7 +728,7 @@ def test_load_invalid():
     yield __test_warn, fn, True, False
 
 
-def test_annotation_trim():
+def test_annotation_trim_bad_params():
 
     @raises(jams.ParameterError, jams.JamsError)
     def __test_error(ann, start_time, end_time, strict=False):
@@ -742,13 +742,16 @@ def test_annotation_trim():
     ann.duration = None
     __test_error(ann, 3, 5)
 
+
+def test_annotation_trim_no_overlap():
+    # when there's no overlap, a warning is raised and the
+    # returned annotation should be empty
+    ann = jams.Annotation('tag_open')
     ann.time = 5
     ann.duration = 10
 
-    trim_times = [(1, 2), (16, 20), (10, 20), (0, 10)]
+    trim_times = [(1, 2), (16, 20)]
 
-    # when there's no overlap, a warning is raised and the
-    # returned annotation should be empty
     for tt in trim_times[:2]:
 
         clean_warning_registry()
@@ -763,6 +766,8 @@ def test_annotation_trim():
         assert ann_trim.time == ann.time
         assert ann_trim.duration == 0
 
+
+def test_annotation_trim_complete_overlap():
     # For a valid scenario, ensure everything behaves as expected
     namespace = 'tag_open'
     data = dict(time=[5.0, 5.0, 10.0],
@@ -806,9 +811,18 @@ def test_annotation_trim():
                                    duration=4.0)
     assert ann_trim.data.equals(expected_ann.data)
 
+
+def test_annotation_trim_partial_overlap_beginning():
     # When the trim region only partially overlaps with the annotation time
     # range: at the beginning
     # strict=False
+    namespace = 'tag_open'
+    data = dict(time=[5.0, 5.0, 10.0],
+                duration=[2.0, 4.0, 4.0],
+                value=['one', 'two', 'three'],
+                confidence=[0.9, 0.9, 0.9])
+    ann = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
+
     ann_trim = ann.trim(0, 8, strict=False)
 
     assert ann_trim.time == 5
@@ -844,9 +858,18 @@ def test_annotation_trim():
                                    duration=3.0)
     assert ann_trim.data.equals(expected_ann.data)
 
+
+def test_annotation_trim_partial_overlap_end():
     # When the trim region only partially overlaps with the annotation time
     # range: at the end
     # strict=False
+    namespace = 'tag_open'
+    data = dict(time=[5.0, 5.0, 10.0],
+                duration=[2.0, 4.0, 4.0],
+                value=['one', 'two', 'three'],
+                confidence=[0.9, 0.9, 0.9])
+    ann = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
+
     ann_trim = ann.trim(8, 20, strict=False)
 
     assert ann_trim.time == 8
@@ -882,8 +905,17 @@ def test_annotation_trim():
                                    duration=7.0)
     assert ann_trim.data.equals(expected_ann.data)
 
+
+def test_annotation_trim_multiple():
     # Multiple trims
     # strict=False
+    namespace = 'tag_open'
+    data = dict(time=[5.0, 5.0, 10.0],
+                duration=[2.0, 4.0, 4.0],
+                value=['one', 'two', 'three'],
+                confidence=[0.9, 0.9, 0.9])
+    ann = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
+
     ann_trim = ann.trim(0, 10, strict=False).trim(8, 20, strict=False)
     assert ann_trim.time == 8
     assert ann_trim.duration == 2
