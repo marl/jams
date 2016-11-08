@@ -903,10 +903,10 @@ class Annotation(JObject):
         Parameters
         ----------
         start_time : float
-            The desired start time for the trimmed annotation.
+            The desired start time for the trimmed annotation in seconds.
         end_time
-            The desired end time for trimmed annotation. Must be greater
-            than ``start_time``.
+            The desired end time for the trimmed annotation in seconds. Must be
+            greater than ``start_time``.
         strict : bool
             When ``False`` (default) observations that lie at the boundaries of
             the trimming range (given by ``[trim_start, trim_end]`` as
@@ -1055,9 +1055,9 @@ class Annotation(JObject):
         Parameters
         ----------
         start_time : float
-            The desired start time for slicing.
+            The desired start time for slicing in seconds.
         end_time
-            The desired end time for slicing. Must be greater than
+            The desired end time for slicing in seconds. Must be greater than
             ``start_time``.
         strict : bool
             When ``False`` (default) observations that lie at the boundaries of
@@ -1071,6 +1071,10 @@ class Annotation(JObject):
         -------
         sliced_ann : Annotation
             The sliced annotation.
+
+        See Also
+        --------
+        `Annotation.trim`
 
         Examples
         --------
@@ -1107,9 +1111,8 @@ class Annotation(JObject):
         adjustment = ref_time - sliced_ann.time
 
         if sliced_ann.data is not None:
-            for idx in range(len(sliced_ann.data.index)):
-                sliced_ann.data.loc[idx, 'time'] -= pd.to_timedelta(
-                    adjustment, unit='s')
+            sliced_ann.data['time'] = sliced_ann.data['time'].apply(
+                lambda x: x - pd.to_timedelta(adjustment, unit='s'))
 
         slice_start = ref_time
         slice_end = ref_time + sliced_ann.duration
@@ -1351,10 +1354,10 @@ class AnnotationArray(list):
         Parameters
         ----------
         start_time : float
-            The desired start time for the trimmed annotations.
+            The desired start time for the trimmed annotations in seconds.
         end_time
-            The desired end time for trimmed annotations. Must be greater
-            than ``start_time``.
+            The desired end time for trimmed annotations in seconds. Must be
+            greater than ``start_time``.
         strict : bool
             When ``False`` (default) observations that lie at the boundaries of
             the trimming range (see `Annotation.trim` for details) will have
@@ -1386,9 +1389,9 @@ class AnnotationArray(list):
         Parameters
         ----------
         start_time : float
-            The desired start time for slicing.
+            The desired start time for slicing in seconds.
         end_time
-            The desired end time for slicing. Must be greater than
+            The desired end time for slicing in seconds. Must be greater than
             ``start_time``.
         strict : bool
             When ``False`` (default) observations that lie at the boundaries of
@@ -1607,10 +1610,10 @@ class JAMS(JObject):
         Parameters
         ----------
         start_time : float
-            The desired start time for the trimmed annotations
+            The desired start time for the trimmed annotations in seconds.
         end_time
-            The desired end time for trimmed annotations. Must be greater
-            than ``start_time``.
+            The desired end time for trimmed annotations in seconds. Must be
+            greater than ``start_time``.
         strict : bool
             When ``False`` (default) observations that lie at the boundaries of
             the trimming range (see `Annotation.trim` for details), will have
@@ -1685,9 +1688,9 @@ class JAMS(JObject):
         Parameters
         ----------
         start_time : float
-            The desired start time for slicing.
+            The desired start time for slicing in seconds.
         end_time
-            The desired end time for slicing. Must be greater than
+            The desired end time for slicing in seconds. Must be greater than
             ``start_time``.
         strict : bool
             When ``False`` (default) observations that lie at the boundaries of
