@@ -43,7 +43,6 @@ import six
 import warnings
 import contextlib
 import gzip
-import datetime
 
 from .version import version as __VERSION__
 from . import schema
@@ -872,29 +871,34 @@ class Annotation(JObject):
 
     def trim(self, start_time, end_time, strict=False):
         '''
-        Trim the annotation and return as a new Annotation object. Trimming
-        will result in the new annotation only containing observations that
-        occur in the time range defined by the intersection of [`self.time`,
-        `self.time + self.duration`] (i.e. the time range spanned by the
-        original annotation) and [`start_time`,`end_time`]. The new annotation
-        will span the time range [`trim_start`, `trim_end`] where
-        `trim_start = max(self.time, start_time)` and `trim_end =
-        min(self.time + self.duration, end_time)`. If `strict=False`
-        (the default) observations that start before `trim_start` and end after
-        it will be trimmed such that they start at `trim_start`, and similarly
-        observations that start before `trim_end` and end after it will be
-        trimmed to end at `trim_end`. If `strict=True` such borderline
-        observations will be discarded. The new duration of the annotation will
-        be `trim_end - trim_start`. Note that if the range defined by
-        [`start_time`, `end_time`] doesn't intersect with the original time
-        range spanned by the annotation the resulting annotation will contain
-        no observations, will have the same start time as the original
-        annotation and have duration 0 (a warning will be raised in this case).
+        Trim the annotation and return as a new `Annotation` object.
+
+        Trimming will result in the new annotation only containing observations
+        that occur in the intersection of the time range spanned by the
+        annotation and the time range specified by the user. The new annotation
+        will span the time range ``[trim_start, trim_end]`` where
+        ``trim_start = max(self.time, start_time)`` and ``trim_end =
+        min(self.time + self.duration, end_time)``.
+
+        If ``strict=False`` (default) observations that start before
+        ``trim_start`` and end after it will be trimmed such that they start at
+        ``trim_start``, and similarly observations that start before
+        ``trim_end`` and end after it will be trimmed to end at ``trim_end``.
+        If ``strict=True`` such borderline observations will be discarded.
+
+        The new duration of the annotation will be ``trim_end - trim_start``.
+
+        Note that if the range defined by ``[start_time, end_time]``
+        doesn't intersect with the original time range spanned by the
+        annotation the resulting annotation will contain no observations, will
+        have the same start time as the original annotation and have duration
+        0.
+
         This function also copies over all the annotation metadata from the
         original annotation and documents the trim operation by adding a list
-        of tuples to the annotation's sandbox keyed by `sandbox.trim` which
-        documents each trim operation with a tuple `(start_time, end_time,
-        trim_start, trim_end)`.
+        of tuples to the annotation's sandbox keyed by
+        ``Annotation.sandbox.trim`` which documents each trim operation with a
+        tuple ``(start_time, end_time, trim_start, trim_end)``.
 
         Parameters
         ----------
@@ -902,32 +906,56 @@ class Annotation(JObject):
             The desired start time for the trimmed annotation.
         end_time
             The desired end time for trimmed annotation. Must be greater
-            than `start_time`.
+            than ``start_time``.
         strict : bool
-            When `False` (default) observations that lie at the boundaries of
-            the trimming range (given by [`trim_start`, `trim_end`] as
+            When ``False`` (default) observations that lie at the boundaries of
+            the trimming range (given by ``[trim_start, trim_end]`` as
             described above), i.e. observations that start before and end after
             either the trim start or end time, will have their time and/or
             duration adjusted such that only the part of the observation that
-            lies within the trim range is kept. When `True` such observations
+            lies within the trim range is kept. When ``True`` such observations
             are discarded and not included in the trimmed annotation.
 
         Returns
         -------
         ann_trimmed : jams.Annotation
             The trimmed annotation, returned as a new jams.Annotation object.
-            If the trim range specified by [`start_time`,`end_time`] does not
+            If the trim range specified by ``[start_time, end_time]`` does not
             intersect at all with the original time range of the annotation a
             warning will be issued and the returned annotation will be empty.
 
         Raises
         ------
         ParameterError
-            If end_time is not greater than start_time.
+            If ``end_time`` is not greater than ``start_time``.
 
         JamsError
             If trimming is attempted but the annotation duration
-            `self.duration` hasn't been set.
+            `Annotation.duration` hasn't been set.
+
+        Examples
+        --------
+        >>> ann = jams.Annotation(namespace='tag_open', time=2, duration=8)
+        >>> ann.append(time=2, duration=2, value='one')
+        >>> ann.append(time=4, duration=2, value='two')
+        >>> ann.append(time=6, duration=2, value='three')
+        >>> ann.append(time=7, duration=2, value='four')
+        >>> ann.append(time=8, duration=2, value='five')
+        >>> ann_trim = ann.trim(5, 8, strict=False)
+        >>> print(ann_trim.time, ann_trim.duration)
+        (5, 3)
+        >>> ann_trim.data
+              time  duration  value confidence
+        0 00:00:05  00:00:01    two       None
+        1 00:00:06  00:00:02  three       None
+        2 00:00:07  00:00:01   four       None
+        >>>
+        >>> ann_trim_strict = ann.trim(5, 8, strict=True)
+        >>> print(ann_trim_strict.time, ann_trim_strict.duration)
+        (5, 3)
+        >>> ann_trim_strict.data
+              time  duration  value confidence
+        0 00:00:06  00:00:02  three       None
 
         '''
         # Check for basic start_time and end_time validity
@@ -998,20 +1026,25 @@ class Annotation(JObject):
 
     def slice(self, start_time, end_time, strict=False):
         '''
-        Slice the annotation and return as a new Annotation object. Slicing has
-        the same effect as trimming (see `Annotation.trim` for details) except
+        Slice the annotation and return as a new `Annotation` object.
+
+        Slicing has the same effect as trimming (see `Annotation.trim`) except
         that while trimming does not modify the start time of the annotation or
         the observations it contains, slicing will set the new annotation's
-        start time to `max(0, trimmed_annotation.time - start_time)` and the
+        start time to ``max(0, trimmed_annotation.time - start_time)`` and the
         start time of its observations will be set with respect to this new
-        reference start time. This function documents the slice operation by
-        adding a list of tuples to the annotation's sandbox keyed by
-        `sandbox.slice` which documents each slice operation with a tuple
-        `(start_time, end_time, slice_start, slice_end)`, where `slice_start`
-        and `slice_end` are given by `trim_start` and `trim_end` as described
-        in `Annotation.trim`. Since slicing is implemented using trimming, the
-        trimming operation will also be documented in `Annotation.sandbox.trim`
-        as described in `Annotation.trim`.
+        reference start time.
+
+        This function documents the slice operation by adding a list of tuples
+        to the annotation's sandbox keyed by ``Annotation.sandbox.slice`` which
+        documents each slice operation with a tuple
+        ``(start_time, end_time, slice_start, slice_end)``, where
+        ``slice_start`` and ``slice_end`` are given by ``trim_start`` and
+        ``trim_end`` (see `Annotation.trim`).
+
+        Since slicing is implemented  using trimming, the trimming operation
+        will also be documented in ``Annotation.sandbox.trim`` as described in
+        `Annotation.trim`.
 
         This function is useful for example when trimming an audio file,
         allowing the user to trim the annotation while ensuring all time
@@ -1023,12 +1056,12 @@ class Annotation(JObject):
             The desired start time for slicing.
         end_time
             The desired end time for slicing. Must be greater than
-            `start_time`.
+            ``start_time``.
         strict : bool
-            When `False` (default) observations that lie at the boundaries of
+            When ``False`` (default) observations that lie at the boundaries of
             the slice (see `Annotation.trim` for details) will have their time
             and/or duration adjusted such that only the part of the observation
-            that lies within the slice range is kept. When `True` such
+            that lies within the slice range is kept. When ``True`` such
             observations are discarded and not included in the sliced
             annotation.
 
@@ -1036,6 +1069,30 @@ class Annotation(JObject):
         -------
         sliced_ann : Annotation
             The sliced annotation.
+
+        Examples
+        --------
+        >>> ann = jams.Annotation(namespace='tag_open', time=2, duration=8)
+        >>> ann.append(time=2, duration=2, value='one')
+        >>> ann.append(time=4, duration=2, value='two')
+        >>> ann.append(time=6, duration=2, value='three')
+        >>> ann.append(time=7, duration=2, value='four')
+        >>> ann.append(time=8, duration=2, value='five')
+        >>> ann_slice = ann.slice(5, 8, strict=False)
+        >>> print(ann_slice.time, ann_slice.duration)
+        (0, 3)
+        >>> ann_slice.data
+              time  duration  value confidence
+        0 00:00:00  00:00:01    two       None
+        1 00:00:01  00:00:02  three       None
+        2 00:00:02  00:00:01   four       None
+        >>>
+        >>> ann_slice_strict = ann.slice(5, 8, strict=True)
+        >>> print(ann_slice_strict.time, ann_slice_strict.duration)
+        (0, 3)
+        >>> ann_slice_strict.data
+              time  duration  value confidence
+        0 00:00:01  00:00:02  three       None
 
         '''
         # start by trimming the annotation
@@ -1281,9 +1338,11 @@ class AnnotationArray(list):
     def trim(self, start_time, end_time, strict=False):
         '''
         Trim every annotation contained in the annotation array using
-        `Annotation.trim` (see function docstring for details about trimming)
-        and return as a new AnnotationArray (does not modify annotations in
-        the original array).
+        `Annotation.trim` and return as a new `AnnotationArray`.
+
+        See `Annotation.trim` for details about trimming. This function does
+        not modify the annotations in the original annotation array.
+
 
         Parameters
         ----------
@@ -1291,12 +1350,12 @@ class AnnotationArray(list):
             The desired start time for the trimmed annotations.
         end_time
             The desired end time for trimmed annotations. Must be greater
-            than `start_time`.
+            than ``start_time``.
         strict : bool
-            When `False` (default) observations that lie at the boundaries of
+            When ``False`` (default) observations that lie at the boundaries of
             the trimming range (see `Annotation.trim` for details) will have
             their time and/or duration adjusted such that only the part of the
-            observation that lies within the trim range is kept. When `True`
+            observation that lies within the trim range is kept. When ``True``
             such observations are discarded and not included in the trimmed
             annotation.
 
@@ -1314,9 +1373,11 @@ class AnnotationArray(list):
     def slice(self, start_time, end_time, strict=False):
         '''
         Slice every annotation contained in the annotation array using
-        `Annotation.slice` (see function docstring for details about slicing)
-        and return as a new AnnotationArray (does not modify annotations in
-        the original array).
+        `Annotation.slice`
+        and return as a new AnnotationArray
+
+        See `Annotation.slice` for details about slicing. This function does
+        not modify the annotations in the original annotation array.
 
         Parameters
         ----------
@@ -1324,12 +1385,12 @@ class AnnotationArray(list):
             The desired start time for slicing.
         end_time
             The desired end time for slicing. Must be greater than
-            `start_time`.
+            ``start_time``.
         strict : bool
-            When `False` (default) observations that lie at the boundaries of
+            When ``False`` (default) observations that lie at the boundaries of
             the slicing range (see `Annotation.slice` for details) will have
             their time and/or duration adjusted such that only the part of the
-            observation that lies within the trim range is kept. When `True`
+            observation that lies within the trim range is kept. When ``True``
             such observations are discarded and not included in the sliced
             annotation.
 
@@ -1522,15 +1583,22 @@ class JAMS(JObject):
 
     def trim(self, start_time, end_time, strict=False):
         '''
-        Trim all the annotations inside the jam and return as a new JAMS
-        object. See `Annotation.trim` for details about how the annotations
-        are trimmed. This operation is also documented in the jam-level sandbox
-        with a list keyed by `sandbox.trim` containing a tuple for each
-        jam-level trim of the form `(start_time, end_time)`. This function
-        also copies over all of the file metadata from the original jam. Note:
-        trimming does not affect the duration of the jam, i.e. the value of
-        `file_metadata.duration` will be the same for the original and trimmed
-        jams.
+        Trim all the annotations inside the jam and return as a new `JAMS`
+        object.
+
+        See `Annotation.trim` for details about how the annotations
+        are trimmed.
+
+        This operation is also documented in the jam-level sandbox
+        with a list keyed by ``JAMS.sandbox.trim`` containing a tuple for each
+        jam-level trim of the form ``(start_time, end_time)``.
+
+        This function also copies over all of the file metadata from the
+        original jam.
+
+        Note: trimming does not affect the duration of the jam, i.e. the value
+        of ``JAMS.file_metadata.duration`` will be the same for the original
+        and trimmed jams.
 
         Parameters
         ----------
@@ -1538,20 +1606,20 @@ class JAMS(JObject):
             The desired start time for the trimmed annotations
         end_time
             The desired end time for trimmed annotations. Must be greater
-            than `start_time`.
+            than ``start_time``.
         strict : bool
-            When `False` (default) observations that lie at the boundaries of
+            When ``False`` (default) observations that lie at the boundaries of
             the trimming range (see `Annotation.trim` for details), will have
             their time and/or duration adjusted such that only the part of the
-            observation that lies within the trim range is kept. When `True`
+            observation that lies within the trim range is kept. When ``True``
             such observations are discarded and not included in the trimmed
             annotation.
 
         Returns
         -------
-        jam_trimmed : jams.JAMS
-            The trimmed jam with trimmed annotations, returned as a new
-            jams.JAMS object.
+        jam_trimmed : JAMS
+            The trimmed jam with trimmed annotations, returned as a new JAMS
+            object.
 
         '''
         # Make sure duration is set in file metadata
@@ -1589,16 +1657,24 @@ class JAMS(JObject):
 
     def slice(self, start_time, end_time, strict=False):
         '''
-        Slice all the annotations inside the jam and return as a new JAMS
-        object. See `Annotation.slice` for details about how the annotations
-        are sliced. This operation is also documented in the jam-level sandbox
-        with a list keyed by `sandbox.slice` containing a tuple for each
-        jam-level slice of the form `(start_time, end_time)`. Since slicing
-        is implemented using trimming, the operation will also be documented
-        in `sandbox.trim` as described in `JAMS.trim`. This function also
-        copies over all of the file metadata from the original jam. Note:
-        slicing will affect the duration of the jam, i.e. the new value of
-        `file_metadata.duration` will be `end_time - start_time`.
+        Slice all the annotations inside the jam and return as a new `JAMS`
+        object.
+
+        See `Annotation.slice` for details about how the annotations
+        are sliced.
+
+        This operation is also documented in the jam-level sandbox
+        with a list keyed by ``JAMS.sandbox.slice`` containing a tuple for each
+        jam-level slice of the form ``(start_time, end_time)``.
+
+        Since slicing is implemented using trimming, the operation will also be
+        documented in ``JAMS.sandbox.trim`` as described in `JAMS.trim`.
+
+        This function also copies over all of the file metadata from the
+        original jam.
+
+        Note: slicing will affect the duration of the jam, i.e. the new value
+        of ``JAMS.file_metadata.duration`` will be ``end_time - start_time``.
 
         Parameters
         ----------
@@ -1606,20 +1682,20 @@ class JAMS(JObject):
             The desired start time for slicing.
         end_time
             The desired end time for slicing. Must be greater than
-            `start_time`.
+            ``start_time``.
         strict : bool
-            When `False` (default) observations that lie at the boundaries of
+            When ``False`` (default) observations that lie at the boundaries of
             the slicing range (see `Annotation.slice` for details), will have
             their time and/or duration adjusted such that only the part of the
-            observation that lies within the slice range is kept. When `True`
+            observation that lies within the slice range is kept. When ``True``
             such observations are discarded and not included in the sliced
             annotation.
 
         Returns
         -------
-        jam_sliced: jams.JAMS
+        jam_sliced: JAMS
             The sliced jam with sliced annotations, returned as a new
-            jams.JAMS object.
+            JAMS object.
 
         '''
         # Make sure duration is set in file metadata
