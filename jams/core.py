@@ -1110,9 +1110,8 @@ class Annotation(JObject):
         sliced_ann.time = max(0, sliced_ann.time - start_time)
         adjustment = ref_time - sliced_ann.time
 
-        if sliced_ann.data is not None:
-            sliced_ann.data['time'] = sliced_ann.data['time'].apply(
-                lambda x: x - pd.to_timedelta(adjustment, unit='s'))
+        sliced_ann.data['time'] = sliced_ann.data['time'].apply(
+            lambda x: x - pd.to_timedelta(adjustment, unit='s'))
 
         slice_start = ref_time
         slice_end = ref_time + sliced_ann.duration
@@ -1636,10 +1635,8 @@ class JAMS(JObject):
                 'trimming can be performed.')
 
         # Make sure start and end times are within the file start/end times
-        if (start_time < 0 or
-                start_time > float(self.file_metadata.duration) or
-                end_time < start_time or
-                end_time > float(self.file_metadata.duration)):
+        if not (0 <= start_time <= end_time <= float(
+                self.file_metadata.duration)):
             raise ParameterError(
                 'start_time and end_time must be within the original file '
                 'duration ({:f}) and end_time cannot be smaller than '
