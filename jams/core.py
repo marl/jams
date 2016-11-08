@@ -929,10 +929,6 @@ class Annotation(JObject):
         ParameterError
             If ``end_time`` is not greater than ``start_time``.
 
-        JamsError
-            If trimming is attempted but the annotation duration
-            ``Annotation.duration`` hasn't been set.
-
         Examples
         --------
         >>> ann = jams.Annotation(namespace='tag_open', time=2, duration=8)
@@ -963,16 +959,23 @@ class Annotation(JObject):
             raise ParameterError(
                 'end_time must be greater than start_time.')
 
-        # The annotation must have it's duration value set for trimming
+        # If the annotation does not have a set duration value, we'll assume
+        # trimming is possible (up to the user to ensure this is valid).
         if self.duration is None:
-            raise JamsError(
-                "Trimming cannot be performed if the annotation's duration is "
-                "not set (i.e. is None).")
+            orig_time = start_time
+            orig_duration = end_time - start_time
+            warnings.warn(
+                "Annotation.duration is not defined, cannot check for temporal "
+                "intersection, assuming the annotation is valid between "
+                "start_time and end_time.")
+        else:
+            orig_time = self.time
+            orig_duration = self.duration
 
         # Check whether there is intersection between the trim range and
         # annotation: if not raise a warning and set trim_start and trim_end
         # appropriately.
-        if start_time > (self.time + self.duration) or (end_time < self.time):
+        if start_time > (orig_time + orig_duration) or (end_time < orig_time):
             warnings.warn(
                 'Time range defined by [start_time,end_time] does not '
                 'intersect with the time range spanned by this annotation, '
@@ -981,8 +984,8 @@ class Annotation(JObject):
             trim_end = trim_start
         else:
             # Determine new range
-            trim_start = max(self.time, start_time)
-            trim_end = min(self.time + self.duration, end_time)
+            trim_start = max(orig_time, start_time)
+            trim_end = min(orig_time + orig_duration, end_time)
 
         # Create new annotation with same namespace/metadata
         ann_trimmed = Annotation(

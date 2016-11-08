@@ -738,9 +738,36 @@ def test_annotation_trim_bad_params():
     ann = jams.Annotation('tag_open')
     __test_error(ann, 5, 3)
 
-    # ann.duration must be set prior to trim
+
+def test_annotation_trim_no_duration():
+    # When ann.duration is not set prior to trim should raise warning
+    ann = jams.Annotation('tag_open')
     ann.duration = None
-    __test_error(ann, 3, 5)
+
+    clean_warning_registry()
+    with warnings.catch_warnings(record=True) as out:
+        ann_trim = ann.trim(3, 5)
+
+    assert len(out) > 0
+    assert out[0].category is UserWarning
+    assert 'annotation.duration is not defined' in str(out[0].message).lower()
+
+    # When duration is not defined trim should keep all observations in the
+    # user-specified trim range.
+    namespace = 'tag_open'
+    ann = jams.Annotation(namespace)
+    ann.time = 100
+    ann.duration = None
+    ann.append(time=5, duration=2, value='one')
+    ann_trim = ann.trim(5, 8)
+
+    expected_data = dict(time=[5.0],
+                         duration=[2.0],
+                         value=['one'],
+                         confidence=[None])
+    expected_ann = jams.Annotation(namespace, data=expected_data, time=5.0,
+                                   duration=3.0)
+    assert ann_trim.data.equals(expected_ann.data)
 
 
 def test_annotation_trim_no_overlap():
