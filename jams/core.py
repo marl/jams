@@ -918,7 +918,7 @@ class Annotation(JObject):
 
         Returns
         -------
-        ann_trimmed : jams.Annotation
+        ann_trimmed : Annotation
             The trimmed annotation, returned as a new jams.Annotation object.
             If the trim range specified by ``[start_time, end_time]`` does not
             intersect at all with the original time range of the annotation a
@@ -931,7 +931,7 @@ class Annotation(JObject):
 
         JamsError
             If trimming is attempted but the annotation duration
-            `Annotation.duration` hasn't been set.
+            ``Annotation.duration`` hasn't been set.
 
         Examples
         --------
@@ -1017,10 +1017,12 @@ class Annotation(JObject):
 
         if 'trim' not in ann_trimmed.sandbox.keys():
             ann_trimmed.sandbox.update(
-                trim=[(start_time, end_time, trim_start, trim_end)])
+                trim=[{'start_time': start_time, 'end_time': end_time,
+                       'trim_start': trim_start, 'trim_end': trim_end}])
         else:
             ann_trimmed.sandbox.trim.append(
-                (start_time, end_time, trim_start, trim_end))
+                {'start_time': start_time, 'end_time': end_time,
+                 'trim_start': trim_start, 'trim_end': trim_end})
 
         return ann_trimmed
 
@@ -1114,10 +1116,12 @@ class Annotation(JObject):
 
         if 'slice' not in sliced_ann.sandbox.keys():
             sliced_ann.sandbox.update(
-                slice=[(start_time, end_time, slice_start, slice_end)])
+                slice=[{'start_time': start_time, 'end_time': end_time,
+                        'slice_start': slice_start, 'slice_end': slice_end}])
         else:
             sliced_ann.sandbox.slice.append(
-                (start_time, end_time, slice_start, slice_end))
+                {'start_time': start_time, 'end_time': end_time,
+                 'slice_start': slice_start, 'slice_end': slice_end})
 
         return sliced_ann
 
@@ -1649,9 +1653,11 @@ class JAMS(JObject):
 
         # Document jam-level trim in top level sandbox
         if 'trim' not in jam_trimmed.sandbox.keys():
-            jam_trimmed.sandbox.update(trim=[(start_time, end_time)])
+            jam_trimmed.sandbox.update(
+                trim=[{'start_time': start_time, 'end_time': end_time}])
         else:
-            jam_trimmed.sandbox.trim.append((start_time, end_time))
+            jam_trimmed.sandbox.trim.append(
+                {'start_time': start_time, 'end_time': end_time})
 
         return jam_trimmed
 
@@ -1728,9 +1734,11 @@ class JAMS(JObject):
 
         # Document jam-level trim in top level sandbox
         if 'slice' not in jam_sliced.sandbox.keys():
-            jam_sliced.sandbox.update(slice=[(start_time, end_time)])
+            jam_sliced.sandbox.update(
+                slice=[{'start_time': start_time, 'end_time': end_time}])
         else:
-            jam_sliced.sandbox.slice.append((start_time, end_time))
+            jam_sliced.sandbox.slice.append(
+                {'start_time': start_time, 'end_time': end_time})
 
         return jam_sliced
 

@@ -778,7 +778,8 @@ def test_annotation_trim():
 
     assert ann_trim.time == 8
     assert ann_trim.duration == 4
-    assert ann_trim.sandbox.trim == [(8, 12, 8, 12)]
+    assert ann_trim.sandbox.trim == [{'start_time': 8, 'end_time': 12,
+                                      'trim_start': 8, 'trim_end': 12}]
     assert ann_trim.namespace == ann.namespace
     assert ann_trim.annotation_metadata == ann.annotation_metadata
 
@@ -795,7 +796,8 @@ def test_annotation_trim():
 
     assert ann_trim.time == 8
     assert ann_trim.duration == 4
-    assert ann_trim.sandbox.trim == [(8, 12, 8, 12)]
+    assert ann_trim.sandbox.trim == [{'start_time': 8, 'end_time': 12,
+                                      'trim_start': 8, 'trim_end': 12}]
     assert ann_trim.namespace == ann.namespace
     assert ann_trim.annotation_metadata == ann.annotation_metadata
 
@@ -811,7 +813,8 @@ def test_annotation_trim():
 
     assert ann_trim.time == 5
     assert ann_trim.duration == 3
-    assert ann_trim.sandbox.trim == [(0, 8, 5, 8)]
+    assert ann_trim.sandbox.trim == [{'start_time': 0, 'end_time': 8,
+                                      'trim_start': 5, 'trim_end': 8}]
     assert ann_trim.namespace == ann.namespace
     assert ann_trim.annotation_metadata == ann.annotation_metadata
 
@@ -828,7 +831,8 @@ def test_annotation_trim():
 
     assert ann_trim.time == 5
     assert ann_trim.duration == 3
-    assert ann_trim.sandbox.trim == [(0, 8, 5, 8)]
+    assert ann_trim.sandbox.trim == [{'start_time': 0, 'end_time': 8,
+                                      'trim_start': 5, 'trim_end': 8}]
     assert ann_trim.namespace == ann.namespace
     assert ann_trim.annotation_metadata == ann.annotation_metadata
 
@@ -847,7 +851,8 @@ def test_annotation_trim():
 
     assert ann_trim.time == 8
     assert ann_trim.duration == 7
-    assert ann_trim.sandbox.trim == [(8, 20, 8, 15)]
+    assert ann_trim.sandbox.trim == [{'start_time': 8, 'end_time': 20,
+                                      'trim_start': 8, 'trim_end': 15}]
     assert ann_trim.namespace == ann.namespace
     assert ann_trim.annotation_metadata == ann.annotation_metadata
 
@@ -864,7 +869,8 @@ def test_annotation_trim():
 
     assert ann_trim.time == 8
     assert ann_trim.duration == 7
-    assert ann_trim.sandbox.trim == [(8, 20, 8, 15)]
+    assert ann_trim.sandbox.trim == [{'start_time': 8, 'end_time': 20,
+                                      'trim_start': 8, 'trim_end': 15}]
     assert ann_trim.namespace == ann.namespace
     assert ann_trim.annotation_metadata == ann.annotation_metadata
 
@@ -881,7 +887,9 @@ def test_annotation_trim():
     ann_trim = ann.trim(0, 10, strict=False).trim(8, 20, strict=False)
     assert ann_trim.time == 8
     assert ann_trim.duration == 2
-    assert ann_trim.sandbox.trim == [(0, 10, 5, 10), (8, 20, 8, 10)]
+    assert ann_trim.sandbox.trim == (
+        [{'start_time': 0, 'end_time': 10, 'trim_start': 5, 'trim_end': 10},
+         {'start_time': 8, 'end_time': 20, 'trim_start': 8, 'trim_end': 10}])
     assert ann_trim.namespace == ann.namespace
     assert ann_trim.annotation_metadata == ann.annotation_metadata
 
@@ -898,7 +906,10 @@ def test_annotation_trim():
     ann_trim = ann.trim(0, 10, strict=True).trim(8, 20, strict=True)
     assert ann_trim.time == 8
     assert ann_trim.duration == 2
-    assert ann_trim.sandbox.trim == [(0, 10, 5, 10), (8, 20, 8, 10)]
+    # assert ann_trim.sandbox.trim == [(0, 10, 5, 10), (8, 20, 8, 10)]
+    assert ann_trim.sandbox.trim == (
+        [{'start_time': 0, 'end_time': 10, 'trim_start': 5, 'trim_end': 10},
+         {'start_time': 8, 'end_time': 20, 'trim_start': 8, 'trim_end': 10}])
     assert ann_trim.namespace == ann.namespace
     assert ann_trim.annotation_metadata == ann.annotation_metadata
 
@@ -944,7 +955,7 @@ def test_jams_trim():
         assert ann.data.equals(ann_trim.data)
 
     assert jam_trim.file_metadata.duration == jam.file_metadata.duration
-    assert jam_trim.sandbox.trim == [(0, 10)]
+    assert jam_trim.sandbox.trim == [{'start_time': 0, 'end_time': 10}]
 
     # Multiple trims
     jam_trim = jam.trim(0, 10).trim(8, 10)
@@ -953,7 +964,8 @@ def test_jams_trim():
     for ann in jam_trim.annotations:
         assert ann.data.equals(ann_trim.data)
 
-    assert jam_trim.sandbox.trim == [(0, 10), (8, 10)]
+    assert jam_trim.sandbox.trim == (
+        [{'start_time': 0, 'end_time': 10}, {'start_time': 8, 'end_time': 10}])
 
     # Make sure file metadata copied over correctly
     assert jam_trim.file_metadata == jam.file_metadata
@@ -979,7 +991,8 @@ def test_annotation_slice():
     expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
                                    duration=2.0)
     assert ann_slice.data.equals(expected_ann.data)
-    assert ann_slice.sandbox.slice == [(8, 10, 8, 10)]
+    assert ann_slice.sandbox.slice == (
+        [{'start_time': 8, 'end_time': 10, 'slice_start': 8, 'slice_end': 10}])
 
     # Slice out range that's partially inside the time range spanned by the
     # annotation (starts BEFORE annotation starts)
@@ -992,7 +1005,8 @@ def test_annotation_slice():
     expected_ann = jams.Annotation(namespace, data=expected_data, time=2.0,
                                    duration=5.0)
     assert ann_slice.data.equals(expected_ann.data)
-    assert ann_slice.sandbox.slice == [(3, 10, 5, 10)]
+    assert ann_slice.sandbox.slice == (
+        [{'start_time': 3, 'end_time': 10, 'slice_start': 5, 'slice_end': 10}])
 
     # Slice out range that's partially inside the time range spanned by the
     # annotation (starts AFTER annotation starts)
@@ -1005,7 +1019,8 @@ def test_annotation_slice():
     expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
                                    duration=2.0)
     assert ann_slice.data.equals(expected_ann.data)
-    assert ann_slice.sandbox.slice == [(8, 20, 8, 15)]
+    assert ann_slice.sandbox.slice == (
+        [{'start_time': 8, 'end_time': 20, 'slice_start': 8, 'slice_end': 15}])
 
     # Multiple slices
     ann_slice = ann.slice(0, 10).slice(8, 10)
@@ -1018,7 +1033,9 @@ def test_annotation_slice():
                                    duration=2.0)
     assert ann_slice.data.equals(expected_ann.data)
     print(ann_slice.sandbox.slice)
-    assert ann_slice.sandbox.slice == [(0, 10, 5, 10), (8, 10, 8, 10)]
+    assert ann_slice.sandbox.slice == (
+        [{'start_time': 0, 'end_time': 10, 'slice_start': 5, 'slice_end': 10},
+         {'start_time': 8, 'end_time': 10, 'slice_start': 8, 'slice_end': 10}])
 
 
 def test_jams_slice():
@@ -1057,7 +1074,7 @@ def test_jams_slice():
         assert ann.data.equals(ann_slice.data)
 
     assert jam_slice.file_metadata.duration == 10
-    assert jam_slice.sandbox.slice == [(0, 10)]
+    assert jam_slice.sandbox.slice == [{'start_time': 0, 'end_time': 10}]
 
     # Multiple trims
     jam_slice = jam.slice(0, 10).slice(8, 10)
@@ -1066,7 +1083,8 @@ def test_jams_slice():
     for ann in jam_slice.annotations:
         assert ann.data.equals(ann_slice.data)
 
-    assert jam_slice.sandbox.slice == [(0, 10), (8, 10)]
+    assert jam_slice.sandbox.slice == (
+        [{'start_time': 0, 'end_time': 10}, {'start_time': 8, 'end_time': 10}])
 
     # Make sure file metadata copied over correctly (except for duration)
     orig_metadata = dict(jam.file_metadata)
