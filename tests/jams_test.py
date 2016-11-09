@@ -759,7 +759,14 @@ def test_annotation_trim_no_duration():
     ann.time = 100
     ann.duration = None
     ann.append(time=5, duration=2, value='one')
-    ann_trim = ann.trim(5, 8)
+
+    clean_warning_registry()
+    with warnings.catch_warnings(record=True) as out:
+        ann_trim = ann.trim(5, 8)
+
+    assert len(out) > 0
+    assert out[0].category is UserWarning
+    assert 'annotation.duration is not defined' in str(out[0].message).lower()
 
     expected_data = dict(time=[5.0],
                          duration=[2.0],
@@ -978,9 +985,9 @@ def test_annotation_trim_multiple():
     assert ann_trim.data.equals(expected_ann.data)
 
 
-def test_jams_trim():
-
-    @raises(jams.ParameterError, jams.JamsError)
+def test_jams_trim_no_duration():
+    # If file duration not set, can't trim.
+    @raises(jams.JamsError)
     def __test_error(jam, start_time, end_time, strict=False):
         return jam.trim(start_time, end_time, strict=strict)
 
@@ -988,15 +995,29 @@ def test_jams_trim():
     jam = jams.JAMS()
     __test_error(jam, 0, 1)
 
+
+def test_jams_trim_bad_params():
+    # If trim parameters aren't contained in file's duration, or if end time is
+    # smaller than start time, can't trim.
+    @raises(jams.ParameterError)
+    def __test_error(jam, start_time, end_time, strict=False):
+        return jam.trim(start_time, end_time, strict=strict)
+
+    jam = jams.JAMS()
     jam.file_metadata.duration = 15
 
     # Can only trim if values are within time range spanned by jam and end_time
     # > start_time
     trim_times = [(-5, -1), (-5, 10), (-5, 20), (5, 20), (18, 20), (10, 8)]
     for tt in trim_times:
-        __test_error(jam, *tt)
+        yield __test_error, jam, tt[0], tt[1]
 
+
+def test_jams_trim_valid():
     # For a valid scenario, ensure everything behaves as expected
+    jam = jams.JAMS()
+    jam.file_metadata.duration = 15
+
     namespace = 'tag_open'
     data = dict(time=[5.0, 5.0, 10.0],
                 duration=[2.0, 4.0, 4.0],
@@ -1113,7 +1134,7 @@ def test_jams_slice():
     # > start_time
     slice_times = [(-5, -1), (-5, 10), (-5, 20), (5, 20), (18, 20), (10, 8)]
     for tt in slice_times:
-        __test_error(jam, *tt)
+        yield __test_error, jam, tt[0], tt[1]
 
     # For a valid scenario, ensure everything behaves as expected
     namespace = 'tag_open'
