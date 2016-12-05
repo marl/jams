@@ -119,6 +119,14 @@ def test_sandbox():
         eq_(value, J[key])
 
 
+def test_sandbox_contains():
+    d = dict(foo=5, bar=9)
+    S = jams.Sandbox(**d)
+
+    for key in d:
+        assert key in S
+
+
 # JamsFrame
 
 def test_jamsframe_fields():

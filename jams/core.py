@@ -271,6 +271,9 @@ class JObject(object):
                                   .format(name, props.keys()))
         self.__dict__[name] = value
 
+    def __contains__(self, key):
+        return key in self.__dict__
+
     def __len__(self):
         return len(self.keys())
 
