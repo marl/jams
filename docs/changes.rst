@@ -1,6 +1,35 @@
 Changes
 =======
 
+v0.2.2
+------
+- added ``__contains__`` method to ``JObject``
+  (`PR #139 <https://github.com/marl/jams/pull/139`_).
+- Implemented ``JAMS.trim()`` method
+  (`PR #136 <https://github.com/marl/jams/pull/136`_).
+- Updates to the SALAMI tag namespaces
+  (`PR #134 <https://github.com/marl/jams/pull/134`_).
+- added `infer_duration` flag to ``import_lab``
+  (`PR #125 <https://github.com/marl/jams/pull/125`_).
+- namespace conversion validates input
+  (`PR #123 <https://github.com/marl/jams/pull/123`_).
+- Refactored the ``pitch`` namespaces
+  (`PR #121 <https://github.com/marl/jams/pull/121`_).
+- Fancy indexing for annotation arrays
+  (`PR #120 <https://github.com/marl/jams/pull/120`_).
+- ``jams.schema.values`` function to access enumerated types
+  (`PR #119 <https://github.com/marl/jams/pull/119`_).
+- ``jams.display`` submodule
+  (`PR #115 <https://github.com/marl/jams/pull/115`_).
+- support for `mir_eval >= 0.3`
+  (`PR #106 <https://github.com/marl/jams/pull/106`_).
+- Automatic conversion between namespaces
+  (`PR #105 <https://github.com/marl/jams/pull/105`_).
+- Fixed a type error in ``jams_to_lab``
+  (`PR #94 <https://github.com/marl/jams/pull/94`_).
+- ``jams.sonify`` module for sonification
+  (`PR #91 <https://github.com/marl/jams/pull/91`_).
+
 v0.2.1
 ------
 New features

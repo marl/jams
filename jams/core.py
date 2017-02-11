@@ -1093,7 +1093,7 @@ class Annotation(JObject):
 
         See Also
         --------
-        `Annotation.trim`
+        Annotation.trim
 
         Examples
         --------

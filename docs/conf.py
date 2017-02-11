@@ -41,13 +41,13 @@ autosummary_generate = glob.glob('*.rst')
 
 numpydoc_show_class_members = False
 
-intersphinx_mapping = {'numpy': ('http://docs.scipy.org/doc/numpy/', None),
-                       'np': ('http://docs.scipy.org/doc/numpy/', None),
-                       'pandas': ('http://pandas.pydata.org/pandas-docs/dev', None),
-                       'pd': ('http://pandas.pydata.org/pandas-docs/dev', None),
-                       'mir_eval': ('http://craffel.github.io/mir_eval/', None),
+intersphinx_mapping = {'numpy': ('https://docs.scipy.org/doc/numpy/', None),
+                       'np': ('https://docs.scipy.org/doc/numpy/', None),
+                       'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
+                       'pd': ('http://pandas.pydata.org/pandas-docs/stable/', None),
+                       'mir_eval': ('https://craffel.github.io/mir_eval/', None),
                        'json': ('https://docs.python.org/', None),
-                       'jsonschema': ('https://python-jsonschema.readthedocs.org/en/latest/', None)}
+                       'jsonschema': ('https://python-jsonschema.readthedocs.io/en/latest/', None)}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

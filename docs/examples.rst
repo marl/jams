@@ -32,7 +32,7 @@ The following script illustrates how to evaluate one JAMS annotation object agai
 built-in `eval` submodule to wrap `mir_eval <https://craffel.github.io/mir_eval>`_.
 
 Given two jams files, say, `reference.jams` and `estimate.jams`, the script first loads them as objects
-(``j_ref`` and ``j_est``, respectively).  It then uses the :ref:`jams.JAMS.search` method to locate all
+(``j_ref`` and ``j_est``, respectively).  It then uses the `JAMS.search` method to locate all
 annotations of namespace ``"beat"``.  If no matching annotations are found, an empty list is returned.
 
 In this example, we are assuming that each JAMS file contains only a
@@ -40,7 +40,7 @@ single annotation of interest, so the first result is taken by indexing the resu
 may want to use `annotation_metadata` to select a specific annotation from the JAMS object, if multiple are
 present.)
 
-Finally, the two annotations are compared by calling :ref:`jams.eval.beat`, which returns an ordered
+Finally, the two annotations are compared by calling `jams.eval.beat`, which returns an ordered
 dictionary of evaluation metrics for the annotations in question.
 
 example_eval.py
