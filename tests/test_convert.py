@@ -26,10 +26,10 @@ def test_bad_sources():
     def __test(ann, target):
         jams.convert(ann, target)
 
-
     ann = jams.Annotation(namespace='vector')
     for target in ['pitch_hz', 'pitch_midi', 'segment_open', 'tag_open', 'beat', 'chord']:
         yield __test, ann, target
+
 
 def test_noop():
 
