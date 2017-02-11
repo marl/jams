@@ -14,6 +14,11 @@ from jams import core, util
 import six
 
 
+def srand(seed=628318530):
+    np.random.seed(seed)
+    pass
+
+
 def test_import_lab():
     # Test a lab-file import
     labs = [r'''1.0 1

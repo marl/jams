@@ -6,6 +6,9 @@ import numpy as np
 from nose.tools import raises
 import jams
 
+from util_test import srand
+
+
 # Beat tracking
 def create_annotation(values, namespace='beat', offset=0.0, duration=1, confidence=1):
     ann = jams.Annotation(namespace=namespace)
@@ -163,6 +166,8 @@ def test_tempo_invalid():
 # Melody
 def test_melody_valid():
 
+    srand()
+
     f1 = np.linspace(110.0, 440.0, 10)
     v1 = np.sign(np.random.randn(len(f1)))
     v2 = np.sign(np.random.randn(len(f1)))
@@ -180,6 +185,8 @@ def test_melody_valid():
     jams.eval.melody(ref_ann, est_ann)
 
 def test_melody_invalid():
+
+    srand()
 
     f1 = np.linspace(110.0, 440.0, 10)
     v1 = np.sign(np.random.randn(len(f1)))

@@ -11,6 +11,8 @@ from jams import SchemaError
 from jams import Annotation
 import pandas as pd
 
+from util_test import srand
+
 
 def test_ns_time_valid():
 
@@ -325,6 +327,8 @@ def test_ns_pitch_midi_invalid():
 
 def test_ns_contour_valid():
 
+    srand()
+
     ann = Annotation(namespace='pitch_contour')
 
     seq_len = 21
@@ -343,6 +347,8 @@ def test_ns_contour_valid():
     ann.validate()
 
 def test_ns_contour_invalid():
+
+    srand()
 
     ann = Annotation(namespace='pitch_contour')
 
