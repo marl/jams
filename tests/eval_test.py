@@ -27,16 +27,16 @@ def create_annotation(values, namespace='beat', offset=0.0, duration=1, confiden
 
     return ann
 
-def test_beat_valid():
+def test_chord_valid():
 
-    ref_ann = create_annotation(values=np.arange(10) % 4 + 1.,
-                                namespace='beat')
+    ref_ann = create_annotation(values=['C', 'D', 'E', 'F'],
+                                namespace='chord')
 
-    est_ann = create_annotation(values=np.arange(9) % 4 + 1.,
-                                namespace='beat',
+    est_ann = create_annotation(values=['G', 'Cmin', 'D', 'D', 'D'],
+                                namespace='chord',
                                 offset=0.01)
 
-    jams.eval.beat(ref_ann, est_ann)
+    jams.eval.chord(ref_ann, est_ann)
 
 def test_beat_invalid():
 

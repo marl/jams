@@ -43,6 +43,7 @@ import six
 import warnings
 import contextlib
 import gzip
+import copy
 
 from .version import version as __VERSION__
 from . import schema
@@ -708,6 +709,18 @@ class JamsFrame(pd.DataFrame):
         duration = timedelta_to_float(self.duration.values)
 
         return np.vstack([times, times + duration]).T, list(self.value)
+
+    def __deepcopy__(self, memo):
+        '''Explicit deep-copy implementation'''
+        jf = JamsFrame()
+        for field in self.fields():
+            if len(self[field]):
+                jf[field] = copy.deepcopy(self[field])
+            else:
+                jf[field] = []
+
+        jf.dense = copy.deepcopy(self.dense)
+        return jf
 
 
 class Annotation(JObject):
