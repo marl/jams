@@ -1834,7 +1834,7 @@ def match_query(string, query):
     if six.callable(query):
         return query(string)
 
-    elif isinstance(query, six.string_types):
+    elif isinstance(query, six.string_types) and isinstance(string, six.string_types):
         return re.match(query, string) is not None
 
     else:
