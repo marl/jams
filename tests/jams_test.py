@@ -615,6 +615,8 @@ def test_jams_search():
     fn = 'fixtures/valid.jams'
     jam = jams.load(fn)
 
+    jam.annotations[0].sandbox.foo = None
+
     yield __test, jam, dict(corpus='SMC_MIREX'), jam.annotations
     yield __test, jam, dict(), []
     yield __test, jam, dict(namespace='beat'), jam.annotations[0:1]
@@ -622,6 +624,7 @@ def test_jams_search():
     yield __test, jam, dict(namespace='segment_tut'), jams.AnnotationArray()
     yield __test, jam.file_metadata, dict(duration=40.0), True
     yield __test, jam.file_metadata, dict(duration=39.0), False
+    yield __test, jam, dict(foo='bar'), jams.AnnotationArray()
 
 
 def test_jams_validate_good():
