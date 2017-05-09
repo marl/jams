@@ -1849,7 +1849,7 @@ def serialize_obj(obj):
     - lists are recursively serialized element-wise
 
     '''
-    if isinstance(obj, pd.tslib.Timedelta):
+    if isinstance(obj, pd.Timedelta):
         return obj.total_seconds()
 
     elif isinstance(obj, np.ndarray):
