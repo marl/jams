@@ -26,7 +26,8 @@ Object reference
     AnnotationMetadata
     Curator
     Annotation
-    JamsFrame
+    AnnotationData
+    Observation
     Sandbox
     JObject
 
@@ -34,6 +35,8 @@ Object reference
 
 import json
 import jsonschema
+from collections import namedtuple
+from sortedcontainers import SortedListWithKey
 
 import numpy as np
 import pandas as pd
@@ -53,7 +56,8 @@ from .exceptions import JamsError, SchemaError, ParameterError
 __all__ = ['load',
            'JObject', 'Sandbox', 'JamsFrame',
            'Annotation', 'Curator', 'AnnotationMetadata',
-           'FileMetadata', 'AnnotationArray', 'JAMS']
+           'FileMetadata', 'AnnotationArray', 'JAMS',
+           'AnnotationData', 'Observation']
 
 
 @contextlib.contextmanager
@@ -723,6 +727,113 @@ class JamsFrame(pd.DataFrame):
         return jf
 
 
+Observation = namedtuple('Observation',
+                         ['time', 'duration', 'value', 'confidence'])
+'''Core observation type: (time, duration, value, confidence).'''
+
+
+class AnnotationData(object):
+
+    __dense = False
+
+    def __init__(self):
+        self.obs = SortedListWithKey(key=self._key)
+
+    @classmethod
+    def _key(cls, obs):
+        return obs.time
+
+    @property
+    def dense(self):
+        '''Boolean to determine whether the encoding is dense or sparse.
+
+        Returns
+        -------
+        dense : bool
+            `True` if the data should be encoded densely
+            `False` otherwise
+        '''
+        return self.__dense
+
+    @dense.setter
+    def dense(self, value):
+        '''Setter for dense'''
+        self.__dense = value
+
+    def add_observation(self, time=None, duration=None, value=None,
+                        confidence=None):
+        idx = self.obs.bisect_key(time)
+        self.obs.insert(idx, Observation(time=time,
+                                         duration=duration,
+                                         value=value,
+                                         confidence=confidence))
+
+    def append_records(self, records):
+
+        for obs in records:
+            self.add_observation(**obs)
+
+    def append_columns(self, columns):
+
+        self.append_records(six.moves.zip(columns['time'],
+                                          columns['duration'],
+                                          columns['value'],
+                                          columns['confidence']))
+
+    def to_interval_values(self):
+        '''Extract observation data in a `mir_eval`-friendly format.
+
+        Returns
+        -------
+        intervals : np.ndarray [shape=(n, 2), dtype=float]
+            Start- and end-times of all valued intervals
+
+            `intervals[i, :] = [time[i], time[i] + duration[i]]`
+
+        labels : list
+            List view of value field.
+        '''
+        ints, vals = [], []
+        for obs in self.obs:
+            ints.append([obs.time, obs.time + obs.duration])
+            vals.append(obs.value)
+
+        return np.array(ints), vals
+
+    @property
+    def __json__(self):
+        '''JSON encoding attribute'''
+
+        if self.dense:
+            times, durations, values, confidences = [], [], [], []
+            for (t, d, v, c) in self.obs:
+                times.append(t)
+                durations.append(d)
+                values.append(v)
+                confidences.append(c)
+
+            return dict(time=times,
+                        duration=durations,
+                        value=values,
+                        confidence=confidences)
+        else:
+            return [dict(time=o.time,
+                         duration=o.duration,
+                         value=o.value,
+                         confidence=o.confidence) for o in self.obs]
+
+    def __len__(self):
+        return len(self.obs)
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and
+                self.obs == other.obs)
+
+    def __repr__(self):
+        return '<{}: {:d} observations>'.format(self.__class__.__name__,
+                                                len(self))
+
+
 class Annotation(JObject):
     """Annotation base class."""
 
@@ -762,20 +873,23 @@ class Annotation(JObject):
 
         self.annotation_metadata = AnnotationMetadata(**annotation_metadata)
 
-        if data is None:
-            self.data = JamsFrame()
-        else:
-            self.data = JamsFrame.from_dict(data)
+        self.namespace = namespace
+
+        self.data = AnnotationData()
+
+        # Set the data export coding to match the namespace
+        self.data.dense = schema.is_dense(self.namespace)
+
+        if data is not None:
+            if isinstance(data, dict):
+                self.data.append_columns(data)
+            else:
+                self.data.append_records(data)
 
         if sandbox is None:
             sandbox = Sandbox()
 
         self.sandbox = Sandbox(**sandbox)
-
-        self.namespace = namespace
-
-        # Set the data export coding to match the namespace
-        self.data.dense = schema.is_dense(self.namespace)
 
         self.time = time
         self.duration = duration
@@ -820,13 +934,7 @@ class Annotation(JObject):
             return False
 
         for key in self.__dict__:
-            value = True
-            if key == 'data':
-                value = self.__dict__[key].equals(other.__dict__[key])
-            else:
-                value = self.__dict__[key] == other.__dict__[key]
-
-            if not value:
+            if self.__dict__[key] != other.__dict__[key]:
                 return False
 
         return True
@@ -1016,10 +1124,10 @@ class Annotation(JObject):
         # We do this rather than copying and directly manipulating the
         # annotation' data frame (which might be faster) since this way trim is
         # independent of the internal data representation.
-        for idx, obs in self.data.iterrows():
+        for obs in self.data.obs:
 
-            obs_start = obs['time'].total_seconds()
-            obs_end = obs_start + obs['duration'].total_seconds()
+            obs_start = obs.time
+            obs_end = obs_start + obs.duration
 
             if obs_start < trim_end and obs_end > trim_start:
 
@@ -1031,8 +1139,8 @@ class Annotation(JObject):
                         (new_start == obs_start and new_end == obs_end)):
                     ann_trimmed.append(time=new_start,
                                        duration=new_duration,
-                                       value=obs['value'],
-                                       confidence=obs['confidence'])
+                                       value=obs.value,
+                                       confidence=obs.confidence)
 
         if 'trim' not in ann_trimmed.sandbox.keys():
             ann_trimmed.sandbox.update(
