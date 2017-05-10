@@ -613,6 +613,7 @@ class AnnotationData(object):
         return iter(self.obs)
 
 
+
 class Annotation(JObject):
     """Annotation base class."""
 
@@ -998,9 +999,7 @@ class Annotation(JObject):
         '''
         # start by trimming the annotation
         sliced_ann = self.trim(start_time, end_time, strict=strict)
-        raw_data = sliced_ann.data
-        sliced_ann.data = AnnotationData()
-        sliced_ann.data.dense = raw_data.dense
+        raw_data = sliced_ann.pop_data()
 
         # now adjust the start time of the annotation and the observations it
         # contains.
@@ -1030,6 +1029,21 @@ class Annotation(JObject):
                  'slice_start': slice_start, 'slice_end': slice_end})
 
         return sliced_ann
+
+    def pop_data(self):
+        '''Replace this observation's data with a fresh AnnotationData
+        object.
+
+        Returns
+        -------
+        annotation_data : jams.AnnotationData
+            The original annotation data object
+        '''
+
+        data = self.data
+        self.data = AnnotationData()
+        self.data.dense = data.dense
+        return data
 
 
 class Curator(JObject):

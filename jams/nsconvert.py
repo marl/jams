@@ -140,31 +140,11 @@ def can_convert(annotation, target_namespace):
     return False
 
 
-def pop_data(annotation):
-    '''Replace an annotation's observation data with a fresh AnnotationData
-    object.
-
-    Parameters
-    ----------
-    annotation : jams.Annotation
-
-    Returns
-    -------
-    annotation_data : jams.AnnotationData
-        The original annotation data object
-    '''
-
-    data = annotation.data
-    annotation.data = AnnotationData()
-    annotation.data.dense = data.dense
-    return data
-
-
 @_conversion('pitch_contour', 'pitch_hz')
 def pitch_hz_to_contour(annotation):
     '''Convert a pitch_hz annotation to a contour'''
     annotation.namespace = 'pitch_contour'
-    data = pop_data(annotation)
+    data = annotation.pop_data()
 
     for obs in data:
         annotation.append(time=obs.time, duration=obs.duration,
@@ -187,7 +167,7 @@ def note_midi_to_hz(annotation):
     '''Convert a pitch_midi annotation to pitch_hz'''
 
     annotation.namespace = 'note_hz'
-    data = pop_data(annotation)
+    data = annotation.pop_data()
 
     for obs in data:
         annotation.append(time=obs.time, duration=obs.duration,
@@ -203,7 +183,7 @@ def note_hz_to_midi(annotation):
 
     annotation.namespace = 'note_midi'
 
-    data = pop_data(annotation)
+    data = annotation.pop_data()
 
     for obs in data:
         annotation.append(time=obs.time, duration=obs.duration,
@@ -219,7 +199,7 @@ def pitch_midi_to_hz(annotation):
 
     annotation.namespace = 'pitch_hz'
 
-    data = pop_data(annotation)
+    data = annotation.pop_data()
 
     for obs in data:
         annotation.append(time=obs.time, duration=obs.duration,
@@ -234,7 +214,7 @@ def pitch_hz_to_midi(annotation):
     '''Convert a pitch_hz annotation to pitch_midi'''
 
     annotation.namespace = 'pitch_midi'
-    data = pop_data(annotation)
+    data = annotation.pop_data()
 
     for obs in data:
         annotation.append(time=obs.time, duration=obs.duration,
@@ -264,7 +244,7 @@ def beat_position(annotation):
     '''Convert beat_position to beat'''
 
     annotation.namespace = 'beat'
-    data = pop_data(annotation)
+    data = annotation.pop_data()
     for obs in data:
         annotation.append(time=obs.time, duration=obs.duration,
                           confidence=obs.confidence,
