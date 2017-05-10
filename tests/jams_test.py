@@ -1065,3 +1065,22 @@ def test_jams_slice():
     del slice_metadata['duration']
     assert slice_metadata == orig_metadata
     assert jam_slice.file_metadata.duration == 2
+
+
+def test_annotation_data_frame():
+    namespace = 'tag_open'
+    data = dict(time=[5.0, 5.0, 10.0],
+                duration=[2.0, 4.0, 4.0],
+                value=['one', 'two', 'three'],
+                confidence=[0.9, 0.9, 0.9])
+    ann = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
+
+    df = ann.data.to_dataframe()
+
+    eq_(list(df.columns), ['time', 'duration', 'value', 'confidence'])
+
+    for i, row in df.iterrows():
+        eq_(row.time, data['time'][i])
+        eq_(row.duration, data['duration'][i])
+        eq_(row.value, data['value'][i])
+        eq_(row.confidence, data['confidence'][i])

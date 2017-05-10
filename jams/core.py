@@ -39,6 +39,7 @@ from collections import namedtuple
 from sortedcontainers import SortedListWithKey
 
 import numpy as np
+import pandas as pd
 import os
 import re
 import six
@@ -572,6 +573,11 @@ class AnnotationData(object):
             vals.append(obs.value)
 
         return np.array(ints), vals
+
+    def to_dataframe(self):
+        return pd.DataFrame.from_records(list(self.obs),
+                                         columns=['time', 'duration',
+                                                  'value', 'confidence'])
 
     @property
     def __json__(self):
