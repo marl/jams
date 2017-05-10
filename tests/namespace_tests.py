@@ -8,8 +8,7 @@ import numpy as np
 from nose.tools import raises
 from jams import SchemaError
 
-from jams import Annotation
-import pandas as pd
+from jams import Annotation, Observation
 
 from util_test import srand
 
@@ -30,12 +29,10 @@ def test_ns_time_invalid():
     def __test(data):
         ann = Annotation(namespace='onset')
 
-        # Bypass the safety chceks in add_observation
-        ann.data.loc[0] = {'time': pd.to_timedelta(data['time'], unit='s'),
-                           'duration': pd.to_timedelta(data['duration'],
-                                                       unit='s'),
-                           'value': None,
-                           'confdence': None}
+        # Bypass the safety checks in add_observation
+        ann.data.obs.insert(0, Observation(time=data['time'],
+                                           duration=data['duration'],
+                                           value=None, confidence=None))
 
         ann.validate()
 

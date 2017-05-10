@@ -26,7 +26,9 @@ import mir_eval
 
 from .nsconvert import convert
 
-__all__ = ['beat', 'chord', 'melody', 'onset', 'segment', 'hierarchy', 'tempo', 'pattern', 'transcription']
+__all__ = ['beat', 'chord', 'melody', 'onset',
+           'segment', 'hierarchy', 'tempo',
+           'pattern', 'transcription']
 
 
 def coerce_annotation(ann, namespace):
@@ -350,11 +352,12 @@ def tempo(ref, est, **kwargs):
 
     ref = coerce_annotation(ref, 'tempo')
     est = coerce_annotation(est, 'tempo')
-    ref_tempi = ref.data['value'].values
-    ref_weight = ref.data['confidence'][0]
-    est_tempi = est.data['value'].values
+    ref_tempi = np.asarray([o.value for o in ref.data])
+    ref_weight = ref.data.obs[0].confidence
+    est_tempi = np.asarray([o.value for o in est.data])
 
     return mir_eval.tempo.evaluate(ref_tempi, ref_weight, est_tempi, **kwargs)
+
 
 # melody
 def melody(ref, est, **kwargs):

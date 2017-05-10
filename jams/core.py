@@ -1234,16 +1234,25 @@ class Annotation(JObject):
         '''
         # start by trimming the annotation
         sliced_ann = self.trim(start_time, end_time, strict=strict)
+        raw_data = sliced_ann.data
+        sliced_ann.data = AnnotationData()
+        sliced_ann.data.dense = raw_data.dense
 
         # now adjust the start time of the annotation and the observations it
         # contains.
+
+        for obs in raw_data:
+            new_time = max(0, obs.time - start_time)
+            # if obs.time > start_time,
+            #   duration doesn't change
+            # if obs.time < start_time,
+            #   duration shrinks by start_time - obs.time
+            sliced_ann.append(time=new_time,
+                              duration=obs.duration,
+                              value=obs.value,
+                              confidence=obs.confidence)
+
         ref_time = sliced_ann.time
-        sliced_ann.time = max(0, sliced_ann.time - start_time)
-        adjustment = ref_time - sliced_ann.time
-
-        sliced_ann.data['time'] = sliced_ann.data['time'].apply(
-            lambda x: x - pd.to_timedelta(adjustment, unit='s'))
-
         slice_start = ref_time
         slice_end = ref_time + sliced_ann.duration
 
