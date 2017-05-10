@@ -533,11 +533,8 @@ class AnnotationData(object):
 
     def add_observation(self, time=None, duration=None, value=None,
                         confidence=None):
-        idx = self.obs.bisect_key(time)
-        self.obs.insert(idx, Observation(time=time,
-                                         duration=duration,
-                                         value=value,
-                                         confidence=confidence))
+        self.obs.add(Observation(time=time, duration=duration,
+                                 value=value, confidence=confidence))
 
     def append_records(self, records):
 
