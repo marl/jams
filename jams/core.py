@@ -810,7 +810,7 @@ class AnnotationData(object):
             for (t, d, v, c) in self.obs:
                 times.append(t)
                 durations.append(d)
-                values.append(v)
+                values.append(serialize_obj(v))
                 confidences.append(c)
 
             return dict(time=times,
@@ -820,7 +820,7 @@ class AnnotationData(object):
         else:
             return [dict(time=o.time,
                          duration=o.duration,
-                         value=o.value,
+                         value=serialize_obj(o.value),
                          confidence=o.confidence) for o in self.obs]
 
     def __len__(self):
