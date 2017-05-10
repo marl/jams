@@ -534,11 +534,35 @@ class AnnotationData(object):
 
     def add_observation(self, time=None, duration=None, value=None,
                         confidence=None):
+        '''Add a single observation.
+
+        Parameters
+        ----------
+        time : number >= 0, required
+            The start time of this observation
+
+        duration : number >= 0, required
+            The duration of this observation
+
+        value
+            The value for the observation
+
+        confidence
+            The confidence for the observation
+        '''
         self.obs.add(Observation(time=time, duration=duration,
                                  value=value, confidence=confidence))
 
     def append_records(self, records):
+        '''Add observations from row-major storage.
 
+        This is primarily useful for deserializing sparsely packed data.
+
+        Parameters
+        ----------
+        records : iterable of dicts or Observations
+            Each element of `records` corresponds to one observation.
+        '''
         for obs in records:
             if isinstance(obs, Observation):
                 self.add_observation(**obs._asdict())
@@ -546,7 +570,17 @@ class AnnotationData(object):
                 self.add_observation(**obs)
 
     def append_columns(self, columns):
+        '''Add observations from column-major storage.
 
+        This is primarily used for deserializing densely packed data.
+
+        Parameters
+        ----------
+        columns : dict of lists
+            Keys must be `time, duration, value, confidence`,
+            and each much be a list of equal length.
+
+        '''
         self.append_records([dict(time=t, duration=d, value=v, confidence=c)
                              for (t, d, v, c)
                              in six.moves.zip(columns['time'],
@@ -575,6 +609,14 @@ class AnnotationData(object):
         return np.array(ints), vals
 
     def to_dataframe(self):
+        '''Convert this annotation to a pandas dataframe.
+
+        Returns
+        -------
+        df : pd.DataFrame
+            Columns are `time, duration, value, confidence`.
+            Each row is an observation.
+        '''
         return pd.DataFrame.from_records(list(self.obs),
                                          columns=['time', 'duration',
                                                   'value', 'confidence'])
@@ -615,6 +657,42 @@ class AnnotationData(object):
     def __iter__(self):
         return iter(self.obs)
 
+    def to_html(self):
+        '''Render this annotation list in HTML
+
+        Returns
+        -------
+        rendered : str
+            An HTML table containing this annotation's data.
+        '''
+        out = r'''<table border="1" class="dataframe">
+                    <thead>
+                        <tr style="text-align: right;">
+                            <th></th>
+                            <th>time</th>
+                            <th>duration</th>
+                            <th>value</th>
+                            <th>confidence</th>
+                        </tr>
+                    </thead>'''
+        out += r'''<tbody>'''
+        for i, o in enumerate(self.obs):
+            out += r'''<tr>
+                            <th>{:d}</th>
+                            <td>{:0.6f}</td>
+                            <td>{:0.6f}</td>
+                            <td>{:}</td>
+                            <td>{:}</td>
+                        </tr>'''.format(i,
+                                        o.time,
+                                        o.duration,
+                                        o.value,
+                                        o.confidence)
+        out += r'''</tbody></table>'''
+        return out
+
+    def _repr_html_(self):
+        return self.to_html()
 
 
 class Annotation(JObject):
