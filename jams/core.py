@@ -39,14 +39,12 @@ from collections import namedtuple
 from sortedcontainers import SortedListWithKey
 
 import numpy as np
-import pandas as pd
 import os
 import re
 import six
 import warnings
 import contextlib
 import gzip
-import copy
 
 from .version import version as __VERSION__
 from . import schema
@@ -54,7 +52,7 @@ from .exceptions import JamsError, SchemaError, ParameterError
 
 
 __all__ = ['load',
-           'JObject', 'Sandbox', 'JamsFrame',
+           'JObject', 'Sandbox',
            'Annotation', 'Curator', 'AnnotationMetadata',
            'FileMetadata', 'AnnotationArray', 'JAMS',
            'AnnotationData', 'Observation']
@@ -500,233 +498,6 @@ class Sandbox(JObject):
     pass
 
 
-class JamsFrame(pd.DataFrame):
-    '''A data-frame class for JAMS.
-
-    This automates certain niceties, such as timestamp
-    conversion and serialization.
-    '''
-
-    __dense = False
-
-    def __init__(self, data=None, index=None, columns=None, dtype=None):
-        '''Construct a new JamsFrame object.
-
-        Parameters
-        ----------
-        data
-            Optional data for the new JamsFrame, in any format supported
-            by `pandas.DataFrame.__init__`.
-
-            Fields must be `['time', 'duration', 'value', 'confidence']`.
-
-            `time` and `duration` fields must be floating point types,
-            measured in seconds.
-
-        index
-            Optional index on `data`.
-
-        columns
-        dtype
-            These parameters are ignored by JamsFrame, but are allowed
-            for API compatibility with `pandas.DataFrame`.
-
-        See Also
-        --------
-        from_dict
-        from_dataframe
-        pandas.DataFrame.__init__
-
-        '''
-        super(JamsFrame, self).__init__(data=data, index=index,
-                                        columns=self.fields())
-
-        self.time = pd.to_timedelta(self.time, unit='s')
-        self.duration = pd.to_timedelta(self.duration, unit='s')
-
-    @property
-    def dense(self):
-        '''Boolean to determine whether the encoding is dense or sparse.
-
-        Returns
-        -------
-        dense : bool
-            `True` if the data should be encoded densely
-            `False` otherwise
-        '''
-        return self.__dense
-
-    @dense.setter
-    def dense(self, value):
-        '''Setter for dense'''
-        self.__dense = value
-
-    @classmethod
-    def fields(cls):
-        '''Fields of a JamsFrame: (time, duration, value, confidence)
-
-        Returns
-        -------
-        fields : list
-            The only permissible fields for a JamsFrame:
-            `time`, `duration`, `value`, and `confidence`
-        '''
-        return ['time', 'duration', 'value', 'confidence']
-
-    @classmethod
-    def from_dict(cls, *args, **kwargs):
-        '''Construct a new JamsFrame from a dictionary or list of dictionaries.
-
-        This is analogous to pd.DataFrame.from_dict, except the returned object
-        has the type `JamsFrame`.
-
-        See Also
-        --------
-        pandas.DataFrame.from_dict
-        from_dataframe
-        '''
-        new_frame = super(JamsFrame, cls).from_dict(*args, **kwargs)
-
-        return cls.from_dataframe(new_frame)
-
-    @classmethod
-    def from_dataframe(cls, frame):
-        '''Convert a pandas DataFrame into a JamsFrame.
-
-        Note: this operation is destructive, in that the input
-        DataFrame will have its type and data altered.
-
-        Parameters
-        ----------
-        frame : pandas.DataFrame
-            The input DataFrame.  Must have the appropriate JamsFrame fields:
-            'time', 'duration', 'value', and 'confidence'.
-
-            'time' and 'duration' fields should be of type `float` and measured
-            in seconds.
-
-        Returns
-        -------
-        jams_frame : JamsFrame
-            The input `frame` modified to form a JamsFrame.
-
-        See Also
-        --------
-        from_dict
-        '''
-        # Encode time properly
-        frame.time = pd.to_timedelta(frame.time, unit='s')
-        frame.duration = pd.to_timedelta(frame.duration, unit='s')
-
-        # Properly order the columns
-        frame = frame[cls.fields()]
-
-        # Clobber the class attribute
-        frame.__class__ = cls
-        return frame
-
-    @property
-    def __json__(self):
-        '''JSON encoding attribute'''
-
-        def __recursive_simplify(D):
-            '''A simplifier for nested dictionary structures'''
-            if isinstance(D, list):
-                return [__recursive_simplify(Di) for Di in D]
-
-            dict_out = {}
-            for key, value in six.iteritems(D):
-                if isinstance(value, dict):
-                    dict_out[key] = __recursive_simplify(value)
-                else:
-                    dict_out[key] = serialize_obj(value)
-            return dict_out
-
-        # By default, we'll output a record for each row
-        # But, if the dense flag is set, we'll output the entire
-        # table as one object
-
-        orient = 'records'
-        if self.dense:
-            orient = 'list'
-
-        return __recursive_simplify(self.to_dict(orient=orient))
-
-    def add_observation(self, time=None, duration=None,
-                        value=None, confidence=None):
-        '''Add a single observation event to an existing frame.
-
-        New observations are appended to the end of the frame.
-
-        Parameters
-        ----------
-        time : float
-            The time of the new observation, in seconds
-
-        duration : float
-            The duration of the new observation, in seconds
-
-        value
-        confidence
-            The value and confidence fields of the new observation.
-            This should conform to the corresponding `namespace` of the
-            containing `Annotation` object.
-
-        Examples
-        --------
-        >>> frame = jams.JamsFrame()
-        >>> frame.add_observation(time=3, duration=1.5, value='C#')
-        >>> frame.add_observation(time=5, duration=.5, value='C#:min', confidence=.8)
-        >>> frame
-              time        duration   value confidence
-        0 00:00:03 00:00:01.500000      C#        NaN
-        1 00:00:05 00:00:00.500000  C#:min        0.8
-        '''
-
-        if time is None or not (time >= 0.0):
-            raise ParameterError('time={} must be a non-negative number'.format(time))
-
-        if duration is None or not (duration >= 0.0):
-            raise ParameterError('duration={} must be a non-negative number'.format(duration))
-
-        n = len(self)
-        self.loc[n] = {'time': pd.to_timedelta(time, unit='s'),
-                       'duration': pd.to_timedelta(duration, unit='s'),
-                       'value': value,
-                       'confidence': confidence}
-
-    def to_interval_values(self):
-        '''Extract observation data in a `mir_eval`-friendly format.
-
-        Returns
-        -------
-        intervals : np.ndarray [shape=(n, 2), dtype=float]
-            Start- and end-times of all valued intervals
-
-            `intervals[i, :] = [time[i], time[i] + duration[i]]`
-
-        labels : list
-            List view of value field.
-        '''
-
-        times = timedelta_to_float(self.time.values)
-        duration = timedelta_to_float(self.duration.values)
-
-        return np.vstack([times, times + duration]).T, list(self.value)
-
-    def __deepcopy__(self, memo):
-        '''Explicit deep-copy implementation'''
-        jf = JamsFrame()
-        for field in self.fields():
-            if len(self[field]):
-                jf[field] = copy.deepcopy(self[field])
-            else:
-                jf[field] = []
-
-        jf.dense = copy.deepcopy(self.dense)
-        return jf
-
-
 Observation = namedtuple('Observation',
                          ['time', 'duration', 'value', 'confidence'])
 '''Core observation type: (time, duration, value, confidence).'''
@@ -858,8 +629,8 @@ class Annotation(JObject):
         namespace : str
             The namespace for this annotation
 
-        data : dict or list-of-dict
-            Data for the new annotation in a format supported by `JamsFrame.from_dict`
+        data : dict of lists, list of dicts, or list of Observations
+            Data for the new annotation
 
         annotation_metadata : AnnotationMetadata (or dict), default=None.
             Metadata corresponding to this Annotation.
@@ -919,7 +690,7 @@ class Annotation(JObject):
 
         See Also
         --------
-        JamsFrame.add_observation
+        AnnotationData.add_observation
 
         Examples
         --------
@@ -935,17 +706,6 @@ class Annotation(JObject):
         '''
 
         self.data.add_observation(**kwargs)
-
-    def __eq__(self, other):
-        '''Override JObject equality to handle JamsFrames specially'''
-        if not isinstance(other, self.__class__):
-            return False
-
-        for key in self.__dict__:
-            if self.__dict__[key] != other.__dict__[key]:
-                return False
-
-        return True
 
     def validate(self, strict=True):
         '''Validate this annotation object against the JAMS schema,
@@ -1969,15 +1729,11 @@ def match_query(string, query):
 def serialize_obj(obj):
     '''Custom serialization functionality for working with advanced data types.
 
-    - Timedelta objects are converted to floats (in seconds)
     - numpy arrays are converted to lists
     - lists are recursively serialized element-wise
 
     '''
-    if isinstance(obj, pd.tslib.Timedelta):
-        return obj.total_seconds()
-
-    elif isinstance(obj, np.ndarray):
+    if isinstance(obj, np.ndarray):
         return obj.tolist()
 
     elif isinstance(obj, list):

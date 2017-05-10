@@ -6,19 +6,16 @@
 import os
 import tempfile
 import json
-import jsonschema
 import six
 import sys
 import warnings
-import numpy as np
-import pandas as pd
 
-from nose.tools import raises, eq_, nottest
+from nose.tools import raises, eq_
 
 import jams
 
 
-## Borrowed from sklearn
+# Borrowed from sklearn
 def clean_warning_registry():
     """Safe way to reset warnings """
     warnings.resetwarnings()
@@ -125,123 +122,6 @@ def test_sandbox_contains():
 
     for key in d:
         assert key in S
-
-
-# JamsFrame
-@nottest
-def test_jamsframe_fields():
-
-    eq_(jams.JamsFrame.fields(), ['time', 'duration', 'value', 'confidence'])
-
-
-@nottest
-def test_jamsframe_from_df():
-
-    df = pd.DataFrame(data=[[0.0, 1.0, 'a', 0.0],
-                            [1.0, 2.0, 'b', 0.0]],
-                      columns=['time', 'duration', 'value', 'confidence'])
-
-    jf = jams.JamsFrame.from_dataframe(df)
-
-    # 1. type check
-    assert isinstance(jf, jams.JamsFrame)
-
-    # 2. check field order
-    eq_(list(jf.keys().values),
-        jams.JamsFrame.fields())
-
-    # 3. check field types
-    assert jf['time'].dtype == np.dtype('<m8[ns]')
-    assert jf['duration'].dtype == np.dtype('<m8[ns]')
-
-    # 4. Check the values
-    eq_(list(jf['time']),
-        list(pd.to_timedelta([0.0, 1.0], unit='s')))
-    eq_(list(jf['duration']), 
-        list(pd.to_timedelta([1.0, 2.0], unit='s')))
-    eq_(list(jf['value']), ['a', 'b'])
-    eq_(list(jf['confidence']), [0.0, 0.0])
-
-
-@nottest
-def test_jamsframe_add_observation():
-    df = pd.DataFrame(data=[[0.0, 1.0, 'a', 0.0],
-                            [1.0, 2.0, 'b', 0.0]],
-                      columns=['time', 'duration', 'value', 'confidence'])
-
-    jf = jams.JamsFrame.from_dataframe(df)
-
-    jf.add_observation(time=3.0, duration=1.0, value='c', confidence=0.0)
-
-    eq_(list(jf['time']),
-        list(pd.to_timedelta([0.0, 1.0, 3.0], unit='s')))
-    eq_(list(jf['duration']), 
-        list(pd.to_timedelta([1.0, 2.0, 1.0], unit='s')))
-    eq_(list(jf['value']), ['a', 'b', 'c'])
-    eq_(list(jf['confidence']), [0.0, 0.0, 0.0])
-
-
-@nottest
-def test_jamsframe_add_observation_fail():
-
-    @raises(jams.ParameterError)
-    def __test(ann, time, duration, value, confidence):
-        ann.data.add_observation(time=time,
-                                 duration=duration,
-                                 value=value,
-                                 confidence=confidence)
-
-    ann = jams.Annotation(namespace='tag_open')
-
-    yield __test, ann, None, None, 'foo', 1
-    yield __test, ann, 0.0, None, 'foo', 1
-    yield __test, ann, None, 1.0, 'foo', 1
-
-    yield __test, ann, -1, -1, 'foo', 1
-    yield __test, ann, 0.0, -1, 'foo', 1
-    yield __test, ann, -1, 1.0, 'foo', 1
-
-
-@nottest
-def test_jamsframe_interval_values():
-
-    df = pd.DataFrame(data=[[0.0, 1.0, 'a', 0.0],
-                            [1.0, 2.0, 'b', 0.0]],
-                      columns=['time', 'duration', 'value', 'confidence'])
-
-    jf = jams.JamsFrame.from_dataframe(df)
-
-    intervals, values = jf.to_interval_values()
-
-    assert np.allclose(intervals, np.array([[0.0, 1.0], [1.0, 3.0]]))
-    eq_(values, ['a', 'b'])
-
-
-@nottest
-def test_jamsframe_serialize():
-
-    def __test(dense, data):
-        df = pd.DataFrame(data=data,
-                          columns=['time', 'duration', 'value', 'confidence'])
-
-        jf = jams.JamsFrame.from_dataframe(df)
-        jf.dense = dense
-
-        jf_s = jf.__json__
-
-        jf2 = jams.JamsFrame.from_dict(jf_s)
-
-
-        for key in jams.JamsFrame.fields():
-            eq_(list(jf[key]), list(jf2[key]))
-
-    values = [['a', 'b'], [dict(a=1), dict(b=2)]]
-
-    for value in values:
-        data = [[0.0, 1.0, value[0], 0.0],
-                [1.0, 2.0, value[1], 0.0]]
-        for dense in [False, True]:
-            yield __test, dense, data
 
 
 # Curator
