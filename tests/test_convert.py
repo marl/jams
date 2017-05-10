@@ -181,7 +181,7 @@ def test_segment_open():
     eq_(ann2.namespace, 'segment_open')
 
     # Check all else is equal
-    pdt.assert_frame_equal(ann.data, ann2.data)
+    eq_(ann.data, ann2.data)
 
 
 def test_tag_open():
@@ -197,7 +197,7 @@ def test_tag_open():
     eq_(ann2.namespace, 'tag_open')
 
     # Check all else is equal
-    pdt.assert_frame_equal(ann.data, ann2.data)
+    eq_(ann.data, ann2.data)
 
 
 def test_chord():
@@ -213,7 +213,7 @@ def test_chord():
     eq_(ann2.namespace, 'chord', ann2)
 
     # Check all else is equal
-    pdt.assert_frame_equal(ann.data, ann2.data)
+    assert ann.data == ann2.data
 
 
 def test_beat_position():
@@ -236,12 +236,12 @@ def test_beat_position():
     # Check the namespace
     eq_(ann2.namespace, 'beat')
 
-    npt.assert_allclose(ann2.data.value.values, np.arange(1, 5))
-
     # Check all else is equal
-    pdt.assert_series_equal(ann.data.time, ann2.data.time)
-    pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
-    pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
+    eq_(len(ann), len(ann2))
+    for obs1, obs2 in zip(ann.data, ann2.data):
+        eq_(obs1.time, obs2.time)
+        eq_(obs1.duration, obs2.duration)
+        eq_(obs1.confidence, obs2.confidence)
 
 
 def test_can_convert_equal():

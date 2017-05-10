@@ -45,12 +45,13 @@ def test_import_lab():
         _, ann = util.import_lab(ns, six.StringIO(lab),
                                  infer_duration=infer_duration)
 
-        assert np.allclose(core.timedelta_to_float(ann.data['time'].values),
-                           ints[:, 0])
-        assert np.allclose(core.timedelta_to_float(ann.data['duration'].values),
-                           ints[:, 1] - ints[:, 0])
-        for y1, y2 in zip(list(ann.data['value'].values), y):
-            eq_(y1, y2)
+        eq_(len(ints), len(ann.data))
+        eq_(len(y), len(ann.data))
+
+        for yi, ival, obs in zip(y, ints, ann.data):
+            eq_(obs.time, ival[0])
+            eq_(obs.duration, ival[1] - ival[0])
+            eq_(obs.value, yi)
 
     for ns, lab, ints, y, inf in zip(namespace, labs, intervals, labels, durations):
         yield __test, ns, lab, ints, y, inf

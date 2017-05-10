@@ -775,10 +775,11 @@ class AnnotationData(object):
 
     def append_columns(self, columns):
 
-        self.append_records(six.moves.zip(columns['time'],
-                                          columns['duration'],
-                                          columns['value'],
-                                          columns['confidence']))
+        self.append_records([dict(time=t, duration=d, value=v, confidence=c)
+                             for t,d,v,c in six.moves.zip(columns['time'],
+                                                          columns['duration'],
+                                                          columns['value'],
+                                                          columns['confidence'])])
 
     def to_interval_values(self):
         '''Extract observation data in a `mir_eval`-friendly format.
@@ -832,6 +833,9 @@ class AnnotationData(object):
     def __repr__(self):
         return '<{}: {:d} observations>'.format(self.__class__.__name__,
                                                 len(self))
+
+    def __iter__(self):
+        return iter(self.obs)
 
 
 class Annotation(JObject):
