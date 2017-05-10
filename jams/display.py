@@ -88,7 +88,7 @@ def pitch_contour(annotation, **kwargs):
     indices = np.unique([v['index'] for v in values])
 
     for idx in indices:
-        rows = annotation.data.value.apply(lambda x: x['index'] == idx).nonzero()[0]
+        rows = [i for (i, v) in enumerate(values) if v['index'] == idx]
         freqs = np.asarray([values[r]['frequency'] for r in rows])
         unvoiced = ~np.asarray([values[r]['voiced'] for r in rows])
         freqs[unvoiced] *= -1
