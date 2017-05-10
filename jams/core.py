@@ -771,15 +771,19 @@ class AnnotationData(object):
     def append_records(self, records):
 
         for obs in records:
-            self.add_observation(**obs)
+            if isinstance(obs, Observation):
+                self.add_observation(**obs._asdict())
+            else:
+                self.add_observation(**obs)
 
     def append_columns(self, columns):
 
         self.append_records([dict(time=t, duration=d, value=v, confidence=c)
-                             for t,d,v,c in six.moves.zip(columns['time'],
-                                                          columns['duration'],
-                                                          columns['value'],
-                                                          columns['confidence'])])
+                             for (t, d, v, c)
+                             in six.moves.zip(columns['time'],
+                                              columns['duration'],
+                                              columns['value'],
+                                              columns['confidence'])])
 
     def to_interval_values(self):
         '''Extract observation data in a `mir_eval`-friendly format.

@@ -549,6 +549,7 @@ def test_jams_save():
     for ext in ['jams', 'jamz']:
         yield __test, ext
 
+
 def test_jams_add():
 
     def __test():
