@@ -44,6 +44,7 @@ import warnings
 import contextlib
 import gzip
 import copy
+import sys
 
 from .version import version as __VERSION__
 from . import schema
@@ -523,9 +524,9 @@ class JamsFrame(pd.DataFrame):
             Optional index on `data`.
 
         columns
-        dtype
             These parameters are ignored by JamsFrame, but are allowed
             for API compatibility with `pandas.DataFrame`.
+        dtype : 
 
         See Also
         --------
@@ -534,11 +535,15 @@ class JamsFrame(pd.DataFrame):
         pandas.DataFrame.__init__
 
         '''
-        super(JamsFrame, self).__init__(data=data, index=index,
+        super(JamsFrame, self).__init__(data=data,
+                                        index=index,
                                         columns=self.fields())
 
         self.time = pd.to_timedelta(self.time, unit='s')
         self.duration = pd.to_timedelta(self.duration, unit='s')
+        if dtype:
+            self.value = self.value.astype(dtype[0])
+            self.confidence = self.value.astype(dtype[1])
 
     @property
     def dense(self):
@@ -690,10 +695,15 @@ class JamsFrame(pd.DataFrame):
         else:
             n = self.index.max() + 1
 
-        self.set_value(n, 'time', pd.to_timedelta(time, unit='s'))
-        self.set_value(n, 'duration', pd.to_timedelta(duration, unit='s'))
-        self.set_value(n, 'value', value)
-        self.set_value(n, 'confidence', confidence)
+        try:
+            self.set_value(n, 'time', pd.to_timedelta(time, unit='s'))
+            self.set_value(n, 'duration', pd.to_timedelta(duration, unit='s'))
+            self.set_value(n, 'value', value)
+            self.set_value(n, 'confidence', confidence)
+        except ValueError as exc:
+            self.drop(n, inplace=True, errors='ignore')
+            six.reraise(SchemaError, SchemaError(str(exc)), sys.exc_info()[2])
+
 
     def to_interval_values(self):
         '''Extract observation data in a `mir_eval`-friendly format.
@@ -744,7 +754,8 @@ class Annotation(JObject):
             The namespace for this annotation
 
         data : dict or list-of-dict
-            Data for the new annotation in a format supported by `JamsFrame.from_dict`
+            Data for the new annotation in a format supported by
+            `JamsFrame.from_dict`
 
         annotation_metadata : AnnotationMetadata (or dict), default=None.
             Metadata corresponding to this Annotation.
@@ -766,8 +777,12 @@ class Annotation(JObject):
 
         self.annotation_metadata = AnnotationMetadata(**annotation_metadata)
 
+        self.namespace = namespace
+
+        dtypes = schema.get_dtypes(self.namespace)
+
         if data is None:
-            self.data = JamsFrame()
+            self.data = JamsFrame(dtype=dtypes)
         else:
             self.data = JamsFrame.from_dict(data)
 
@@ -775,8 +790,6 @@ class Annotation(JObject):
             sandbox = Sandbox()
 
         self.sandbox = Sandbox(**sandbox)
-
-        self.namespace = namespace
 
         # Set the data export coding to match the namespace
         self.data.dense = schema.is_dense(self.namespace)

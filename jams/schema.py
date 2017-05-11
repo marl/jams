@@ -172,17 +172,13 @@ def __get_dtype(typespec):
         The associated dtype
     '''
 
-    # int -> np.int
-    # str -> np.object
-    # enum -> np.object
-    # object -> np.object
-    # array -> np.object
-    # oneOf -> ???
     if 'type' in typespec:
         return __TYPE_MAP__.get(typespec['type'], np.object_)
+
     elif 'enum' in typespec:
         # Enums map to objects
         return np.object_
+
     elif 'oneOf' in typespec:
         # Recurse
         types = [__get_dtype(v) for v in typespec['oneOf']]
@@ -214,4 +210,3 @@ SCHEMA_DIR = 'schemata'
 NS_SCHEMA_DIR = os.path.join(SCHEMA_DIR, 'namespaces')
 
 JAMS_SCHEMA = __load_jams_schema()
-

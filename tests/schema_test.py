@@ -89,7 +89,6 @@ def test_schema_values_notenum():
     jams.schema.values('chord_harte')
 
 
-
 def test_schema_dtypes():
 
     for n in jams.schema.__NAMESPACE__:
@@ -99,4 +98,3 @@ def test_schema_dtypes():
 @raises(NamespaceError)
 def test_schema_dtypes_badns():
     jams.schema.get_dtypes('unknown namespace')
-
