@@ -1038,6 +1038,7 @@ class Annotation(JObject):
                                        value=obs['value'],
                                        confidence=obs['confidence'])
 
+        ann_trimmed.data.reset_index(drop=True, inplace=True)
         if 'trim' not in ann_trimmed.sandbox.keys():
             ann_trimmed.sandbox.update(
                 trim=[{'start_time': start_time, 'end_time': end_time,
