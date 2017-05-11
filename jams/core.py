@@ -526,7 +526,14 @@ class JamsFrame(pd.DataFrame):
         columns
             These parameters are ignored by JamsFrame, but are allowed
             for API compatibility with `pandas.DataFrame`.
-        dtype : 
+
+        dtype : tuple of types
+            The first entry corresponds to the `value` field's dtype,
+            the second corresponds to the `confidence` field.
+
+            These can be obtained for any JAMS namespace by
+            `jams.schema.get_dtypes(namespace_id)`.
+
 
         See Also
         --------
