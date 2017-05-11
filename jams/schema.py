@@ -11,6 +11,7 @@ Namespace management
     namespace
     is_dense
     values
+    get_dtypes
 '''
 
 import json
@@ -22,7 +23,7 @@ import numpy as np
 
 from .exceptions import NamespaceError, JamsError
 
-__all__ = ['add_namespace', 'namespace', 'is_dense', 'values']
+__all__ = ['add_namespace', 'namespace', 'is_dense', 'values', 'get_dtypes']
 
 __NAMESPACE__ = dict()
 
