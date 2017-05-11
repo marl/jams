@@ -704,7 +704,6 @@ class JamsFrame(pd.DataFrame):
             self.drop(n, inplace=True, errors='ignore')
             six.reraise(SchemaError, SchemaError(str(exc)), sys.exc_info()[2])
 
-
     def to_interval_values(self):
         '''Extract observation data in a `mir_eval`-friendly format.
 
@@ -728,10 +727,8 @@ class JamsFrame(pd.DataFrame):
         '''Explicit deep-copy implementation'''
         jf = JamsFrame()
         for field in self.fields():
-            if len(self[field]):
-                jf[field] = copy.deepcopy(self[field])
-            else:
-                jf[field] = []
+            jf[field] = pd.Series([copy.deepcopy(_) for _ in self[field]],
+                                  dtype=self[field].dtype)
 
         jf.dense = copy.deepcopy(self.dense)
         return jf
