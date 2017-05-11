@@ -13,7 +13,11 @@ import numpy as np
 import pandas as pd
 
 from nose.tools import raises, eq_
-import pandas.testing as pdt
+try:
+    import pandas.testing as pdt
+except ImportError:
+    import pandas.util.testing as pdt
+
 
 import jams
 
