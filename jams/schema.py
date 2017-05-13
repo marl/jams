@@ -11,6 +11,7 @@ Namespace management
     namespace
     is_dense
     values
+    get_dtypes
 '''
 
 import json
@@ -18,9 +19,11 @@ import os
 import copy
 from pkg_resources import resource_filename
 
+import numpy as np
+
 from .exceptions import NamespaceError, JamsError
 
-__all__ = ['add_namespace', 'namespace', 'is_dense', 'values']
+__all__ = ['add_namespace', 'namespace', 'is_dense', 'values', 'get_dtypes']
 
 __NAMESPACE__ = dict()
 
@@ -122,6 +125,72 @@ def values(ns_key):
     return copy.copy(__NAMESPACE__[ns_key]['value']['enum'])
 
 
+def get_dtypes(ns_key):
+    '''Get the dtypes associated with the value and confidence fields for a given schema.
+
+    Parameters
+    ----------
+    ns_key : str
+        The namespace key in question
+
+    Returns
+    -------
+    value_dtype, confidence_dtype : numpy.dtype
+        Type identifiers for dataframe/jamsframe columns.
+    '''
+
+    # First, get the schema
+    if ns_key not in __NAMESPACE__:
+        raise NamespaceError('Unknown namespace: {:s}'.format(ns_key))
+
+    value_dtype = __get_dtype(__NAMESPACE__[ns_key].get('value', {}))
+    confidence_dtype = __get_dtype(__NAMESPACE__[ns_key].get('confidence', {}))
+
+    return value_dtype, confidence_dtype
+
+
+# Mapping of js primitives to numpy types
+__TYPE_MAP__ = dict(integer=np.int_,
+                    boolean=np.bool_,
+                    number=np.float_,
+                    object=np.object_,
+                    array=np.object_,
+                    string=np.object_,
+                    null=np.float_)
+
+
+def __get_dtype(typespec):
+    '''Get the dtype associated with a jsonschema type definition
+
+    Parameters
+    ----------
+    typespec : dict
+        The schema definition
+
+    Returns
+    -------
+    dtype : numpy.dtype
+        The associated dtype
+    '''
+
+    if 'type' in typespec:
+        return __TYPE_MAP__.get(typespec['type'], np.object_)
+
+    elif 'enum' in typespec:
+        # Enums map to objects
+        return np.object_
+
+    elif 'oneOf' in typespec:
+        # Recurse
+        types = [__get_dtype(v) for v in typespec['oneOf']]
+
+        # If they're not all equal, return object
+        if all([t == types[0] for t in types]):
+            return types[0]
+
+    return np.object_
+
+
 def __load_jams_schema():
     '''Load the schema file from the package.'''
 
@@ -136,9 +205,9 @@ def __load_jams_schema():
 
     return jams_schema
 
+
 # Populate the schemata
 SCHEMA_DIR = 'schemata'
 NS_SCHEMA_DIR = os.path.join(SCHEMA_DIR, 'namespaces')
 
 JAMS_SCHEMA = __load_jams_schema()
-

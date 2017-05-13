@@ -350,11 +350,12 @@ def tempo(ref, est, **kwargs):
 
     ref = coerce_annotation(ref, 'tempo')
     est = coerce_annotation(est, 'tempo')
-    ref_tempi = ref.data['value'].values
-    ref_weight = ref.data['confidence'][0]
-    est_tempi = est.data['value'].values
+    ref_tempi = np.asarray(ref.data['value'].values, dtype=np.float)
+    ref_weight = float(ref.data['confidence'][0])
+    est_tempi = np.asarray(est.data['value'].values, dtype=np.float)
 
     return mir_eval.tempo.evaluate(ref_tempi, ref_weight, est_tempi, **kwargs)
+
 
 # melody
 def melody(ref, est, **kwargs):

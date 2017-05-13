@@ -24,6 +24,7 @@ __CONVERSION__ = defaultdict(defaultdict)
 
 __all__ = ['convert', 'can_convert']
 
+
 def _conversion(target, source):
     '''A decorator to register namespace conversions.
 
@@ -167,7 +168,9 @@ def note_hz_to_midi(annotation):
     '''Convert a pitch_hz annotation to pitch_midi'''
 
     annotation.namespace = 'note_midi'
-    annotation.data.value = 12 * (np.log2(annotation.data.value) - np.log2(440.0)) + 69
+
+    logf = np.log2(np.asarray(annotation.data.value.values, dtype=np.float))
+    annotation.data.value = 12 * (logf - np.log2(440.0)) + 69
     return annotation
 
 
@@ -185,7 +188,8 @@ def pitch_hz_to_midi(annotation):
     '''Convert a pitch_hz annotation to pitch_midi'''
 
     annotation.namespace = 'pitch_midi'
-    annotation.data.value = 12 * (np.log2(annotation.data.value) - np.log2(440.0)) + 69
+    logf = np.log2(np.asarray(annotation.data.value.values, dtype=np.float))
+    annotation.data.value = 12 * (logf - np.log2(440.0)) + 69
     return annotation
 
 

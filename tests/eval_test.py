@@ -186,6 +186,10 @@ def test_melody_valid():
 
     jams.eval.melody(ref_ann, est_ann)
 
+
+# Temporarily disabling because pandas 0.20 won't allow us to
+# construct ill-typed observations
+@nottest
 def test_melody_invalid():
 
     srand()
@@ -252,7 +256,6 @@ def test_pattern_invalid():
     yield raises(jams.SchemaError)(jams.eval.pattern), est_ann, ref_ann
 
 
-
 # Hierarchical segmentation
 def create_hierarchy(values, offset=0.0, duration=20):
     ann = jams.Annotation(namespace='multi_segment')
@@ -267,6 +270,7 @@ def create_hierarchy(values, offset=0.0, duration=20):
             ann.append(time=t, duration=d, value=dict(label=v, level=level))
 
     return ann
+
 
 def test_hierarchy_valid():
 
@@ -302,6 +306,9 @@ def test_transcription_valid():
     jams.eval.transcription(ref_ann, est_ann)
 
 
+# Temporarily disabled because pandas 0.20 will not allow unsafe type mixtures,
+# so there's no easy way to make a bad corner case
+@nottest
 def test_transcription_invalid():
 
     ref_jam = jams.load('fixtures/transcription_ref.jams')
@@ -309,9 +316,8 @@ def test_transcription_invalid():
     ref_ann = ref_jam.search(namespace='pitch_hz')[0]
     est_ann = est_jam.search(namespace='pitch_hz')[0]
 
-    ref_ann.append(time=2., duration=1., value='A', confidence=1)
-    est_ann.append(time=2., duration=1., value='B', confidence=1)
+    ref_ann.append(time=2., duration=1., value=None, confidence=1)
+    est_ann.append(time=2., duration=1., value=None, confidence=1)
 
     yield raises(jams.SchemaError)(jams.eval.transcription), ref_ann, est_ann
     yield raises(jams.SchemaError)(jams.eval.transcription), est_ann, ref_ann
-

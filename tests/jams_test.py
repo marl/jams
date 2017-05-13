@@ -6,7 +6,6 @@
 import os
 import tempfile
 import json
-import jsonschema
 import six
 import sys
 import warnings
@@ -14,11 +13,16 @@ import numpy as np
 import pandas as pd
 
 from nose.tools import raises, eq_
+try:
+    import pandas.testing as pdt
+except ImportError:
+    import pandas.util.testing as pdt
+
 
 import jams
 
 
-## Borrowed from sklearn
+# Borrowed from sklearn
 def clean_warning_registry():
     """Safe way to reset warnings """
     warnings.resetwarnings()
@@ -785,7 +789,7 @@ def test_annotation_trim_no_duration():
                          confidence=[None])
     expected_ann = jams.Annotation(namespace, data=expected_data, time=5.0,
                                    duration=3.0)
-    assert ann_trim.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_trim.data, expected_ann.data)
 
 
 def test_annotation_trim_no_overlap():
@@ -839,7 +843,7 @@ def test_annotation_trim_complete_overlap():
                          confidence=[0.9, 0.9])
     expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
                                    duration=4.0)
-    assert ann_trim.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_trim.data, expected_ann.data, check_dtype=False)
 
     # with strict=True
     ann_trim = ann.trim(8, 12, strict=True)
@@ -854,7 +858,8 @@ def test_annotation_trim_complete_overlap():
     expected_data = None
     expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
                                    duration=4.0)
-    assert ann_trim.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_trim.data, expected_ann.data,
+                           check_dtype=False, check_index_type=False)
 
 
 def test_annotation_trim_partial_overlap_beginning():
@@ -883,7 +888,7 @@ def test_annotation_trim_partial_overlap_beginning():
                          confidence=[0.9, 0.9])
     expected_ann = jams.Annotation(namespace, data=expected_data, time=5.0,
                                    duration=3.0)
-    assert ann_trim.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_trim.data, expected_ann.data, check_dtype=False)
 
     # strict=True
     ann_trim = ann.trim(0, 8, strict=True)
@@ -901,7 +906,7 @@ def test_annotation_trim_partial_overlap_beginning():
                          confidence=[0.9])
     expected_ann = jams.Annotation(namespace, data=expected_data, time=5.0,
                                    duration=3.0)
-    assert ann_trim.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_trim.data, expected_ann.data, check_dtype=False)
 
 
 def test_annotation_trim_partial_overlap_end():
@@ -930,7 +935,7 @@ def test_annotation_trim_partial_overlap_end():
                          confidence=[0.9, 0.9])
     expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
                                    duration=7.0)
-    assert ann_trim.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_trim.data, expected_ann.data, check_dtype=False)
 
     # strict=True
     ann_trim = ann.trim(8, 20, strict=True)
@@ -948,7 +953,7 @@ def test_annotation_trim_partial_overlap_end():
                          confidence=[0.9])
     expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
                                    duration=7.0)
-    assert ann_trim.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_trim.data, expected_ann.data, check_dtype=False)
 
 
 def test_annotation_trim_multiple():
@@ -977,7 +982,7 @@ def test_annotation_trim_multiple():
 
     expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
                                    duration=2.0)
-    assert ann_trim.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_trim.data, expected_ann.data, check_dtype=False)
 
     # strict=True
     ann_trim = ann.trim(0, 10, strict=True).trim(8, 20, strict=True)
@@ -993,7 +998,8 @@ def test_annotation_trim_multiple():
     expected_data = None
     expected_ann = jams.Annotation(namespace, data=expected_data, time=8.0,
                                    duration=2.0)
-    assert ann_trim.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_trim.data, expected_ann.data,
+                           check_dtype=False, check_index_type=False)
 
 
 def test_jams_trim_no_duration():
@@ -1043,7 +1049,7 @@ def test_jams_trim_valid():
     jam_trim = jam.trim(0, 10, strict=False)
 
     for ann in jam_trim.annotations:
-        assert ann.data.equals(ann_trim.data)
+        pdt.assert_frame_equal(ann_trim.data, ann.data, check_dtype=False)
 
     assert jam_trim.file_metadata.duration == jam.file_metadata.duration
     assert jam_trim.sandbox.trim == [{'start_time': 0, 'end_time': 10}]
@@ -1053,7 +1059,7 @@ def test_jams_trim_valid():
     ann_trim = ann_copy.trim(0, 10).trim(8, 10)
 
     for ann in jam_trim.annotations:
-        assert ann.data.equals(ann_trim.data)
+        pdt.assert_frame_equal(ann_trim.data, ann.data, check_dtype=False)
 
     assert jam_trim.sandbox.trim == (
         [{'start_time': 0, 'end_time': 10}, {'start_time': 8, 'end_time': 10}])
@@ -1081,7 +1087,7 @@ def test_annotation_slice():
 
     expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
                                    duration=2.0)
-    assert ann_slice.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_slice.data, expected_ann.data, check_dtype=False)
     assert ann_slice.sandbox.slice == (
         [{'start_time': 8, 'end_time': 10, 'slice_start': 8, 'slice_end': 10}])
 
@@ -1095,7 +1101,7 @@ def test_annotation_slice():
 
     expected_ann = jams.Annotation(namespace, data=expected_data, time=2.0,
                                    duration=5.0)
-    assert ann_slice.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_slice.data, expected_ann.data, check_dtype=False)
     assert ann_slice.sandbox.slice == (
         [{'start_time': 3, 'end_time': 10, 'slice_start': 5, 'slice_end': 10}])
 
@@ -1109,7 +1115,7 @@ def test_annotation_slice():
 
     expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
                                    duration=2.0)
-    assert ann_slice.data.equals(expected_ann.data)
+    pdt.assert_frame_equal(ann_slice.data, expected_ann.data, check_dtype=False)
     assert ann_slice.sandbox.slice == (
         [{'start_time': 8, 'end_time': 20, 'slice_start': 8, 'slice_end': 15}])
 
@@ -1122,8 +1128,7 @@ def test_annotation_slice():
 
     expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
                                    duration=2.0)
-    assert ann_slice.data.equals(expected_ann.data)
-    print(ann_slice.sandbox.slice)
+    pdt.assert_frame_equal(ann_slice.data, expected_ann.data, check_dtype=False)
     assert ann_slice.sandbox.slice == (
         [{'start_time': 0, 'end_time': 10, 'slice_start': 5, 'slice_end': 10},
          {'start_time': 8, 'end_time': 10, 'slice_start': 8, 'slice_end': 10}])
@@ -1162,7 +1167,7 @@ def test_jams_slice():
     jam_slice = jam.slice(0, 10, strict=False)
 
     for ann in jam_slice.annotations:
-        assert ann.data.equals(ann_slice.data)
+        pdt.assert_frame_equal(ann_slice.data, ann.data, check_dtype=False)
 
     assert jam_slice.file_metadata.duration == 10
     assert jam_slice.sandbox.slice == [{'start_time': 0, 'end_time': 10}]
@@ -1172,7 +1177,7 @@ def test_jams_slice():
     ann_slice = ann_copy.slice(0, 10).slice(8, 10)
 
     for ann in jam_slice.annotations:
-        assert ann.data.equals(ann_slice.data)
+        pdt.assert_frame_equal(ann_slice.data, ann.data, check_dtype=False)
 
     assert jam_slice.sandbox.slice == (
         [{'start_time': 0, 'end_time': 10}, {'start_time': 8, 'end_time': 10}])

@@ -230,7 +230,11 @@ def test_ns_note_hz_invalid():
 
     # note: 1j should also be invalid, but currently not caught
     # by the schema validation and hence removed from the test
-    for value in ['a', -23, None, True]:
+    # for value in ['a', -23, None, True]:
+
+    # None and True get auto-cast to float now, so we can't rely
+    # on validation here
+    for value in ['a', -23]:
         yield __test, value
 
 
@@ -261,7 +265,12 @@ def test_ns_pitch_hz_invalid():
 
     # note: 1j should also be invalid, but currently not caught
     # by the schema validation and hence removed from the test
-    for value in ['a', None, True]:
+
+    # for value in ['a', None, True]:
+
+    # None and True get auto-cast to float now, so we can't rely
+    # on validation here
+    for value in ['a']:
         yield __test, value
 
 
@@ -281,6 +290,7 @@ def test_ns_note_midi_valid():
 
     ann.validate()
 
+
 def test_ns_note_midi_invalid():
 
     @raises(SchemaError)
@@ -291,7 +301,9 @@ def test_ns_note_midi_invalid():
 
     # note: 1j should also be invalid, but currently not caught
     # by the schema validation and hence removed from the test
-    for value in ['a', None, True]:
+    # for value in ['a', None, True]:
+    # None and True can cast to float, so this passes
+    for value in ['a']:
         yield __test, value
 
 
@@ -322,8 +334,12 @@ def test_ns_pitch_midi_invalid():
 
     # note: 1j should also be invalid, but currently not caught
     # by the schema validation and hence removed from the test
-    for value in ['a', None, True]:
+    # for value in ['a', None, True]:
+
+    # None and True cast to float
+    for value in ['a']:
         yield __test, value
+
 
 def test_ns_contour_valid():
 
@@ -346,6 +362,7 @@ def test_ns_contour_valid():
 
     ann.validate()
 
+
 def test_ns_contour_invalid():
 
     srand()
@@ -366,6 +383,7 @@ def test_ns_contour_invalid():
         ann.append(time=t, duration=d, value={'pitch': v, 'id': i, 'voiced': b}, confidence=c)
 
     ann.validate()
+
 
 def test_ns_key_mode():
 

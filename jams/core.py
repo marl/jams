@@ -44,6 +44,7 @@ import warnings
 import contextlib
 import gzip
 import copy
+import sys
 
 from .version import version as __VERSION__
 from . import schema
@@ -523,9 +524,16 @@ class JamsFrame(pd.DataFrame):
             Optional index on `data`.
 
         columns
-        dtype
             These parameters are ignored by JamsFrame, but are allowed
             for API compatibility with `pandas.DataFrame`.
+
+        dtype : tuple of types
+            The first entry corresponds to the `value` field's dtype,
+            the second corresponds to the `confidence` field.
+
+            These can be obtained for any JAMS namespace by
+            `jams.schema.get_dtypes(namespace_id)`.
+
 
         See Also
         --------
@@ -534,11 +542,15 @@ class JamsFrame(pd.DataFrame):
         pandas.DataFrame.__init__
 
         '''
-        super(JamsFrame, self).__init__(data=data, index=index,
+        super(JamsFrame, self).__init__(data=data,
+                                        index=index,
                                         columns=self.fields())
 
         self.time = pd.to_timedelta(self.time, unit='s')
         self.duration = pd.to_timedelta(self.duration, unit='s')
+        if dtype:
+            self.value = self.value.astype(dtype[0])
+            self.confidence = self.value.astype(dtype[1])
 
     @property
     def dense(self):
@@ -685,11 +697,19 @@ class JamsFrame(pd.DataFrame):
         if duration is None or not (duration >= 0.0):
             raise ParameterError('duration={} must be a non-negative number'.format(duration))
 
-        n = len(self)
-        self.loc[n] = {'time': pd.to_timedelta(time, unit='s'),
-                       'duration': pd.to_timedelta(duration, unit='s'),
-                       'value': value,
-                       'confidence': confidence}
+        if not len(self):
+            n = 0
+        else:
+            n = self.index.max() + 1
+
+        try:
+            self.set_value(n, 'time', pd.to_timedelta(time, unit='s'))
+            self.set_value(n, 'duration', pd.to_timedelta(duration, unit='s'))
+            self.set_value(n, 'value', value)
+            self.set_value(n, 'confidence', confidence)
+        except ValueError as exc:
+            self.drop(n, inplace=True, errors='ignore')
+            six.reraise(SchemaError, SchemaError(str(exc)), sys.exc_info()[2])
 
     def to_interval_values(self):
         '''Extract observation data in a `mir_eval`-friendly format.
@@ -714,10 +734,8 @@ class JamsFrame(pd.DataFrame):
         '''Explicit deep-copy implementation'''
         jf = JamsFrame()
         for field in self.fields():
-            if len(self[field]):
-                jf[field] = copy.deepcopy(self[field])
-            else:
-                jf[field] = []
+            jf[field] = pd.Series([copy.deepcopy(_) for _ in self[field]],
+                                  dtype=self[field].dtype)
 
         jf.dense = copy.deepcopy(self.dense)
         return jf
@@ -740,7 +758,8 @@ class Annotation(JObject):
             The namespace for this annotation
 
         data : dict or list-of-dict
-            Data for the new annotation in a format supported by `JamsFrame.from_dict`
+            Data for the new annotation in a format supported by
+            `JamsFrame.from_dict`
 
         annotation_metadata : AnnotationMetadata (or dict), default=None.
             Metadata corresponding to this Annotation.
@@ -762,8 +781,12 @@ class Annotation(JObject):
 
         self.annotation_metadata = AnnotationMetadata(**annotation_metadata)
 
+        self.namespace = namespace
+
+        dtypes = schema.get_dtypes(self.namespace)
+
         if data is None:
-            self.data = JamsFrame()
+            self.data = JamsFrame(dtype=dtypes)
         else:
             self.data = JamsFrame.from_dict(data)
 
@@ -771,8 +794,6 @@ class Annotation(JObject):
             sandbox = Sandbox()
 
         self.sandbox = Sandbox(**sandbox)
-
-        self.namespace = namespace
 
         # Set the data export coding to match the namespace
         self.data.dense = schema.is_dense(self.namespace)
@@ -1034,6 +1055,7 @@ class Annotation(JObject):
                                        value=obs['value'],
                                        confidence=obs['confidence'])
 
+        ann_trimmed.data.reset_index(drop=True, inplace=True)
         if 'trim' not in ann_trimmed.sandbox.keys():
             ann_trimmed.sandbox.update(
                 trim=[{'start_time': start_time, 'end_time': end_time,
@@ -1849,7 +1871,7 @@ def serialize_obj(obj):
     - lists are recursively serialized element-wise
 
     '''
-    if isinstance(obj, pd.tslib.Timedelta):
+    if isinstance(obj, pd.Timedelta):
         return obj.total_seconds()
 
     elif isinstance(obj, np.ndarray):
