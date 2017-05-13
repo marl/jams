@@ -376,6 +376,20 @@ def test_annotation_eq():
     assert not (ann1 == ann2)
 
 
+def test_annotation_iterator():
+
+    data = [dict(time=0, duration=0.5, value='one', confidence=0.2),
+            dict(time=1, duration=1, value='two', confidence=0.5)]
+
+    namespace = 'tag_open'
+
+    ann = jams.Annotation(namespace, data=data)
+
+    for obs, obs_raw in zip(ann, data):
+        assert isinstance(obs, jams.Observation)
+        assert obs._asdict() == obs_raw, (obs, obs_raw)
+
+
 def test_annotation_interval_values():
 
     data = dict(time=[0.0, 1.0],
