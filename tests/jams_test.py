@@ -189,6 +189,7 @@ def test_annotation():
             eq_(dict(sandbox), dict(ann.sandbox))
 
         if data is not None:
+            eq_(len(ann), len(data))
             eq_(len(ann.data), len(data))
             for obs1, obs2 in zip(ann.data, data):
                 eq_(obs1._asdict(), obs2)

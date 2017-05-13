@@ -987,9 +987,6 @@ class Annotation(JObject):
     def __iter__(self):
         return iter(self.data)
 
-    def __contains__(self, item):
-        return item in self.data
-
     def to_html(self):
         '''Render this annotation list in HTML
 
