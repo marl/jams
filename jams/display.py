@@ -63,7 +63,7 @@ def pprint_jobject(obj, **kwargs):
 
 def intervals(annotation, **kwargs):
     '''Plotting wrapper for labeled intervals'''
-    times, labels = annotation.data.to_interval_values()
+    times, labels = annotation.to_interval_values()
 
     return mir_eval.display.labeled_intervals(times, labels, **kwargs)
 
@@ -83,7 +83,7 @@ def pitch_contour(annotation, **kwargs):
     # If the annotation is empty, we need to construct a new axes
     ax = mir_eval.display.__get_axes(ax=ax)[0]
 
-    times, values = annotation.data.to_interval_values()
+    times, values = annotation.to_interval_values()
 
     indices = np.unique([v['index'] for v in values])
 
@@ -102,7 +102,7 @@ def pitch_contour(annotation, **kwargs):
 def event(annotation, **kwargs):
     '''Plotting wrapper for events'''
 
-    times, values = annotation.data.to_interval_values()
+    times, values = annotation.to_interval_values()
 
     if any(values):
         labels = values
@@ -115,7 +115,7 @@ def event(annotation, **kwargs):
 def beat_position(annotation, **kwargs):
     '''Plotting wrapper for beat-position data'''
 
-    times, values = annotation.data.to_interval_values()
+    times, values = annotation.to_interval_values()
 
     labels = [_['position'] for _ in values]
 
@@ -125,7 +125,7 @@ def beat_position(annotation, **kwargs):
 
 def piano_roll(annotation, **kwargs):
     '''Plotting wrapper for piano rolls'''
-    times, midi = annotation.data.to_interval_values()
+    times, midi = annotation.to_interval_values()
 
     return mir_eval.display.piano_roll(times, midi=midi, **kwargs)
 

@@ -29,7 +29,7 @@ Object reference
     JamsFrame
     Sandbox
     JObject
-
+    Observation
 """
 
 import json
@@ -45,6 +45,10 @@ import contextlib
 import gzip
 import copy
 import sys
+from collections import namedtuple
+
+from decorator import decorator
+
 
 from .version import version as __VERSION__
 from . import schema
@@ -54,7 +58,31 @@ from .exceptions import JamsError, SchemaError, ParameterError
 __all__ = ['load',
            'JObject', 'Sandbox', 'JamsFrame',
            'Annotation', 'Curator', 'AnnotationMetadata',
-           'FileMetadata', 'AnnotationArray', 'JAMS']
+           'FileMetadata', 'AnnotationArray', 'JAMS',
+           'Observation']
+
+
+def deprecated(version, version_removed):
+    '''This is a decorator which can be used to mark functions
+    as deprecated.
+
+    It will result in a warning being emitted when the function is used.'''
+
+    def __wrapper(func, *args, **kwargs):
+        '''Warn the user, and then proceed.'''
+        code = six.get_function_code(func)
+        warnings.warn_explicit(
+            "{:s}.{:s}\n\tDeprecated as of JAMS version {:s}."
+            "\n\tIt will be removed in JAMS version {:s}."
+            .format(func.__module__, func.__name__,
+                    version, version_removed),
+            category=DeprecationWarning,
+            filename=code.co_filename,
+            lineno=code.co_firstlineno + 1
+        )
+        return func(*args, **kwargs)
+
+    return decorator(__wrapper)
 
 
 @contextlib.contextmanager
@@ -489,6 +517,11 @@ class JObject(object):
         return valid
 
 
+Observation = namedtuple('Observation',
+                         ['time', 'duration', 'value', 'confidence'])
+'''Core observation type: (time, duration, value, confidence).'''
+
+
 class Sandbox(JObject):
     """Sandbox (unconstrained)
 
@@ -711,6 +744,7 @@ class JamsFrame(pd.DataFrame):
             self.drop(n, inplace=True, errors='ignore')
             six.reraise(SchemaError, SchemaError(str(exc)), sys.exc_info()[2])
 
+    @deprecated('0.2.3', '0.3.0')
     def to_interval_values(self):
         '''Extract observation data in a `mir_eval`-friendly format.
 
@@ -1167,6 +1201,34 @@ class Annotation(JObject):
                  'slice_start': slice_start, 'slice_end': slice_end})
 
         return sliced_ann
+
+    def to_interval_values(self):
+        '''Extract observation data in a `mir_eval`-friendly format.
+
+        Returns
+        -------
+        intervals : np.ndarray [shape=(n, 2), dtype=float]
+            Start- and end-times of all valued intervals
+
+            `intervals[i, :] = [time[i], time[i] + duration[i]]`
+
+        labels : list
+            List view of value field.
+        '''
+
+        times = timedelta_to_float(self.data.time.values)
+        duration = timedelta_to_float(self.data.duration.values)
+
+        return np.vstack([times, times + duration]).T, list(self.data.value)
+
+    def __iter_obs__(self):
+        for _, (t, d, v, c) in self.data.iterrows():
+            yield Observation(time=t.total_seconds(),
+                              duration=d.total_seconds(),
+                              value=v, confidence=c)
+
+    def __iter__(self):
+        return self.__iter_obs__()
 
 
 class Curator(JObject):
@@ -1881,3 +1943,5 @@ def serialize_obj(obj):
         return [serialize_obj(x) for x in obj]
 
     return obj
+
+

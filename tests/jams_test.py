@@ -211,10 +211,16 @@ def test_jamsframe_interval_values():
 
     jf = jams.JamsFrame.from_dataframe(df)
 
-    intervals, values = jf.to_interval_values()
+    warnings.resetwarnings()
+    warnings.simplefilter('always')
+    with warnings.catch_warnings(record=True) as out:
+        intervals, values = jf.to_interval_values()
+        assert len(out) > 0
+        assert out[0].category is DeprecationWarning
+        assert 'deprecated' in str(out[0].message).lower()
 
-    assert np.allclose(intervals, np.array([[0.0, 1.0], [1.0, 3.0]]))
-    eq_(values, ['a', 'b'])
+        assert np.allclose(intervals, np.array([[0.0, 1.0], [1.0, 3.0]]))
+        eq_(values, ['a', 'b'])
 
 
 def test_jamsframe_serialize():
@@ -368,6 +374,35 @@ def test_annotation_eq():
     ann2.append(**update)
 
     assert not (ann1 == ann2)
+
+
+def test_annotation_iterator():
+
+    data = [dict(time=0, duration=0.5, value='one', confidence=0.2),
+            dict(time=1, duration=1, value='two', confidence=0.5)]
+
+    namespace = 'tag_open'
+
+    ann = jams.Annotation(namespace, data=data)
+
+    for obs, obs_raw in zip(ann, data):
+        assert isinstance(obs, jams.Observation)
+        assert obs._asdict() == obs_raw, (obs, obs_raw)
+
+
+def test_annotation_interval_values():
+
+    data = dict(time=[0.0, 1.0],
+                duration=[1., 2.0],
+                value=['a', 'b'],
+                confidence=[0.9, 0.9])
+
+    ann = jams.Annotation(namespace='tag_open', data=data)
+
+    intervals, values = ann.to_interval_values()
+
+    assert np.allclose(intervals, np.array([[0.0, 1.0], [1.0, 3.0]]))
+    eq_(values, ['a', 'b'])
 
 # FileMetadata
 
