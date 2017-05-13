@@ -106,10 +106,10 @@ def beat(ref, est, **kwargs):
     namespace = 'beat'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
-    ref_interval, _ = ref.to_interval_values()
-    est_interval, _ = est.to_interval_values()
+    ref_times, _ = ref.to_event_values()
+    est_times, _ = est.to_event_values()
 
-    return mir_eval.beat.evaluate(ref_interval[:, 0], est_interval[:, 0], **kwargs)
+    return mir_eval.beat.evaluate(ref_times, est_times, **kwargs)
 
 
 def onset(ref, est, **kwargs):
@@ -147,10 +147,10 @@ def onset(ref, est, **kwargs):
     namespace = 'onset'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
-    ref_interval, _ = ref.to_interval_values()
-    est_interval, _ = est.to_interval_values()
+    ref_times, _ = ref.to_event_values()
+    est_times, _ = est.to_event_values()
 
-    return mir_eval.onset.evaluate(ref_interval[:, 0], est_interval[:, 0], **kwargs)
+    return mir_eval.onset.evaluate(ref_times, est_times, **kwargs)
 
 
 def chord(ref, est, **kwargs):
@@ -396,14 +396,14 @@ def melody(ref, est, **kwargs):
     namespace = 'pitch_contour'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
-    ref_interval, ref_p = ref.to_interval_values()
-    est_interval, est_p = est.to_interval_values()
+    ref_times, ref_p = ref.to_event_values()
+    est_times, est_p = est.to_event_values()
 
     ref_freq = np.asarray([p['frequency'] * (-1)**(~p['voiced']) for p in ref_p])
     est_freq = np.asarray([p['frequency'] * (-1)**(~p['voiced']) for p in est_p])
 
-    return mir_eval.melody.evaluate(ref_interval[:, 0], ref_freq,
-                                    est_interval[:, 0], est_freq,
+    return mir_eval.melody.evaluate(ref_times, ref_freq,
+                                    est_times, est_freq,
                                     **kwargs)
 
 
