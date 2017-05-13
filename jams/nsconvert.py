@@ -16,8 +16,6 @@ import numpy as np
 from copy import deepcopy
 from collections import defaultdict
 
-from .core import AnnotationData
-
 from .exceptions import NamespaceError
 
 

@@ -4,10 +4,9 @@
 
 import tempfile
 import os
-from nose.tools import eq_, raises
+from nose.tools import eq_
 import numpy as np
 
-import jams
 from jams import core, util
 
 
@@ -45,10 +44,10 @@ def test_import_lab():
         _, ann = util.import_lab(ns, six.StringIO(lab),
                                  infer_duration=infer_duration)
 
-        eq_(len(ints), len(ann.data))
-        eq_(len(y), len(ann.data))
+        eq_(len(ints), len(ann))
+        eq_(len(y), len(ann))
 
-        for yi, ival, obs in zip(y, ints, ann.data):
+        for yi, ival, obs in zip(y, ints, ann):
             eq_(obs.time, ival[0])
             eq_(obs.duration, ival[1] - ival[0])
             eq_(obs.value, yi)

@@ -189,8 +189,8 @@ def test_annotation():
             eq_(dict(sandbox), dict(ann.sandbox))
 
         if data is not None:
-            eq_(len(ann.data.obs), len(data))
-            for obs1, obs2 in zip(ann.data.obs, data):
+            eq_(len(ann.data), len(data))
+            for obs1, obs2 in zip(ann.data, data):
                 eq_(obs1._asdict(), obs2)
 
     real_sandbox = jams.Sandbox(description='none')
@@ -220,7 +220,7 @@ def test_annotation_append():
 
     ann.append(**update)
 
-    eq_(ann.data.obs[-1]._asdict(), update)
+    eq_(ann.data[-1]._asdict(), update)
 
 
 def test_annotation_eq():
@@ -1075,7 +1075,7 @@ def test_annotation_data_frame():
                 confidence=[0.9, 0.9, 0.9])
     ann = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
 
-    df = ann.data.to_dataframe()
+    df = ann.to_dataframe()
 
     eq_(list(df.columns), ['time', 'duration', 'value', 'confidence'])
 

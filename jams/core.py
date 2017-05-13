@@ -26,7 +26,6 @@ Object reference
     AnnotationMetadata
     Curator
     Annotation
-    AnnotationData
     Observation
     Sandbox
     JObject
@@ -56,7 +55,7 @@ __all__ = ['load',
            'JObject', 'Sandbox',
            'Annotation', 'Curator', 'AnnotationMetadata',
            'FileMetadata', 'AnnotationArray', 'JAMS',
-           'AnnotationData', 'Observation']
+           'Observation']
 
 
 @contextlib.contextmanager
@@ -504,197 +503,6 @@ Observation = namedtuple('Observation',
 '''Core observation type: (time, duration, value, confidence).'''
 
 
-class AnnotationData(object):
-
-    __dense = False
-
-    def __init__(self):
-        self.obs = SortedListWithKey(key=self._key)
-
-    @classmethod
-    def _key(cls, obs):
-        return obs.time
-
-    @property
-    def dense(self):
-        '''Boolean to determine whether the encoding is dense or sparse.
-
-        Returns
-        -------
-        dense : bool
-            `True` if the data should be encoded densely
-            `False` otherwise
-        '''
-        return self.__dense
-
-    @dense.setter
-    def dense(self, value):
-        '''Setter for dense'''
-        self.__dense = value
-
-    def add_observation(self, time=None, duration=None, value=None,
-                        confidence=None):
-        '''Add a single observation.
-
-        Parameters
-        ----------
-        time : number >= 0, required
-            The start time of this observation
-
-        duration : number >= 0, required
-            The duration of this observation
-
-        value
-            The value for the observation
-
-        confidence
-            The confidence for the observation
-        '''
-        self.obs.add(Observation(time=time, duration=duration,
-                                 value=value, confidence=confidence))
-
-    def append_records(self, records):
-        '''Add observations from row-major storage.
-
-        This is primarily useful for deserializing sparsely packed data.
-
-        Parameters
-        ----------
-        records : iterable of dicts or Observations
-            Each element of `records` corresponds to one observation.
-        '''
-        for obs in records:
-            if isinstance(obs, Observation):
-                self.add_observation(**obs._asdict())
-            else:
-                self.add_observation(**obs)
-
-    def append_columns(self, columns):
-        '''Add observations from column-major storage.
-
-        This is primarily used for deserializing densely packed data.
-
-        Parameters
-        ----------
-        columns : dict of lists
-            Keys must be `time, duration, value, confidence`,
-            and each much be a list of equal length.
-
-        '''
-        self.append_records([dict(time=t, duration=d, value=v, confidence=c)
-                             for (t, d, v, c)
-                             in six.moves.zip(columns['time'],
-                                              columns['duration'],
-                                              columns['value'],
-                                              columns['confidence'])])
-
-    def to_interval_values(self):
-        '''Extract observation data in a `mir_eval`-friendly format.
-
-        Returns
-        -------
-        intervals : np.ndarray [shape=(n, 2), dtype=float]
-            Start- and end-times of all valued intervals
-
-            `intervals[i, :] = [time[i], time[i] + duration[i]]`
-
-        labels : list
-            List view of value field.
-        '''
-        ints, vals = [], []
-        for obs in self.obs:
-            ints.append([obs.time, obs.time + obs.duration])
-            vals.append(obs.value)
-
-        return np.array(ints), vals
-
-    def to_dataframe(self):
-        '''Convert this annotation to a pandas dataframe.
-
-        Returns
-        -------
-        df : pd.DataFrame
-            Columns are `time, duration, value, confidence`.
-            Each row is an observation.
-        '''
-        return pd.DataFrame.from_records(list(self.obs),
-                                         columns=['time', 'duration',
-                                                  'value', 'confidence'])
-
-    @property
-    def __json__(self):
-        '''JSON encoding attribute'''
-
-        if self.dense:
-            times, durations, values, confidences = [], [], [], []
-            for (t, d, v, c) in self.obs:
-                times.append(t)
-                durations.append(d)
-                values.append(serialize_obj(v))
-                confidences.append(c)
-
-            return dict(time=times,
-                        duration=durations,
-                        value=values,
-                        confidence=confidences)
-        else:
-            return [dict(time=o.time,
-                         duration=o.duration,
-                         value=serialize_obj(o.value),
-                         confidence=o.confidence) for o in self.obs]
-
-    def __len__(self):
-        return len(self.obs)
-
-    def __eq__(self, other):
-        return (isinstance(other, self.__class__) and
-                self.obs == other.obs)
-
-    def __repr__(self):
-        return '<{}: {:d} observations>'.format(self.__class__.__name__,
-                                                len(self))
-
-    def __iter__(self):
-        return iter(self.obs)
-
-    def to_html(self):
-        '''Render this annotation list in HTML
-
-        Returns
-        -------
-        rendered : str
-            An HTML table containing this annotation's data.
-        '''
-        out = r'''<table border="1" class="dataframe">
-                    <thead>
-                        <tr style="text-align: right;">
-                            <th></th>
-                            <th>time</th>
-                            <th>duration</th>
-                            <th>value</th>
-                            <th>confidence</th>
-                        </tr>
-                    </thead>'''
-        out += r'''<tbody>'''
-        for i, o in enumerate(self.obs):
-            out += r'''<tr>
-                            <th>{:d}</th>
-                            <td>{:0.6f}</td>
-                            <td>{:0.6f}</td>
-                            <td>{:}</td>
-                            <td>{:}</td>
-                        </tr>'''.format(i,
-                                        o.time,
-                                        o.duration,
-                                        o.value,
-                                        o.confidence)
-        out += r'''</tbody></table>'''
-        return out
-
-    def _repr_html_(self):
-        return self.to_html()
-
-
 class Annotation(JObject):
     """Annotation base class."""
 
@@ -736,16 +544,13 @@ class Annotation(JObject):
 
         self.namespace = namespace
 
-        self.data = AnnotationData()
-
-        # Set the data export coding to match the namespace
-        self.data.dense = schema.is_dense(self.namespace)
+        self.data = SortedListWithKey(key=self._key)
 
         if data is not None:
             if isinstance(data, dict):
-                self.data.append_columns(data)
+                self.append_columns(data)
             else:
-                self.data.append_records(data)
+                self.append_records(data)
 
         if sandbox is None:
             sandbox = Sandbox()
@@ -755,7 +560,7 @@ class Annotation(JObject):
         self.time = time
         self.duration = duration
 
-    def append(self, **kwargs):
+    def append(self, time=None, duration=None, value=None, confidence=None):
         '''Append an observation to the data field
 
         Parameters
@@ -770,24 +575,52 @@ class Annotation(JObject):
             Types and values should conform to the namespace of the
             Annotation object.
 
-        See Also
-        --------
-        AnnotationData.add_observation
-
         Examples
         --------
         >>> ann = jams.Annotation(namespace='chord')
-        >>> ann.append(time=0, duration=3, value='C#')
         >>> ann.append(time=3, duration=2, value='E#')
-        >>> ann
-        <Annotation: namespace, annotation_metadata, data, sandbox>
-        >>> ann.data
-              time  duration value confidence
-        0 00:00:00  00:00:03    C#       None
-        1 00:00:03  00:00:02    E#       None
         '''
 
-        self.data.add_observation(**kwargs)
+        # TODO: validate time and duration here
+        self.data.add(Observation(time=time,
+                                  duration=duration,
+                                  value=value,
+                                  confidence=confidence))
+
+    def append_records(self, records):
+        '''Add observations from row-major storage.
+
+        This is primarily useful for deserializing sparsely packed data.
+
+        Parameters
+        ----------
+        records : iterable of dicts or Observations
+            Each element of `records` corresponds to one observation.
+        '''
+        for obs in records:
+            if isinstance(obs, Observation):
+                self.append(**obs._asdict())
+            else:
+                self.append(**obs)
+
+    def append_columns(self, columns):
+        '''Add observations from column-major storage.
+
+        This is primarily used for deserializing densely packed data.
+
+        Parameters
+        ----------
+        columns : dict of lists
+            Keys must be `time, duration, value, confidence`,
+            and each much be a list of equal length.
+
+        '''
+        self.append_records([dict(time=t, duration=d, value=v, confidence=c)
+                             for (t, d, v, c)
+                             in six.moves.zip(columns['time'],
+                                              columns['duration'],
+                                              columns['value'],
+                                              columns['confidence'])])
 
     def validate(self, strict=True):
         '''Validate this annotation object against the JAMS schema,
@@ -821,18 +654,9 @@ class Annotation(JObject):
         ann_schema = schema.namespace(self.namespace)
 
         try:
-            records = self.data.__json__
-
-            # If the data has a dense packing, reshape it for record-wise
-            # validation
-            if self.data.dense:
-                records = [dict(_)
-                           for _ in zip(*[[(k, v) for v in value]
-                                          for (k, value) in six.iteritems(records)])]
-
             # validate each record in the frame
-            for rec in records:
-                jsonschema.validate(rec, ann_schema)
+            for rec in self.data:
+                jsonschema.validate(serialize_obj(rec), ann_schema)
 
         except jsonschema.ValidationError as invalid:
             if strict:
@@ -974,7 +798,7 @@ class Annotation(JObject):
         # We do this rather than copying and directly manipulating the
         # annotation' data frame (which might be faster) since this way trim is
         # independent of the internal data representation.
-        for obs in self.data.obs:
+        for obs in self.data:
 
             obs_start = obs.time
             obs_end = obs_start + obs.duration
@@ -1112,19 +936,135 @@ class Annotation(JObject):
         return sliced_ann
 
     def pop_data(self):
-        '''Replace this observation's data with a fresh AnnotationData
-        object.
+        '''Replace this observation's data with a fresh container.
 
         Returns
         -------
-        annotation_data : jams.AnnotationData
-            The original annotation data object
+        annotation_data : SortedListWithKey
+            The original annotation data container
         '''
 
         data = self.data
-        self.data = AnnotationData()
-        self.data.dense = data.dense
+        self.data = SortedListWithKey(key=self._key)
         return data
+
+    def to_interval_values(self):
+        '''Extract observation data in a `mir_eval`-friendly format.
+
+        Returns
+        -------
+        intervals : np.ndarray [shape=(n, 2), dtype=float]
+            Start- and end-times of all valued intervals
+
+            `intervals[i, :] = [time[i], time[i] + duration[i]]`
+
+        labels : list
+            List view of value field.
+        '''
+        ints, vals = [], []
+        for obs in self.data:
+            ints.append([obs.time, obs.time + obs.duration])
+            vals.append(obs.value)
+
+        return np.array(ints), vals
+
+    def to_dataframe(self):
+        '''Convert this annotation to a pandas dataframe.
+
+        Returns
+        -------
+        df : pd.DataFrame
+            Columns are `time, duration, value, confidence`.
+            Each row is an observation.
+        '''
+        return pd.DataFrame.from_records(list(self.data),
+                                         columns=['time', 'duration',
+                                                  'value', 'confidence'])
+
+    def __len__(self):
+        return len(self.data)
+
+    def __iter__(self):
+        return iter(self.data)
+
+    def to_html(self):
+        '''Render this annotation list in HTML
+
+        Returns
+        -------
+        rendered : str
+            An HTML table containing this annotation's data.
+        '''
+        out = r'''<table border="1" class="dataframe">
+                    <thead>
+                        <tr style="text-align: right;">
+                            <th></th>
+                            <th>time</th>
+                            <th>duration</th>
+                            <th>value</th>
+                            <th>confidence</th>
+                        </tr>
+                    </thead>'''
+        out += r'''<tbody>'''
+        for i, o in enumerate(self.data):
+            out += r'''<tr>
+                            <th>{:d}</th>
+                            <td>{:0.6f}</td>
+                            <td>{:0.6f}</td>
+                            <td>{:}</td>
+                            <td>{:}</td>
+                        </tr>'''.format(i,
+                                        o.time,
+                                        o.duration,
+                                        o.value,
+                                        o.confidence)
+        out += r'''</tbody></table>'''
+        return out
+
+    def _repr_html_(self):
+        return self.to_html()
+
+    @property
+    def __json__(self):
+        r"""Return the JObject as a set of native data types for serialization.
+
+        Note: attributes beginning with underscores are suppressed.
+        """
+        filtered_dict = dict()
+
+        for k, item in six.iteritems(self.__dict__):
+            if k.startswith('_'):
+                continue
+            elif k == 'data':
+                filtered_dict[k] = self.__json_data__
+
+            elif hasattr(item, '__json__'):
+                filtered_dict[k] = item.__json__
+            else:
+                filtered_dict[k] = item
+
+        return filtered_dict
+
+    @property
+    def __json_data__(self):
+        r"""JSON-serialize the observation sequence."""
+        if schema.is_dense(self.namespace):
+            dense_records = dict()
+            for field in Observation._fields:
+                dense_records[field] = []
+
+            for obs in self.data:
+                for key, val in six.iteritems(obs._asdict()):
+                    dense_records[key].append(serialize_obj(val))
+
+            return dense_records
+
+        else:
+            return [serialize_obj(_) for _ in self.data]
+
+    @classmethod
+    def _key(cls, obs):
+        return obs.time
 
 
 class Curator(JObject):
@@ -1833,5 +1773,8 @@ def serialize_obj(obj):
 
     elif isinstance(obj, list):
         return [serialize_obj(x) for x in obj]
+
+    elif isinstance(obj, Observation):
+        return {k: serialize_obj(v) for k, v in six.iteritems(obj._asdict())}
 
     return obj

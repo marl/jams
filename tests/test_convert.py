@@ -58,16 +58,16 @@ def test_pitch_hz_to_contour():
     eq_(ann2.namespace, 'pitch_contour')
 
     # Check index values
-    eq_(ann2.data.obs[0].value['index'], 0)
-    eq_(ann2.data.obs[-1].value['index'], 0)
+    eq_(ann2.data[0].value['index'], 0)
+    eq_(ann2.data[-1].value['index'], 0)
 
     # Check frequency
-    eq_(np.abs(ann2.data.obs[0].value['frequency']), np.abs(values[0]))
-    eq_(np.abs(ann2.data.obs[-1].value['frequency']), np.abs(values[-1]))
+    eq_(np.abs(ann2.data[0].value['frequency']), np.abs(values[0]))
+    eq_(np.abs(ann2.data[-1].value['frequency']), np.abs(values[-1]))
 
     # Check voicings
-    assert not ann2.data.obs[0].value['voiced']
-    assert ann2.data.obs[-1].value['voiced']
+    assert not ann2.data[0].value['voiced']
+    assert ann2.data[-1].value['voiced']
 
 
 def test_pitch_midi_to_contour():
@@ -86,11 +86,11 @@ def test_pitch_midi_to_contour():
     eq_(ann2.namespace, 'pitch_contour')
 
     # Check index values
-    eq_(ann2.data.obs[0].value['index'], 0)
-    eq_(ann2.data.obs[-1].value['index'], 0)
+    eq_(ann2.data[0].value['index'], 0)
+    eq_(ann2.data[-1].value['index'], 0)
 
     # Check voicings
-    assert ann2.data.obs[-1].value['voiced']
+    assert ann2.data[-1].value['voiced']
 
 
 def test_pitch_midi_to_hz():
@@ -104,7 +104,7 @@ def test_pitch_midi_to_hz():
     # Check the namespace
     eq_(ann2.namespace, 'pitch_hz')
     # midi 69 = 440.0 Hz
-    eq_(ann2.data.obs[0].value, 440.0)
+    eq_(ann2.data[0].value, 440.0)
 
     # Check all else is equal
     eq_(len(ann.data), len(ann2.data))
@@ -126,7 +126,7 @@ def test_pitch_hz_to_midi():
     # Check the namespace
     eq_(ann2.namespace, 'pitch_midi')
     # midi 69 = 440.0 Hz
-    eq_(ann2.data.obs[0].value, 69)
+    eq_(ann2.data[0].value, 69)
 
     # Check all else is equal
     eq_(len(ann.data), len(ann2.data))
@@ -148,7 +148,7 @@ def test_note_midi_to_hz():
     # Check the namespace
     eq_(ann2.namespace, 'note_hz')
     # midi 69 = 440.0 Hz
-    eq_(ann2.data.obs[0].value, 440.0)
+    eq_(ann2.data[0].value, 440.0)
 
     # Check all else is equal
     eq_(len(ann.data), len(ann2.data))
@@ -170,7 +170,7 @@ def test_note_hz_to_midi():
     # Check the namespace
     eq_(ann2.namespace, 'note_midi')
     # midi 69 = 440.0 Hz
-    eq_(ann2.data.obs[0].value, 69)
+    eq_(ann2.data[0].value, 69)
 
     # Check all else is equal
     eq_(len(ann.data), len(ann2.data))

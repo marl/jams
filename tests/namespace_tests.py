@@ -29,10 +29,10 @@ def test_ns_time_invalid():
     def __test(data):
         ann = Annotation(namespace='onset')
 
-        # Bypass the safety checks in add_observation
-        ann.data.obs.insert(0, Observation(time=data['time'],
-                                           duration=data['duration'],
-                                           value=None, confidence=None))
+        # Bypass the safety checks in append
+        ann.data.add(Observation(time=data['time'],
+                                 duration=data['duration'],
+                                 value=None, confidence=None))
 
         ann.validate()
 
