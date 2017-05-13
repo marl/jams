@@ -621,6 +621,10 @@ def test_load_fail():
         yield raises(jams.ParameterError)(__test), '{:s}.{:s}'.format(badfile, ext), 'auto'
         yield raises(jams.ParameterError)(__test), '{:s}.{:s}'.format(badfile, ext), ext
         yield raises(jams.ParameterError)(__test), '{:s}.jams'.format(badfile), ext
+
+    # one last test, trying to load form a non-file-like object
+    yield raises(jams.ParameterError)(__test), None, 'auto'
+
     os.rmdir(tdir)
 
 
@@ -1145,3 +1149,24 @@ def test_annotation_data_frame():
         eq_(row.duration, data['duration'][i])
         eq_(row.value, data['value'][i])
         eq_(row.confidence, data['confidence'][i])
+
+
+def test_deprecated():
+
+    @jams.core.deprecated('old version', 'new version')
+    def _foo():
+        pass
+
+    warnings.resetwarnings()
+    warnings.simplefilter('always')
+    with warnings.catch_warnings(record=True) as out:
+        _foo()
+
+        # And that the warning triggered
+        assert len(out) > 0
+
+        # And that the category is correct
+        assert out[0].category is DeprecationWarning
+
+        # And that it says the right thing (roughly)
+        assert 'deprecated' in str(out[0].message).lower()

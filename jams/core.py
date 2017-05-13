@@ -149,7 +149,7 @@ def _open(name_or_fdesc, mode='r', fmt='auto'):
 
     else:
         # Don't know how to handle this. Raise a parameter error
-        raise ParameterError('Invalid filename or descriptor: {:r}'.format(name_or_fdesc))
+        raise ParameterError('Invalid filename or descriptor: {}'.format(name_or_fdesc))
 
 
 def load(path_or_file, validate=True, strict=True, fmt='auto'):
