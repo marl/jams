@@ -10,6 +10,7 @@ import six
 import sys
 import warnings
 
+import numpy as np
 from nose.tools import raises, eq_
 try:
     import pandas.testing as pdt
