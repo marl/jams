@@ -434,11 +434,11 @@ def pattern_to_mireval(ann):
     patterns = defaultdict(lambda: defaultdict(list))
 
     # Iterate over the data in interval-value format
-    for interval, observation in zip(*ann.to_interval_values()):
+    for time, observation in zip(*ann.to_event_values()):
 
         pattern_id = observation['pattern_id']
         occurrence_id = observation['occurrence_id']
-        obs = (interval[0], observation['midi_pitch'])
+        obs = (time, observation['midi_pitch'])
 
         # Push this note observation into the correct pattern/occurrence
         patterns[pattern_id][occurrence_id].append(obs)
