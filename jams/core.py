@@ -980,11 +980,15 @@ class Annotation(JObject):
                                          columns=['time', 'duration',
                                                   'value', 'confidence'])
 
+    # Collection methods
     def __len__(self):
         return len(self.data)
 
     def __iter__(self):
         return iter(self.data)
+
+    def __contains__(self, item):
+        return item in self.data
 
     def to_html(self):
         '''Render this annotation list in HTML
@@ -1063,6 +1067,9 @@ class Annotation(JObject):
 
     @classmethod
     def _key(cls, obs):
+        if not isinstance(obs, Observation):
+            raise JamsError('{} must be of type jams.Observation'.format(obs))
+
         return obs.time
 
 
