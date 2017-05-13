@@ -6,7 +6,6 @@ import collections
 import sys
 import os
 import json
-import six
 import pandas as pd
 
 import jams
@@ -56,6 +55,7 @@ def get_comments(jam, ann):
                        'annotation metadata': ann_comments},
                       indent=2)
 
+
 def lab_dump(ann, comment, filename, sep, comment_char):
     '''Save an annotation as a lab/csv.
 
@@ -77,11 +77,11 @@ def lab_dump(ann, comment, filename, sep, comment_char):
         The character used to denote comments
     '''
 
-    intervals, values = ann.data.to_interval_values()
+    intervals, values = ann.to_interval_values()
 
     frame = pd.DataFrame(columns=['Time', 'End Time', 'Label'],
                          data={'Time': intervals[:, 0],
-                               'End Time': intervals[:, 1], 
+                               'End Time': intervals[:, 1],
                                'Label': values})
 
     with open(filename, 'w') as fdesc:
