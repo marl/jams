@@ -581,7 +581,6 @@ class Annotation(JObject):
         >>> ann.append(time=3, duration=2, value='E#')
         '''
 
-        # TODO: validate time and duration here
         self.data.add(Observation(time=time,
                                   duration=duration,
                                   value=value,
