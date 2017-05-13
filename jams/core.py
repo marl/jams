@@ -29,7 +29,7 @@ Object reference
     JamsFrame
     Sandbox
     JObject
-
+    Observation
 """
 
 import json
@@ -45,6 +45,7 @@ import contextlib
 import gzip
 import copy
 import sys
+from collections import namedtuple
 
 from decorator import decorator
 
@@ -57,7 +58,8 @@ from .exceptions import JamsError, SchemaError, ParameterError
 __all__ = ['load',
            'JObject', 'Sandbox', 'JamsFrame',
            'Annotation', 'Curator', 'AnnotationMetadata',
-           'FileMetadata', 'AnnotationArray', 'JAMS']
+           'FileMetadata', 'AnnotationArray', 'JAMS',
+           'Observation']
 
 
 def deprecated(version, version_removed):
@@ -513,6 +515,11 @@ class JObject(object):
             valid = False
 
         return valid
+
+
+Observation = namedtuple('Observation',
+                         ['time', 'duration', 'value', 'confidence'])
+'''Core observation type: (time, duration, value, confidence).'''
 
 
 class Sandbox(JObject):
@@ -1213,6 +1220,15 @@ class Annotation(JObject):
         duration = timedelta_to_float(self.data.duration.values)
 
         return np.vstack([times, times + duration]).T, list(self.data.value)
+
+    def __iter_obs__(self):
+        for _, (t, d, v, c) in self.data.iterrows():
+            yield Observation(time=t.total_seconds(),
+                              duration=d.total_seconds(),
+                              value=v, confidence=c)
+
+    def __iter__(self):
+        return self.__iter_obs__()
 
 
 class Curator(JObject):
