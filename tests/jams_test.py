@@ -189,7 +189,6 @@ def test_annotation():
             eq_(dict(sandbox), dict(ann.sandbox))
 
         if data is not None:
-            eq_(len(ann), len(data))
             eq_(len(ann.data), len(data))
             for obs1, obs2 in zip(ann.data, data):
                 eq_(obs1._asdict(), obs2)
@@ -246,6 +245,14 @@ def test_annotation_eq():
     ann2.append(**update)
 
     assert not (ann1 == ann2)
+
+
+@raises(jams.JamsError)
+def test_annotation_badtype():
+
+    an = jams.Annotation(namespace='tag_open')
+    # This should throw a jams error because NoneType can't be indexed
+    an.data.add(None)
 
 
 # FileMetadata

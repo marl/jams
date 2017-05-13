@@ -44,8 +44,8 @@ def test_import_lab():
         _, ann = util.import_lab(ns, six.StringIO(lab),
                                  infer_duration=infer_duration)
 
-        eq_(len(ints), len(ann))
-        eq_(len(y), len(ann))
+        eq_(len(ints), len(ann.data))
+        eq_(len(y), len(ann.data))
 
         for yi, ival, obs in zip(y, ints, ann):
             eq_(obs.time, ival[0])
