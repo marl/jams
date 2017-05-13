@@ -43,7 +43,7 @@ def clicks(annotation, sr=22050, length=None, **kwargs):
     events such as beats or segment boundaries.
     '''
 
-    interval, _ = annotation.data.to_interval_values()
+    interval, _ = annotation.to_interval_values()
 
     return filter_kwargs(mir_eval.sonify.clicks, interval[:, 0],
                          fs=sr, length=length, **kwargs)
@@ -56,7 +56,7 @@ def downbeat(annotation, sr=22050, length=None, **kwargs):
     beat_click = mkclick(440 * 2, sr=sr)
     downbeat_click = mkclick(440 * 3, sr=sr)
 
-    intervals, values = annotation.data.to_interval_values()
+    intervals, values = annotation.to_interval_values()
 
     beats, downbeats = [], []
 
@@ -109,7 +109,7 @@ def chord(annotation, sr=22050, length=None, **kwargs):
     This uses mir_eval.sonify.chords.
     '''
 
-    intervals, chords = annotation.data.to_interval_values()
+    intervals, chords = annotation.to_interval_values()
 
     return filter_kwargs(mir_eval.sonify.chords,
                          chords, intervals,
@@ -127,7 +127,7 @@ def pitch_contour(annotation, sr=22050, length=None, **kwargs):
     are summed together.
     '''
 
-    times, values = annotation.data.to_interval_values()
+    times, values = annotation.to_interval_values()
 
     indices = np.unique([v['index'] for v in values])
 
@@ -159,7 +159,7 @@ def piano_roll(annotation, sr=22050, length=None, **kwargs):
     namespace.
     '''
 
-    intervals, pitches = annotation.data.to_interval_values()
+    intervals, pitches = annotation.to_interval_values()
 
     # Construct the pitchogram
     pitch_map = {f: idx for idx, f in enumerate(np.unique(pitches))}

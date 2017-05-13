@@ -104,8 +104,8 @@ def beat(ref, est, **kwargs):
     namespace = 'beat'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
-    ref_interval, _ = ref.data.to_interval_values()
-    est_interval, _ = est.data.to_interval_values()
+    ref_interval, _ = ref.to_interval_values()
+    est_interval, _ = est.to_interval_values()
 
     return mir_eval.beat.evaluate(ref_interval[:, 0], est_interval[:, 0], **kwargs)
 
@@ -145,8 +145,8 @@ def onset(ref, est, **kwargs):
     namespace = 'onset'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
-    ref_interval, _ = ref.data.to_interval_values()
-    est_interval, _ = est.data.to_interval_values()
+    ref_interval, _ = ref.to_interval_values()
+    est_interval, _ = est.to_interval_values()
 
     return mir_eval.onset.evaluate(ref_interval[:, 0], est_interval[:, 0], **kwargs)
 
@@ -187,8 +187,8 @@ def chord(ref, est, **kwargs):
     namespace = 'chord'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
-    ref_interval, ref_value = ref.data.to_interval_values()
-    est_interval, est_value = est.data.to_interval_values()
+    ref_interval, ref_value = ref.to_interval_values()
+    est_interval, est_value = est.to_interval_values()
 
     return mir_eval.chord.evaluate(ref_interval, ref_value,
                                    est_interval, est_value, **kwargs)
@@ -229,8 +229,8 @@ def segment(ref, est, **kwargs):
     namespace = 'segment_open'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
-    ref_interval, ref_value = ref.data.to_interval_values()
-    est_interval, est_value = est.data.to_interval_values()
+    ref_interval, ref_value = ref.to_interval_values()
+    est_interval, est_value = est.to_interval_values()
 
     return mir_eval.segment.evaluate(ref_interval, ref_value,
                                      est_interval, est_value, **kwargs)
@@ -253,7 +253,7 @@ def hierarchy_flatten(annotation):
         A list of lists of labels, ordered by increasing specificity.
     '''
 
-    intervals, values = annotation.data.to_interval_values()
+    intervals, values = annotation.to_interval_values()
 
     ordering = dict()
 
@@ -394,8 +394,8 @@ def melody(ref, est, **kwargs):
     namespace = 'pitch_contour'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
-    ref_interval, ref_p = ref.data.to_interval_values()
-    est_interval, est_p = est.data.to_interval_values()
+    ref_interval, ref_p = ref.to_interval_values()
+    est_interval, est_p = est.to_interval_values()
 
     ref_freq = np.asarray([p['frequency'] * (-1)**(~p['voiced']) for p in ref_p])
     est_freq = np.asarray([p['frequency'] * (-1)**(~p['voiced']) for p in est_p])
@@ -432,7 +432,7 @@ def pattern_to_mireval(ann):
     patterns = defaultdict(lambda: defaultdict(list))
 
     # Iterate over the data in interval-value format
-    for interval, observation in zip(*ann.data.to_interval_values()):
+    for interval, observation in zip(*ann.to_interval_values()):
 
         pattern_id = observation['pattern_id']
         occurrence_id = observation['occurrence_id']
@@ -525,8 +525,8 @@ def transcription(ref, est, **kwargs):
     namespace = 'pitch_contour'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
-    ref_intervals, ref_p = ref.data.to_interval_values()
-    est_intervals, est_p = est.data.to_interval_values()
+    ref_intervals, ref_p = ref.to_interval_values()
+    est_intervals, est_p = est.to_interval_values()
 
     ref_pitches = np.asarray([p['frequency'] * (-1)**(~p['voiced']) for p in ref_p])
     est_pitches = np.asarray([p['frequency'] * (-1)**(~p['voiced']) for p in est_p])
