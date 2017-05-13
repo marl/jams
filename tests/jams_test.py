@@ -246,8 +246,8 @@ def test_annotation_eq():
 
     assert not (ann1 == ann2)
 
-# FileMetadata
 
+# FileMetadata
 def test_filemetadata():
 
     meta = dict(title='Test track',
@@ -260,8 +260,8 @@ def test_filemetadata():
     for k in meta:
         eq_(meta[k], dict_fm[k])
 
-# AnnotationArray
 
+# AnnotationArray
 def test_annotation_array():
 
     arr = jams.AnnotationArray()
@@ -320,6 +320,7 @@ def test_annotation_array_index_simple():
         a1, a2 = anns[i], jam.annotations[i]
         eq_(a1, a2)
 
+
 def test_annotation_array_slice_simple():
 
     jam = jams.JAMS()
@@ -332,6 +333,7 @@ def test_annotation_array_slice_simple():
     res = jam.annotations[:3]
     eq_(len(res), 3)
     assert anns[0] in res
+
 
 def test_annotation_array_index_fancy():
 
@@ -358,6 +360,7 @@ def test_annotation_array_composite():
     eq_(len(jam.annotations['beat', 3:]), 7)
 
     eq_(len(jam.annotations['beat', 2::2]), 4)
+
 
 @raises(IndexError)
 def test_annotation_array_index_error():
