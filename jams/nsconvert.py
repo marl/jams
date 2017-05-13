@@ -181,6 +181,7 @@ def note_hz_to_midi(annotation):
 
     annotation.namespace = 'note_midi'
 
+
     data = annotation.pop_data()
 
     for obs in data:
@@ -212,6 +213,7 @@ def pitch_hz_to_midi(annotation):
     '''Convert a pitch_hz annotation to pitch_midi'''
 
     annotation.namespace = 'pitch_midi'
+
     data = annotation.pop_data()
 
     for obs in data:

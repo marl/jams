@@ -29,7 +29,7 @@ Object reference
     Observation
     Sandbox
     JObject
-
+    Observation
 """
 
 import json
@@ -46,6 +46,11 @@ import warnings
 import contextlib
 import gzip
 
+import copy
+import sys
+
+from decorator import decorator
+
 from .version import version as __VERSION__
 from . import schema
 from .exceptions import JamsError, SchemaError, ParameterError
@@ -56,6 +61,28 @@ __all__ = ['load',
            'Annotation', 'Curator', 'AnnotationMetadata',
            'FileMetadata', 'AnnotationArray', 'JAMS',
            'Observation']
+
+def deprecated(version, version_removed):
+    '''This is a decorator which can be used to mark functions
+    as deprecated.
+
+    It will result in a warning being emitted when the function is used.'''
+
+    def __wrapper(func, *args, **kwargs):
+        '''Warn the user, and then proceed.'''
+        code = six.get_function_code(func)
+        warnings.warn_explicit(
+            "{:s}.{:s}\n\tDeprecated as of JAMS version {:s}."
+            "\n\tIt will be removed in JAMS version {:s}."
+            .format(func.__module__, func.__name__,
+                    version, version_removed),
+            category=DeprecationWarning,
+            filename=code.co_filename,
+            lineno=code.co_firstlineno + 1
+        )
+        return func(*args, **kwargs)
+
+    return decorator(__wrapper)
 
 
 @contextlib.contextmanager
@@ -490,17 +517,17 @@ class JObject(object):
         return valid
 
 
+Observation = namedtuple('Observation',
+                         ['time', 'duration', 'value', 'confidence'])
+'''Core observation type: (time, duration, value, confidence).'''
+
+
 class Sandbox(JObject):
     """Sandbox (unconstrained)
 
     Functionally identical to JObjects, but the class hierarchy might be
     confusing if all objects inherit from Sandboxes."""
     pass
-
-
-Observation = namedtuple('Observation',
-                         ['time', 'duration', 'value', 'confidence'])
-'''Core observation type: (time, duration, value, confidence).'''
 
 
 class Annotation(JObject):
@@ -551,6 +578,7 @@ class Annotation(JObject):
                 self.append_columns(data)
             else:
                 self.append_records(data)
+
 
         if sandbox is None:
             sandbox = Sandbox()
@@ -815,6 +843,7 @@ class Annotation(JObject):
                                        value=obs.value,
                                        confidence=obs.confidence)
 
+        ann_trimmed.data.reset_index(drop=True, inplace=True)
         if 'trim' not in ann_trimmed.sandbox.keys():
             ann_trimmed.sandbox.update(
                 trim=[{'start_time': start_time, 'end_time': end_time,
@@ -934,6 +963,7 @@ class Annotation(JObject):
 
         return sliced_ann
 
+
     def pop_data(self):
         '''Replace this observation's data with a fresh container.
 
@@ -960,6 +990,7 @@ class Annotation(JObject):
         labels : list
             List view of value field.
         '''
+
         ints, vals = [], []
         for obs in self.data:
             ints.append([obs.time, obs.time + obs.duration])
@@ -1785,6 +1816,7 @@ def serialize_obj(obj):
     - lists are recursively serialized element-wise
 
     '''
+
     if isinstance(obj, np.ndarray):
         return obj.tolist()
 
@@ -1795,3 +1827,5 @@ def serialize_obj(obj):
         return {k: serialize_obj(v) for k, v in six.iteritems(obj._asdict())}
 
     return obj
+
+

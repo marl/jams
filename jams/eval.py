@@ -106,6 +106,7 @@ def beat(ref, est, **kwargs):
     namespace = 'beat'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
+
     ref_times, _ = ref.to_event_values()
     est_times, _ = est.to_event_values()
 
@@ -147,6 +148,7 @@ def onset(ref, est, **kwargs):
     namespace = 'onset'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
+
     ref_times, _ = ref.to_event_values()
     est_times, _ = est.to_event_values()
 
@@ -352,6 +354,7 @@ def tempo(ref, est, **kwargs):
 
     ref = coerce_annotation(ref, 'tempo')
     est = coerce_annotation(est, 'tempo')
+
     ref_tempi = np.asarray([o.value for o in ref])
     ref_weight = ref.data[0].confidence
     est_tempi = np.asarray([o.value for o in est])
@@ -396,6 +399,7 @@ def melody(ref, est, **kwargs):
     namespace = 'pitch_contour'
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
+
     ref_times, ref_p = ref.to_event_values()
     est_times, est_p = est.to_event_values()
 
@@ -434,6 +438,7 @@ def pattern_to_mireval(ann):
     patterns = defaultdict(lambda: defaultdict(list))
 
     # Iterate over the data in interval-value format
+
     for time, observation in zip(*ann.to_event_values()):
 
         pattern_id = observation['pattern_id']
