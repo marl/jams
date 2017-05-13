@@ -54,6 +54,9 @@ def test_jobject_serialize():
 
     J = jams.JObject(**data)
 
+    # Stick a dummy _value in for testing
+    J._dummy = True
+
     json_jobject = J.dumps(indent=2)
 
     # De-serialize into dicts
