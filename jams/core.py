@@ -33,22 +33,19 @@ Object reference
 """
 
 import json
-import jsonschema
 from collections import namedtuple
-from sortedcontainers import SortedListWithKey
 
-import numpy as np
-import pandas as pd
 import os
 import re
-import six
 import warnings
 import contextlib
 import gzip
+import six
 
-import copy
-import sys
-
+import numpy as np
+import pandas as pd
+import jsonschema
+from sortedcontainers import SortedListWithKey
 from decorator import decorator
 
 from .version import version as __VERSION__
@@ -61,6 +58,7 @@ __all__ = ['load',
            'Annotation', 'Curator', 'AnnotationMetadata',
            'FileMetadata', 'AnnotationArray', 'JAMS',
            'Observation']
+
 
 def deprecated(version, version_removed):
     '''This is a decorator which can be used to mark functions
@@ -145,11 +143,13 @@ def _open(name_or_fdesc, mode='r', fmt='auto'):
                 yield fdesc
 
         except KeyError:
-            raise ParameterError('Unknown JAMS extension format: "{:s}"'.format(ext))
+            raise ParameterError('Unknown JAMS extension '
+                                 'format: "{:s}"'.format(ext))
 
     else:
         # Don't know how to handle this. Raise a parameter error
-        raise ParameterError('Invalid filename or descriptor: {}'.format(name_or_fdesc))
+        raise ParameterError('Invalid filename or '
+                             'descriptor: {}'.format(name_or_fdesc))
 
 
 def load(path_or_file, validate=True, strict=True, fmt='auto'):
@@ -432,7 +432,8 @@ class JObject(object):
         -------
         match : bool
             `True` if any of the search keys match the specified value,
-            `False` otherwise, or if the search keys do not exist within the object.
+            `False` otherwise, or if the search keys do not exist
+            within the object.
 
         Examples
         --------
@@ -579,7 +580,6 @@ class Annotation(JObject):
             else:
                 self.append_records(data)
 
-
         if sandbox is None:
             sandbox = Sandbox()
 
@@ -663,7 +663,8 @@ class Annotation(JObject):
         -------
         valid : bool
             `True` if the object conforms to schema.
-            `False` if the object fails to conform to schema, but `strict == False`.
+            `False` if the object fails to conform to schema,
+            but `strict == False`.
 
         Raises
         ------
@@ -790,9 +791,9 @@ class Annotation(JObject):
             orig_time = start_time
             orig_duration = end_time - start_time
             warnings.warn(
-                "Annotation.duration is not defined, cannot check for temporal "
-                "intersection, assuming the annotation is valid between "
-                "start_time and end_time.")
+                "Annotation.duration is not defined, cannot check "
+                "for temporal intersection, assuming the annotation "
+                "is valid between start_time and end_time.")
         else:
             orig_time = self.time
             orig_duration = self.duration
@@ -962,7 +963,6 @@ class Annotation(JObject):
 
         return sliced_ann
 
-
     def pop_data(self):
         '''Replace this observation's data with a fresh container.
 
@@ -1053,7 +1053,7 @@ class Annotation(JObject):
                         </tr>
                     </thead>'''
         out += r'''<tbody>'''
-        for i, o in enumerate(self.data):
+        for i, obs in enumerate(self.data):
             out += r'''<tr>
                             <th>{:d}</th>
                             <td>{:0.6f}</td>
@@ -1061,14 +1061,15 @@ class Annotation(JObject):
                             <td>{:}</td>
                             <td>{:}</td>
                         </tr>'''.format(i,
-                                        o.time,
-                                        o.duration,
-                                        o.value,
-                                        o.confidence)
+                                        obs.time,
+                                        obs.duration,
+                                        obs.value,
+                                        obs.confidence)
         out += r'''</tbody></table>'''
         return out
 
     def _repr_html_(self):
+        '''Render annotation as HTML.  See also: `to_html()`'''
         return self.to_html()
 
     @property
@@ -1111,6 +1112,7 @@ class Annotation(JObject):
 
     @classmethod
     def _key(cls, obs):
+        '''Provides sorting index for Observation objects'''
         if not isinstance(obs, Observation):
             raise JamsError('{} must be of type jams.Observation'.format(obs))
 
@@ -1248,7 +1250,8 @@ class AnnotationArray(list):
     are supported:
 
     - integer or slice : acts just as in `list`, e.g., `arr[0]` or `arr[1:3]`
-    - string : acts like a search, e.g., `arr['beat'] == arr.search(namespace='beat')`
+    - string : acts like a search, e.g.,
+      `arr['beat'] == arr.search(namespace='beat')`
     - (string, integer or slice) acts like a search followed by index/slice
 
     Examples
@@ -1733,13 +1736,6 @@ class JAMS(JObject):
 
 
 # -- Helper functions -- #
-
-def timedelta_to_float(t):
-    '''Convert a timedelta64[ns] to floating point (seconds)'''
-
-    return t.astype(np.float) * 1e-9
-
-
 def query_pop(query, prefix, sep='.'):
     '''Pop a prefix from a query string.
 
@@ -1804,7 +1800,8 @@ def match_query(string, query):
     if six.callable(query):
         return query(string)
 
-    elif isinstance(query, six.string_types) and isinstance(string, six.string_types):
+    elif (isinstance(query, six.string_types) and
+          isinstance(string, six.string_types)):
         return re.match(query, string) is not None
 
     else:
@@ -1829,5 +1826,3 @@ def serialize_obj(obj):
         return {k: serialize_obj(v) for k, v in six.iteritems(obj._asdict())}
 
     return obj
-
-
