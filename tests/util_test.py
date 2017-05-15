@@ -56,17 +56,6 @@ def test_import_lab():
         yield __test, ns, lab, ints, y, inf
 
 
-def test_timedelta_to_float():
-
-    # 2.5 seconds
-    t = 2.5
-    x = np.timedelta64(int(t * 1e9))
-    tn = core.timedelta_to_float(x)
-
-    # convert back
-    assert np.allclose(t, tn)
-
-
 def test_query_pop():
 
     def __test(query, prefix, sep, target):
