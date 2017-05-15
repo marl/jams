@@ -995,6 +995,9 @@ class Annotation(JObject):
             ints.append([obs.time, obs.time + obs.duration])
             vals.append(obs.value)
 
+        if not ints:
+            return np.empty(shape=(0, 2), dtype=float), []
+
         return np.array(ints), vals
 
     def to_event_values(self):
