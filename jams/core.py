@@ -766,19 +766,17 @@ class Annotation(JObject):
         >>> ann_trim = ann.trim(5, 8, strict=False)
         >>> print(ann_trim.time, ann_trim.duration)
         (5, 3)
-        >>> ann_trim.data
-              time  duration  value confidence
-        0 00:00:05  00:00:01    two       None
-        1 00:00:06  00:00:02  three       None
-        2 00:00:07  00:00:01   four       None
-        >>>
+        >>> ann_trim.to_dataframe()
+           time  duration  value confidence
+        0     5         1    two       None
+        1     6         2  three       None
+        2     7         1   four       None
         >>> ann_trim_strict = ann.trim(5, 8, strict=True)
         >>> print(ann_trim_strict.time, ann_trim_strict.duration)
         (5, 3)
         >>> ann_trim_strict.data
-              time  duration  value confidence
-        0 00:00:06  00:00:02  three       None
-
+           time  duration  value confidence
+        0     6         2  three       None
         '''
         # Check for basic start_time and end_time validity
         if end_time <= start_time:
@@ -917,18 +915,16 @@ class Annotation(JObject):
         >>> print(ann_slice.time, ann_slice.duration)
         (0, 3)
         >>> ann_slice.data
-              time  duration  value confidence
-        0 00:00:00  00:00:01    two       None
-        1 00:00:01  00:00:02  three       None
-        2 00:00:02  00:00:01   four       None
-        >>>
+           time  duration  value confidence
+        0     0         1    two       None
+        1     1         2  three       None
+        2     2         1   four       None
         >>> ann_slice_strict = ann.slice(5, 8, strict=True)
         >>> print(ann_slice_strict.time, ann_slice_strict.duration)
         (0, 3)
         >>> ann_slice_strict.data
-              time  duration  value confidence
-        0 00:00:01  00:00:02  three       None
-
+           time  duration  value confidence
+        0     1         2  three       None
         '''
         # start by trimming the annotation
         sliced_ann = self.trim(start_time, end_time, strict=strict)
