@@ -68,7 +68,7 @@ def convert(annotation, target_namespace):
     ------
     SchemaError
         if the input annotation fails to validate
-    
+
     NamespaceError
         if no conversion is possible
 
@@ -180,7 +180,6 @@ def note_hz_to_midi(annotation):
     '''Convert a pitch_hz annotation to pitch_midi'''
 
     annotation.namespace = 'note_midi'
-
 
     data = annotation.pop_data()
 
