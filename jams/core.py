@@ -1021,7 +1021,8 @@ class Annotation(JObject):
         -------
         df : pd.DataFrame
             Columns are `time, duration, value, confidence`.
-            Each row is an observation.
+            Each row is an observation, and rows are sorted by
+            ascending `time`.
         '''
         return pd.DataFrame.from_records(list(self.data),
                                          columns=['time', 'duration',
