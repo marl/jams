@@ -12,7 +12,6 @@ Utility functions
     smkdirs
     filebase
     find_with_extension
-    _deprecated
 """
 
 import os
