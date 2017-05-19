@@ -220,6 +220,14 @@ def sonify(annotation, sr=22050, duration=None, **kwargs):
     if duration is not None:
         length = int(duration * sr)
 
+    # If the annotation can be directly sonified, try that first
+    if annotation.namespace in SONIFY_MAPPING:
+        ann = coerce_annotation(annotation, annotation.namespace)
+        return SONIFY_MAPPING[annotation.namespace](ann,
+                                                    sr=sr,
+                                                    length=length,
+                                                    **kwargs)
+
     for namespace, func in six.iteritems(SONIFY_MAPPING):
         try:
             ann = coerce_annotation(annotation, namespace)
