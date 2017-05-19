@@ -41,8 +41,8 @@ def test_import_lab():
     durations = [True, False, True, False]
 
     def __test(ns, lab, ints, y, infer_duration):
-        _, ann = util.import_lab(ns, six.StringIO(lab),
-                                 infer_duration=infer_duration)
+        ann = util.import_lab(ns, six.StringIO(lab),
+                              infer_duration=infer_duration)
 
         eq_(len(ints), len(ann.data))
         eq_(len(y), len(ann.data))
