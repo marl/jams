@@ -68,7 +68,7 @@ def convert(annotation, target_namespace):
     ------
     SchemaError
         if the input annotation fails to validate
-    
+
     NamespaceError
         if no conversion is possible
 
@@ -142,8 +142,14 @@ def can_convert(annotation, target_namespace):
 def pitch_hz_to_contour(annotation):
     '''Convert a pitch_hz annotation to a contour'''
     annotation.namespace = 'pitch_contour'
-    annotation.data.value = [dict(index=0, frequency=np.abs(f), voiced=f > 0)
-                             for f in annotation.data.value]
+    data = annotation.pop_data()
+
+    for obs in data:
+        annotation.append(time=obs.time, duration=obs.duration,
+                          confidence=obs.confidence,
+                          value=dict(index=0,
+                                     frequency=np.abs(obs.value),
+                                     voiced=obs.value > 0))
     return annotation
 
 
@@ -159,7 +165,13 @@ def note_midi_to_hz(annotation):
     '''Convert a pitch_midi annotation to pitch_hz'''
 
     annotation.namespace = 'note_hz'
-    annotation.data.value = 440 * (2.0 ** ((annotation.data.value - 69.0)/12.0))
+    data = annotation.pop_data()
+
+    for obs in data:
+        annotation.append(time=obs.time, duration=obs.duration,
+                          confidence=obs.confidence,
+                          value=440 * (2.0**((obs.value - 69.0)/12.0)))
+
     return annotation
 
 
@@ -169,8 +181,13 @@ def note_hz_to_midi(annotation):
 
     annotation.namespace = 'note_midi'
 
-    logf = np.log2(np.asarray(annotation.data.value.values, dtype=np.float))
-    annotation.data.value = 12 * (logf - np.log2(440.0)) + 69
+    data = annotation.pop_data()
+
+    for obs in data:
+        annotation.append(time=obs.time, duration=obs.duration,
+                          confidence=obs.confidence,
+                          value=12 * (np.log2(obs.value) - np.log2(440.0)) + 69)
+
     return annotation
 
 
@@ -179,7 +196,14 @@ def pitch_midi_to_hz(annotation):
     '''Convert a pitch_midi annotation to pitch_hz'''
 
     annotation.namespace = 'pitch_hz'
-    annotation.data.value = 440 * (2.0 ** ((annotation.data.value - 69.0)/12.0))
+
+    data = annotation.pop_data()
+
+    for obs in data:
+        annotation.append(time=obs.time, duration=obs.duration,
+                          confidence=obs.confidence,
+                          value=440 * (2.0**((obs.value - 69.0)/12.0)))
+
     return annotation
 
 
@@ -188,8 +212,13 @@ def pitch_hz_to_midi(annotation):
     '''Convert a pitch_hz annotation to pitch_midi'''
 
     annotation.namespace = 'pitch_midi'
-    logf = np.log2(np.asarray(annotation.data.value.values, dtype=np.float))
-    annotation.data.value = 12 * (logf - np.log2(440.0)) + 69
+
+    data = annotation.pop_data()
+
+    for obs in data:
+        annotation.append(time=obs.time, duration=obs.duration,
+                          confidence=obs.confidence,
+                          value=12 * (np.log2(obs.value) - np.log2(440.0)) + 69)
     return annotation
 
 
@@ -214,8 +243,14 @@ def beat_position(annotation):
     '''Convert beat_position to beat'''
 
     annotation.namespace = 'beat'
-    annotation.data.value = annotation.data.value.apply(lambda x: x['position'])
+    data = annotation.pop_data()
+    for obs in data:
+        annotation.append(time=obs.time, duration=obs.duration,
+                          confidence=obs.confidence,
+                          value=obs.value['position'])
+
     return annotation
+
 
 @_conversion('chord', 'chord_harte')
 def chordh_to_chord(annotation):

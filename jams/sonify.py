@@ -133,7 +133,7 @@ def pitch_contour(annotation, sr=22050, length=None, **kwargs):
 
     y_out = 0.0
     for ix in indices:
-        rows = annotation.data.value.apply(lambda x: x['index'] == ix).nonzero()[0]
+        rows = [i for (i, v) in enumerate(values) if v['index'] == ix]
 
         freqs = np.asarray([values[r]['frequency'] for r in rows])
         unv = ~np.asarray([values[r]['voiced'] for r in rows])
@@ -153,7 +153,7 @@ def pitch_contour(annotation, sr=22050, length=None, **kwargs):
 
 def piano_roll(annotation, sr=22050, length=None, **kwargs):
     '''Sonify a piano-roll
-    
+
     This uses mir_eval.sonify.time_frequency, and is appropriate
     for sparse transcription data, e.g., annotations in the `note_midi`
     namespace.

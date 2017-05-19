@@ -3,7 +3,7 @@
 '''mir_eval integration tests'''
 
 import numpy as np
-from nose.tools import raises, nottest
+from nose.tools import raises
 import jams
 
 from util_test import srand
@@ -28,7 +28,6 @@ def create_annotation(values, namespace='beat', offset=0.0, duration=1, confiden
     return ann
 
 
-@nottest # Temporarily disabled due to mir_eval bug with numpy 1.12
 def test_beat_valid():
 
     ref_ann = create_annotation(values=np.arange(10) % 4 + 0.5,
@@ -189,7 +188,6 @@ def test_melody_valid():
 
 # Temporarily disabling because pandas 0.20 won't allow us to
 # construct ill-typed observations
-@nottest
 def test_melody_invalid():
 
     srand()
@@ -308,7 +306,6 @@ def test_transcription_valid():
 
 # Temporarily disabled because pandas 0.20 will not allow unsafe type mixtures,
 # so there's no easy way to make a bad corner case
-@nottest
 def test_transcription_invalid():
 
     ref_jam = jams.load('fixtures/transcription_ref.jams')

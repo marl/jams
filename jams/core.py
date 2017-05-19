@@ -26,29 +26,27 @@ Object reference
     AnnotationMetadata
     Curator
     Annotation
-    JamsFrame
+    Observation
     Sandbox
     JObject
     Observation
 """
 
 import json
-import jsonschema
+from collections import namedtuple
 
-import numpy as np
-import pandas as pd
 import os
 import re
-import six
 import warnings
 import contextlib
 import gzip
-import copy
-import sys
-from collections import namedtuple
+import six
 
+import numpy as np
+import pandas as pd
+import jsonschema
+from sortedcontainers import SortedListWithKey
 from decorator import decorator
-
 
 from .version import version as __VERSION__
 from . import schema
@@ -56,7 +54,7 @@ from .exceptions import JamsError, SchemaError, ParameterError
 
 
 __all__ = ['load',
-           'JObject', 'Sandbox', 'JamsFrame',
+           'JObject', 'Sandbox',
            'Annotation', 'Curator', 'AnnotationMetadata',
            'FileMetadata', 'AnnotationArray', 'JAMS',
            'Observation']
@@ -145,11 +143,13 @@ def _open(name_or_fdesc, mode='r', fmt='auto'):
                 yield fdesc
 
         except KeyError:
-            raise ParameterError('Unknown JAMS extension format: "{:s}"'.format(ext))
+            raise ParameterError('Unknown JAMS extension '
+                                 'format: "{:s}"'.format(ext))
 
     else:
         # Don't know how to handle this. Raise a parameter error
-        raise ParameterError('Invalid filename or descriptor: {:r}'.format(name_or_fdesc))
+        raise ParameterError('Invalid filename or '
+                             'descriptor: {}'.format(name_or_fdesc))
 
 
 def load(path_or_file, validate=True, strict=True, fmt='auto'):
@@ -432,7 +432,8 @@ class JObject(object):
         -------
         match : bool
             `True` if any of the search keys match the specified value,
-            `False` otherwise, or if the search keys do not exist within the object.
+            `False` otherwise, or if the search keys do not exist
+            within the object.
 
         Examples
         --------
@@ -530,251 +531,6 @@ class Sandbox(JObject):
     pass
 
 
-class JamsFrame(pd.DataFrame):
-    '''A data-frame class for JAMS.
-
-    This automates certain niceties, such as timestamp
-    conversion and serialization.
-    '''
-
-    __dense = False
-
-    def __init__(self, data=None, index=None, columns=None, dtype=None):
-        '''Construct a new JamsFrame object.
-
-        Parameters
-        ----------
-        data
-            Optional data for the new JamsFrame, in any format supported
-            by `pandas.DataFrame.__init__`.
-
-            Fields must be `['time', 'duration', 'value', 'confidence']`.
-
-            `time` and `duration` fields must be floating point types,
-            measured in seconds.
-
-        index
-            Optional index on `data`.
-
-        columns
-            These parameters are ignored by JamsFrame, but are allowed
-            for API compatibility with `pandas.DataFrame`.
-
-        dtype : tuple of types
-            The first entry corresponds to the `value` field's dtype,
-            the second corresponds to the `confidence` field.
-
-            These can be obtained for any JAMS namespace by
-            `jams.schema.get_dtypes(namespace_id)`.
-
-
-        See Also
-        --------
-        from_dict
-        from_dataframe
-        pandas.DataFrame.__init__
-
-        '''
-        super(JamsFrame, self).__init__(data=data,
-                                        index=index,
-                                        columns=self.fields())
-
-        self.time = pd.to_timedelta(self.time, unit='s')
-        self.duration = pd.to_timedelta(self.duration, unit='s')
-        if dtype:
-            self.value = self.value.astype(dtype[0])
-            self.confidence = self.value.astype(dtype[1])
-
-    @property
-    def dense(self):
-        '''Boolean to determine whether the encoding is dense or sparse.
-
-        Returns
-        -------
-        dense : bool
-            `True` if the data should be encoded densely
-            `False` otherwise
-        '''
-        return self.__dense
-
-    @dense.setter
-    def dense(self, value):
-        '''Setter for dense'''
-        self.__dense = value
-
-    @classmethod
-    def fields(cls):
-        '''Fields of a JamsFrame: (time, duration, value, confidence)
-
-        Returns
-        -------
-        fields : list
-            The only permissible fields for a JamsFrame:
-            `time`, `duration`, `value`, and `confidence`
-        '''
-        return ['time', 'duration', 'value', 'confidence']
-
-    @classmethod
-    def from_dict(cls, *args, **kwargs):
-        '''Construct a new JamsFrame from a dictionary or list of dictionaries.
-
-        This is analogous to pd.DataFrame.from_dict, except the returned object
-        has the type `JamsFrame`.
-
-        See Also
-        --------
-        pandas.DataFrame.from_dict
-        from_dataframe
-        '''
-        new_frame = super(JamsFrame, cls).from_dict(*args, **kwargs)
-
-        return cls.from_dataframe(new_frame)
-
-    @classmethod
-    def from_dataframe(cls, frame):
-        '''Convert a pandas DataFrame into a JamsFrame.
-
-        Note: this operation is destructive, in that the input
-        DataFrame will have its type and data altered.
-
-        Parameters
-        ----------
-        frame : pandas.DataFrame
-            The input DataFrame.  Must have the appropriate JamsFrame fields:
-            'time', 'duration', 'value', and 'confidence'.
-
-            'time' and 'duration' fields should be of type `float` and measured
-            in seconds.
-
-        Returns
-        -------
-        jams_frame : JamsFrame
-            The input `frame` modified to form a JamsFrame.
-
-        See Also
-        --------
-        from_dict
-        '''
-        # Encode time properly
-        frame.time = pd.to_timedelta(frame.time, unit='s')
-        frame.duration = pd.to_timedelta(frame.duration, unit='s')
-
-        # Properly order the columns
-        frame = frame[cls.fields()]
-
-        # Clobber the class attribute
-        frame.__class__ = cls
-        return frame
-
-    @property
-    def __json__(self):
-        '''JSON encoding attribute'''
-
-        def __recursive_simplify(D):
-            '''A simplifier for nested dictionary structures'''
-            if isinstance(D, list):
-                return [__recursive_simplify(Di) for Di in D]
-
-            dict_out = {}
-            for key, value in six.iteritems(D):
-                if isinstance(value, dict):
-                    dict_out[key] = __recursive_simplify(value)
-                else:
-                    dict_out[key] = serialize_obj(value)
-            return dict_out
-
-        # By default, we'll output a record for each row
-        # But, if the dense flag is set, we'll output the entire
-        # table as one object
-
-        orient = 'records'
-        if self.dense:
-            orient = 'list'
-
-        return __recursive_simplify(self.to_dict(orient=orient))
-
-    def add_observation(self, time=None, duration=None,
-                        value=None, confidence=None):
-        '''Add a single observation event to an existing frame.
-
-        New observations are appended to the end of the frame.
-
-        Parameters
-        ----------
-        time : float
-            The time of the new observation, in seconds
-
-        duration : float
-            The duration of the new observation, in seconds
-
-        value
-        confidence
-            The value and confidence fields of the new observation.
-            This should conform to the corresponding `namespace` of the
-            containing `Annotation` object.
-
-        Examples
-        --------
-        >>> frame = jams.JamsFrame()
-        >>> frame.add_observation(time=3, duration=1.5, value='C#')
-        >>> frame.add_observation(time=5, duration=.5, value='C#:min', confidence=.8)
-        >>> frame
-              time        duration   value confidence
-        0 00:00:03 00:00:01.500000      C#        NaN
-        1 00:00:05 00:00:00.500000  C#:min        0.8
-        '''
-
-        if time is None or not (time >= 0.0):
-            raise ParameterError('time={} must be a non-negative number'.format(time))
-
-        if duration is None or not (duration >= 0.0):
-            raise ParameterError('duration={} must be a non-negative number'.format(duration))
-
-        if not len(self):
-            n = 0
-        else:
-            n = self.index.max() + 1
-
-        try:
-            self.set_value(n, 'time', pd.to_timedelta(time, unit='s'))
-            self.set_value(n, 'duration', pd.to_timedelta(duration, unit='s'))
-            self.set_value(n, 'value', value)
-            self.set_value(n, 'confidence', confidence)
-        except ValueError as exc:
-            self.drop(n, inplace=True, errors='ignore')
-            six.reraise(SchemaError, SchemaError(str(exc)), sys.exc_info()[2])
-
-    @deprecated('0.2.3', '0.3.0')
-    def to_interval_values(self):
-        '''Extract observation data in a `mir_eval`-friendly format.
-
-        Returns
-        -------
-        intervals : np.ndarray [shape=(n, 2), dtype=float]
-            Start- and end-times of all valued intervals
-
-            `intervals[i, :] = [time[i], time[i] + duration[i]]`
-
-        labels : list
-            List view of value field.
-        '''
-
-        times = timedelta_to_float(self.time.values)
-        duration = timedelta_to_float(self.duration.values)
-
-        return np.vstack([times, times + duration]).T, list(self.value)
-
-    def __deepcopy__(self, memo):
-        '''Explicit deep-copy implementation'''
-        jf = JamsFrame()
-        for field in self.fields():
-            jf[field] = pd.Series([copy.deepcopy(_) for _ in self[field]],
-                                  dtype=self[field].dtype)
-
-        jf.dense = copy.deepcopy(self.dense)
-        return jf
-
-
 class Annotation(JObject):
     """Annotation base class."""
 
@@ -791,9 +547,8 @@ class Annotation(JObject):
         namespace : str
             The namespace for this annotation
 
-        data : dict or list-of-dict
-            Data for the new annotation in a format supported by
-            `JamsFrame.from_dict`
+        data : dict of lists, list of dicts, or list of Observations
+            Data for the new annotation
 
         annotation_metadata : AnnotationMetadata (or dict), default=None.
             Metadata corresponding to this Annotation.
@@ -817,25 +572,23 @@ class Annotation(JObject):
 
         self.namespace = namespace
 
-        dtypes = schema.get_dtypes(self.namespace)
+        self.data = SortedListWithKey(key=self._key)
 
-        if data is None:
-            self.data = JamsFrame(dtype=dtypes)
-        else:
-            self.data = JamsFrame.from_dict(data)
+        if data is not None:
+            if isinstance(data, dict):
+                self.append_columns(data)
+            else:
+                self.append_records(data)
 
         if sandbox is None:
             sandbox = Sandbox()
 
         self.sandbox = Sandbox(**sandbox)
 
-        # Set the data export coding to match the namespace
-        self.data.dense = schema.is_dense(self.namespace)
-
         self.time = time
         self.duration = duration
 
-    def append(self, **kwargs):
+    def append(self, time=None, duration=None, value=None, confidence=None):
         '''Append an observation to the data field
 
         Parameters
@@ -850,41 +603,51 @@ class Annotation(JObject):
             Types and values should conform to the namespace of the
             Annotation object.
 
-        See Also
-        --------
-        JamsFrame.add_observation
-
         Examples
         --------
         >>> ann = jams.Annotation(namespace='chord')
-        >>> ann.append(time=0, duration=3, value='C#')
         >>> ann.append(time=3, duration=2, value='E#')
-        >>> ann
-        <Annotation: namespace, annotation_metadata, data, sandbox>
-        >>> ann.data
-              time  duration value confidence
-        0 00:00:00  00:00:03    C#       None
-        1 00:00:03  00:00:02    E#       None
         '''
 
-        self.data.add_observation(**kwargs)
+        self.data.add(Observation(time=time,
+                                  duration=duration,
+                                  value=value,
+                                  confidence=confidence))
 
-    def __eq__(self, other):
-        '''Override JObject equality to handle JamsFrames specially'''
-        if not isinstance(other, self.__class__):
-            return False
+    def append_records(self, records):
+        '''Add observations from row-major storage.
 
-        for key in self.__dict__:
-            value = True
-            if key == 'data':
-                value = self.__dict__[key].equals(other.__dict__[key])
+        This is primarily useful for deserializing sparsely packed data.
+
+        Parameters
+        ----------
+        records : iterable of dicts or Observations
+            Each element of `records` corresponds to one observation.
+        '''
+        for obs in records:
+            if isinstance(obs, Observation):
+                self.append(**obs._asdict())
             else:
-                value = self.__dict__[key] == other.__dict__[key]
+                self.append(**obs)
 
-            if not value:
-                return False
+    def append_columns(self, columns):
+        '''Add observations from column-major storage.
 
-        return True
+        This is primarily used for deserializing densely packed data.
+
+        Parameters
+        ----------
+        columns : dict of lists
+            Keys must be `time, duration, value, confidence`,
+            and each much be a list of equal length.
+
+        '''
+        self.append_records([dict(time=t, duration=d, value=v, confidence=c)
+                             for (t, d, v, c)
+                             in six.moves.zip(columns['time'],
+                                              columns['duration'],
+                                              columns['value'],
+                                              columns['confidence'])])
 
     def validate(self, strict=True):
         '''Validate this annotation object against the JAMS schema,
@@ -900,7 +663,8 @@ class Annotation(JObject):
         -------
         valid : bool
             `True` if the object conforms to schema.
-            `False` if the object fails to conform to schema, but `strict == False`.
+            `False` if the object fails to conform to schema,
+            but `strict == False`.
 
         Raises
         ------
@@ -918,18 +682,9 @@ class Annotation(JObject):
         ann_schema = schema.namespace(self.namespace)
 
         try:
-            records = self.data.__json__
-
-            # If the data has a dense packing, reshape it for record-wise
-            # validation
-            if self.data.dense:
-                records = [dict(_)
-                           for _ in zip(*[[(k, v) for v in value]
-                                          for (k, value) in six.iteritems(records)])]
-
             # validate each record in the frame
-            for rec in records:
-                jsonschema.validate(rec, ann_schema)
+            for rec in self.data:
+                jsonschema.validate(serialize_obj(rec), ann_schema)
 
         except jsonschema.ValidationError as invalid:
             if strict:
@@ -1011,19 +766,17 @@ class Annotation(JObject):
         >>> ann_trim = ann.trim(5, 8, strict=False)
         >>> print(ann_trim.time, ann_trim.duration)
         (5, 3)
-        >>> ann_trim.data
-              time  duration  value confidence
-        0 00:00:05  00:00:01    two       None
-        1 00:00:06  00:00:02  three       None
-        2 00:00:07  00:00:01   four       None
-        >>>
+        >>> ann_trim.to_dataframe()
+           time  duration  value confidence
+        0     5         1    two       None
+        1     6         2  three       None
+        2     7         1   four       None
         >>> ann_trim_strict = ann.trim(5, 8, strict=True)
         >>> print(ann_trim_strict.time, ann_trim_strict.duration)
         (5, 3)
         >>> ann_trim_strict.data
-              time  duration  value confidence
-        0 00:00:06  00:00:02  three       None
-
+           time  duration  value confidence
+        0     6         2  three       None
         '''
         # Check for basic start_time and end_time validity
         if end_time <= start_time:
@@ -1036,9 +789,9 @@ class Annotation(JObject):
             orig_time = start_time
             orig_duration = end_time - start_time
             warnings.warn(
-                "Annotation.duration is not defined, cannot check for temporal "
-                "intersection, assuming the annotation is valid between "
-                "start_time and end_time.")
+                "Annotation.duration is not defined, cannot check "
+                "for temporal intersection, assuming the annotation "
+                "is valid between start_time and end_time.")
         else:
             orig_time = self.time
             orig_duration = self.duration
@@ -1071,10 +824,10 @@ class Annotation(JObject):
         # We do this rather than copying and directly manipulating the
         # annotation' data frame (which might be faster) since this way trim is
         # independent of the internal data representation.
-        for idx, obs in self.data.iterrows():
+        for obs in self.data:
 
-            obs_start = obs['time'].total_seconds()
-            obs_end = obs_start + obs['duration'].total_seconds()
+            obs_start = obs.time
+            obs_end = obs_start + obs.duration
 
             if obs_start < trim_end and obs_end > trim_start:
 
@@ -1086,10 +839,9 @@ class Annotation(JObject):
                         (new_start == obs_start and new_end == obs_end)):
                     ann_trimmed.append(time=new_start,
                                        duration=new_duration,
-                                       value=obs['value'],
-                                       confidence=obs['confidence'])
+                                       value=obs.value,
+                                       confidence=obs.confidence)
 
-        ann_trimmed.data.reset_index(drop=True, inplace=True)
         if 'trim' not in ann_trimmed.sandbox.keys():
             ann_trimmed.sandbox.update(
                 trim=[{'start_time': start_time, 'end_time': end_time,
@@ -1163,31 +915,36 @@ class Annotation(JObject):
         >>> print(ann_slice.time, ann_slice.duration)
         (0, 3)
         >>> ann_slice.data
-              time  duration  value confidence
-        0 00:00:00  00:00:01    two       None
-        1 00:00:01  00:00:02  three       None
-        2 00:00:02  00:00:01   four       None
-        >>>
+           time  duration  value confidence
+        0     0         1    two       None
+        1     1         2  three       None
+        2     2         1   four       None
         >>> ann_slice_strict = ann.slice(5, 8, strict=True)
         >>> print(ann_slice_strict.time, ann_slice_strict.duration)
         (0, 3)
         >>> ann_slice_strict.data
-              time  duration  value confidence
-        0 00:00:01  00:00:02  three       None
-
+           time  duration  value confidence
+        0     1         2  three       None
         '''
         # start by trimming the annotation
         sliced_ann = self.trim(start_time, end_time, strict=strict)
+        raw_data = sliced_ann.pop_data()
 
         # now adjust the start time of the annotation and the observations it
         # contains.
+
+        for obs in raw_data:
+            new_time = max(0, obs.time - start_time)
+            # if obs.time > start_time,
+            #   duration doesn't change
+            # if obs.time < start_time,
+            #   duration shrinks by start_time - obs.time
+            sliced_ann.append(time=new_time,
+                              duration=obs.duration,
+                              value=obs.value,
+                              confidence=obs.confidence)
+
         ref_time = sliced_ann.time
-        sliced_ann.time = max(0, sliced_ann.time - start_time)
-        adjustment = ref_time - sliced_ann.time
-
-        sliced_ann.data['time'] = sliced_ann.data['time'].apply(
-            lambda x: x - pd.to_timedelta(adjustment, unit='s'))
-
         slice_start = ref_time
         slice_end = ref_time + sliced_ann.duration
 
@@ -1201,6 +958,19 @@ class Annotation(JObject):
                  'slice_start': slice_start, 'slice_end': slice_end})
 
         return sliced_ann
+
+    def pop_data(self):
+        '''Replace this observation's data with a fresh container.
+
+        Returns
+        -------
+        annotation_data : SortedListWithKey
+            The original annotation data container
+        '''
+
+        data = self.data
+        self.data = SortedListWithKey(key=self._key)
+        return data
 
     def to_interval_values(self):
         '''Extract observation data in a `mir_eval`-friendly format.
@@ -1216,19 +986,134 @@ class Annotation(JObject):
             List view of value field.
         '''
 
-        times = timedelta_to_float(self.data.time.values)
-        duration = timedelta_to_float(self.data.duration.values)
+        ints, vals = [], []
+        for obs in self.data:
+            ints.append([obs.time, obs.time + obs.duration])
+            vals.append(obs.value)
 
-        return np.vstack([times, times + duration]).T, list(self.data.value)
+        if not ints:
+            return np.empty(shape=(0, 2), dtype=float), []
 
-    def __iter_obs__(self):
-        for _, (t, d, v, c) in self.data.iterrows():
-            yield Observation(time=t.total_seconds(),
-                              duration=d.total_seconds(),
-                              value=v, confidence=c)
+        return np.array(ints), vals
+
+    def to_event_values(self):
+        '''Extract observation data in a `mir_eval`-friendly format.
+
+        Returns
+        -------
+        times : np.ndarray [shape=(n,), dtype=float]
+            Start-time of all observations
+
+        labels : list
+            List view of value field.
+        '''
+        ints, vals = [], []
+        for obs in self.data:
+            ints.append(obs.time)
+            vals.append(obs.value)
+
+        return np.array(ints), vals
+
+    def to_dataframe(self):
+        '''Convert this annotation to a pandas dataframe.
+
+        Returns
+        -------
+        df : pd.DataFrame
+            Columns are `time, duration, value, confidence`.
+            Each row is an observation, and rows are sorted by
+            ascending `time`.
+        '''
+        return pd.DataFrame.from_records(list(self.data),
+                                         columns=['time', 'duration',
+                                                  'value', 'confidence'])
 
     def __iter__(self):
-        return self.__iter_obs__()
+        return iter(self.data)
+
+    def to_html(self):
+        '''Render this annotation list in HTML
+
+        Returns
+        -------
+        rendered : str
+            An HTML table containing this annotation's data.
+        '''
+        out = r'''<table border="1" class="dataframe">
+                    <thead>
+                        <tr style="text-align: right;">
+                            <th></th>
+                            <th>time</th>
+                            <th>duration</th>
+                            <th>value</th>
+                            <th>confidence</th>
+                        </tr>
+                    </thead>'''
+        out += r'''<tbody>'''
+        for i, obs in enumerate(self.data):
+            out += r'''<tr>
+                            <th>{:d}</th>
+                            <td>{:0.6f}</td>
+                            <td>{:0.6f}</td>
+                            <td>{:}</td>
+                            <td>{:}</td>
+                        </tr>'''.format(i,
+                                        obs.time,
+                                        obs.duration,
+                                        obs.value,
+                                        obs.confidence)
+        out += r'''</tbody></table>'''
+        return out
+
+    def _repr_html_(self):
+        '''Render annotation as HTML.  See also: `to_html()`'''
+        return self.to_html()
+
+    @property
+    def __json__(self):
+        r"""Return the JObject as a set of native data types for serialization.
+
+        Note: attributes beginning with underscores are suppressed.
+        """
+        filtered_dict = dict()
+
+        for k, item in six.iteritems(self.__dict__):
+            if k.startswith('_'):
+                continue
+            elif k == 'data':
+                filtered_dict[k] = self.__json_data__
+
+            elif hasattr(item, '__json__'):
+                filtered_dict[k] = item.__json__
+            else:
+                filtered_dict[k] = item
+
+        return filtered_dict
+
+    @property
+    def __json_data__(self):
+        r"""JSON-serialize the observation sequence."""
+        if schema.is_dense(self.namespace):
+            dense_records = dict()
+            for field in Observation._fields:
+                dense_records[field] = []
+
+            for obs in self.data:
+                for key, val in six.iteritems(obs._asdict()):
+                    dense_records[key].append(serialize_obj(val))
+
+            return dense_records
+
+        else:
+            return [serialize_obj(_) for _ in self.data]
+
+    @classmethod
+    def _key(cls, obs):
+        '''Provides sorting index for Observation objects'''
+        if not isinstance(obs, Observation):
+            raise JamsError('{} must be of type jams.Observation'.format(obs))
+
+        return obs.time
 
 
 class Curator(JObject):
@@ -1362,7 +1247,8 @@ class AnnotationArray(list):
     are supported:
 
     - integer or slice : acts just as in `list`, e.g., `arr[0]` or `arr[1:3]`
-    - string : acts like a search, e.g., `arr['beat'] == arr.search(namespace='beat')`
+    - string : acts like a search, e.g.,
+      `arr['beat'] == arr.search(namespace='beat')`
     - (string, integer or slice) acts like a search followed by index/slice
 
     Examples
@@ -1847,13 +1733,6 @@ class JAMS(JObject):
 
 
 # -- Helper functions -- #
-
-def timedelta_to_float(t):
-    '''Convert a timedelta64[ns] to floating point (seconds)'''
-
-    return t.astype(np.float) * 1e-9
-
-
 def query_pop(query, prefix, sep='.'):
     '''Pop a prefix from a query string.
 
@@ -1918,7 +1797,8 @@ def match_query(string, query):
     if six.callable(query):
         return query(string)
 
-    elif isinstance(query, six.string_types) and isinstance(string, six.string_types):
+    elif (isinstance(query, six.string_types) and
+          isinstance(string, six.string_types)):
         return re.match(query, string) is not None
 
     else:
@@ -1928,20 +1808,18 @@ def match_query(string, query):
 def serialize_obj(obj):
     '''Custom serialization functionality for working with advanced data types.
 
-    - Timedelta objects are converted to floats (in seconds)
     - numpy arrays are converted to lists
     - lists are recursively serialized element-wise
 
     '''
-    if isinstance(obj, pd.Timedelta):
-        return obj.total_seconds()
 
-    elif isinstance(obj, np.ndarray):
+    if isinstance(obj, np.ndarray):
         return obj.tolist()
 
     elif isinstance(obj, list):
         return [serialize_obj(x) for x in obj]
 
+    elif isinstance(obj, Observation):
+        return {k: serialize_obj(v) for k, v in six.iteritems(obj._asdict())}
+
     return obj
-
-

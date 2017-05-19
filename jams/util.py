@@ -12,7 +12,6 @@ Utility functions
     smkdirs
     filebase
     find_with_extension
-    _deprecated
 """
 
 import os
@@ -116,10 +115,10 @@ def import_lab(namespace, filename, jam=None, infer_duration=True, **parse_optio
 
         value = [x for x in row[3:] if x is not None][-1]
 
-        annotation.data.add_observation(time=time,
-                                        duration=duration,
-                                        confidence=1.0,
-                                        value=value)
+        annotation.append(time=time,
+                          duration=duration,
+                          confidence=1.0,
+                          value=value)
 
     jam.annotations.append(annotation)
 

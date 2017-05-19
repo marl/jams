@@ -33,6 +33,7 @@ setup(
     license='ISC',
     install_requires=[
         'pandas',
+        'sortedcontainers',
         'jsonschema',
         'numpy>=1.8.0',
         'six',

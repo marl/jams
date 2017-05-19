@@ -3,8 +3,6 @@
 '''namespace conversion tests'''
 
 import numpy as np
-import numpy.testing as npt
-import pandas.util.testing as pdt
 
 from nose.tools import raises, eq_
 import jams
@@ -41,6 +39,7 @@ def test_noop():
     for ns in jams.schema.__NAMESPACE__:
         yield __test, ns
 
+
 def test_pitch_hz_to_contour():
 
     ann = jams.Annotation(namespace='pitch_hz')
@@ -59,16 +58,17 @@ def test_pitch_hz_to_contour():
     eq_(ann2.namespace, 'pitch_contour')
 
     # Check index values
-    eq_(ann2.data.value.iloc[0]['index'], 0)
-    eq_(ann2.data.value.iloc[-1]['index'], 0)
+    eq_(ann2.data[0].value['index'], 0)
+    eq_(ann2.data[-1].value['index'], 0)
 
     # Check frequency
-    eq_(np.abs(ann2.data.value.iloc[0]['frequency']), np.abs(values[0]))
-    eq_(np.abs(ann2.data.value.iloc[-1]['frequency']), np.abs(values[-1]))
+    eq_(np.abs(ann2.data[0].value['frequency']), np.abs(values[0]))
+    eq_(np.abs(ann2.data[-1].value['frequency']), np.abs(values[-1]))
 
     # Check voicings
-    assert not ann2.data.value.iloc[0]['voiced']
-    assert ann2.data.value.iloc[-1]['voiced']
+    assert not ann2.data[0].value['voiced']
+    assert ann2.data[-1].value['voiced']
+
 
 def test_pitch_midi_to_contour():
 
@@ -86,11 +86,11 @@ def test_pitch_midi_to_contour():
     eq_(ann2.namespace, 'pitch_contour')
 
     # Check index values
-    eq_(ann2.data.value.iloc[0]['index'], 0)
-    eq_(ann2.data.value.iloc[-1]['index'], 0)
+    eq_(ann2.data[0].value['index'], 0)
+    eq_(ann2.data[-1].value['index'], 0)
 
     # Check voicings
-    assert ann2.data.value.iloc[-1]['voiced']
+    assert ann2.data[-1].value['voiced']
 
 
 def test_pitch_midi_to_hz():
@@ -104,12 +104,15 @@ def test_pitch_midi_to_hz():
     # Check the namespace
     eq_(ann2.namespace, 'pitch_hz')
     # midi 69 = 440.0 Hz
-    eq_(ann2.data.value.loc[0], 440.0)
+    eq_(ann2.data[0].value, 440.0)
 
     # Check all else is equal
-    pdt.assert_series_equal(ann.data.time, ann2.data.time)
-    pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
-    pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
+    eq_(len(ann.data), len(ann2.data))
+
+    for obs1, obs2 in zip(ann.data, ann2.data):
+        eq_(obs1.time, obs2.time)
+        eq_(obs1.duration, obs2.duration)
+        eq_(obs1.confidence, obs2.confidence)
 
 
 def test_pitch_hz_to_midi():
@@ -123,12 +126,15 @@ def test_pitch_hz_to_midi():
     # Check the namespace
     eq_(ann2.namespace, 'pitch_midi')
     # midi 69 = 440.0 Hz
-    eq_(ann2.data.value.loc[0], 69)
+    eq_(ann2.data[0].value, 69)
 
     # Check all else is equal
-    pdt.assert_series_equal(ann.data.time, ann2.data.time)
-    pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
-    pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
+    eq_(len(ann.data), len(ann2.data))
+
+    for obs1, obs2 in zip(ann.data, ann2.data):
+        eq_(obs1.time, obs2.time)
+        eq_(obs1.duration, obs2.duration)
+        eq_(obs1.confidence, obs2.confidence)
 
 
 def test_note_midi_to_hz():
@@ -142,12 +148,15 @@ def test_note_midi_to_hz():
     # Check the namespace
     eq_(ann2.namespace, 'note_hz')
     # midi 69 = 440.0 Hz
-    eq_(ann2.data.value.loc[0], 440.0)
+    eq_(ann2.data[0].value, 440.0)
 
     # Check all else is equal
-    pdt.assert_series_equal(ann.data.time, ann2.data.time)
-    pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
-    pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
+    eq_(len(ann.data), len(ann2.data))
+
+    for obs1, obs2 in zip(ann.data, ann2.data):
+        eq_(obs1.time, obs2.time)
+        eq_(obs1.duration, obs2.duration)
+        eq_(obs1.confidence, obs2.confidence)
 
 
 def test_note_hz_to_midi():
@@ -161,12 +170,16 @@ def test_note_hz_to_midi():
     # Check the namespace
     eq_(ann2.namespace, 'note_midi')
     # midi 69 = 440.0 Hz
-    eq_(ann2.data.value.loc[0], 69)
+    eq_(ann2.data[0].value, 69)
 
     # Check all else is equal
-    pdt.assert_series_equal(ann.data.time, ann2.data.time)
-    pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
-    pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
+    eq_(len(ann.data), len(ann2.data))
+
+    for obs1, obs2 in zip(ann.data, ann2.data):
+        eq_(obs1.time, obs2.time)
+        eq_(obs1.duration, obs2.duration)
+        eq_(obs1.confidence, obs2.confidence)
+
 
 def test_segment_open():
 
@@ -181,7 +194,7 @@ def test_segment_open():
     eq_(ann2.namespace, 'segment_open')
 
     # Check all else is equal
-    pdt.assert_frame_equal(ann.data, ann2.data)
+    eq_(ann.data, ann2.data)
 
 
 def test_tag_open():
@@ -197,7 +210,7 @@ def test_tag_open():
     eq_(ann2.namespace, 'tag_open')
 
     # Check all else is equal
-    pdt.assert_frame_equal(ann.data, ann2.data)
+    eq_(ann.data, ann2.data)
 
 
 def test_chord():
@@ -213,7 +226,7 @@ def test_chord():
     eq_(ann2.namespace, 'chord', ann2)
 
     # Check all else is equal
-    pdt.assert_frame_equal(ann.data, ann2.data)
+    assert ann.data == ann2.data
 
 
 def test_beat_position():
@@ -236,12 +249,12 @@ def test_beat_position():
     # Check the namespace
     eq_(ann2.namespace, 'beat')
 
-    npt.assert_allclose(ann2.data.value.values, np.arange(1, 5))
-
     # Check all else is equal
-    pdt.assert_series_equal(ann.data.time, ann2.data.time)
-    pdt.assert_series_equal(ann.data.duration, ann2.data.duration)
-    pdt.assert_series_equal(ann.data.confidence, ann2.data.confidence)
+    eq_(len(ann), len(ann2))
+    for obs1, obs2 in zip(ann.data, ann2.data):
+        eq_(obs1.time, obs2.time)
+        eq_(obs1.duration, obs2.duration)
+        eq_(obs1.confidence, obs2.confidence)
 
 
 def test_can_convert_equal():

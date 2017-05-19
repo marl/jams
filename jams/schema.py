@@ -126,7 +126,8 @@ def values(ns_key):
 
 
 def get_dtypes(ns_key):
-    '''Get the dtypes associated with the value and confidence fields for a given schema.
+    '''Get the dtypes associated with the value and confidence fields
+    for a given namespace.
 
     Parameters
     ----------
@@ -136,7 +137,7 @@ def get_dtypes(ns_key):
     Returns
     -------
     value_dtype, confidence_dtype : numpy.dtype
-        Type identifiers for dataframe/jamsframe columns.
+        Type identifiers for value and confidence fields.
     '''
 
     # First, get the schema
