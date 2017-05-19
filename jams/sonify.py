@@ -11,7 +11,7 @@ Sonification
 '''
 
 from itertools import product
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 import six
 import numpy as np
 import mir_eval.sonify
@@ -127,23 +127,22 @@ def pitch_contour(annotation, sr=22050, length=None, **kwargs):
     are summed together.
     '''
 
-    times, values = annotation.to_interval_values()
+    # Map contours to lists of observations
 
-    indices = np.unique([v['index'] for v in values])
+    times = defaultdict(list)
+    freqs = defaultdict(list)
+
+    for obs in annotation:
+        times[obs.value['index']].append(obs.time)
+        freqs[obs.value['index']].append(obs.value['frequency'] *
+                                         (-1)**(~obs.value['voiced']))
 
     y_out = 0.0
-    for ix in indices:
-        rows = [i for (i, v) in enumerate(values) if v['index'] == ix]
-
-        freqs = np.asarray([values[r]['frequency'] for r in rows])
-        unv = ~np.asarray([values[r]['voiced'] for r in rows])
-        freqs[unv] *= -1
-
+    for ix in times:
         y_out = y_out + filter_kwargs(mir_eval.sonify.pitch_contour,
-                                      times[rows, 0],
-                                      freqs,
-                                      fs=sr,
-                                      length=length,
+                                      np.asarray(times[ix]),
+                                      np.asarray(freqs[ix]),
+                                      fs=sr, length=length,
                                       **kwargs)
         if length is None:
             length = len(y_out)
