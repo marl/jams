@@ -21,8 +21,8 @@ import pandas as pd
 from . import core
 
 
-def import_lab(namespace, filename, jam=None, infer_duration=True, **parse_options):
-    r'''Load a .lab file into a JAMS object.
+def import_lab(namespace, filename, infer_duration=True, **parse_options):
+    r'''Load a .lab file as an Annotation object.
 
     .lab files are assumed to have the following format:
 
@@ -47,10 +47,6 @@ def import_lab(namespace, filename, jam=None, infer_duration=True, **parse_optio
     filename : str
         Path to the .lab file
 
-    jam : jams.JAMS (optional)
-        An optional pre-existing JAMS object to append into.
-        If `None`, a new, blank JAMS object is created.
-
     infer_duration : bool
         If `True`, interval durations are inferred from `(start, end)` columns,
         or difference between successive times.
@@ -59,19 +55,16 @@ def import_lab(namespace, filename, jam=None, infer_duration=True, **parse_optio
         `(start, duration)` columns.  If only one time column is given, then
         durations are set to 0.
 
-        For instantaneous event annotations (e.g., beats or onsets), this should
-        be set to `False`.
+        For instantaneous event annotations (e.g., beats or onsets), this
+        should be set to `False`.
 
     parse_options : additional keyword arguments
         Passed to ``pandas.DataFrame.read_csv``
 
     Returns
     -------
-    jam : JAMS
-        The modified or constructed JAMS object
-
     annotation : Annotation
-        A handle to the newly constructed annotation object
+        The newly constructed annotation object
 
     See Also
     --------
@@ -80,9 +73,6 @@ def import_lab(namespace, filename, jam=None, infer_duration=True, **parse_optio
 
     # Create a new annotation object
     annotation = core.Annotation(namespace)
-
-    if jam is None:
-        jam = core.JAMS()
 
     parse_options.setdefault('sep', r'\s+')
     parse_options.setdefault('engine', 'python')
@@ -120,9 +110,7 @@ def import_lab(namespace, filename, jam=None, infer_duration=True, **parse_optio
                           confidence=1.0,
                           value=value)
 
-    jam.annotations.append(annotation)
-
-    return jam, annotation
+    return annotation
 
 
 def expand_filepaths(base_dir, rel_paths):
