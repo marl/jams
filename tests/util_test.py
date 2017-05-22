@@ -104,7 +104,7 @@ def test_filebase(query, target):
     assert target == util.filebase(query)
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def root_and_files():
 
     root = tempfile.mkdtemp()
