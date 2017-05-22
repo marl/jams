@@ -4,7 +4,7 @@
 
 import tempfile
 import os
-from nose.tools import eq_
+import pytest
 import numpy as np
 
 from jams import core, util
@@ -18,74 +18,62 @@ def srand(seed=628318530):
     pass
 
 
-def test_import_lab():
-    # Test a lab-file import
-    labs = [r'''1.0 1
-                3.0 2''',
-            r'''1.0 1
-                3.0 2''',
-            r'''1.0 2.0 a
-                2.0 4.0 b''',
-            r'''1.0 1.0 c
-                2.0 2.0 d''']
+@pytest.mark.parametrize('ns, lab, ints, y, infer_duration',
+                         [('beat',
+                           "1.0 1\n3.0 2",
+                           np.array([[1.0, 3.0], [3.0, 3.0]]),
+                           [1, 2],
+                           True),
+                          ('beat',
+                           "1.0 1\n3.0 2",
+                           np.array([[1.0, 1.0], [3.0, 3.0]]),
+                           [1, 2],
+                           False),
+                          ('chord_harte',
+                           "1.0 2.0 a\n2.0 4.0 b",
+                           np.array([[1.0, 2.0], [2.0, 4.0]]),
+                           ['a', 'b'],
+                           True),
+                          ('chord',
+                           "1.0 1.0 c\n2.0 2.0 d",
+                           np.array([[1.0, 2.0], [2.0, 4.0]]),
+                           ['c', 'd'],
+                           False)])
+def test_import_lab(ns, lab, ints, y, infer_duration):
+    ann = util.import_lab(ns, six.StringIO(lab),
+                          infer_duration=infer_duration)
 
-    intervals = [np.array([[1.0, 3.0], [3.0, 3.0]]),
-                 np.array([[1.0, 1.0], [3.0, 3.0]]),
-                 np.array([[1.0, 2.0], [2.0, 4.0]]),
-                 np.array([[1.0, 2.0], [2.0, 4.0]])]
+    assert len(ints) == len(ann.data)
+    assert len(y) == len(ann.data)
 
-    labels = [[1, 2], [1, 2], ['a', 'b'], ['c', 'd']]
-
-    namespace = ['beat', 'beat', 'chord_harte', 'chord']
-
-    durations = [True, False, True, False]
-
-    def __test(ns, lab, ints, y, infer_duration):
-        ann = util.import_lab(ns, six.StringIO(lab),
-                              infer_duration=infer_duration)
-
-        eq_(len(ints), len(ann.data))
-        eq_(len(y), len(ann.data))
-
-        for yi, ival, obs in zip(y, ints, ann):
-            eq_(obs.time, ival[0])
-            eq_(obs.duration, ival[1] - ival[0])
-            eq_(obs.value, yi)
-
-    for ns, lab, ints, y, inf in zip(namespace, labs, intervals, labels, durations):
-        yield __test, ns, lab, ints, y, inf
+    for yi, ival, obs in zip(y, ints, ann):
+        assert obs.time == ival[0]
+        assert obs.duration == ival[1] - ival[0]
+        assert obs.value == yi
 
 
-def test_query_pop():
-
-    def __test(query, prefix, sep, target):
-        eq_(core.query_pop(query, prefix, sep=sep), target)
-
-    yield __test, 'alpha.beta.gamma', 'alpha', '.', 'beta.gamma'
-    yield __test, 'alpha/beta/gamma', 'alpha', '/', 'beta/gamma'
-    yield __test, 'alpha.beta.gamma', 'beta', '.', 'alpha.beta.gamma'
-    yield __test, 'alpha.beta.gamma', 'beta', '/', 'alpha.beta.gamma'
-    yield __test, 'alpha.alpha.beta.gamma', 'alpha', '.', 'alpha.beta.gamma'
+@pytest.mark.parametrize('query, prefix, sep, target',
+                         [('al.beta.gamma', 'al', '.', 'beta.gamma'),
+                          ('al/beta/gamma', 'al', '/', 'beta/gamma'),
+                          ('al.beta.gamma', 'beta', '.', 'al.beta.gamma'),
+                          ('al.beta.gamma', 'beta', '/', 'al.beta.gamma'),
+                          ('al.pha.beta.gamma', 'al', '.', 'pha.beta.gamma')])
+def test_query_pop(query, prefix, sep, target):
+    assert target == core.query_pop(query, prefix, sep=sep)
 
 
-def test_match_query():
-
-    def __test(needle, haystack, result):
-        eq_(core.match_query(haystack, needle), result)
-
-    haystack = 'abcdeABCDE123'
-
-    yield __test, haystack, haystack, True
-    yield __test, '.*cde.*', haystack, True
-    yield __test, 'cde$', haystack, False
-    yield __test, r'.*\d+$', haystack, True
-    yield __test, r'^\d+$', haystack, False
-
-    yield __test, lambda x: True, haystack, True
-    yield __test, lambda x: False, haystack, False
-
-    yield __test, 5, 5, True
-    yield __test, 5, 4, False
+@pytest.mark.parametrize('needle, haystack, result',
+                         [('abcdeABCDE123', 'abcdeABCDE123', True),
+                          ('.*cde.*', 'abcdeABCDE123', True),
+                          ('cde$', 'abcdeABCDE123', False),
+                          (r'.*\d+$', 'abcdeABCDE123', True),
+                          (r'^\d+$', 'abcdeABCDE123', False),
+                          (lambda x: True, 'abcdeABCDE123', True),
+                          (lambda x: False, 'abcdeABCDE123', False),
+                          (5, 5, True),
+                          (5, 4, False)])
+def test_match_query(needle, haystack, result):
+    assert result == core.match_query(haystack, needle)
 
 
 def test_smkdirs():
@@ -107,19 +95,18 @@ def test_smkdirs():
             os.rmdir(tmpdir)
 
 
-def test_filebase():
-
-    def __test(query, target):
-
-        eq_(util.filebase(query), target)
-
-    yield __test, 'foo', 'foo'
-    yield __test, 'foo.txt', 'foo'
-    yield __test, '/path/to/foo.txt', 'foo'
-    yield __test, '/path/to/foo', 'foo'
+@pytest.mark.parametrize('query, target',
+                         [('foo', 'foo'),
+                          ('foo.txt', 'foo'),
+                          ('/path/to/foo.txt', 'foo'),
+                          ('/path/to/foo', 'foo')])
+def test_filebase(query, target):
+    assert target == util.filebase(query)
 
 
-def test_find_with_extension():
+@pytest.yield_fixture
+def root_and_files():
+
     root = tempfile.mkdtemp()
 
     files = [[root, 'file1.txt'],
@@ -135,23 +122,24 @@ def test_find_with_extension():
 
     # Create the dummy files
     for fname in files + badfiles:
-        with open(fname, 'w') as _:
+        with open(fname, 'w'):
             pass
 
-    def __test(level, sort):
-        results = util.find_with_extension(root, 'txt', depth=level, sort=sort)
+    yield root, files
 
-        eq_(sorted(results), sorted(files[:level]))
-
-    for level in [1, 2, 3, 4]:
-        for sort in [False, True]:
-            yield __test, level, sort
-
-    # Cleanup
     for fname, badfname in zip(files[::-1], badfiles[::-1]):
         os.remove(fname)
         os.remove(badfname)
         os.rmdir(os.path.dirname(fname))
+
+
+@pytest.mark.parametrize('level', [1, 2, 3, 4])
+@pytest.mark.parametrize('sort', [False, True])
+def test_find_with_extension(root_and_files, level, sort):
+    root, files = root_and_files
+    results = util.find_with_extension(root, 'txt', depth=level, sort=sort)
+
+    assert sorted(results) == sorted(files[:level])
 
 
 def test_expand_filepaths():
@@ -164,4 +152,4 @@ def test_expand_filepaths():
 
     for search, result in zip(targets, paths):
 
-        eq_(os.path.normpath(os.path.join(target_dir, search)), result)
+        assert result == os.path.normpath(os.path.join(target_dir, search))
