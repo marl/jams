@@ -3,22 +3,20 @@
 """Sonification tests"""
 
 import numpy as np
-
-from nose.tools import raises, eq_
-
+import pytest
 from eval_test import create_hierarchy
 
 import jams
 
 
-@raises(jams.NamespaceError)
+@pytest.mark.xfail(raises=jams.NamespaceError)
 def test_no_sonify():
 
     ann = jams.Annotation(namespace='vector')
     jams.sonify.sonify(ann)
 
 
-@raises(jams.SchemaError)
+@pytest.mark.xfail(raises=jams.SchemaError)
 def test_bad_sonify():
     ann = jams.Annotation(namespace='chord')
     ann.append(time=0, duration=1, value='not a chord')
@@ -26,21 +24,18 @@ def test_bad_sonify():
     jams.sonify.sonify(ann)
 
 
-def test_duration():
+@pytest.mark.parametrize('ns', ['segment_open', 'chord'])
+@pytest.mark.parametrize('sr', [8000, 11025])
+@pytest.mark.parametrize('duration', [None, 5.0, 1.0])
+def test_duration(ns, sr, duration):
 
-    def __test(ns, duration, sr):
-        ann = jams.Annotation(namespace=ns)
-        ann.append(time=3, duration=1, value='C')
+    ann = jams.Annotation(namespace=ns)
+    ann.append(time=3, duration=1, value='C')
 
-        y = jams.sonify.sonify(ann, sr=sr, duration=duration)
+    y = jams.sonify.sonify(ann, sr=sr, duration=duration)
 
-        if duration is not None:
-            eq_(len(y), int(sr * duration))
-
-    for ns in ['segment_open', 'chord']:
-        for sr in [8000, 11025]:
-            for dur in [None, 5.0, 10.0]:
-                yield __test, ns, dur, sr
+    if duration is not None:
+        assert len(y) == int(sr * duration)
 
 
 def test_note_hz():
@@ -48,7 +43,7 @@ def test_note_hz():
     ann.append(time=0, duration=1, value=261.0)
     y = jams.sonify.sonify(ann, sr=8000, duration=2.0)
 
-    eq_(len(y), 8000 * 2)
+    assert len(y) == 8000 * 2
 
 
 def test_note_hz_nolength():
@@ -56,7 +51,7 @@ def test_note_hz_nolength():
     ann.append(time=0, duration=1, value=261.0)
     y = jams.sonify.sonify(ann, sr=8000)
 
-    eq_(len(y), 8000 * 1)
+    assert len(y) == 8000 * 1
     assert np.any(y)
 
 
@@ -65,10 +60,11 @@ def test_note_midi():
     ann.append(time=0, duration=1, value=60)
     y = jams.sonify.sonify(ann, sr=8000, duration=2.0)
 
-    eq_(len(y), 8000 * 2)
+    assert len(y) == 8000 * 2
 
 
-def test_contour():
+@pytest.fixture(scope='module')
+def ann_contour():
     ann = jams.Annotation(namespace='pitch_contour')
 
     duration = 5.0
@@ -83,48 +79,46 @@ def test_contour():
                                                'index': 0,
                                                'voiced': (t < 3 or t > 4)})
 
-    def __test(ann, duration):
-        y = jams.sonify.sonify(ann, sr=8000, duration=duration)
-        if duration is not None:
-            eq_(len(y), 8000 * duration)
-
-    for duration in [None, 5.0, 10.0]:
-        yield __test, ann, duration
+    return ann
 
 
-def test_chord():
-
-    def __test(namespace, value):
-        ann = jams.Annotation(namespace=namespace)
-        ann.append(time=0.5, duration=1.0, value=value)
-        y = jams.sonify.sonify(ann, sr=8000, duration=2.0)
-
-        eq_(len(y), 8000 * 2)
-
-    yield __test, 'chord', 'C:maj/5'
-    yield __test, 'chord_harte', 'C:maj/5'
+@pytest.mark.parametrize('duration', [None, 5.0, 10.0])
+@pytest.mark.parametrize('sr', [8000])
+def test_contour(ann_contour, duration, sr):
+    y = jams.sonify.sonify(ann_contour, sr=sr, duration=duration)
+    if duration is not None:
+        assert len(y) == sr * duration
 
 
-def test_event():
+@pytest.mark.parametrize('namespace', ['chord', 'chord_harte'])
+@pytest.mark.parametrize('sr', [8000])
+@pytest.mark.parametrize('duration', [2.0])
+@pytest.mark.parametrize('value', ['C:maj/5'])
+def test_chord(namespace, sr, duration, value):
 
-    def __test(namespace, value):
-        ann = jams.Annotation(namespace=namespace)
-        ann.append(time=0.5, duration=0, value=value)
-        y = jams.sonify.sonify(ann, sr=8000, duration=2.0)
-        eq_(len(y), 8000 * 2)
+    ann = jams.Annotation(namespace=namespace)
+    ann.append(time=0.5, duration=1.0, value=value)
+    y = jams.sonify.sonify(ann, sr=sr, duration=duration)
 
-    yield __test, 'beat', 1
-    yield __test, 'segment_open', 'C'
-    yield __test, 'onset', 1
+    assert len(y) == sr * duration
 
 
-def test_beat_position():
+@pytest.mark.parametrize('namespace, value',
+                         [('beat', 1),
+                          ('segment_open', 'C'),
+                          ('onset', 1)])
+@pytest.mark.parametrize('sr', [8000])
+@pytest.mark.parametrize('duration', [2.0])
+def test_event(namespace, sr, duration, value):
 
-    def __test(ann, sr, duration):
-        yout = jams.sonify.sonify(ann, sr=sr, duration=duration)
-        if duration is not None:
-            eq_(len(yout), int(duration * sr))
+    ann = jams.Annotation(namespace=namespace)
+    ann.append(time=0.5, duration=0, value=value)
+    y = jams.sonify.sonify(ann, sr=sr, duration=duration)
+    assert len(y) == sr * duration
 
+
+@pytest.fixture(scope='module')
+def beat_pos_ann():
     ann = jams.Annotation(namespace='beat_position')
 
     for i, t in enumerate(np.arange(0, 10, 0.25)):
@@ -133,19 +127,26 @@ def test_beat_position():
                               measure=1 + i // 4,
                               num_beats=4,
                               beat_units=4))
-
-    for length in [None, 5, 15]:
-        yield __test, ann, 8000, length
+    return ann
 
 
-def test_multi_segment():
-    ann = create_hierarchy(values=['AB', 'abac', 'xxyyxxzz'], duration=30)
-    sr = 8000
+@pytest.mark.parametrize('sr', [8000])
+@pytest.mark.parametrize('duration', [None, 5, 15])
+def test_beat_position(beat_pos_ann, sr, duration):
 
-    def __test(ann, duration):
-        y = jams.sonify.sonify(ann, sr=sr, duration=duration)
-        if duration:
-            eq_(len(y), duration * sr)
+    yout = jams.sonify.sonify(beat_pos_ann, sr=sr, duration=duration)
+    if duration is not None:
+        assert len(yout) == duration * sr
 
-    for duration in [None, 15, 30]:
-        yield __test, ann, duration
+
+@pytest.fixture(scope='module')
+def ann_hier():
+    return create_hierarchy(values=['AB', 'abac', 'xxyyxxzz'], duration=30)
+
+
+@pytest.mark.parametrize('sr', [8000])
+@pytest.mark.parametrize('duration', [None, 15, 30])
+def test_multi_segment(ann_hier, sr, duration):
+    y = jams.sonify.sonify(ann_hier, sr=sr, duration=duration)
+    if duration:
+        assert len(y) == duration * sr
