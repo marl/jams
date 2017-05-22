@@ -5,12 +5,17 @@
 import six
 import numpy as np
 
-from nose.tools import raises
+import pytest
+
 from jams import SchemaError
 
 from jams import Annotation, Observation
 
 from util_test import srand
+
+
+xfail = pytest.mark.xfail
+parametrize = pytest.mark.parametrize
 
 
 def test_ns_time_valid():
@@ -23,24 +28,17 @@ def test_ns_time_valid():
     ann.validate()
 
 
-def test_ns_time_invalid():
+@xfail(raises=SchemaError)
+@parametrize('time, duration', [(-1, 0), (1, -1)])
+def test_ns_time_invalid(time, duration):
 
-    @raises(SchemaError)
-    def __test(data):
-        ann = Annotation(namespace='onset')
+    ann = Annotation(namespace='onset')
 
-        # Bypass the safety checks in append
-        ann.data.add(Observation(time=data['time'],
-                                 duration=data['duration'],
-                                 value=None, confidence=None))
+    # Bypass the safety checks in append
+    ann.data.add(Observation(time=time, duration=duration,
+                             value=None, confidence=None))
 
-        ann.validate()
-
-    # Check bad time
-    yield __test, dict(time=-1, duration=0)
-
-    # Check bad duration
-    yield __test, dict(time=1, duration=-1)
+    ann.validate()
 
 
 def test_ns_beat_valid():
@@ -57,7 +55,7 @@ def test_ns_beat_valid():
     ann.validate()
 
 
-@raises(SchemaError)
+@xfail(raises=SchemaError)
 def test_ns_beat_invalid():
 
     ann = Annotation(namespace='beat')
@@ -80,48 +78,37 @@ def test_ns_beat_position_valid():
     ann.validate()
 
 
-def test_ns_beat_position_invalid():
+@parametrize('key, value',
+             [('position', -1), ('position', 0),
+              ('position', 'a'), ('position', None),
+              ('measure', -1), ('measure', 1.0),
+              ('measure', 'a'), ('measure', None),
+              ('num_beats', -1), ('num_beats', 1.5),
+              ('num_beats', 'a'), ('num_beats', None),
+              ('beat_units', -1), ('beat_units', 1.5),
+              ('beat_units', 3), ('beat_units', 'a'),
+              ('beat_units', None)])
+@xfail(raises=SchemaError)
+def test_ns_beat_position_invalid(key, value):
 
-    @raises(SchemaError)
-    def __test(value):
-        ann = Annotation(namespace='beat_position')
-        ann.append(time=0, duration=1.0, value=value)
-        ann.validate()
+    data = dict(position=1, measure=1, num_beats=3, beat_units=4)
+    data[key] = value
 
-    good_dict = dict(position=1, measure=1, num_beats=3, beat_units=4)
+    ann = Annotation(namespace='beat_position')
+    ann.append(time=0, duration=1.0, value=data)
+    ann.validate()
 
-    # First, test the bad positions
-    for pos in [-1, 0, 'a', None]:
-        value = good_dict.copy()
-        value['position'] = pos
-        yield __test, value
 
-    # Now test bad measures
-    for measure in [-1, 1.0, 'a', None]:
-        value = good_dict.copy()
-        value['measure'] = measure
-        yield __test, value
+@parametrize('key',
+             ['position', 'measure', 'num_beats', 'beat_units'])
+@xfail(raises=SchemaError)
+def test_ns_beat_position_missing(key):
 
-    # Now test bad num_beats
-    for nb in [-1, 1.5, 'a', None]:
-        value = good_dict.copy()
-        value['num_beats'] = nb
-        yield __test, value
-
-    # Now test bad beat units
-    for bu in [-1, 1.5, 3, 'a', None]:
-        value = good_dict.copy()
-        value['beat_units'] = bu
-        yield __test, value
-
-    # And test missing fields
-    for field in good_dict.keys():
-        value = good_dict.copy()
-        del value[field]
-        yield __test, value
-
-    # And test non-object values
-    yield __test, None
+    data = dict(position=1, measure=1, num_beats=3, beat_units=4)
+    del data[key]
+    ann = Annotation(namespace='beat_position')
+    ann.append(time=0, duration=1.0, value=data)
+    ann.validate()
 
 
 def test_ns_mood_thayer_valid():
@@ -133,16 +120,13 @@ def test_ns_mood_thayer_valid():
     ann.validate()
 
 
-def test_ns_mood_thayer_invalid():
+@parametrize('value', [[0], [0, 1, 2], ['a', 'b'], None, 0])
+@xfail(raises=SchemaError)
+def test_ns_mood_thayer_invalid(value):
 
-    @raises(SchemaError)
-    def __test(value):
-        ann = Annotation(namespace='mood_thayer')
-        ann.append(time=0, duration=1.0, value=value)
-        ann.validate()
-
-    for value in [ [0], [0, 1, 2], ['a', 'b'], None, 0]:
-        yield __test, value
+    ann = Annotation(namespace='mood_thayer')
+    ann.append(time=0, duration=1.0, value=value)
+    ann.validate()
 
 
 def test_ns_onset():
@@ -159,20 +143,15 @@ def test_ns_onset():
     ann.validate()
 
 
-def test_ns_lyrics():
+@parametrize('lyric',
+             ['Check yourself', six.u('before you wreck yourself'),
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError)])
+def test_ns_lyrics(lyric):
 
-    def __test(lyric):
-        ann = Annotation(namespace='lyrics')
-
-        ann.append(time=0, duration=1, value=lyric)
-
-        ann.validate()
-
-    for line in ['Check yourself', six.u('before you wreck yourself')]:
-        yield __test, line
-
-    for line in [23, None]:
-        yield raises(SchemaError)(__test), line
+    ann = Annotation(namespace='lyrics')
+    ann.append(time=0, duration=1, value=lyric)
+    ann.validate()
 
 
 def test_ns_tempo_valid():
@@ -184,22 +163,17 @@ def test_ns_tempo_valid():
     ann.validate()
 
 
-def test_ns_tempo_invalid():
+@xfail(SchemaError)
+@parametrize('value, confidence',
+             [(-1, 0.5), (-0.5, 0.5), ('a', 0.5),
+              (120.0, -1), (120.0, -0.5),
+              (120.0, 2.0), (120.0, 'a')])
+def test_ns_tempo_invalid(value, confidence):
 
-    @raises(SchemaError)
-    def __test(value, confidence):
-        ann = Annotation(namespace='tempo')
+    ann = Annotation(namespace='tempo')
+    ann.append(time=0, duration=0, value=value, confidence=confidence)
+    ann.validate()
 
-        ann.append(time=0, duration=0, value=value, confidence=confidence)
-
-        ann.validate()
-
-
-    for value in [-1, -0.5, 'a']:
-        yield __test, value, 0.5
-
-    for confidence in [-1, -0.5, 2.0, 'a']:
-        yield __test, 120.0, confidence
 
 def test_ns_note_hz_valid():
 
@@ -208,31 +182,23 @@ def test_ns_note_hz_valid():
     seq_len = 21
     times = np.arange(seq_len)
     durations = np.zeros(seq_len)
-    values = np.linspace(0, 22050, seq_len) # includes 0 (odd symmetric)
+    values = np.linspace(0, 22050, seq_len)  # includes 0 (odd symmetric)
     confidences = np.linspace(0, 1., seq_len)
-    confidences[seq_len//2] = None # throw in a None confidence value
+    confidences[seq_len//2] = None  # throw in a None confidence value
 
     for (t, d, v, c) in zip(times, durations, values, confidences):
         ann.append(time=t, duration=d, value=v, confidence=c)
 
     ann.validate()
 
-def test_ns_note_hz_invalid():
 
-    @raises(SchemaError)
-    def __test(value):
-        ann = Annotation(namespace='note_hz')
-        ann.append(time=0, duration=0, value=value, confidence=0.5)
-        ann.validate()
+@parametrize('value', ['a', -23])
+@xfail(raises=SchemaError)
+def test_ns_note_hz_invalid(value):
 
-    # note: 1j should also be invalid, but currently not caught
-    # by the schema validation and hence removed from the test
-    # for value in ['a', -23, None, True]:
-
-    # None and True get auto-cast to float now, so we can't rely
-    # on validation here
-    for value in ['a', -23]:
-        yield __test, value
+    ann = Annotation(namespace='note_hz')
+    ann.append(time=0, duration=0, value=value, confidence=0.5)
+    ann.validate()
 
 
 def test_ns_pitch_hz_valid():
@@ -242,9 +208,9 @@ def test_ns_pitch_hz_valid():
     seq_len = 21
     times = np.arange(seq_len)
     durations = np.zeros(seq_len)
-    values = np.linspace(-22050., 22050, seq_len) # includes 0 (odd symmetric)
+    values = np.linspace(-22050., 22050, seq_len)  # includes 0 (odd symmetric)
     confidences = np.linspace(0, 1., seq_len)
-    confidences[seq_len//2] = None # throw in a None confidence value
+    confidences[seq_len//2] = None  # throw in a None confidence value
 
     for (t, d, v, c) in zip(times, durations, values, confidences):
         ann.append(time=t, duration=d, value=v, confidence=c)
@@ -252,23 +218,13 @@ def test_ns_pitch_hz_valid():
     ann.validate()
 
 
-def test_ns_pitch_hz_invalid():
+@parametrize('value', ['a'])
+@xfail(raises=SchemaError)
+def test_ns_pitch_hz_invalid(value):
 
-    @raises(SchemaError)
-    def __test(value):
-        ann = Annotation(namespace='pitch_hz')
-        ann.append(time=0, duration=0, value=value, confidence=0.5)
-        ann.validate()
-
-    # note: 1j should also be invalid, but currently not caught
-    # by the schema validation and hence removed from the test
-
-    # for value in ['a', None, True]:
-
-    # None and True get auto-cast to float now, so we can't rely
-    # on validation here
-    for value in ['a']:
-        yield __test, value
+    ann = Annotation(namespace='pitch_hz')
+    ann.append(time=0, duration=0, value=value, confidence=0.5)
+    ann.validate()
 
 
 def test_ns_note_midi_valid():
@@ -288,20 +244,13 @@ def test_ns_note_midi_valid():
     ann.validate()
 
 
-def test_ns_note_midi_invalid():
+@parametrize('value', ['a'])
+@xfail(raises=SchemaError)
+def test_ns_note_midi_invalid(value):
 
-    @raises(SchemaError)
-    def __test(value):
-        ann = Annotation(namespace='note_midi')
-        ann.append(time=0, duration=0, value=value, confidence=0.5)
-        ann.validate()
-
-    # note: 1j should also be invalid, but currently not caught
-    # by the schema validation and hence removed from the test
-    # for value in ['a', None, True]:
-    # None and True can cast to float, so this passes
-    for value in ['a']:
-        yield __test, value
+    ann = Annotation(namespace='note_midi')
+    ann.append(time=0, duration=0, value=value, confidence=0.5)
+    ann.validate()
 
 
 def test_ns_pitch_midi_valid():
@@ -321,21 +270,13 @@ def test_ns_pitch_midi_valid():
     ann.validate()
 
 
-def test_ns_pitch_midi_invalid():
+@parametrize('value', ['a'])
+@xfail(raises=SchemaError)
+def test_ns_pitch_midi_invalid(value):
 
-    @raises(SchemaError)
-    def __test(value):
-        ann = Annotation(namespace='pitch_midi')
-        ann.append(time=0, duration=0, value=value, confidence=0.5)
-        ann.validate()
-
-    # note: 1j should also be invalid, but currently not caught
-    # by the schema validation and hence removed from the test
-    # for value in ['a', None, True]:
-
-    # None and True cast to float
-    for value in ['a']:
-        yield __test, value
+    ann = Annotation(namespace='pitch_midi')
+    ann.append(time=0, duration=0, value=value, confidence=0.5)
+    ann.validate()
 
 
 def test_ns_contour_valid():
@@ -354,8 +295,10 @@ def test_ns_contour_valid():
     confidences = np.linspace(0, 1., seq_len)
     confidences[seq_len//2] = None  # throw in a None confidence value
 
-    for (t, d, v, c, i, b) in zip(times, durations, values, confidences, ids, voicing):
-        ann.append(time=t, duration=d, value={'pitch': v, 'id': i, 'voiced': b}, confidence=c)
+    for (t, d, v, c, i, b) in zip(times, durations, values,
+                                  confidences, ids, voicing):
+        ann.append(time=t, duration=d,
+                   value={'pitch': v, 'id': i, 'voiced': b}, confidence=c)
 
     ann.validate()
 
@@ -376,557 +319,416 @@ def test_ns_contour_invalid():
     confidences = np.linspace(0, 1., seq_len)
     confidences[seq_len//2] = None  # throw in a None confidence value
 
-    for (t, d, v, c, i, b) in zip(times, durations, values, confidences, ids, voicing):
-        ann.append(time=t, duration=d, value={'pitch': v, 'id': i, 'voiced': b}, confidence=c)
+    for (t, d, v, c, i, b) in zip(times, durations, values,
+                                  confidences, ids, voicing):
+        ann.append(time=t, duration=d,
+                   value={'pitch': v, 'id': i, 'voiced': b}, confidence=c)
 
     ann.validate()
 
 
-def test_ns_key_mode():
+@parametrize('value',
+             ['B#:locrian', six.u('A:minor'), 'N', 'E',
+              xfail('asdf', raises=SchemaError),
+              xfail('A&:phrygian', raises=SchemaError),
+              xfail(11, raises=SchemaError),
+              xfail('', raises=SchemaError),
+              xfail(':dorian', raises=SchemaError),
+              xfail(None, raises=SchemaError)])
+def test_ns_key_mode(value):
+
+    ann = Annotation(namespace='key_mode')
+    ann.append(time=0, duration=0, value=value, confidence=None)
+    ann.validate()
+
+
+@parametrize('value',
+             ['A:9', 'Gb:sus2(1,3,5)', 'X', 'C:13(*9)/b7'])
+def test_ns_chord_valid(value):
+
+    ann = Annotation(namespace='chord')
+    ann.append(time=0, duration=1.0, value=value)
+    ann.validate()
+
+
+@parametrize('value',
+             ['{}:maj'.format(_)
+              for _ in [42, 'H', 'a', 'F1', True, None]] +
+             ['C:{}'.format(_)
+              for _ in [64, 'z', 'mj', 'Ab', 'iiii', False, None]] +
+             ['C/{}'.format(_)
+              for _ in ['A', 7.5, '8b']] + [None])
+@xfail(raises=SchemaError)
+def test_ns_chord_invalid(value):
+
+    ann = Annotation(namespace='chord')
+    ann.append(time=0, duration=1.0, value=value)
+    ann.validate()
+
+
+@parametrize('value', ['B:7', 'Gb:(1,3,5)', 'A#:(*3)', 'C:sus4(*5)/b7'])
+def test_ns_chord_harte_valid(value):
+
+    ann = Annotation(namespace='chord_harte')
+    ann.append(time=0, duration=1.0, value=value)
+    ann.validate()
+
+
+@parametrize('value',
+             ['{}:maj'.format(_)
+              for _ in [42, 'X', 'a', 'F1', True, None]] +
+             ['C:{}'.format(_)
+              for _ in [64, 'z', 'mj', 'Ab', 'iiii', False, None]] +
+             ['C/{}'.format(_)
+              for _ in ['A', 7.5, '8b']] + [None])
+@xfail(raises=SchemaError)
+def test_ns_chord_harte_invalid(value):
+
+    ann = Annotation(namespace='chord_harte')
+    ann.append(time=0, duration=1.0, value=value)
+    ann.validate()
+
+
+@parametrize('value',
+             [dict(tonic='B', chord='bII7'),
+              dict(tonic=six.u('Gb'), chord=six.u('ii7/#V'))])
+def test_ns_chord_roman_valid(value):
+
+    ann = Annotation(namespace='chord_roman')
+    ann.append(time=0, duration=1.0, value=value)
+    ann.validate()
+
+
+@xfail(SchemaError)
+@parametrize('key, value',
+             [('tonic', 42), ('tonic', 'H'),
+              ('tonic', 'a'), ('tonic', 'F#b'),
+              ('tonic', True), ('tonic', None),
+              ('chord', 64), ('chord', 'z'),
+              ('chord', 'i/V64'), ('chord', 'Ab'),
+              ('chord', 'iiii'), ('chord', False),
+              ('chord', None)])
+def test_ns_chord_roman_invalid(key, value):
+
+    data = dict(tonic='E', chord='iv64')
+    data[key] = value
+
+    ann = Annotation(namespace='chord_roman')
+    ann.append(time=0, duration=1.0, value=data)
+    ann.validate()
+
+
+@xfail(SchemaError)
+@parametrize('key', ['tonic', 'chord'])
+def test_ns_chord_roman_missing(key):
+    data = dict(tonic='E', chord='iv64')
+    del data[key]
+
+    ann = Annotation(namespace='chord_roman')
+    ann.append(time=0, duration=1.0, value=data)
+    ann.validate()
+
 
-    def __test(keymode):
-        ann = Annotation(namespace='key_mode')
-
-        ann.append(time=0, duration=0, value=keymode, confidence=None)
-
-        ann.validate()
-
-    for val in ['B#:locrian', six.u('A:minor'), 'N', 'E']:
-        yield __test, val
-
-    for val in ['asdf', 'A&:phrygian', 11, '', ':dorian', None]:
-        yield raises(SchemaError)(__test), val
-
-
-def test_ns_chord_valid():
-
-    def __test(chord):
-        ann = Annotation(namespace='chord')
-
-        ann.append(time=0, duration=1.0, value=chord)
-
-        ann.validate()
-
-    for chord in ['A:9', 'Gb:sus2(1,3,5)', 'X', 'C:13(*9)/b7']:
-        yield __test, chord
-
-
-def test_ns_chord_invalid():
-
-    @raises(SchemaError)
-    def __test(chord):
-        ann = Annotation(namespace='chord')
-
-        ann.append(time=0, duration=1.0, value=chord)
-
-        ann.validate()
-
-    # test bad roots
-    for root in [42, 'H', 'a', 'F1', True, None]:
-        yield __test, '{0}:maj'.format(root)
-
-    # test bad qualities
-    for quality in [64, 'z', 'mj', 'Ab', 'iiii', False, None]:
-        yield __test, 'C:{0}'.format(quality)
-
-    # test bad bass
-    for bass in ['A', 7.5, '8b']:
-        yield __test, 'C/{0}'.format(bass)
-
-    # test non-object values
-    yield __test, None
-
-
-def test_ns_chord_harte_valid():
-
-    def __test(chord):
-        ann = Annotation(namespace='chord_harte')
-
-        ann.append(time=0, duration=1.0, value=chord)
-
-        ann.validate()
-
-    for chord in ['B:7', 'Gb:(1,3,5)', 'A#:(*3)', 'C:sus4(*5)/b7']:
-        yield __test, chord
-
-
-def test_ns_chord_harte_invalid():
-
-    @raises(SchemaError)
-    def __test(chord):
-        ann = Annotation(namespace='chord_harte')
-
-        ann.append(time=0, duration=1.0, value=chord)
-
-        ann.validate()
-
-    # test bad roots
-    for root in [42, 'X', 'a', 'F1', True, None]:
-        yield __test, '{0}:maj'.format(root)
-
-    # test bad qualities
-    for quality in [64, 'z', 'mj', 'Ab', 'iiii', False, None]:
-        yield __test, 'C:{0}'.format(quality)
-
-    # test bad bass
-    for bass in ['A', 7.5, '8b']:
-        yield __test, 'C/{0}'.format(bass)
-
-    # test non-object values
-    yield __test, None
-
-
-def test_ns_chord_roman_valid():
-
-    def __test(chord):
-        ann = Annotation(namespace='chord_roman')
-
-        ann.append(time=0, duration=1.0, value=chord)
-
-        ann.validate()
-
-    yield __test, dict(tonic='B', chord='bII7')
-
-    yield __test, dict(tonic=six.u('Gb'), chord=six.u('ii7/#V'))
-
-
-def test_ns_chord_roman_invalid():
-
-    @raises(SchemaError)
-    def __test(chord):
-        ann = Annotation(namespace='chord_roman')
-
-        ann.append(time=0, duration=1.0, value=chord)
-
-        ann.validate()
-
-    good_dict = dict(tonic='E', chord='iv64')
-
-    # test bad tonics
-    for tonic in [42, 'H', 'a', 'F#b', True, None]:
-        value = good_dict.copy()
-        value['tonic'] = tonic
-        yield __test, value
-
-    # test bad chords
-    for chord in [64, 'z', 'i/V64', 'Ab', 'iiii', False, None]:
-        value = good_dict.copy()
-        value['chord'] = chord
-        yield __test, value
-
-    # test missing fields
-    for field in good_dict.keys():
-        value = good_dict.copy()
-        del value[field]
-        yield __test, value
-
-    # test non-object values
-    yield __test, None
-
-
-def test_ns_pitch_class_valid():
-
-    def __test(pitch):
-        ann = Annotation(namespace='pitch_class')
-
-        ann.append(time=0, duration=1.0, value=pitch)
-        ann.append(time=1.0, duration=1.0, value=pitch)
-
-        ann.validate()
-
-    yield __test, dict(tonic='B', pitch=0)
-
-    yield __test, dict(tonic=six.u('Gb'), pitch=11)
-
-
-def test_ns_pitch_class_invalid():
-
-    @raises(SchemaError)
-    def __test(pitch):
-        ann = Annotation(namespace='pitch_class')
-
-        ann.append(time=0, duration=1.0, value=pitch)
-        ann.append(time=1.0, duration=1.0, value=pitch)
-
-        ann.validate()
-
-    good_dict = dict(tonic='E', pitch=7)
-
-    # test bad tonics
-    for tonic in [42, 'H', 'a', 'F#b', True, None]:
-        value = good_dict.copy()
-        value['tonic'] = tonic
-        yield __test, value
-
-    # test bad pitches
-    for pitch in [1.5, 'xyz', '3', False, None]:
-        value = good_dict.copy()
-        value['pitch'] = pitch
-        yield __test, value
-
-    # test missing fields
-    for field in good_dict.keys():
-        value = good_dict.copy()
-        del value[field]
-        yield __test, value
-
-    # test non-object values
-    yield __test, None
-
-def test_ns_tag_cal500():
-
-    def __test(tag):
-        ann = Annotation(namespace='tag_cal500')
-
-        ann.append(time=0, duration=1, value=tag)
-
-        ann.validate()
-
-    for tag in ['Emotion-Angry_/_Aggressive', 'Genre--_Metal/Hard_Rock', 'Genre-Best-Jazz']:
-        yield __test, tag
-        yield __test, six.u(tag)
-        yield raises(SchemaError)(__test), tag.upper()
-
-
-    for tag in [23, None]:
-        yield raises(SchemaError)(__test), tag
-
-def test_ns_tag_cal10k():
-
-    def __test(tag):
-        ann = Annotation(namespace='tag_cal10k')
-
-        ann.append(time=0, duration=1, value=tag)
-
-        ann.validate()
-
-    for tag in ['a dub production', "boomin' kick drum", 'rock & roll ? roots']:
-        yield __test, tag
-        yield __test, six.u(tag)
-        yield raises(SchemaError)(__test), tag.upper()
-
-
-    for tag in [23, None]:
-        yield raises(SchemaError)(__test), tag
-
-def test_ns_tag_gtzan():
-
-    def __test(tag):
-        ann = Annotation(namespace='tag_gtzan')
-
-        ann.append(time=0, duration=1, value=tag)
-
-        ann.validate()
-
-    for tag in ['blues', 'classical', 'country', 'disco',
-                'hip-hop', 'jazz', 'metal', 'pop', 'reggae', 'rock']:
-
-        yield __test, tag
-        yield __test, six.u(tag)
-        yield raises(SchemaError)(__test), tag.upper()
-
-
-    for tag in [23, None]:
-        yield raises(SchemaError)(__test), tag
-
-def test_ns_tag_msd_tagtraum_cd1():
-
-    def __test(tag, confidence=None):
-        ann = Annotation(namespace='tag_msd_tagtraum_cd1')
-
-        ann.append(time=0, duration=1, value=tag, confidence=confidence)
-
-        ann.validate()
-
-    for tag in ['reggae',
-                'pop/rock',
-                'rnb',
-                'jazz',
-                'vocal',
-                'new age',
-                'latin',
-                'rap',
-                'country',
-                'international',
-                'blues',
-                'electronic',
-                'folk']:
-
-        yield __test, tag
-        yield __test, six.u(tag)
-        yield raises(SchemaError)(__test), tag.upper()
-
-
-    for tag in [23, None]:
-        yield raises(SchemaError)(__test), tag
-
-    yield raises(SchemaError)(__test), 'folk', 1.2
-    yield raises(SchemaError)(__test), 'folk', -0.1
-    yield __test, 'folk', 1.0
-    yield __test, 'folk', 0.0
-
-
-def test_ns_tag_msd_tagtraum_cd2():
-
-    def __test(tag, confidence=None):
-        ann = Annotation(namespace='tag_msd_tagtraum_cd2')
-
-        ann.append(time=0, duration=1, value=tag, confidence=confidence)
-
-        ann.validate()
-
-    for tag in ['reggae',
-                'latin',
-                'metal',
-                'rnb',
-                'jazz',
-                'punk',
-                'pop',
-                'new age',
-                'country',
-                'rap',
-                'rock',
-                'world',
-                'blues',
-                'electronic',
-                'folk']:
-
-        yield __test, tag
-        yield __test, six.u(tag)
-        yield raises(SchemaError)(__test), tag.upper()
-
-
-    for tag in [23, None]:
-        yield raises(SchemaError)(__test), tag
-
-    yield raises(SchemaError)(__test), 'folk', 1.2
-    yield raises(SchemaError)(__test), 'folk', -0.1
-    yield __test, 'folk', 1.0
-    yield __test, 'folk', 0.0
-
-        
-def test_ns_tag_medleydb():
-
-    def __test(tag):
-        ann = Annotation(namespace='tag_medleydb_instruments')
-
-        ann.append(time=0, duration=1, value=tag)
-
-        ann.validate()
-
-    for tag in ['accordion', 'alto saxophone', 'fx/processed sound']:
-        yield __test, tag
-        yield __test, six.u(tag)
-        yield raises(SchemaError)(__test), tag.upper()
-
-
-    for tag in [23, None]:
-        yield raises(SchemaError)(__test), tag
-
-def test_ns_tag_open():
-
-    def __test(label):
-        ann = Annotation(namespace='tag_open')
-
-        ann.append(time=0, duration=1, value=label)
-
-        ann.validate()
-
-    for line in ['a tag', six.u('a unicode tag')]:
-        yield __test, line
-
-    for line in [23, None]:
-        yield raises(SchemaError)(__test), line
-
-def test_ns_segment_open():
-
-    def __test(label):
-        ann = Annotation(namespace='segment_open')
-
-        ann.append(time=0, duration=1, value=label)
-
-        ann.validate()
-
-    for line in ['a segment', six.u('a unicode segment')]:
-        yield __test, line
-
-    for line in [23, None]:
-        yield raises(SchemaError)(__test), line
-
-def test_ns_segment_salami_lower():
-
-    def __test(label):
-        ann = Annotation(namespace='segment_salami_lower')
-
-        ann.append(time=0, duration=1, value=label)
-
-        ann.validate()
-
-    for line in ['a', "a'", "a'''", "silence", "Silence", six.u('a'), 'aa', "aa'", 'ab']:
-        yield __test, line
-
-    for line in [23, None, 'A', 'S', 'a23', '  Silence  23', 'aba', 'aab']:
-        yield raises(SchemaError)(__test), line
-
-def test_ns_segment_salami_upper():
-
-    def __test(label):
-        ann = Annotation(namespace='segment_salami_upper')
-
-        ann.append(time=0, duration=1, value=label)
-
-        ann.validate()
-
-    for line in ['A', "A'", "A'''", "silence", "Silence", six.u('A'), 'A', "A'"]:
-        yield __test, line
-
-    for line in [23, None, 'a', 'a', 'A23', '  Silence  23', 'ABA', 'AAB', 'AA']:
-        yield raises(SchemaError)(__test), line
-
-def test_ns_segment_salami_function():
-
-    def __test(label):
-        ann = Annotation(namespace='segment_salami_function')
-
-        ann.append(time=0, duration=1, value=label)
-
-        ann.validate()
-
-    for line in ['verse', "chorus", "theme", "voice", "silence", six.u('verse')]:
-        yield __test, line
-
-    for line in [23, None, 'a', 'a', 'A23', '  Silence  23', 'Some Garbage']:
-        yield raises(SchemaError)(__test), line
-
-def test_ns_segment_tut():
-
-    def __test(label):
-        ann = Annotation(namespace='segment_tut')
-
-        ann.append(time=0, duration=1, value=label)
-
-        ann.validate()
-
-    for line in ['verse', "refrain", "Si", "bridge", "Bridge", six.u('verse')]:
-        yield __test, line
-
-    for line in [23, None, 'chorus', 'a', 'a', 'A23', '  Silence  23', 'Some Garbage']:
-        yield raises(SchemaError)(__test), line
-
-
-def test_ns_pattern_valid():
-    def __test(pattern):
-        ann = Annotation(namespace='pattern_jku')
-
-        ann.append(time=0, duration=1.0, value=pattern)
-        ann.append(time=1.0, duration=1.0, value=pattern)
-
-        ann.validate()
-
-    yield __test, dict(midi_pitch=3, morph_pitch=5, staff=1, pattern_id=1, occurrence_id=1)
-    yield __test, dict(midi_pitch=-3, morph_pitch=-1.5, staff=1.0, pattern_id=1, occurrence_id=1)
-
-
-
-
-def test_ns_pattern_invalid():
-
-    @raises(SchemaError)
-    def __test(pattern):
-        ann = Annotation(namespace='pattern_jku')
-
-        ann.append(time=0, duration=1.0, value=pattern)
-        ann.append(time=1.0, duration=1.0, value=pattern)
-
-        ann.validate()
-
-    good_pattern = dict(midi_pitch=3,
-                        morph_pitch=5,
-                        staff=1,
-                        pattern_id=1,
-                        occurrence_id=1)
-
-    # Test that all values are only numeric
-    for key in good_pattern.keys():
-        for bad_value in ['foo', None, dict(), []]:
-            pattern = good_pattern.copy()
-            pattern[key] = bad_value
-            yield __test, pattern
-
-    # Test bounded values
-    for key in ['pattern_id', 'occurrence_id']:
-        for bad_value in [-1, 0, 0.5]:
-            pattern = good_pattern.copy()
-            pattern[key] = bad_value
-            yield __test, pattern
-
-
-def test_ns_blob():
-    def __test(label):
-        ann = Annotation(namespace='blob')
-
-        ann.append(time=0, duration=1, value=label)
-
-        ann.validate()
-
-    for line in ['a tag', six.u('a unicode tag'), 23, None, dict(), list()]:
-        yield __test, line
-
-
-def test_ns_vector():
-
-    def __test(label):
-        ann = Annotation(namespace='vector')
-
-        ann.append(time=0, duration=1, value=label)
-
-        ann.validate()
-
-    for line in [[1], [1, 2], np.asarray([1]), np.asarray([1, 2])]:
-        yield __test, line
-
-    for line in ['a tag', six.u('a unicode tag'), 23, None, dict(), list()]:
-        yield raises(SchemaError)(__test), line
-
-
-def test_ns_multi_segment():
-
-    def __test(value):
-        ann = Annotation(namespace='multi_segment')
-
-        ann.append(time=0, duration=1, value=value)
-
-        ann.validate()
-
-    for label in ['a segment', six.u('a unicode segment')]:
-        yield raises(SchemaError)(__test), label
-        for level in [0, 1, 2]:
-            yield __test, dict(label=label, level=level)
-        for level in [-1, None, 'foo']:
-            yield raises(SchemaError)(__test), dict(label=label, level=level)
-
-    for label in [23, None]:
-        yield raises(SchemaError)(__test), label
-        for level in [0, 1, 2]:
-            yield raises(SchemaError)(__test), dict(label=label, level=level)
-
-
-def test_ns_lyrics_bow():
-
-    def __test(label):
-        ann = Annotation(namespace='lyrics_bow')
-
-        ann.append(time=0, duration=1, value=label)
-
-        print(ann.data)
-        ann.validate()
-
-    yield __test, [['foo', 23]]
-    yield __test, [['foo', 23], ['bar', 35]]
-    yield __test, [['foo', 23], [['foo', 'bar'], 13]]
-    yield __test, []
-
-    yield raises(SchemaError)(__test), ('foo', 23)
-    yield raises(SchemaError)(__test), [('foo', -23)]
-    yield raises(SchemaError)(__test), [(23, 'foo')]
-
+@parametrize('value',
+             [dict(tonic='B', pitch=0),
+              dict(tonic=six.u('Gb'), pitch=11)])
+def test_ns_pitch_class_valid(value):
+
+    ann = Annotation(namespace='pitch_class')
+    ann.append(time=0, duration=1.0, value=value)
+    ann.validate()
+
+
+@parametrize('key, value',
+             [('tonic', 42), ('tonic', 'H'),
+              ('tonic', 'a'), ('tonic', 'F#b'),
+              ('tonic', True), ('tonic', None),
+              ('pitch', 1.5), ('pitch', 'xyz'),
+              ('pitch', '3'), ('pitch', False),
+              ('pitch', None)])
+@xfail(raises=SchemaError)
+def test_ns_pitch_class_invalid(key, value):
+
+    data = dict(tonic='E', pitch=7)
+    data[key] = value
+    ann = Annotation(namespace='pitch_class')
+    ann.append(time=0, duration=1.0, value=data)
+    ann.validate()
+
+
+@parametrize('key', ['tonic', 'pitch'])
+@xfail(raises=SchemaError)
+def test_ns_pitch_class_missing(key):
+    data = dict(tonic='E', pitch=7)
+    del data[key]
+    ann = Annotation(namespace='pitch_class')
+    ann.append(time=0, duration=1.0, value=data)
+    ann.validate()
+
+
+@parametrize('tag',
+             ['Emotion-Angry_/_Aggressive',
+              'Genre--_Metal/Hard_Rock',
+              'Genre-Best-Jazz',
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('GENRE-BEST-JAZZ', raises=SchemaError)])
+def test_ns_tag_cal500(tag):
+
+    ann = Annotation(namespace='tag_cal500')
+    ann.append(time=0, duration=1, value=tag)
+    ann.append(time=1, duration=1, value=six.u(tag))
+    ann.validate()
+
+
+@parametrize('tag',
+             ['a dub production', "boomin' kick drum",
+              'rock & roll ? roots',
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('A DUB PRODUCTION', raises=SchemaError)])
+def test_ns_tag_cal10k(tag):
+
+    ann = Annotation(namespace='tag_cal10k')
+
+    ann.append(time=0, duration=1, value=tag)
+    ann.append(time=1, duration=1, value=six.u(tag))
+
+    ann.validate()
+
+
+@parametrize('tag',
+             ['blues', 'classical', 'country', 'disco',
+              'hip-hop', 'jazz', 'metal', 'pop',
+              'reggae', 'rock',
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('ROCK', raises=SchemaError)])
+def test_ns_tag_gtzan(tag):
+
+    ann = Annotation(namespace='tag_gtzan')
+    ann.append(time=0, duration=1, value=tag)
+    ann.append(time=1, duration=1, value=six.u(tag))
+    ann.validate()
+
+
+@parametrize('tag',
+             ['reggae', 'pop/rock', 'rnb', 'jazz',
+              'vocal', 'new age', 'latin', 'rap',
+              'country', 'international', 'blues', 'electronic',
+              'folk',
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('FOLK', raises=SchemaError)])
+@parametrize('confidence',
+             [0.0, 1.0, None,
+              xfail(1.2, raises=SchemaError),
+              xfail(-0.1, raises=SchemaError)])
+def test_ns_tag_msd_tagtraum_cd1(tag, confidence):
+
+    ann = Annotation(namespace='tag_msd_tagtraum_cd1')
+
+    ann.append(time=0, duration=1, value=tag, confidence=confidence)
+    ann.append(time=1, duration=1, value=six.u(tag),
+               confidence=confidence)
+
+    ann.validate()
+
+
+@parametrize('tag',
+             ['reggae', 'latin', 'metal',
+              'rnb', 'jazz', 'punk', 'pop',
+              'new age', 'country', 'rap', 'rock',
+              'world', 'blues', 'electronic', 'folk',
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('FOLK', raises=SchemaError)])
+@parametrize('confidence',
+             [0.0, 1.0, None,
+              xfail(1.2, raises=SchemaError),
+              xfail(-0.1, raises=SchemaError)])
+def test_ns_tag_msd_tagtraum_cd2(tag, confidence):
+
+    ann = Annotation(namespace='tag_msd_tagtraum_cd2')
+    ann.append(time=0, duration=1, value=tag, confidence=confidence)
+    ann.append(time=1, duration=1, value=six.u(tag),
+               confidence=confidence)
+    ann.validate()
+
+
+@parametrize('tag',
+             ['accordion', 'alto saxophone', 'fx/processed sound',
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('ACCORDION', raises=SchemaError)])
+def test_ns_tag_medleydb(tag):
+
+    ann = Annotation(namespace='tag_medleydb_instruments')
+    ann.append(time=0, duration=1, value=tag)
+    ann.append(time=1, duration=1, value=six.u(tag))
+    ann.validate()
+
+
+@parametrize('tag',
+             ['a tag', six.u('a unicode tag'),
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError)])
+def test_ns_tag_open(tag):
+
+    ann = Annotation(namespace='tag_open')
+    ann.append(time=0, duration=1, value=tag)
+    ann.validate()
+
+
+@parametrize('segment',
+             ['a segment', six.u('a unicode segment'),
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError)])
+def test_segment_tag_open(segment):
+
+    ann = Annotation(namespace='segment_open')
+    ann.append(time=0, duration=1, value=segment)
+    ann.validate()
+
+
+@parametrize('label',
+             ['a', "a'", "a'''", "silence", "Silence",
+              six.u('a'), 'aa', "aa'", 'ab'] +
+             [xfail(_, raises=SchemaError)
+              for _ in [23, None, 'A', 'S', 'a23',
+                        '  Silence  23', 'aba', 'aab']])
+def test_ns_segment_salami_lower(label):
+
+    ann = Annotation(namespace='segment_salami_lower')
+    ann.append(time=0, duration=1, value=label)
+    ann.validate()
+
+
+@parametrize('label',
+             ['A', "A'", "A'''", "silence", "Silence",
+              six.u('A')] +
+             [xfail(_, raises=SchemaError)
+              for _ in [23, None, 'a', 'A23',
+                        '  Silence  23', 'ABA', 'AAB', 'AA']])
+def test_ns_segment_salami_upper(label):
+
+    ann = Annotation(namespace='segment_salami_upper')
+    ann.append(time=0, duration=1, value=label)
+    ann.validate()
+
+
+@parametrize('label',
+             ['verse', "chorus", "theme", "voice",
+              "silence", six.u('verse')] +
+             [xfail(_, raises=SchemaError)
+              for _ in [23, None, 'a', 'a', 'A23',
+                        '  Silence  23', 'Some Garbage']])
+def test_ns_segment_salami_function(label):
+
+    ann = Annotation(namespace='segment_salami_function')
+    ann.append(time=0, duration=1, value=label)
+    ann.validate()
+
+
+@parametrize('label',
+             ['verse', "refrain", "Si", "bridge", "Bridge", six.u('verse')] +
+             [xfail(_, raises=SchemaError)
+              for _ in [23, None, 'chorus', 'a', 'a',
+                        'A23', '  Silence  23', 'Some Garbage']])
+def test_ns_segment_tut(label):
+
+    ann = Annotation(namespace='segment_tut')
+    ann.append(time=0, duration=1, value=label)
+    ann.validate()
+
+
+@parametrize('pattern', [dict(midi_pitch=3, morph_pitch=5, staff=1,
+                              pattern_id=1, occurrence_id=1),
+                         dict(midi_pitch=-3, morph_pitch=-1.5, staff=1.0,
+                              pattern_id=1, occurrence_id=1)])
+def test_ns_pattern_valid(pattern):
+    ann = Annotation(namespace='pattern_jku')
+    ann.append(time=0, duration=1.0, value=pattern)
+    ann.validate()
+
+
+@xfail(raises=SchemaError)
+@parametrize('key', ['midi_pitch', 'morph_pitch', 'staff',
+                     'pattern_id', 'occurrence_id'])
+@parametrize('value', ['foo', None, dict(), list()])
+def test_ns_pattern_invalid(key, value):
+
+    data = dict(midi_pitch=3, morph_pitch=5,
+                staff=1, pattern_id=1, occurrence_id=1)
+    data[key] = value
+
+    ann = Annotation(namespace='pattern_jku')
+    ann.append(time=0, duration=1.0, value=data)
+    ann.validate()
+
+
+@xfail(raises=SchemaError)
+@parametrize('key', ['pattern_id', 'occurrence_id'])
+@parametrize('value', [-1, 0, 0.5])
+def test_ns_pattern_invalid_bounded(key, value):
+    data = dict(midi_pitch=3, morph_pitch=5,
+                staff=1, pattern_id=1, occurrence_id=1)
+    data[key] = value
+
+    ann = Annotation(namespace='pattern_jku')
+    ann.append(time=0, duration=1.0, value=data)
+    ann.validate()
+
+
+@parametrize('label', ['a tag', six.u('a unicode tag'), 23,
+                       None, dict(), list()])
+def test_ns_blob(label):
+    ann = Annotation(namespace='blob')
+    ann.append(time=0, duration=1, value=label)
+    ann.validate()
+
+
+@parametrize('label', [[1], [1, 2], np.asarray([1]), np.asarray([1, 2])] +
+                      [xfail(_, raises=SchemaError) for _ in
+                       ['a tag', six.u('a unicode tag'), 23,
+                        None, dict(), list()]])
+def test_ns_vector(label):
+
+    ann = Annotation(namespace='vector')
+    ann.append(time=0, duration=1, value=label)
+    ann.validate()
+
+
+@parametrize('label', ['a segment', six.u('a unicode segment'),
+                       xfail(23, raises=SchemaError),
+                       xfail(None, raises=SchemaError)])
+@parametrize('level', [0, 2,
+                       xfail(-1, raises=SchemaError),
+                       xfail('foo', raises=SchemaError),
+                       xfail(None, raises=SchemaError)])
+def test_ns_multi_segment(label, level):
+
+    ann = Annotation(namespace='multi_segment')
+    ann.append(time=0, duration=1, value=dict(label=label, level=level))
+    ann.validate()
+
+
+@xfail(raises=SchemaError)
+def test_ns_multi_segment_bad():
+    ann = Annotation(namespace='multi_segment')
+    ann.append(time=0, duration=1, value='a string')
+    ann.validate()
+
+
+@parametrize('label', [[['foo', 23]],
+                       [['foo', 23], ['bar', 35]],
+                       [['foo', 23], [['foo', 'bar'], 13]],
+                       [],
+                       xfail(('foo', 23), raises=SchemaError),
+                       xfail([('foo', -23)], raises=SchemaError),
+                       xfail([(23, 'foo')], raises=SchemaError)])
+def test_ns_lyrics_bow(label):
+
+    ann = Annotation(namespace='lyrics_bow')
+    ann.append(time=0, duration=1, value=label)
+    ann.validate()
