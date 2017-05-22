@@ -4,12 +4,12 @@
 
 import numpy as np
 
-from nose.tools import raises, eq_
+import pytest
 import jams
 from jams import NamespaceError
 
 
-@raises(NamespaceError)
+@pytest.mark.xfail(raises=NamespaceError)
 def test_bad_target():
 
     ann = jams.Annotation(namespace='tag_open')
@@ -18,26 +18,22 @@ def test_bad_target():
     jams.convert(ann, 'bad namespace')
 
 
-def test_bad_sources():
-
-    @raises(NamespaceError)
-    def __test(ann, target):
-        jams.convert(ann, target)
+@pytest.mark.parametrize('target',
+                         ['pitch_hz', 'pitch_midi', 'segment_open',
+                          'tag_open', 'beat', 'chord'])
+@pytest.mark.xfail(raises=NamespaceError)
+def test_bad_sources(target):
 
     ann = jams.Annotation(namespace='vector')
-    for target in ['pitch_hz', 'pitch_midi', 'segment_open', 'tag_open', 'beat', 'chord']:
-        yield __test, ann, target
+    jams.convert(ann, target)
 
 
-def test_noop():
+@pytest.mark.parametrize('namespace', list(jams.schema.__NAMESPACE__.keys()))
+def test_noop(namespace):
 
-    def __test(ns):
-        ann = jams.Annotation(namespace=ns)
-        a2 = jams.convert(ann, ns)
-        eq_(ann, a2)
-
-    for ns in jams.schema.__NAMESPACE__:
-        yield __test, ns
+    ann = jams.Annotation(namespace=namespace)
+    a2 = jams.convert(ann, namespace)
+    assert ann == a2
 
 
 def test_pitch_hz_to_contour():
@@ -55,15 +51,15 @@ def test_pitch_hz_to_contour():
     ann2 = jams.convert(ann, 'pitch_contour')
     ann.validate()
     ann2.validate()
-    eq_(ann2.namespace, 'pitch_contour')
+    assert ann2.namespace == 'pitch_contour'
 
     # Check index values
-    eq_(ann2.data[0].value['index'], 0)
-    eq_(ann2.data[-1].value['index'], 0)
+    assert ann2.data[0].value['index'] == 0
+    assert ann2.data[-1].value['index'] == 0
 
     # Check frequency
-    eq_(np.abs(ann2.data[0].value['frequency']), np.abs(values[0]))
-    eq_(np.abs(ann2.data[-1].value['frequency']), np.abs(values[-1]))
+    assert np.abs(ann2.data[0].value['frequency'] == np.abs(values[0]))
+    assert np.abs(ann2.data[-1].value['frequency'] == np.abs(values[-1]))
 
     # Check voicings
     assert not ann2.data[0].value['voiced']
@@ -83,11 +79,11 @@ def test_pitch_midi_to_contour():
     ann2 = jams.convert(ann, 'pitch_contour')
     ann.validate()
     ann2.validate()
-    eq_(ann2.namespace, 'pitch_contour')
+    assert ann2.namespace == 'pitch_contour'
 
     # Check index values
-    eq_(ann2.data[0].value['index'], 0)
-    eq_(ann2.data[-1].value['index'], 0)
+    assert ann2.data[0].value['index'] == 0
+    assert ann2.data[-1].value['index'] == 0
 
     # Check voicings
     assert ann2.data[-1].value['voiced']
@@ -102,17 +98,17 @@ def test_pitch_midi_to_hz():
     ann2.validate()
 
     # Check the namespace
-    eq_(ann2.namespace, 'pitch_hz')
+    assert ann2.namespace == 'pitch_hz'
     # midi 69 = 440.0 Hz
-    eq_(ann2.data[0].value, 440.0)
+    assert ann2.data[0].value == 440.0
 
     # Check all else is equal
-    eq_(len(ann.data), len(ann2.data))
+    assert len(ann.data) == len(ann2.data)
 
     for obs1, obs2 in zip(ann.data, ann2.data):
-        eq_(obs1.time, obs2.time)
-        eq_(obs1.duration, obs2.duration)
-        eq_(obs1.confidence, obs2.confidence)
+        assert obs1.time == obs2.time
+        assert obs1.duration == obs2.duration
+        assert obs1.confidence == obs2.confidence
 
 
 def test_pitch_hz_to_midi():
@@ -124,17 +120,17 @@ def test_pitch_hz_to_midi():
     ann2.validate()
 
     # Check the namespace
-    eq_(ann2.namespace, 'pitch_midi')
+    assert ann2.namespace == 'pitch_midi'
     # midi 69 = 440.0 Hz
-    eq_(ann2.data[0].value, 69)
+    assert ann2.data[0].value == 69
 
     # Check all else is equal
-    eq_(len(ann.data), len(ann2.data))
+    assert len(ann.data) == len(ann2.data)
 
     for obs1, obs2 in zip(ann.data, ann2.data):
-        eq_(obs1.time, obs2.time)
-        eq_(obs1.duration, obs2.duration)
-        eq_(obs1.confidence, obs2.confidence)
+        assert obs1.time == obs2.time
+        assert obs1.duration == obs2.duration
+        assert obs1.confidence == obs2.confidence
 
 
 def test_note_midi_to_hz():
@@ -146,17 +142,17 @@ def test_note_midi_to_hz():
     ann2.validate()
 
     # Check the namespace
-    eq_(ann2.namespace, 'note_hz')
+    assert ann2.namespace == 'note_hz'
     # midi 69 = 440.0 Hz
-    eq_(ann2.data[0].value, 440.0)
+    assert ann2.data[0].value == 440.0
 
     # Check all else is equal
-    eq_(len(ann.data), len(ann2.data))
+    assert len(ann.data) == len(ann2.data)
 
     for obs1, obs2 in zip(ann.data, ann2.data):
-        eq_(obs1.time, obs2.time)
-        eq_(obs1.duration, obs2.duration)
-        eq_(obs1.confidence, obs2.confidence)
+        assert obs1.time == obs2.time
+        assert obs1.duration == obs2.duration
+        assert obs1.confidence == obs2.confidence
 
 
 def test_note_hz_to_midi():
@@ -168,17 +164,17 @@ def test_note_hz_to_midi():
     ann2.validate()
 
     # Check the namespace
-    eq_(ann2.namespace, 'note_midi')
+    assert ann2.namespace == 'note_midi'
     # midi 69 = 440.0 Hz
-    eq_(ann2.data[0].value, 69)
+    assert ann2.data[0].value == 69
 
     # Check all else is equal
-    eq_(len(ann.data), len(ann2.data))
+    assert len(ann.data) == len(ann2.data)
 
     for obs1, obs2 in zip(ann.data, ann2.data):
-        eq_(obs1.time, obs2.time)
-        eq_(obs1.duration, obs2.duration)
-        eq_(obs1.confidence, obs2.confidence)
+        assert obs1.time == obs2.time
+        assert obs1.duration == obs2.duration
+        assert obs1.confidence == obs2.confidence
 
 
 def test_segment_open():
@@ -190,11 +186,11 @@ def test_segment_open():
     ann2.validate()
 
     # Check the namespace
-    eq_(ann.namespace, 'segment_salami_upper')
-    eq_(ann2.namespace, 'segment_open')
+    assert ann.namespace == 'segment_salami_upper'
+    assert ann2.namespace == 'segment_open'
 
     # Check all else is equal
-    eq_(ann.data, ann2.data)
+    assert ann.data == ann2.data
 
 
 def test_tag_open():
@@ -206,11 +202,11 @@ def test_tag_open():
     ann2.validate()
 
     # Check the namespace
-    eq_(ann.namespace, 'tag_gtzan')
-    eq_(ann2.namespace, 'tag_open')
+    assert ann.namespace == 'tag_gtzan'
+    assert ann2.namespace == 'tag_open'
 
     # Check all else is equal
-    eq_(ann.data, ann2.data)
+    assert ann.data == ann2.data
 
 
 def test_chord():
@@ -222,8 +218,8 @@ def test_chord():
     ann2.validate()
 
     # Check the namespace
-    eq_(ann.namespace, 'chord_harte', ann)
-    eq_(ann2.namespace, 'chord', ann2)
+    assert ann.namespace == 'chord_harte'
+    assert ann2.namespace == 'chord'
 
     # Check all else is equal
     assert ann.data == ann2.data
@@ -247,33 +243,29 @@ def test_beat_position():
     ann2.validate()
 
     # Check the namespace
-    eq_(ann2.namespace, 'beat')
+    assert ann2.namespace == 'beat'
 
     # Check all else is equal
-    eq_(len(ann), len(ann2))
+    assert len(ann) == len(ann2)
     for obs1, obs2 in zip(ann.data, ann2.data):
-        eq_(obs1.time, obs2.time)
-        eq_(obs1.duration, obs2.duration)
-        eq_(obs1.confidence, obs2.confidence)
+        assert obs1.time == obs2.time
+        assert obs1.duration == obs2.duration
+        assert obs1.confidence == obs2.confidence
 
 
 def test_can_convert_equal():
 
     ann = jams.Annotation(namespace='chord')
-
     assert jams.nsconvert.can_convert(ann, 'chord')
 
 
 def test_can_convert_cast():
 
     ann = jams.Annotation(namespace='tag_gtzan')
-
     assert jams.nsconvert.can_convert(ann, 'tag_open')
 
 
 def test_can_convert_fail():
 
     ann = jams.Annotation(namespace='tag_gtzan')
-
     assert not jams.nsconvert.can_convert(ann, 'chord')
-
