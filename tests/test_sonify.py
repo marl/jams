@@ -4,7 +4,7 @@
 
 import numpy as np
 import pytest
-from eval_test import create_hierarchy
+from test_eval import create_hierarchy
 
 import jams
 

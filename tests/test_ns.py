@@ -11,7 +11,7 @@ from jams import SchemaError
 
 from jams import Annotation, Observation
 
-from util_test import srand
+from test_util import srand
 
 
 xfail = pytest.mark.xfail

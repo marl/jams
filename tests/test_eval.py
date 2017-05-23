@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 import jams
 
-from util_test import srand
+from test_util import srand
 
 
 # Fixtures
