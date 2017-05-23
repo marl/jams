@@ -7,28 +7,24 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
+import pytest
 import jams
 import jams.display
 
-from nose.tools import raises
 from jams import NamespaceError
 
+
 # A simple run-without-fail test for plotting
-def test_display():
+@pytest.mark.parametrize('namespace',
+                         ['segment_open', 'chord', 'multi_segment',
+                          'pitch_contour', 'beat_position', 'beat',
+                          'onset', 'note_midi',
+                          pytest.mark.xfail('tempo', raises=NamespaceError)])
+@pytest.mark.parametrize('meta', [False, True])
+def test_display(namespace, meta):
 
-    def __test(namespace, meta):
-
-        fig = plt.figure()
-        ann = jams.Annotation(namespace=namespace)
-        jams.display.display(ann, meta=meta)
-
-
-    for namespace in ['segment_open', 'chord', 'multi_segment', 'pitch_contour',
-                      'beat_position', 'beat', 'onset', 'note_midi']:
-        for meta in [False, True]:
-
-            yield __test, namespace, meta
-    yield raises(NamespaceError)(__test), 'tempo', False
+    ann = jams.Annotation(namespace=namespace)
+    jams.display.display(ann, meta=meta)
 
 
 def test_display_multi():
@@ -72,9 +68,9 @@ def test_display_labeled_events():
 
     jams.display.display(ann)
 
-@raises(jams.ParameterError)
+
+@pytest.mark.xfail(raises=jams.ParameterError)
 def test_display_multi_fail():
 
     anns = jams.AnnotationArray()
     jams.display.display_multi(anns)
-
