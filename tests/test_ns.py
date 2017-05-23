@@ -469,7 +469,7 @@ def test_ns_pitch_class_missing(key):
 @parametrize('tag',
              ['Emotion-Angry_/_Aggressive',
               'Genre--_Metal/Hard_Rock',
-              'Genre-Best-Jazz',
+              six.u('Genre-Best-Jazz'),
               xfail(23, raises=SchemaError),
               xfail(None, raises=SchemaError),
               xfail('GENRE-BEST-JAZZ', raises=SchemaError)])
@@ -477,13 +477,12 @@ def test_ns_tag_cal500(tag):
 
     ann = Annotation(namespace='tag_cal500')
     ann.append(time=0, duration=1, value=tag)
-    ann.append(time=1, duration=1, value=six.u(tag))
     ann.validate()
 
 
 @parametrize('tag',
              ['a dub production', "boomin' kick drum",
-              'rock & roll ? roots',
+              six.u('rock & roll ? roots'),
               xfail(23, raises=SchemaError),
               xfail(None, raises=SchemaError),
               xfail('A DUB PRODUCTION', raises=SchemaError)])
@@ -492,7 +491,6 @@ def test_ns_tag_cal10k(tag):
     ann = Annotation(namespace='tag_cal10k')
 
     ann.append(time=0, duration=1, value=tag)
-    ann.append(time=1, duration=1, value=six.u(tag))
 
     ann.validate()
 
@@ -500,7 +498,7 @@ def test_ns_tag_cal10k(tag):
 @parametrize('tag',
              ['blues', 'classical', 'country', 'disco',
               'hip-hop', 'jazz', 'metal', 'pop',
-              'reggae', 'rock',
+              'reggae', six.u('rock'),
               xfail(23, raises=SchemaError),
               xfail(None, raises=SchemaError),
               xfail('ROCK', raises=SchemaError)])
@@ -508,7 +506,6 @@ def test_ns_tag_gtzan(tag):
 
     ann = Annotation(namespace='tag_gtzan')
     ann.append(time=0, duration=1, value=tag)
-    ann.append(time=1, duration=1, value=six.u(tag))
     ann.validate()
 
 
@@ -516,7 +513,7 @@ def test_ns_tag_gtzan(tag):
              ['reggae', 'pop/rock', 'rnb', 'jazz',
               'vocal', 'new age', 'latin', 'rap',
               'country', 'international', 'blues', 'electronic',
-              'folk',
+              six.u('folk'),
               xfail(23, raises=SchemaError),
               xfail(None, raises=SchemaError),
               xfail('FOLK', raises=SchemaError)])
@@ -529,8 +526,6 @@ def test_ns_tag_msd_tagtraum_cd1(tag, confidence):
     ann = Annotation(namespace='tag_msd_tagtraum_cd1')
 
     ann.append(time=0, duration=1, value=tag, confidence=confidence)
-    ann.append(time=1, duration=1, value=six.u(tag),
-               confidence=confidence)
 
     ann.validate()
 
@@ -539,7 +534,7 @@ def test_ns_tag_msd_tagtraum_cd1(tag, confidence):
              ['reggae', 'latin', 'metal',
               'rnb', 'jazz', 'punk', 'pop',
               'new age', 'country', 'rap', 'rock',
-              'world', 'blues', 'electronic', 'folk',
+              'world', 'blues', 'electronic', six.u('folk'),
               xfail(23, raises=SchemaError),
               xfail(None, raises=SchemaError),
               xfail('FOLK', raises=SchemaError)])
@@ -551,13 +546,11 @@ def test_ns_tag_msd_tagtraum_cd2(tag, confidence):
 
     ann = Annotation(namespace='tag_msd_tagtraum_cd2')
     ann.append(time=0, duration=1, value=tag, confidence=confidence)
-    ann.append(time=1, duration=1, value=six.u(tag),
-               confidence=confidence)
     ann.validate()
 
 
 @parametrize('tag',
-             ['accordion', 'alto saxophone', 'fx/processed sound',
+             ['accordion', 'alto saxophone', six.u('fx/processed sound'),
               xfail(23, raises=SchemaError),
               xfail(None, raises=SchemaError),
               xfail('ACCORDION', raises=SchemaError)])
@@ -565,7 +558,6 @@ def test_ns_tag_medleydb(tag):
 
     ann = Annotation(namespace='tag_medleydb_instruments')
     ann.append(time=0, duration=1, value=tag)
-    ann.append(time=1, duration=1, value=six.u(tag))
     ann.validate()
 
 
