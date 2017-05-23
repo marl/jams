@@ -40,7 +40,7 @@ def test_schema_is_dense(ns, dense):
 @pytest.fixture
 def local_namespace():
 
-    os.environ['JAMS_SCHEMA_DIR'] = os.path.join('fixtures', 'schema')
+    os.environ['JAMS_SCHEMA_DIR'] = os.path.join('tests', 'fixtures', 'schema')
     reload_module(jams)
 
     # This one should pass

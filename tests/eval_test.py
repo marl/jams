@@ -167,7 +167,7 @@ def est_badmelody():
 
 @pytest.fixture(scope='module')
 def ref_pattern():
-    ref_jam = jams.load('fixtures/pattern_data.jams', validate=False)
+    ref_jam = jams.load('tests/fixtures/pattern_data.jams', validate=False)
     return ref_jam.annotations['pattern_jku', 0]
 
 
@@ -199,19 +199,19 @@ def est_badhier():
 
 @pytest.fixture(scope='module')
 def ref_transcript():
-    ref_jam = jams.load('fixtures/transcription_ref.jams', validate=False)
+    ref_jam = jams.load('tests/fixtures/transcription_ref.jams', validate=False)
     return ref_jam.annotations['pitch_hz', 0]
 
 
 @pytest.fixture(scope='module')
 def est_transcript():
-    est_jam = jams.load('fixtures/transcription_est.jams', validate=False)
+    est_jam = jams.load('tests/fixtures/transcription_est.jams', validate=False)
     return est_jam.annotations['pitch_hz', 0]
 
 
 @pytest.fixture(scope='module')
 def est_badtranscript():
-    est_jam = jams.load('fixtures/transcription_est.jams', validate=False)
+    est_jam = jams.load('tests/fixtures/transcription_est.jams', validate=False)
     ann = est_jam.annotations['pitch_hz', 0]
     ann.append(time=2., duration=1., value=None, confidence=1)
     return ann

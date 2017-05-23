@@ -409,7 +409,7 @@ def output_path(request):
 
 @pytest.fixture(scope='module')
 def input_jam():
-    return jams.load('fixtures/valid.jams')
+    return jams.load('tests/fixtures/valid.jams')
 
 
 def test_jams_save(input_jam, output_path):
@@ -421,7 +421,7 @@ def test_jams_save(input_jam, output_path):
 
 def test_jams_add(tag_data):
 
-    fn = 'fixtures/valid.jams'
+    fn = 'tests/fixtures/valid.jams'
 
     # The original jam
     jam_orig = jams.load(fn)
@@ -445,7 +445,7 @@ def test_jams_add(tag_data):
               xfail('fail', raises=jams.JamsError),
               xfail('bad_fail_mdoe', raises=jams.ParameterError)])
 def test_jams_add_conflict(on_conflict):
-    fn = 'fixtures/valid.jams'
+    fn = 'tests/fixtures/valid.jams'
 
     # The original jam
     jam = jams.load(fn)
@@ -466,7 +466,7 @@ def test_jams_add_conflict(on_conflict):
 
 @pytest.fixture(scope='module')
 def jam_search():
-    jam = jams.load('fixtures/valid.jams', validate=False)
+    jam = jams.load('tests/fixtures/valid.jams', validate=False)
     jam.annotations[0].sandbox.foo = None
     return jam
 
@@ -487,7 +487,7 @@ def test_jams_search(jam_search, query, expected):
 
 def test_jams_validate_good():
 
-    fn = 'fixtures/valid.jams'
+    fn = 'tests/fixtures/valid.jams'
     j1 = jams.load(fn, validate=False)
 
     j1.validate()
@@ -495,7 +495,7 @@ def test_jams_validate_good():
 
 @pytest.fixture(scope='module')
 def jam_validate():
-    j1 = jams.load('fixtures/invalid.jams', validate=False)
+    j1 = jams.load('tests/fixtures/invalid.jams', validate=False)
     return j1
 
 
@@ -565,7 +565,7 @@ def test_load_valid():
 
     # 3. test good jams file with strict validation
     # 4. test good jams file without strict validation
-    fn = 'fixtures/valid'
+    fn = 'tests/fixtures/valid'
 
     for ext in ['jams', 'jamz']:
         for validate in [False, True]:
@@ -589,7 +589,7 @@ def test_load_invalid():
 
     # 5. test bad jams file with strict validation
     # 6. test bad jams file without strict validation
-    fn = 'fixtures/invalid.jams'
+    fn = 'tests/fixtures/invalid.jams'
 
     # Test once with no validation
     jams.load(fn, validate=False, strict=False)
