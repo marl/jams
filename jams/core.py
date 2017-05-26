@@ -1031,7 +1031,7 @@ class Annotation(JObject):
     def __iter__(self):
         return iter(self.data)
 
-    def to_html(self):
+    def to_html(self, max_rows=None):
         '''Render this annotation list in HTML
 
         Returns
@@ -1039,7 +1039,11 @@ class Annotation(JObject):
         rendered : str
             An HTML table containing this annotation's data.
         '''
+        n = len(self.data)
         out = r'''<table border="1" class="dataframe">
+                    <caption>
+                        <em>{:s}</em> annotation: {:d} observation(s)
+                    </caption>
                     <thead>
                         <tr style="text-align: right;">
                             <th></th>
@@ -1048,13 +1052,35 @@ class Annotation(JObject):
                             <th>value</th>
                             <th>confidence</th>
                         </tr>
-                    </thead>'''
+                    </thead>'''.format(self.namespace, n)
+
         out += r'''<tbody>'''
-        for i, obs in enumerate(self.data):
+
+        if max_rows is None or n <= max_rows:
+            out += self._fmt_rows(0, n)
+        else:
+            out += self._fmt_rows(0, max_rows//2)
+            out += r'''<tr>
+                            <th>...</th>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>'''
+            out += self._fmt_rows(n-max_rows//2, n)
+
+        out += r'''</tbody>'''
+
+        out += r'''</table>'''
+        return out
+
+    def _fmt_rows(self, start, end):
+        out = ''
+        for i, obs in enumerate(self.data[start:end], start):
             out += r'''<tr>
                             <th>{:d}</th>
-                            <td>{:0.6f}</td>
-                            <td>{:0.6f}</td>
+                            <td>{:0.3f}</td>
+                            <td>{:0.3f}</td>
                             <td>{:}</td>
                             <td>{:}</td>
                         </tr>'''.format(i,
@@ -1062,12 +1088,12 @@ class Annotation(JObject):
                                         obs.duration,
                                         obs.value,
                                         obs.confidence)
-        out += r'''</tbody></table>'''
+
         return out
 
-    def _repr_html_(self):
+    def _repr_html_(self, max_rows=25):
         '''Render annotation as HTML.  See also: `to_html()`'''
-        return self.to_html()
+        return self.to_html(max_rows=max_rows)
 
     @property
     def __json__(self):
