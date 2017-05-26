@@ -309,7 +309,20 @@ class JObject(object):
 
     def __repr__(self):
         """Render the object alongside its attributes."""
-        return '<{}: {:s}>'.format(self.type, ', '.join(self.keys()))
+        schema = self.__schema__
+        props = []
+        indent = len(self.type) + 2
+        jstr = ',\n' + ' ' * indent
+        if schema:
+            props = sorted(schema['properties'].keys())
+
+        params = jstr.join('{:}={:}'.format(p, summary(self[p],
+                                                       indent=indent))
+                           for p in props)
+        return '<{}({:})>'.format(self.type, params)
+
+    def __summary__(self):
+        return '<{}(...)>'.format(self.type)
 
     def __str__(self):
         return json.dumps(self.__json__, indent=2)
@@ -1426,6 +1439,14 @@ class AnnotationArray(list):
 
         return sliced_array
 
+    def __repr__(self):
+        n = len(self)
+
+        if n == 1:
+            return '[1 annotation]'
+        else:
+            return '[{:d} annotations]'.format(n)
+
 
 class JAMS(JObject):
     """Top-level Jams Object"""
@@ -1849,3 +1870,34 @@ def serialize_obj(obj):
         return {k: serialize_obj(v) for k, v in six.iteritems(obj._asdict())}
 
     return obj
+
+
+def summary(obj, indent=0):
+    '''Helper function to format repr strings for JObjects and friends.
+
+    Parameters
+    ----------
+    obj
+        The object to repr
+
+    indent : int >= 0
+        indent each new line by `indent` spaces
+
+    Returns
+    -------
+    r : str
+        If `obj` has a `__summary__` method, it is used.
+
+        If `obj` is a `SortedListWithKey`, then it returns a description
+        of the length of the list.
+
+        Otherwise, `repr(obj)`.
+    '''
+    if hasattr(obj, '__summary__'):
+        rep = obj.__summary__()
+    elif isinstance(obj, SortedListWithKey):
+        rep = '<{:d} observations>'.format(len(obj))
+    else:
+        rep = repr(obj)
+
+    return rep.replace('\n', '\n' + ' ' * indent)
