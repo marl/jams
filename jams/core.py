@@ -321,6 +321,19 @@ class JObject(object):
                            for p in props)
         return '<{}({:})>'.format(self.type, params)
 
+    def _repr_html_(self):
+        schema = self.__schema__
+        props = []
+        if schema:
+            props = sorted(schema['properties'].keys())
+
+        out = '<div><dl class="dl-horizontal">'
+        for prop in props:
+            out += '<dt>{}</dt>'.format(prop)
+            out += '<dd>{}</dd>'.format(summary_html(self[prop]))
+        out += '</dl></div>'
+        return out
+
     def __summary__(self):
         return '<{}(...)>'.format(self.type)
 
@@ -1044,7 +1057,7 @@ class Annotation(JObject):
     def __iter__(self):
         return iter(self.data)
 
-    def to_html(self, max_rows=None):
+    def _to_html(self, max_rows=None):
         '''Render this annotation list in HTML
 
         Returns
@@ -1085,6 +1098,76 @@ class Annotation(JObject):
         out += r'''</tbody>'''
 
         out += r'''</table>'''
+        return out
+
+    def to_html(self, max_rows=None):
+        '''Render this annotation list in HTML
+
+        Returns
+        -------
+        rendered : str
+            An HTML table containing this annotation's data.
+        '''
+        n = len(self.data)
+
+        div_id = _get_divid(self)
+
+        out = r'''
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="heading-{0}">
+                                <a  role="button"
+                                    data-toggle="collapse"
+                                    data-parent="#accordion"
+                                    href="#{0}"
+                                    aria-expanded="false"
+                                    class="collapsed label label-primary"
+                                    aria-controls="{0}">
+                                <em>{1:s}</em>
+                                <span class="badge pull-right">{2:d}</span>
+                                </a>
+                        </div>'''.format(div_id, self.namespace, n)
+
+        out += r'''     <div id="{0}" class="panel-collapse collapse"
+                             role="tabpanel" aria-labelledby="heading-{0}">
+                            <div class="panel-body">'''.format(div_id)
+
+        # -- Annotation content starts here
+        out += r'''<table border="1" class="dataframe">
+                    <thead>
+                        <tr style="text-align: right;">
+                            <th></th>
+                            <th>time</th>
+                            <th>duration</th>
+                            <th>value</th>
+                            <th>confidence</th>
+                        </tr>
+                    </thead>'''.format(self.namespace, n)
+
+        out += r'''<tbody>'''
+
+        if max_rows is None or n <= max_rows:
+            out += self._fmt_rows(0, n)
+        else:
+            out += self._fmt_rows(0, max_rows//2)
+            out += r'''<tr>
+                            <th>...</th>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>'''
+            out += self._fmt_rows(n-max_rows//2, n)
+
+        out += r'''</tbody>'''
+
+        out += r'''</table>'''
+
+        # Maybe we should wrap the data, metadata, and sandbox in tabs
+        # or in divs?
+        out += r'''<div>{}</div>'''.format(self.annotation_metadata._repr_html_())
+        out += r'''<div>{}</div>'''.format(self.sandbox._repr_html_())
+
+        out += r'''</div></div></div>'''
         return out
 
     def _fmt_rows(self, start, end):
@@ -1446,6 +1529,13 @@ class AnnotationArray(list):
             return '[1 annotation]'
         else:
             return '[{:d} annotations]'.format(n)
+
+    def _repr_html_(self):
+        out = '<div>'
+        for ann in self:
+            out += '<div>{}</div>'.format(ann._repr_html_())
+        out += '</div>'
+        return out
 
 
 class JAMS(JObject):
@@ -1901,3 +1991,24 @@ def summary(obj, indent=0):
         rep = repr(obj)
 
     return rep.replace('\n', '\n' + ' ' * indent)
+
+
+def summary_html(obj):
+
+    if hasattr(obj, '_repr_html_'):
+        return obj._repr_html_()
+    else:
+        return repr(obj)
+
+
+__DIVID_COUNT__ = 0
+
+
+def _get_divid(obj):
+    '''Static function to get a unique id for an object.
+    This is used in HTML rendering to ensure unique div ids for each call
+    to display an object'''
+
+    global __DIVID_COUNT__
+    __DIVID_COUNT__ += 1
+    return '{}-{}'.format(id(obj), __DIVID_COUNT__)
