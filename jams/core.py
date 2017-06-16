@@ -324,14 +324,38 @@ class JObject(object):
     def _repr_html_(self):
         schema = self.__schema__
         props = []
+
+        # TODO: add fixed sort-order to these in each derived class
+        # rewrite this as a method that returns tuples of keys and display names
+        # derived classes can override the method and reorder/pretty-print things
         if schema:
             props = sorted(schema['properties'].keys())
 
-        out = '<div><dl class="dl-horizontal">'
+        if not props:
+            return ''
+
+        out = '<div class="panel">'
         for prop in props:
-            out += '<dt>{}</dt>'.format(prop)
-            out += '<dd>{}</dd>'.format(summary_html(self[prop]))
-        out += '</dl></div>'
+            content = summary_html(self[prop])
+
+            if not content:
+                prop_class = 'text-muted panel-danger'
+            else:
+                prop_class = 'panel-default'
+            if isinstance(self[prop], (JObject, AnnotationArray)):
+                out += r'''<div class="panel-heading {}">
+                                {}
+                           </div>'''.format(prop_class, prop)
+                out += r'''<div class="panel-body {}">
+                                {}
+                           </div>'''.format(prop_class, content)
+            else:
+
+                out += r'''<div class="panel-heading {}">{}
+                            <span href="#" class="pull-right">{}</span>
+                            </div>'''.format(prop_class, prop, content)
+        out += '</div>'
+
         return out
 
     def __summary__(self):
@@ -1085,6 +1109,7 @@ class Annotation(JObject):
         if max_rows is None or n <= max_rows:
             out += self._fmt_rows(0, n)
         else:
+            # TODO: replace this with a collapse-row
             out += self._fmt_rows(0, max_rows//2)
             out += r'''<tr>
                             <th>...</th>
@@ -1131,6 +1156,13 @@ class Annotation(JObject):
                              role="tabpanel" aria-labelledby="heading-{0}">
                             <div class="panel-body">'''.format(div_id)
 
+        out += r'''<div class="pull-right">
+                        {}
+                    </div>'''.format(self.annotation_metadata._repr_html_())
+        out += r'''<div class="pull-right">
+                        {}
+                    </div>'''.format(self.sandbox._repr_html_())
+
         # -- Annotation content starts here
         out += r'''<table border="1" class="dataframe">
                     <thead>
@@ -1161,11 +1193,6 @@ class Annotation(JObject):
         out += r'''</tbody>'''
 
         out += r'''</table>'''
-
-        # Maybe we should wrap the data, metadata, and sandbox in tabs
-        # or in divs?
-        out += r'''<div>{}</div>'''.format(self.annotation_metadata._repr_html_())
-        out += r'''<div>{}</div>'''.format(self.sandbox._repr_html_())
 
         out += r'''</div></div></div>'''
         return out
@@ -1531,10 +1558,9 @@ class AnnotationArray(list):
             return '[{:d} annotations]'.format(n)
 
     def _repr_html_(self):
-        out = '<div>'
+        out = ''
         for ann in self:
             out += '<div>{}</div>'.format(ann._repr_html_())
-        out += '</div>'
         return out
 
 
@@ -1998,7 +2024,7 @@ def summary_html(obj):
     if hasattr(obj, '_repr_html_'):
         return obj._repr_html_()
     else:
-        return repr(obj)
+        return str(obj)
 
 
 __DIVID_COUNT__ = 0
