@@ -309,51 +309,57 @@ class JObject(object):
 
     def __repr__(self):
         """Render the object alongside its attributes."""
-        schema = self.__schema__
-        props = []
         indent = len(self.type) + 2
         jstr = ',\n' + ' ' * indent
-        if schema:
-            props = sorted(schema['properties'].keys())
+
+        props = self._display_properties()
 
         params = jstr.join('{:}={:}'.format(p, summary(self[p],
                                                        indent=indent))
-                           for p in props)
+                           for (p, dp) in props)
         return '<{}({:})>'.format(self.type, params)
 
-    def _repr_html_(self):
+    def _display_properties(self):
+        '''Returns a list of tuples (key, display_name)
+        for properties of this object'''
         schema = self.__schema__
-        props = []
+        if not schema or 'properties' not in schema:
+            return []
 
-        # TODO: add fixed sort-order to these in each derived class
-        # rewrite this as a method that returns tuples of keys and display names
-        # derived classes can override the method and reorder/pretty-print things
-        if schema:
-            props = sorted(schema['properties'].keys())
+        return sorted([(k, k) for k in schema['properties'].keys()])
+
+    def _repr_html_(self):
+
+        props = self._display_properties()
 
         if not props:
             return ''
 
-        out = '<div class="panel">'
-        for prop in props:
+        out = '<div class="panel-group">'
+        for (prop, dprop) in props:
             content = summary_html(self[prop])
 
             if not content:
-                prop_class = 'text-muted panel-danger'
+                prop_class = 'panel-danger'
             else:
                 prop_class = 'panel-default'
+            out += '<div class="panel {}">'.format(prop_class)
+
             if isinstance(self[prop], (JObject, AnnotationArray)):
-                out += r'''<div class="panel-heading {}">
+                out += r'''<div class="panel-heading">
+                            {}
+                           </div>'''.format(dprop)
+                if content:
+                    out += r'''<div class="panel-body">
                                 {}
-                           </div>'''.format(prop_class, prop)
-                out += r'''<div class="panel-body {}">
-                                {}
-                           </div>'''.format(prop_class, content)
+                               </div>'''.format(content)
             else:
 
-                out += r'''<div class="panel-heading {}">{}
-                            <span href="#" class="pull-right">{}</span>
-                            </div>'''.format(prop_class, prop, content)
+                out += r'''<div class="panel-heading">
+                            {}&nbsp;
+                            <span class="pull-right">{}</span>
+                           </div>'''.format(dprop, content)
+            out += '</div>'
         out += '</div>'
 
         return out
@@ -637,6 +643,14 @@ class Annotation(JObject):
 
         self.time = time
         self.duration = duration
+
+    def _display_properties(self):
+        return [('namespace', 'Namespace'),
+                ('time', 'Time'),
+                ('duration', 'Duration'),
+                ('annotation_metadata', 'Annotation metadata'),
+                ('data', 'Data'),
+                ('sandbox', 'Sandbox')]
 
     def append(self, time=None, duration=None, value=None, confidence=None):
         '''Append an observation to the data field
@@ -1137,8 +1151,7 @@ class Annotation(JObject):
 
         div_id = _get_divid(self)
 
-        out = r'''
-                    <div class="panel panel-default">
+        out = r'''  <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="heading-{0}">
                                 <a  role="button"
                                     data-toggle="collapse"
@@ -1285,6 +1298,9 @@ class Curator(JObject):
         self.name = name
         self.email = email
 
+    def _display_properties(self):
+        return [('name', 'Name'), ('email', 'Email')]
+
 
 class AnnotationMetadata(JObject):
     """AnnotationMetadata
@@ -1342,6 +1358,16 @@ class AnnotationMetadata(JObject):
         self.validation = validation
         self.data_source = data_source
 
+    def _display_properties(self):
+        return [('annotator', 'Annotator'),
+                ('version', 'Version'),
+                ('corpus', 'Corpus'),
+                ('curator', 'Curator'),
+                ('annotation_tools', 'Annotation tools'),
+                ('annotation_rules', 'Annotation rules'),
+                ('data_source', 'Data source'),
+                ('validation', 'Validation')]
+
 
 class FileMetadata(JObject):
     """Metadata for a given audio file."""
@@ -1383,6 +1409,14 @@ class FileMetadata(JObject):
         self.duration = duration
         self.identifiers = Sandbox(**identifiers)
         self.jams_version = jams_version
+
+    def _display_properties(self):
+        return [('artist', 'Artist'),
+                ('title', 'Title'),
+                ('release', 'Release'),
+                ('duration', 'Duration (s)'),
+                ('jams_version', 'JAMS version'),
+                ('identifiers', 'Identifiers')]
 
 
 class AnnotationArray(list):
@@ -1560,7 +1594,7 @@ class AnnotationArray(list):
     def _repr_html_(self):
         out = ''
         for ann in self:
-            out += '<div>{}</div>'.format(ann._repr_html_())
+            out += '<div class="panel-group">{}</div>'.format(ann._repr_html_())
         return out
 
 
@@ -1595,6 +1629,11 @@ class JAMS(JObject):
         self.file_metadata = FileMetadata(**file_metadata)
 
         self.sandbox = Sandbox(**sandbox)
+
+    def _display_properties(self):
+        return [('file_metadata', 'File Metadata'),
+                ('annotations', 'Annotations'),
+                ('sandbox', 'Sandbox')]
 
     @property
     def __schema__(self):
