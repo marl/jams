@@ -322,13 +322,8 @@ class JObject(object):
     def _display_properties(self):
         '''Returns a list of tuples (key, display_name)
         for properties of this object'''
-        schema = self.__schema__
-        if not schema or 'properties' not in schema:
-            props = self.__dict__.keys()
-        else:
-            props = schema['properties'].keys()
 
-        return sorted([(k, k) for k in props])
+        return sorted([(k, k) for k in self.__dict__])
 
     def _repr_html_(self):
 
