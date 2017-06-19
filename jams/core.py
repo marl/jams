@@ -324,9 +324,11 @@ class JObject(object):
         for properties of this object'''
         schema = self.__schema__
         if not schema or 'properties' not in schema:
-            return []
+            props = self.__dict__.keys()
+        else:
+            props = schema['properties'].keys()
 
-        return sorted([(k, k) for k in schema['properties'].keys()])
+        return sorted([(k, k) for k in props])
 
     def _repr_html_(self):
 
@@ -339,25 +341,48 @@ class JObject(object):
         for (prop, dprop) in props:
             content = summary_html(self[prop])
 
+            prop_class = 'default'
             if not content:
-                prop_class = 'panel-danger'
-            else:
-                prop_class = 'panel-default'
-            out += '<div class="panel {}">'.format(prop_class)
+                prop_class = 'danger'
 
-            if isinstance(self[prop], (JObject, AnnotationArray)):
-                out += r'''<div class="panel-heading">
-                            {}
-                           </div>'''.format(dprop)
+            out += '<div class="panel panel-{}">'.format(prop_class)
+
+            if (isinstance(self[prop], (JObject, AnnotationArray, dict))
+               and content):
+                # These classes should have collapses
+                div_id = _get_divid(self[prop])
+
+                out += r'''<div class="panel-heading" role="tab" id="heading-{0}">
+                            <button
+                                type="button"
+                                data-toggle="collapse"
+                                data-parent="#accordion"
+                                href="#{0}"
+                                aria-expanded="false"
+                                class="collapsed btn btn-block btn-primary"
+                                aria-controls="{0}">
+                                {1:s}'''.format(div_id, dprop)
+
+                if isinstance(self[prop], AnnotationArray):
+                    out += r'''<span class="badge pull-right">
+                                    {:d}
+                               </span>'''.format(len(self[prop]))
+
+                out += r''' </button></div>'''
+
                 if content:
-                    out += r'''<div class="panel-body">
-                                {}
-                               </div>'''.format(content)
+                    out += r'''<div class="panel-collapse collapse"
+                                    id="{0}"
+                                    role="tabpanel"
+                                    aria-labelledby="hading{0}">
+                                    <div class="panel-body">
+                                        {1}
+                                    </div>
+                                </div>'''.format(div_id, content)
             else:
-
                 out += r'''<div class="panel-heading">
-                            {}&nbsp;
-                            <span class="pull-right">{}</span>
+                                {}&nbsp;
+                                <span class="pull-right">{}</span>
                            </div>'''.format(dprop, content)
             out += '</div>'
         out += '</div>'
@@ -1095,50 +1120,6 @@ class Annotation(JObject):
     def __iter__(self):
         return iter(self.data)
 
-    def _to_html(self, max_rows=None):
-        '''Render this annotation list in HTML
-
-        Returns
-        -------
-        rendered : str
-            An HTML table containing this annotation's data.
-        '''
-        n = len(self.data)
-        out = r'''<table border="1" class="dataframe">
-                    <caption>
-                        <em>{:s}</em> annotation: {:d} observation(s)
-                    </caption>
-                    <thead>
-                        <tr style="text-align: right;">
-                            <th></th>
-                            <th>time</th>
-                            <th>duration</th>
-                            <th>value</th>
-                            <th>confidence</th>
-                        </tr>
-                    </thead>'''.format(self.namespace, n)
-
-        out += r'''<tbody>'''
-
-        if max_rows is None or n <= max_rows:
-            out += self._fmt_rows(0, n)
-        else:
-            # TODO: replace this with a collapse-row
-            out += self._fmt_rows(0, max_rows//2)
-            out += r'''<tr>
-                            <th>...</th>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                        </tr>'''
-            out += self._fmt_rows(n-max_rows//2, n)
-
-        out += r'''</tbody>'''
-
-        out += r'''</table>'''
-        return out
-
     def to_html(self, max_rows=None):
         '''Render this annotation list in HTML
 
@@ -1153,16 +1134,17 @@ class Annotation(JObject):
 
         out = r'''  <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="heading-{0}">
-                                <a  role="button"
-                                    data-toggle="collapse"
-                                    data-parent="#accordion"
-                                    href="#{0}"
-                                    aria-expanded="false"
-                                    class="collapsed label label-primary"
-                                    aria-controls="{0}">
-                                <em>{1:s}</em>
+                            <button
+                                type="button"
+                                data-toggle="collapse"
+                                data-parent="#accordion"
+                                href="#{0}"
+                                aria-expanded="false"
+                                class="collapsed btn btn-info btn-block"
+                                aria-controls="{0}">
+                                {1:s}
                                 <span class="badge pull-right">{2:d}</span>
-                                </a>
+                            </button>
                         </div>'''.format(div_id, self.namespace, n)
 
         out += r'''     <div id="{0}" class="panel-collapse collapse"
@@ -1172,12 +1154,12 @@ class Annotation(JObject):
         out += r'''<div class="pull-right">
                         {}
                     </div>'''.format(self.annotation_metadata._repr_html_())
-        out += r'''<div class="pull-right">
+        out += r'''<div class="pull-right clearfix">
                         {}
                     </div>'''.format(self.sandbox._repr_html_())
 
         # -- Annotation content starts here
-        out += r'''<table border="1" class="dataframe">
+        out += r'''<div><table border="1" class="dataframe">
                     <thead>
                         <tr style="text-align: right;">
                             <th></th>
@@ -1205,7 +1187,7 @@ class Annotation(JObject):
 
         out += r'''</tbody>'''
 
-        out += r'''</table>'''
+        out += r'''</table></div>'''
 
         out += r'''</div></div></div>'''
         return out
@@ -1222,8 +1204,8 @@ class Annotation(JObject):
                         </tr>'''.format(i,
                                         obs.time,
                                         obs.duration,
-                                        obs.value,
-                                        obs.confidence)
+                                        summary_html(obs.value),
+                                        summary_html(obs.confidence))
 
         return out
 
@@ -2062,6 +2044,17 @@ def summary_html(obj):
 
     if hasattr(obj, '_repr_html_'):
         return obj._repr_html_()
+    elif isinstance(obj, dict):
+        out = '<table class="table"><tbody>'
+        for key in obj:
+            out += r''' <tr>
+                            <th scope="row">{0}</th>
+                            <td>{1}</td>
+                        </tr>'''.format(key, summary_html(obj[key]))
+        out += '</tbody></table>'
+        return out
+    elif isinstance(obj, list):
+        return ''.join([summary_html(x) for x in obj])
     else:
         return str(obj)
 
