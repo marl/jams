@@ -382,7 +382,7 @@ class JObject(object):
             else:
                 out += r'''<div class="panel-heading">
                                 {}&nbsp;
-                                <span class="pull-right">{}</span>
+                                <span class="pull-right"><em>{}</em></span>
                            </div>'''.format(dprop, content)
             out += '</div>'
         out += '</div>'
