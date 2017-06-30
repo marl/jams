@@ -43,5 +43,6 @@ def validate(schema_file=None, jams_files=None):
 
             print exc
 
+
 if __name__ == '__main__':
     validate(**process_arguments(sys.argv[1:]))
