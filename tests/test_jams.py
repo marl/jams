@@ -102,7 +102,8 @@ def test_jobject_nonzero(data, value):
 
 
 def test_jobject_repr():
-    repr(jams.JObject(foo=1, bar=2))
+    assert (repr(jams.JObject(foo=1, bar=2)) ==
+            '<JObject(bar=2,\n         foo=1)>')
 
 
 def test_jobject_repr_html():
