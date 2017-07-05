@@ -309,7 +309,83 @@ class JObject(object):
 
     def __repr__(self):
         """Render the object alongside its attributes."""
-        return '<{}: {:s}>'.format(self.type, ', '.join(self.keys()))
+        indent = len(self.type) + 2
+        jstr = ',\n' + ' ' * indent
+
+        props = self._display_properties()
+
+        params = jstr.join('{:}={:}'.format(p, summary(self[p],
+                                                       indent=indent))
+                           for (p, dp) in props)
+        return '<{}({:})>'.format(self.type, params)
+
+    def _display_properties(self):
+        '''Returns a list of tuples (key, display_name)
+        for properties of this object'''
+
+        return sorted([(k, k) for k in self.__dict__])
+
+    def _repr_html_(self):
+
+        props = self._display_properties()
+
+        if not props:
+            return ''
+
+        out = '<div class="panel-group">'
+        for (prop, dprop) in props:
+            content = summary_html(self[prop])
+
+            prop_class = 'default'
+            if not content:
+                prop_class = 'danger'
+
+            out += '<div class="panel panel-{}">'.format(prop_class)
+
+            if (isinstance(self[prop], (JObject, AnnotationArray, dict))
+               and content):
+                # These classes should have collapses
+                div_id = _get_divid(self[prop])
+
+                out += r'''<div class="panel-heading" role="tab" id="heading-{0}">
+                            <button
+                                type="button"
+                                data-toggle="collapse"
+                                data-parent="#accordion"
+                                href="#{0}"
+                                aria-expanded="false"
+                                class="collapsed btn btn-block btn-primary"
+                                aria-controls="{0}">
+                                {1:s}'''.format(div_id, dprop)
+
+                if isinstance(self[prop], AnnotationArray):
+                    out += r'''<span class="badge pull-right">
+                                    {:d}
+                               </span>'''.format(len(self[prop]))
+
+                out += r''' </button></div>'''
+
+                if content:
+                    out += r'''<div class="panel-collapse collapse"
+                                    id="{0}"
+                                    role="tabpanel"
+                                    aria-labelledby="hading{0}">
+                                    <div class="panel-body">
+                                        {1}
+                                    </div>
+                                </div>'''.format(div_id, content)
+            else:
+                out += r'''<div class="panel-heading">
+                                {}&nbsp;
+                                <span class="pull-right"><em>{}</em></span>
+                           </div>'''.format(dprop, content)
+            out += '</div>'
+        out += '</div>'
+
+        return out
+
+    def __summary__(self):
+        return '<{}(...)>'.format(self.type)
 
     def __str__(self):
         return json.dumps(self.__json__, indent=2)
@@ -587,6 +663,14 @@ class Annotation(JObject):
 
         self.time = time
         self.duration = duration
+
+    def _display_properties(self):
+        return [('namespace', 'Namespace'),
+                ('time', 'Time'),
+                ('duration', 'Duration'),
+                ('annotation_metadata', 'Annotation metadata'),
+                ('data', 'Data'),
+                ('sandbox', 'Sandbox')]
 
     def append(self, time=None, duration=None, value=None, confidence=None):
         '''Append an observation to the data field
@@ -1031,7 +1115,7 @@ class Annotation(JObject):
     def __iter__(self):
         return iter(self.data)
 
-    def to_html(self):
+    def to_html(self, max_rows=None):
         '''Render this annotation list in HTML
 
         Returns
@@ -1039,7 +1123,38 @@ class Annotation(JObject):
         rendered : str
             An HTML table containing this annotation's data.
         '''
-        out = r'''<table border="1" class="dataframe">
+        n = len(self.data)
+
+        div_id = _get_divid(self)
+
+        out = r'''  <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="heading-{0}">
+                            <button
+                                type="button"
+                                data-toggle="collapse"
+                                data-parent="#accordion"
+                                href="#{0}"
+                                aria-expanded="false"
+                                class="collapsed btn btn-info btn-block"
+                                aria-controls="{0}">
+                                {1:s}
+                                <span class="badge pull-right">{2:d}</span>
+                            </button>
+                        </div>'''.format(div_id, self.namespace, n)
+
+        out += r'''     <div id="{0}" class="panel-collapse collapse"
+                             role="tabpanel" aria-labelledby="heading-{0}">
+                            <div class="panel-body">'''.format(div_id)
+
+        out += r'''<div class="pull-right">
+                        {}
+                    </div>'''.format(self.annotation_metadata._repr_html_())
+        out += r'''<div class="pull-right clearfix">
+                        {}
+                    </div>'''.format(self.sandbox._repr_html_())
+
+        # -- Annotation content starts here
+        out += r'''<div><table border="1" class="dataframe">
                     <thead>
                         <tr style="text-align: right;">
                             <th></th>
@@ -1048,26 +1163,50 @@ class Annotation(JObject):
                             <th>value</th>
                             <th>confidence</th>
                         </tr>
-                    </thead>'''
+                    </thead>'''.format(self.namespace, n)
+
         out += r'''<tbody>'''
-        for i, obs in enumerate(self.data):
+
+        if max_rows is None or n <= max_rows:
+            out += self._fmt_rows(0, n)
+        else:
+            out += self._fmt_rows(0, max_rows//2)
+            out += r'''<tr>
+                            <th>...</th>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>'''
+            out += self._fmt_rows(n-max_rows//2, n)
+
+        out += r'''</tbody>'''
+
+        out += r'''</table></div>'''
+
+        out += r'''</div></div></div>'''
+        return out
+
+    def _fmt_rows(self, start, end):
+        out = ''
+        for i, obs in enumerate(self.data[start:end], start):
             out += r'''<tr>
                             <th>{:d}</th>
-                            <td>{:0.6f}</td>
-                            <td>{:0.6f}</td>
+                            <td>{:0.3f}</td>
+                            <td>{:0.3f}</td>
                             <td>{:}</td>
                             <td>{:}</td>
                         </tr>'''.format(i,
                                         obs.time,
                                         obs.duration,
-                                        obs.value,
-                                        obs.confidence)
-        out += r'''</tbody></table>'''
+                                        summary_html(obs.value),
+                                        summary_html(obs.confidence))
+
         return out
 
-    def _repr_html_(self):
+    def _repr_html_(self, max_rows=25):
         '''Render annotation as HTML.  See also: `to_html()`'''
-        return self.to_html()
+        return self.to_html(max_rows=max_rows)
 
     @property
     def __json__(self):
@@ -1136,6 +1275,9 @@ class Curator(JObject):
         self.name = name
         self.email = email
 
+    def _display_properties(self):
+        return [('name', 'Name'), ('email', 'Email')]
+
 
 class AnnotationMetadata(JObject):
     """AnnotationMetadata
@@ -1193,6 +1335,16 @@ class AnnotationMetadata(JObject):
         self.validation = validation
         self.data_source = data_source
 
+    def _display_properties(self):
+        return [('annotator', 'Annotator'),
+                ('version', 'Version'),
+                ('corpus', 'Corpus'),
+                ('curator', 'Curator'),
+                ('annotation_tools', 'Annotation tools'),
+                ('annotation_rules', 'Annotation rules'),
+                ('data_source', 'Data source'),
+                ('validation', 'Validation')]
+
 
 class FileMetadata(JObject):
     """Metadata for a given audio file."""
@@ -1234,6 +1386,14 @@ class FileMetadata(JObject):
         self.duration = duration
         self.identifiers = Sandbox(**identifiers)
         self.jams_version = jams_version
+
+    def _display_properties(self):
+        return [('artist', 'Artist'),
+                ('title', 'Title'),
+                ('release', 'Release'),
+                ('duration', 'Duration (s)'),
+                ('jams_version', 'JAMS version'),
+                ('identifiers', 'Identifiers')]
 
 
 class AnnotationArray(list):
@@ -1400,6 +1560,20 @@ class AnnotationArray(list):
 
         return sliced_array
 
+    def __repr__(self):
+        n = len(self)
+
+        if n == 1:
+            return '[1 annotation]'
+        else:
+            return '[{:d} annotations]'.format(n)
+
+    def _repr_html_(self):
+        out = ''
+        for ann in self:
+            out += '<div class="panel-group">{}</div>'.format(ann._repr_html_())
+        return out
+
 
 class JAMS(JObject):
     """Top-level Jams Object"""
@@ -1432,6 +1606,11 @@ class JAMS(JObject):
         self.file_metadata = FileMetadata(**file_metadata)
 
         self.sandbox = Sandbox(**sandbox)
+
+    def _display_properties(self):
+        return [('file_metadata', 'File Metadata'),
+                ('annotations', 'Annotations'),
+                ('sandbox', 'Sandbox')]
 
     @property
     def __schema__(self):
@@ -1823,3 +2002,66 @@ def serialize_obj(obj):
         return {k: serialize_obj(v) for k, v in six.iteritems(obj._asdict())}
 
     return obj
+
+
+def summary(obj, indent=0):
+    '''Helper function to format repr strings for JObjects and friends.
+
+    Parameters
+    ----------
+    obj
+        The object to repr
+
+    indent : int >= 0
+        indent each new line by `indent` spaces
+
+    Returns
+    -------
+    r : str
+        If `obj` has a `__summary__` method, it is used.
+
+        If `obj` is a `SortedListWithKey`, then it returns a description
+        of the length of the list.
+
+        Otherwise, `repr(obj)`.
+    '''
+    if hasattr(obj, '__summary__'):
+        rep = obj.__summary__()
+    elif isinstance(obj, SortedListWithKey):
+        rep = '<{:d} observations>'.format(len(obj))
+    else:
+        rep = repr(obj)
+
+    return rep.replace('\n', '\n' + ' ' * indent)
+
+
+def summary_html(obj):
+
+    if hasattr(obj, '_repr_html_'):
+        return obj._repr_html_()
+    elif isinstance(obj, dict):
+        out = '<table class="table"><tbody>'
+        for key in obj:
+            out += r''' <tr>
+                            <th scope="row">{0}</th>
+                            <td>{1}</td>
+                        </tr>'''.format(key, summary_html(obj[key]))
+        out += '</tbody></table>'
+        return out
+    elif isinstance(obj, list):
+        return ''.join([summary_html(x) for x in obj])
+    else:
+        return str(obj)
+
+
+__DIVID_COUNT__ = 0
+
+
+def _get_divid(obj):
+    '''Static function to get a unique id for an object.
+    This is used in HTML rendering to ensure unique div ids for each call
+    to display an object'''
+
+    global __DIVID_COUNT__
+    __DIVID_COUNT__ += 1
+    return '{}-{}'.format(id(obj), __DIVID_COUNT__)

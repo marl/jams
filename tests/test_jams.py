@@ -101,8 +101,22 @@ def test_jobject_nonzero(data, value):
     assert J.__nonzero__() == value
 
 
-# Sandbox
+def test_jobject_repr():
+    assert (repr(jams.JObject(foo=1, bar=2)) ==
+            '<JObject(bar=2,\n         foo=1)>')
 
+
+def test_jobject_repr_html():
+    # Test once with empty
+    J2 = jams.JObject()
+    J2._repr_html_()
+
+    # And once with some nested values
+    J = jams.JObject(foo=1, bar=dict(baz=3), qux=[1], quux=None)
+    J._repr_html_()
+
+
+# Sandbox
 def test_sandbox():
 
     data = dict(key1='value 1', key2='value 2')
@@ -517,6 +531,18 @@ def test_jobject_bad_field():
     jam = jams.JAMS()
 
     jam.out_of_schema = None
+
+
+def test_jams_repr(input_jam):
+    repr(input_jam)
+
+
+def test_jams_repr_html(input_jam):
+    input_jam._repr_html_()
+
+
+def test_jams_str(input_jam):
+    str(input_jam)
 
 
 # Load
