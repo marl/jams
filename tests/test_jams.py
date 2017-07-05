@@ -1117,3 +1117,9 @@ def test_deprecated():
 
         # And that it says the right thing (roughly)
         assert 'deprecated' in str(out[0].message).lower()
+
+
+def test_numpy_serialize():
+
+    jobj = jams.JObject(key=np.float32(1.0))
+    jobj.__json__
