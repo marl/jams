@@ -1120,6 +1120,6 @@ def test_deprecated():
 
 
 def test_numpy_serialize():
-
+    # Test to trigger issue #159 - serializing numpy dtypes
     jobj = jams.JObject(key=np.float32(1.0))
-    jobj.__json__
+    jobj.dumps()
