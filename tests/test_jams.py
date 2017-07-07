@@ -1123,3 +1123,11 @@ def test_numpy_serialize():
     # Test to trigger issue #159 - serializing numpy dtypes
     jobj = jams.JObject(key=np.float32(1.0))
     jobj.dumps()
+
+
+def test_annotation_serialize():
+    # Secondary test to trigger #159 on observation data
+    ann = jams.Annotation(namespace='tag_open', duration=1.0)
+    ann.append(time=np.float32(0), duration=np.float32(1),
+               value=np.float32(5), confidence=np.float32(0.5))
+    ann.dumps()
