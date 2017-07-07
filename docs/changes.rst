@@ -1,6 +1,27 @@
 Changes
 =======
 
+v0.3.0
+------
+
+- Removed the `JamsFrame` class and replaced the underlying observation storage data
+  structure (`PR #149 <https://github.com/marl/jams/pull/149>`_).
+
+- `import_lab` now returns only an `Annotation` and does not construct a `JAMS` object
+  (`PR #154 <https://github.com/marl/jams/pull/154>`_)
+
+- Accelerated pitch contour sonification
+  (`PR #155 <https://github.com/marl/jams/pull/155>`_)
+
+- Migrated all tests from nosetest to py.test
+  (`PR #157 <https://github.com/marl/jams/pull/157>`_)
+
+- Improved `repr()` and added HTML rendering for JAMS objects in notebooks
+  (`PR #158 <https://github.com/marl/jams/pull/158>`_)
+
+- Fixed a JSON serialization bug with numpy datatypes
+  (`PR #160 <https://github.com/marl/jams/pull/160>`_)
+  
 v0.2.3
 ------
 
