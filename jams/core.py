@@ -273,7 +273,7 @@ class JObject(object):
             if hasattr(item, '__json__'):
                 filtered_dict[k] = item.__json__
             else:
-                filtered_dict[k] = item
+                filtered_dict[k] = serialize_obj(item)
 
         return filtered_dict
 
@@ -693,8 +693,8 @@ class Annotation(JObject):
         >>> ann.append(time=3, duration=2, value='E#')
         '''
 
-        self.data.add(Observation(time=time,
-                                  duration=duration,
+        self.data.add(Observation(time=float(time),
+                                  duration=float(duration),
                                   value=value,
                                   confidence=confidence))
 
@@ -1992,7 +1992,13 @@ def serialize_obj(obj):
 
     '''
 
-    if isinstance(obj, np.ndarray):
+    if isinstance(obj, np.integer):
+        return int(obj)
+
+    elif isinstance(obj, np.floating):
+        return float(obj)
+
+    elif isinstance(obj, np.ndarray):
         return obj.tolist()
 
     elif isinstance(obj, list):
