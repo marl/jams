@@ -1,10 +1,11 @@
+**************
 JAMS Structure
---------------
+**************
 
 This section describes the anatomy of JAMS objects.
 
 JAMS
-~~~~
+====
 
 A JAMS object consists of three basic properties:
     * ``file_metadata``, which describes the audio file to which these annotations are attached;
@@ -13,7 +14,7 @@ A JAMS object consists of three basic properties:
 
 
 FileMetadata
-~~~~~~~~~~~~
+============
 The ``file_metadata`` field contains the following properties:
     * ``identifiers``: an unstructured ``sandbox``-type object for storing identifier mappings, e.g., MusicBrainz
       ID;
@@ -21,9 +22,11 @@ The ``file_metadata`` field contains the following properties:
     * ``duration`` : non-negative number describing the length (in seconds) of the track; and
     * ``jams_version`` : string describing the JAMS version for this file.
 
-Annotation
-~~~~~~~~~~
 .. _Annotation:
+
+Annotation
+==========
+
 Each annotation object contains the following properties:
     * ``namespace`` : a string describing the type of this annotation;
     * ``data`` : a list of observations, each containing:
@@ -44,7 +47,7 @@ The permissible contents of the ``value`` and ``confidence`` fields are defined 
 
 
 Annotation_Metadata
-~~~~~~~~~~~~~~~~~~~
+===================
 The meta-data associated with each annotation describes the process by which the annotation was generated.
 The ``annotation_metadata`` property has the following fields:
 

@@ -3,6 +3,7 @@
 import librosa
 import jams
 
+
 def beat_track(infile, outfile):
 
     # Load the audio file
@@ -41,7 +42,7 @@ def beat_track(infile, outfile):
 
     # The tempo estimate is global, so it should start at time=0 and cover the full
     # track duration.
-    # If we had a likelihood score on the estimation, it could be stored in 
+    # If we had a likelihood score on the estimation, it could be stored in
     # `confidence`.  Since we have no competing estimates, we'll set it to 1.0.
     tempo_a.append(time=0.0,
                    duration=track_duration,
@@ -59,4 +60,3 @@ if __name__ == '__main__':
 
     infile = librosa.util.example_audio_file()
     beat_track(infile, 'output.jams')
-

@@ -53,11 +53,6 @@ Chord annotations described according to the grammar defined by Harte, et al. [1
     [sec] [sec]    string --
     ===== ======== ====== ==========
 
-.. [1] Harte, Christopher, Mark B. Sandler, Samer A. Abdallah, and Emilia Gómez.
-    "Symbolic Representation of Musical Chords: A Proposed Syntax for Text Annotations."
-    In ISMIR, vol. 5, pp. 66-71. 2005.
-
-
 Each observed value is a text representation of a chord annotation.
 
     * ``N`` specifies a *no chord* observation

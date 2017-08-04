@@ -12,9 +12,9 @@ Tempo measurements in beats per minute (BPM).
     ===== ======== ====== ==========
 
 The ``value`` field is a non-negative number (floating point), indicated the tempo measurement.
-The ``confidence`` field is a number in the range ``[0, 1]``, following the format used by MIREX [1]_.
+The ``confidence`` field is a number in the range ``[0, 1]``, following the format used by MIREX [5]_.
 
-.. [1] http://www.music-ir.org/mirex/wiki/2014:Audio_Tempo_Estimation
+.. [5] http://www.music-ir.org/mirex/wiki/2014:Audio_Tempo_Estimation
 
 *Example*
 

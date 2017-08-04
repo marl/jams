@@ -90,7 +90,7 @@ New features
   - ``blob`` namespace for unstructured, time-keyed observation data
     (`PR #63 <https://github.com/marl/jams/pull/63>`_).
   - ``tag_msd_tagtraum_cd1`` and ``tag_msd_tagtraum_cd2`` namespaces for genre tags
-    (`PR #63 <https://github.com/marl/jams/pull/83>`_).
+    (`PR #83 <https://github.com/marl/jams/pull/83>`_).
 
 Schema changes
   - ``Annotation`` objects now have ``time`` and ``duration`` fields which encode the

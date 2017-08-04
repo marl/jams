@@ -1,8 +1,9 @@
+***************
 Getting started
----------------
+***************
 
 Creating a JAMS data structure from scratch
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+===========================================
 First, create the top-level JAMS container:
 
     >>> import jams
@@ -87,7 +88,7 @@ Or save to a file using the built-in save function:
 
 
 Reading a JAMS file
-~~~~~~~~~~~~~~~~~~~
+===================
 Assuming you already have a JAMS file on-disk, say at 'these_are_also_my.jams',
 you can easily read it back into memory:
 

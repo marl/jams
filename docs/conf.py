@@ -46,7 +46,7 @@ intersphinx_mapping = {'numpy': ('https://docs.scipy.org/doc/numpy/', None),
                        'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
                        'pd': ('http://pandas.pydata.org/pandas-docs/stable/', None),
                        'mir_eval': ('https://craffel.github.io/mir_eval/', None),
-                       'json': ('https://docs.python.org/', None),
+                       'json': ('https://docs.python.org/2/', None),
                        'jsonschema': ('https://python-jsonschema.readthedocs.io/en/latest/', None)}
 
 # Add any paths that contain templates here, relative to this directory.
@@ -126,7 +126,10 @@ class Mock(MagicMock):
         return Mock()
 
 MOCK_MODULES = (['jsonschema', 'mir_eval', 'pandas', 'numpy',
-                 'mir_eval.sonify', 'mir_eval.util'])
+                 'mir_eval.sonify', 'mir_eval.util', 'mir_eval.display',
+                 'decorator',
+                 'matplotlib', 'matplotlib.pyplot', 'matplotlib.offsetbox',
+                 'sortedcontainers'])
 
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 r'''
 Display
-=======
+-------
 
 .. autosummary::
     :toctree: generated/

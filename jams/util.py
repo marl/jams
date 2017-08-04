@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 r"""
 Utility functions
-=================
+-----------------
 
 .. autosummary::
     :toctree: generated/

@@ -1,5 +1,6 @@
+***************
 Task namespaces
----------------
+***************
 In JAMS v0.2.0, the concept of task `namespaces` was introduced.  Broadly speaking, a `namespace`
 defines the syntax (and some semantics) of a particular type of annotation.
 
@@ -13,7 +14,7 @@ versions.  Please refer to :ref:`namespace` for a comprehensive description of t
 
 
 Namespace specification format
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+==============================
 
 In this section, we'll demonstrate how to define a task namespace, using `tempo` as our running example.
 Namespaces are defined by JSON objects that contain partial `JSON schema <http://json-schema.org/>`_
@@ -46,7 +47,7 @@ annotation's `namespace` field.  This string must be a unique identifier.
 
 Lines 3--6 specify the valid contents of the `value` field for tempo annotations.  In this case, values must
 be numeric and non-negative.  Any valid JSON schema definition can be substituted here, allowing for
-structured observation objects.  (See pattern-jku_ for an example of this.)
+structured observation objects.  (See :ref:`pattern_jku <patternjku>` for an example of this.)
 
 Similarly, lines 7--11 specify valid contents of the `confidence` field.  Most namespaces do not enforce
 specific constraints on confidence, so this block is optional.  In the case of `tempo`, confidence must be a
@@ -60,7 +61,7 @@ Finally, line 13 contains a brief description of the namespace and corresponding
 
 
 Local namespaces
-~~~~~~~~~~~~~~~~
+================
 
 The JAMS namespace management architecture is modular and extensible, so it is relatively straightforward 
 to create a new namespace schema and add it to JAMS at run-time:

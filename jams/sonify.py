@@ -2,7 +2,7 @@
 # CREATED:2015-12-12 18:20:37 by Brian McFee <brian.mcfee@nyu.edu>
 r'''
 Sonification
-============
+------------
 
 .. autosummary::
     :toctree: generated/

@@ -1,6 +1,6 @@
 """
-JAMS Python API
-===============
+Core functionality
+------------------
 
 This library provides an interface for reading JAMS into Python, or creating
 them programatically.
@@ -8,14 +8,14 @@ them programatically.
 .. currentmodule:: jams
 
 Function reference
-------------------
+^^^^^^^^^^^^^^^^^^
 .. autosummary::
     :toctree: generated/
 
     load
 
 Object reference
-----------------
+^^^^^^^^^^^^^^^^
 .. autosummary::
     :toctree: generated/
     :template: class.rst
