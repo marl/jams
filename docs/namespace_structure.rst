@@ -46,7 +46,7 @@ annotation's `namespace` field.  This string must be a unique identifier.
 
 Lines 3--6 specify the valid contents of the `value` field for tempo annotations.  In this case, values must
 be numeric and non-negative.  Any valid JSON schema definition can be substituted here, allowing for
-structured observation objects.  (See pattern-jku_ for an example of this.)
+structured observation objects.  (See :ref:`pattern_jku <patternjku>` for an example of this.)
 
 Similarly, lines 7--11 specify valid contents of the `confidence` field.  Most namespaces do not enforce
 specific constraints on confidence, so this block is optional.  In the case of `tempo`, confidence must be a

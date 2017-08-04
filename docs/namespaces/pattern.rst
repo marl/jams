@@ -1,11 +1,13 @@
 Pattern
 -------
 
+.. _patternjku:
+
 pattern_jku
 ~~~~~~~~~~~
 
 Each note of the pattern contains ``(pattern_id, midi_pitch, occurrence_id, morph_pitch, 
-staff)``, following the format described in [3]_.
+staff)``, following the format described in [4]_.
 
     +-------+----------+------------------+------------+
     | time  | duration | value            | confidence |
@@ -17,7 +19,7 @@ staff)``, following the format described in [3]_.
     |       |          | - staff          |            |
     +-------+----------+------------------+------------+
 
-.. [3] Collins T., Discovery of Repeated Themes & Sections, Music Information Retrieval 
+.. [4] Collins T., Discovery of Repeated Themes & Sections, Music Information Retrieval 
     Evalaluation eXchange (MIReX), 2013 (Accessed on July 7th 2015). Available `here
     <http://www.music-ir.org/mirex/wiki/2013:Discovery_of_Repeated_Themes_&_Sections>`_.
 

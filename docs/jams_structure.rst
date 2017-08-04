@@ -21,9 +21,11 @@ The ``file_metadata`` field contains the following properties:
     * ``duration`` : non-negative number describing the length (in seconds) of the track; and
     * ``jams_version`` : string describing the JAMS version for this file.
 
+.. _Annotation:
+
 Annotation
 ~~~~~~~~~~
-.. _Annotation:
+
 Each annotation object contains the following properties:
     * ``namespace`` : a string describing the type of this annotation;
     * ``data`` : a list of observations, each containing:

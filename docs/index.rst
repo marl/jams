@@ -31,6 +31,9 @@ API reference
 
     jams
     namespace
+    eval
+    schema
+    util
 
 Contribute
 ----------

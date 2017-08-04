@@ -13,9 +13,9 @@ Time-varying emotion measurements as ordered pairs of ``(valence, arousal)``
     ===== ======== ================== ==========
 
 The ``value`` field is an ordered pair of numbers measuring the ``valence`` and
-``arousal`` positions in the Thayer mood model [1]_.
+``arousal`` positions in the Thayer mood model [3]_.
 
-.. [1] Thayer, Robert E. The biopsychology of mood and arousal.
+.. [3] Thayer, Robert E. The biopsychology of mood and arousal.
        Oxford University Press, 1989.
 
 *Example*
