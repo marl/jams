@@ -127,10 +127,10 @@ class Mock(MagicMock):
 
 MOCK_MODULES = (['jsonschema', 'mir_eval', 'pandas', 'numpy',
                  'mir_eval.sonify', 'mir_eval.util', 'mir_eval.display',
-                 'matplotlib.pyplot', 'matplotlib.offsetbox',
+                 'matplotlib', 'matplotlib.pyplot', 'matplotlib.offsetbox',
                  'sortedcontainers'])
 
-#sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # -- Options for HTML output ----------------------------------------------
 
