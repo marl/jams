@@ -126,7 +126,7 @@ class Mock(MagicMock):
         return Mock()
 
 MOCK_MODULES = (['jsonschema', 'mir_eval', 'pandas', 'numpy',
-                 'mir_eval.sonify', 'mir_eval.util'])
+                 'mir_eval.sonify', 'mir_eval.util', 'sortedcontainers'])
 
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
