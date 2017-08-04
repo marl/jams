@@ -3,7 +3,7 @@
 # CREATED:2016-02-16 15:40:04 by Brian McFee <brian.mcfee@nyu.edu>
 r'''
 Namespace conversion
-====================
+--------------------
 
 .. autosummary::
     :toctree: generated

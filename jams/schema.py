@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 r'''
 Namespace management
-====================
+--------------------
 
 .. autosummary::
     :toctree: generated/

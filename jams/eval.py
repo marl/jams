@@ -2,7 +2,7 @@
 # CREATED:2015-02-04 16:39:00 by Brian McFee <brian.mcfee@nyu.edu>
 r'''
 Evaluation
-==========
+----------
 
 .. autosummary::
     :toctree: generated/

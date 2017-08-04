@@ -3,8 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+####
 JAMS
-====
+####
 A JSON Annotated Music Specification for Reproducible MIR Research.
 
 JAMS provides:
@@ -17,34 +18,34 @@ JAMS provides:
 For the most recent information, please refer to `JAMS on github <https://github.com/marl/jams>`_.
 
 .. toctree:: 
-    :maxdepth: 1
+    :maxdepth: 2
 
     quickstart
     jams_structure
     namespace_structure
     examples
 
+*************
 API reference
--------------
+*************
 .. toctree:: 
-    :maxdepth: 1
+    :maxdepth: 2
 
     jams
     namespace
-    eval
-    schema
-    util
 
+**********
 Contribute
-----------
+**********
 - `Issue Tracker <http://github.com/marl/jams/issues>`_
 - `Source Code <http://github.com/marl/jams>`_
 
 
+*********
 Changelog
-=========
+*********
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
 
     changes
 
