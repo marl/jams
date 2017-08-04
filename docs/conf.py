@@ -127,6 +127,7 @@ class Mock(MagicMock):
 
 MOCK_MODULES = (['jsonschema', 'mir_eval', 'pandas', 'numpy',
                  'mir_eval.sonify', 'mir_eval.util', 'mir_eval.display',
+                 'decorator',
                  'matplotlib', 'matplotlib.pyplot', 'matplotlib.offsetbox',
                  'sortedcontainers'])
 
