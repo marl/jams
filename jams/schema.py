@@ -12,7 +12,10 @@ Namespace management
     is_dense
     values
     get_dtypes
+    list_namespaces
 '''
+
+from __future__ import print_function
 
 import json
 import os
@@ -148,6 +151,16 @@ def get_dtypes(ns_key):
     confidence_dtype = __get_dtype(__NAMESPACE__[ns_key].get('confidence', {}))
 
     return value_dtype, confidence_dtype
+
+
+def list_namespaces():
+    '''Print out a listing of available namespaces'''
+    print('{:30s}\t{:40s}'.format('NAME', 'DESCRIPTION'))
+    print('-' * 78)
+    for sch in sorted(__NAMESPACE__):
+        desc = __NAMESPACE__[sch]['description']
+        desc = (desc[:44] + '..') if len(desc) > 46 else desc
+        print('{:30s}\t{:40s}'.format(sch, desc))
 
 
 # Mapping of js primitives to numpy types

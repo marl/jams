@@ -99,3 +99,7 @@ def test_schema_dtypes():
 @pytest.mark.xfail(raises=NamespaceError)
 def test_schema_dtypes_badns():
     jams.schema.get_dtypes('unknown namespace')
+
+
+def test_list_namespaces():
+    jams.schema.list_namespaces()

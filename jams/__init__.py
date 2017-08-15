@@ -14,6 +14,7 @@ from .version import version as __version__
 
 from .core import *
 from .nsconvert import convert
+from .schema import list_namespaces
 
 
 # Populate the namespace mapping
