@@ -724,3 +724,39 @@ def test_ns_lyrics_bow(label):
     ann = Annotation(namespace='lyrics_bow')
     ann.append(time=0, duration=1, value=label)
     ann.validate()
+
+
+@parametrize('tag',
+             ['Accordion', 'Afrobeat', six.u('Cacophony'),
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('ACCORDION', raises=SchemaError)])
+def test_ns_tag_audioset(tag):
+
+    ann = Annotation(namespace='tag_audioset')
+    ann.append(time=0, duration=1, value=tag)
+    ann.validate()
+
+
+@parametrize('tag',
+             ['Afrobeat', 'Disco', six.u('Opera'),
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('Accordion', raises=SchemaError)])
+def test_ns_tag_audioset_genre(tag):
+
+    ann = Annotation(namespace='tag_audioset_genre')
+    ann.append(time=0, duration=1, value=tag)
+    ann.validate()
+
+
+@parametrize('tag',
+             ['Organ', 'Harmonica', six.u('Zither'),
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('Afrobeat', raises=SchemaError)])
+def test_ns_tag_audioset_instruments(tag):
+
+    ann = Annotation(namespace='tag_audioset_instruments')
+    ann.append(time=0, duration=1, value=tag)
+    ann.validate()
