@@ -267,7 +267,6 @@ def test_annotation_interval_values(tag_data):
     assert values == ['one', 'two']
 
 
-# FileMetadata
 @xfail(raises=jams.JamsError)
 def test_annotation_badtype():
 
@@ -288,6 +287,25 @@ def test_filemetadata():
 
     for k in meta:
         assert meta[k] == dict_fm[k]
+
+
+@parametrize('strict', [False, xfail(True, raises=jams.SchemaError)])
+def test_filemetadata_validation(strict):
+
+    # This should fail validation because null duration is not allowed
+    fm = jams.FileMetadata(title='Test track',
+                           artist='Test artist',
+                           release='Test release',
+                           duration=None)
+
+    clean_warning_registry()
+
+    with warnings.catch_warnings(record=True) as out:
+        fm.validate(strict=strict)
+
+        assert len(out) > 0
+        assert out[0].category is UserWarning
+        assert 'failed validating' in str(out[0].message).lower()
 
 
 # AnnotationArray
@@ -506,6 +524,9 @@ def test_jams_validate_good():
 
     j1.validate()
 
+    j1.file_metadata.validate()
+
+
 
 @pytest.fixture(scope='module')
 def jam_validate():
@@ -527,10 +548,41 @@ def test_jams_validate_bad(jam_validate, strict):
 
 
 @xfail(raises=jams.SchemaError)
-def test_jobject_bad_field():
+def test_jams_bad_field():
     jam = jams.JAMS()
 
     jam.out_of_schema = None
+
+
+@parametrize('strict', [False, xfail(True, raises=jams.SchemaError)])
+def test_jams_bad_annotation(strict):
+    jam = jams.JAMS()
+    jam.file_metadata.duration = 10
+
+    jam.annotations.append('not an annotation')
+
+    clean_warning_registry()
+
+    with warnings.catch_warnings(record=True) as out:
+        jam.validate(strict=strict)
+
+    assert len(out) > 0
+    assert out[0].category is UserWarning
+    assert 'is not a well-formed jams annotation' in str(out[0].message).lower()
+
+
+@parametrize('strict', [False, xfail(True, raises=jams.SchemaError)])
+def test_jams_bad_jam(strict):
+    jam = jams.JAMS()
+
+    clean_warning_registry()
+
+    with warnings.catch_warnings(record=True) as out:
+        jam.validate(strict=strict)
+
+    assert len(out) > 0
+    assert out[0].category is UserWarning
+    assert 'failed validating' in str(out[0].message).lower()
 
 
 def test_jams_repr(input_jam):
