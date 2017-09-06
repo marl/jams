@@ -220,4 +220,74 @@ The ``value`` field is unconstrained, and can contain any string value.
     0.000 20.000   "favez^^^"         null
     ===== ======== ================== ==========
 
+tag_audioset
+~~~~~~~~~~~~
+Tags from the full AudioSet (v1) ontology.
 
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    [sec] [sec]    string             --
+    ===== ======== ================== ==========
+
+The ``value`` field is constrained to the vocabulary of the AudioSet_ ontology.
+
+*Example*
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    0.000 20.000   "Air brake"        null
+    5.000 25.000   "Yodeling"         null
+    9.000 35.000   "Steam whistle"    null
+    ===== ======== ================== ==========
+
+.. _AudioSet: https://research.google.com/audioset/ontology/index.html
+
+
+tag_audioset_genre
+~~~~~~~~~~~~~~~~~~
+Tags from the musical genre subset of the AudioSet (v1) ontology.
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    [sec] [sec]    string             --
+    ===== ======== ================== ==========
+
+The ``value`` field is constrained to the 66 musical genres of the AudioSet-genre_ ontology.
+
+*Example*
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    0.000 20.000   "Oldschool jungle" null
+    ===== ======== ================== ==========
+
+.. _AudioSet-genre: https://research.google.com/audioset/ontology/music_genre_1.html
+
+tag_audioset_instrument
+~~~~~~~~~~~~~~~~~~~~~~~
+Tags from the musical intstrument subset of the AudioSet (v1) ontology.
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    [sec] [sec]    string             --
+    ===== ======== ================== ==========
+
+The ``value`` field is constrained to the 91 musical instruments 
+of the AudioSet-instruments_ ontology.
+
+*Example*
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    0.000 20.000   "Ukulele"          null
+    5.000 25.000   "Piano"            null
+    9.000 35.000   "Tuning fork"      null
+    ===== ======== ================== ==========
+
+.. _AudioSet-instruments: https://research.google.com/audioset/ontology/musical_instrument_1.html
