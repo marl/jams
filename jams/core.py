@@ -763,12 +763,12 @@ class Annotation(JObject):
         valid = super(Annotation, self).validate(strict=strict)
 
         # Get the schema for this annotation
-        ann_schema = schema.namespace(self.namespace)
+        ann_schema = schema.namespace_array(self.namespace)
 
         try:
             # validate each record in the frame
-            for rec in self.data:
-                jsonschema.validate(serialize_obj(rec), ann_schema)
+            data_ser = [serialize_obj(obs) for obs in self.data]
+            jsonschema.validate(data_ser, ann_schema)
 
         except jsonschema.ValidationError as invalid:
             if strict:
