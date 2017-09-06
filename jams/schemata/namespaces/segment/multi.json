@@ -9,7 +9,7 @@
             "required": ["label", "level"]
         },
         "dense": false,
-        "description": "Multi-level segmentation. Each interval has both a label string and an integer level."
+        "description": "Multi-level segmentation: (label, level)"
     }
 }
 

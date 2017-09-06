@@ -7,7 +7,7 @@
             "frequency": {"type": "number", "minimum": 0},
             "voiced": {"type": "boolean"}
         },
-        "description": "Continuous pitch contours"
+        "description": "Pitch contours: (index, frequency, voicing)"
     }
 }
 

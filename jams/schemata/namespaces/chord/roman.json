@@ -13,6 +13,6 @@
             "required": ["tonic", "chord"]
         },
         "dense": false,
-        "description": "Chord annotations in roman numeral format: tuples (tonic, chord)"
+        "description": "Roman numeral chords: (tonic, chord)"
     }
 }
