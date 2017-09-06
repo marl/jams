@@ -18,6 +18,6 @@
             "required": ["midi_pitch", "morph_pitch", "staff", "pattern_id", "occurrence_id"]
         },
         "dense": false,
-        "description": "Pattern (MIDI pitch), including staff height, voice number, occurrence id, and pattern id."
+        "description": "Pattern (MIDI pitch), including staff height, voice number, occurrence id, and pattern id"
     }
 }
