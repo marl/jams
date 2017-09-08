@@ -581,7 +581,7 @@ class JObject(object):
         valid = True
 
         try:
-            jsonschema.validate(self.__json__, schema.JAMS_SCHEMA)
+            jsonschema.validate(self.__json__, self.__schema__)
 
         except jsonschema.ValidationError as invalid:
             if strict:
@@ -760,15 +760,18 @@ class Annotation(JObject):
         JObject.validate
         '''
 
-        valid = super(Annotation, self).validate(strict=strict)
-
         # Get the schema for this annotation
-        ann_schema = schema.namespace(self.namespace)
+        ann_schema = schema.namespace_array(self.namespace)
+
+        valid = True
 
         try:
+            jsonschema.validate(self.__json_light__(data=False),
+                                schema.JAMS_SCHEMA)
+
             # validate each record in the frame
-            for rec in self.data:
-                jsonschema.validate(serialize_obj(rec), ann_schema)
+            data_ser = [serialize_obj(obs) for obs in self.data]
+            jsonschema.validate(data_ser, ann_schema)
 
         except jsonschema.ValidationError as invalid:
             if strict:
@@ -1210,6 +1213,9 @@ class Annotation(JObject):
 
     @property
     def __json__(self):
+        return self.__json_light__(data=True)
+
+    def __json_light__(self, data=True):
         r"""Return the JObject as a set of native data types for serialization.
 
         Note: attributes beginning with underscores are suppressed.
@@ -1220,7 +1226,10 @@ class Annotation(JObject):
             if k.startswith('_'):
                 continue
             elif k == 'data':
-                filtered_dict[k] = self.__json_data__
+                if data:
+                    filtered_dict[k] = self.__json_data__
+                else:
+                    filtered_dict[k] = []
 
             elif hasattr(item, '__json__'):
                 filtered_dict[k] = item.__json__
@@ -1748,10 +1757,28 @@ class JAMS(JObject):
         jsonschema.validate
 
         '''
-        valid = super(JAMS, self).validate(strict=strict)
+        valid = True
+        try:
+            jsonschema.validate(self.__json_light__, schema.JAMS_SCHEMA)
 
-        for ann in self.annotations:
-            valid &= ann.validate(strict=strict)
+            for ann in self.annotations:
+                if isinstance(ann, Annotation):
+                    valid &= ann.validate(strict=strict)
+                else:
+                    msg = '{} is not a well-formed JAMS Annotation'.format(ann)
+                    valid = False
+                    if strict:
+                        raise SchemaError(msg)
+                    else:
+                        warnings.warn(str(msg))
+
+        except jsonschema.ValidationError as invalid:
+            if strict:
+                raise SchemaError(str(invalid))
+            else:
+                warnings.warn(str(invalid))
+
+            valid = False
 
         return valid
 
@@ -1909,6 +1936,27 @@ class JAMS(JObject):
                 {'start_time': start_time, 'end_time': end_time})
 
         return jam_sliced
+
+    @property
+    def __json_light__(self):
+        r"""Return the JObject as a set of native data types for serialization.
+
+        Note: attributes beginning with underscores are suppressed.
+
+        This also skips the `annotations` field, which will be validated separately.
+        """
+        filtered_dict = dict()
+
+        for k, item in six.iteritems(self.__dict__):
+            if k.startswith('_') or k == 'annotations':
+                continue
+
+            if hasattr(item, '__json__'):
+                filtered_dict[k] = item.__json__
+            else:
+                filtered_dict[k] = serialize_obj(item)
+
+        return filtered_dict
 
 
 # -- Helper functions -- #
