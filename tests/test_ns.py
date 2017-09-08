@@ -760,3 +760,27 @@ def test_ns_tag_audioset_instruments(tag):
     ann = Annotation(namespace='tag_audioset_instruments')
     ann.append(time=0, duration=1, value=tag)
     ann.validate()
+
+
+@parametrize('tag',
+             ['Blues', 'Classical', six.u('Soul-RnB'),
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('Afrobeat', raises=SchemaError)])
+def test_ns_tag_fma_genre(tag):
+
+    ann = Annotation(namespace='tag_fma_genre')
+    ann.append(time=0, duration=1, value=tag)
+    ann.validate()
+
+
+@parametrize('tag',
+             ['Blues', 'British Folk', six.u('Klezmer'),
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('title', raises=SchemaError)])
+def test_ns_tag_fma_subgenre(tag):
+
+    ann = Annotation(namespace='tag_fma_subgenre')
+    ann.append(time=0, duration=1, value=tag)
+    ann.validate()

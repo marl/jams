@@ -269,7 +269,7 @@ The ``value`` field is constrained to the 66 musical genres of the AudioSet-genr
 
 tag_audioset_instrument
 ~~~~~~~~~~~~~~~~~~~~~~~
-Tags from the musical intstrument subset of the AudioSet (v1) ontology.
+Tags from the musical instrument subset of the AudioSet (v1) ontology.
 
     ===== ======== ================== ==========
     time  duration value              confidence
@@ -291,3 +291,50 @@ of the AudioSet-instruments_ ontology.
     ===== ======== ================== ==========
 
 .. _AudioSet-instruments: https://research.google.com/audioset/ontology/musical_instrument_1.html
+
+tag_fma_genre
+~~~~~~~~~~~~~
+Tags from the Free Music Archive (FMA) 16-class genre taxonomy.
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    [sec] [sec]    string             --
+    ===== ======== ================== ==========
+
+The ``value`` field is constrained to the 16 genres 
+of the FMA_ data-set.
+
+*Example*
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    0.000 20.000   "Blues"            null
+    5.000 25.000   "Instrumental"     null
+    9.000 35.000   "Soul-RnB"         null
+    ===== ======== ================== ==========
+
+.. _FMA: https://github.com/mdeff/fma
+
+tag_fma_subgenre
+~~~~~~~~~~~~~~~~
+Tags from the Free Music Archive (FMA) 163-class genre and sub-genre taxonomy.
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    [sec] [sec]    string             --
+    ===== ======== ================== ==========
+
+The ``value`` field is constrained to the 163 genres and sub-genres of the FMA_ data-set.
+
+*Example*
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    0.000 20.000   "Pop"              null
+    5.000 25.000   "Power-Pop"        null
+    9.000 35.000   "Nerdcore"         null
+    ===== ======== ================== ==========

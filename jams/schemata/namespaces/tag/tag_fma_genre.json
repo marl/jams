@@ -1,0 +1,26 @@
+{
+    "tag_fma_genre": {
+        "description": "Free Music Archive genres",
+        "value": {
+            "enum": [
+                "Blues",
+                "Classical",
+                "Country",
+                "Easy Listening",
+                "Electronic",
+                "Experimental",
+                "Folk",
+                "Hip-Hop",
+                "Instrumental",
+                "International",
+                "Jazz",
+                "Old-Time / Historic",
+                "Pop",
+                "Rock",
+                "Soul-RnB",
+                "Spoken"
+            ]
+        },
+        "dense": false
+    }
+}
