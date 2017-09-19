@@ -527,7 +527,6 @@ def test_jams_validate_good():
     j1.file_metadata.validate()
 
 
-
 @pytest.fixture(scope='module')
 def jam_validate():
     j1 = jams.load('tests/fixtures/invalid.jams', validate=False)
@@ -1023,7 +1022,7 @@ def test_annotation_slice():
                                    duration=2.0)
 
     assert ann_slice.data == expected_ann.data
-    assert ann_slice.sandbox.slice == [{'start_time': 8, 
+    assert ann_slice.sandbox.slice == [{'start_time': 8,
                                         'end_time': 10,
                                         'slice_start': 8,
                                         'slice_end': 10}]
@@ -1183,3 +1182,22 @@ def test_annotation_serialize():
     ann.append(time=np.float32(0), duration=np.float32(1),
                value=np.float32(5), confidence=np.float32(0.5))
     ann.dumps()
+
+
+@pytest.mark.parametrize('confidence', [False, True])
+def test_annotation_to_samples(confidence):
+
+    ann = jams.Annotation('tag_open')
+
+    ann.append(time=0, duration=0.5, value='one', confidence=0.1)
+    ann.append(time=0.25, duration=0.5, value='two', confidence=0.2)
+    ann.append(time=0.75, duration=0.5, value='three', confidence=0.3)
+    ann.append(time=1.5, duration=0.5, value='four', confidence=0.4)
+
+    values = ann.to_samples([0.2, 0.4, 0.75, 1.25, 1.75, 1.4], confidence=confidence)
+
+    if confidence:
+        values, confs = values
+        assert confs == [[0.1], [0.1, 0.2], [0.2, 0.3], [0.3], [0.4], []]
+
+    assert values == [['one'], ['one', 'two'], ['two', 'three'], ['three'], ['four'], []]
