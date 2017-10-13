@@ -1,6 +1,94 @@
 Pitch
 -----
 
+pitch_contour
+~~~~~~~~~~~~~
+Pitch contours in the format ``(index, frequency, voicing)``.
+
+    +-------+----------+---------------+------------+
+    | time  | duration | value         | confidence |
+    +=======+==========+===============+============+
+    | [sec] | [--]     | - index       | --         |
+    |       |          | - frequency   |            |
+    |       |          | - voiced      |            |
+    +-------+----------+---------------+------------+
+
+Each ``value`` field is a structure containing a contour ``index`` (an integer indicating which contour the observation belongs to), a ``frequency`` value in Hz, and a boolean indicating if the values is ``voiced``. The ``confidence`` field is unconstrained.
+
+
+*Example*
+
+    +--------+----------+--------------------+------------+
+    | time   | duration | value              | confidence |
+    +========+==========+====================+============+
+    | 0.0000 | 0.0000   | - index: 0         | null       |
+    |        |          | - frequency: 442.1 |            |
+    |        |          | - voiced: True     |            |
+    +--------+----------+--------------------+------------+
+    | 0.0058 | 0.0000   | - index: 0         | null       |
+    |        |          | - frequency: 457.8 |            |
+    |        |          | - voiced: False    |            |
+    +--------+----------+--------------------+------------+
+    | 2.5490 | 0.0000   | - index: 1         | null       |
+    |        |          | - frequency: 89.4  |            |
+    |        |          | - voiced: True     |            |
+    +--------+----------+--------------------+------------+
+    | 2.5548 | 0.0000   | - index: 1         | null       |
+    |        |          | - frequency: 90.0  |            |
+    |        |          | - voiced: True     |            |
+    +--------+----------+--------------------+------------+
+
+
+note_hz
+~~~~~~~
+Note events with (non-negative) frequencies measured in Hz.
+
+    +-------+----------+---------------+------------+
+    | time  | duration | value         | confidence |
+    +=======+==========+===============+============+
+    | [sec] | [sec]    | - number      | --         |
+    +-------+----------+---------------+------------+
+
+Each ``value`` field gives the frequency of the note in Hz.
+
+*Example*
+
+    +-------+----------+---------------+------------+
+    | time  | duration | value         | confidence |
+    +=======+==========+===============+============+
+    | 12.34 | 0.287    | 189.9         | null       |
+    +-------+----------+---------------+------------+
+    | 2.896 | 3.000    | 74.0          | null       |
+    +-------+----------+---------------+------------+
+    | 10.12 | 0.5.     | 440.0         | null       |
+    +-------+----------+---------------+------------+
+
+
+note_midi
+~~~~~~~~~
+Note events with pitches measured in (fractional) MIDI note numbers.
+
+    +-------+----------+---------------+------------+
+    | time  | duration | value         | confidence |
+    +=======+==========+===============+============+
+    | [sec] | [sec]    | - number      | --         |
+    +-------+----------+---------------+------------+
+
+Each ``value`` field gives the pitch of the note in MIDI note numbers.
+
+*Example*
+
+    +-------+----------+---------------+------------+
+    | time  | duration | value         | confidence |
+    +=======+==========+===============+============+
+    | 12.34 | 0.287    | 52.0          | null       |
+    +-------+----------+---------------+------------+
+    | 2.896 | 3.000    | 20.7          | null       |
+    +-------+----------+---------------+------------+
+    | 10.12 | 0.5.     | 42.0          | null       |
+    +-------+----------+---------------+------------+
+
+
 pitch_class
 ~~~~~~~~~~~
 Pitch measurements in ``(tonic, pitch class)`` format.
@@ -38,6 +126,7 @@ and a pitch class ``pitch`` as an integer scale degree.  The ``confidence`` fiel
 
 pitch_hz
 ~~~~~~~~
+..warning:: Deprecated
 Pitch measurements in Hertz (Hz). Pitch (a subjective sensation) is represented
 as fundamental frequency (a physical quantity), a.k.a. "f0".
 
@@ -57,7 +146,7 @@ zero are used to represent silence (no pitch). Some algorithms (e.g. melody
 extraction algorithms that adhere to the MIREX convention) use negative f0
 values to represent the algorithm's pitch estimate for frames where it thinks
 there is no active pitch (e.g. no melody), to allow the independent evaluation
-of pitch activation detection (a.k.a. "voicing detection") and pitch frequency 
+of pitch activation detection (a.k.a. "voicing detection") and pitch frequency
 estimation. The ``confidence`` field is unconstrained.
 
 *Example*
@@ -81,6 +170,7 @@ estimation. The ``confidence`` field is unconstrained.
 
 pitch_midi
 ~~~~~~~~~~
+..warning:: Deprecated
 Pitch measurements in (fractional) MIDI note number notation.
 
     ===== ======== ====== ==========
