@@ -1,6 +1,16 @@
 Changes
 =======
 
+v0.3.1
+------
+
+- Improved documentation (`PR #176 <https://github.com/marl/jams/pull/176>`_)
+- Added `Annotation.to_samples()` (`PR #173 <https://github.com/marl/jams/pull/173>`_)
+- Added schemata for FMA genre tags (`PR #172 <https://github.com/marl/jams/pull/172>`_)
+- Accelerated validation (`PR #170 <https://github.com/marl/jams/pull/170>`_)
+- Added schemata for AudioSet tags (`PR #168 <https://github.com/marl/jams/pull/168>`_)
+- Added `jams.list_namespaces()` (`PR #166 <https://github.com/marl/jams/pull/166>`_)
+
 v0.3.0
 ------
 
