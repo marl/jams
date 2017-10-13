@@ -126,7 +126,8 @@ and a pitch class ``pitch`` as an integer scale degree.  The ``confidence`` fiel
 
 pitch_hz
 ~~~~~~~~
-..warning:: Deprecated
+.. warning:: Deprecated, use ``pitch_contour``.
+
 Pitch measurements in Hertz (Hz). Pitch (a subjective sensation) is represented
 as fundamental frequency (a physical quantity), a.k.a. "f0".
 
@@ -170,7 +171,8 @@ estimation. The ``confidence`` field is unconstrained.
 
 pitch_midi
 ~~~~~~~~~~
-..warning:: Deprecated
+.. warning:: Deprecated, use ``note_midi`` or ``pitch_contour``.
+
 Pitch measurements in (fractional) MIDI note number notation.
 
     ===== ======== ====== ==========
