@@ -132,14 +132,15 @@ def piano_roll(annotation, **kwargs):
 
 VIZ_MAPPING = OrderedDict()
 
-VIZ_MAPPING['segment_open'] = intervals
+VIZ_MAPPING['beat'] = event
+VIZ_MAPPING['beat_position'] = beat_position
 VIZ_MAPPING['chord'] = intervals
 VIZ_MAPPING['multi_segment'] = hierarchy
-VIZ_MAPPING['pitch_contour'] = pitch_contour
-VIZ_MAPPING['beat_position'] = beat_position
-VIZ_MAPPING['beat'] = event
-VIZ_MAPPING['onset'] = event
 VIZ_MAPPING['note_midi'] = piano_roll
+VIZ_MAPPING['onset'] = event
+VIZ_MAPPING['pitch_contour'] = pitch_contour
+VIZ_MAPPING['segment_open'] = intervals
+VIZ_MAPPING['tag_open'] = intervals
 
 
 def display(annotation, meta=True, **kwargs):
