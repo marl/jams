@@ -45,7 +45,7 @@ import six
 import numpy as np
 import pandas as pd
 import jsonschema
-from sortedcontainers import SortedListWithKey
+from sortedcontainers import SortedKeyList
 from decorator import decorator
 
 from .version import version as __VERSION__
@@ -648,7 +648,7 @@ class Annotation(JObject):
 
         self.namespace = namespace
 
-        self.data = SortedListWithKey(key=self._key)
+        self.data = SortedKeyList(key=self._key)
 
         if data is not None:
             if isinstance(data, dict):
@@ -1051,12 +1051,12 @@ class Annotation(JObject):
 
         Returns
         -------
-        annotation_data : SortedListWithKey
+        annotation_data : SortedKeyList
             The original annotation data container
         '''
 
         data = self.data
-        self.data = SortedListWithKey(key=self._key)
+        self.data = SortedKeyList(key=self._key)
         return data
 
     def to_interval_values(self):
@@ -2117,14 +2117,14 @@ def summary(obj, indent=0):
     r : str
         If `obj` has a `__summary__` method, it is used.
 
-        If `obj` is a `SortedListWithKey`, then it returns a description
+        If `obj` is a `SortedKeyList`, then it returns a description
         of the length of the list.
 
         Otherwise, `repr(obj)`.
     '''
     if hasattr(obj, '__summary__'):
         rep = obj.__summary__()
-    elif isinstance(obj, SortedListWithKey):
+    elif isinstance(obj, SortedKeyList):
         rep = '<{:d} observations>'.format(len(obj))
     else:
         rep = repr(obj)
