@@ -1000,7 +1000,7 @@ class Annotation(JObject):
         >>> ann.append(time=8, duration=2, value='five')
         >>> ann_slice = ann.slice(5, 8, strict=False)
         >>> print(ann_slice.time, ann_slice.duration)
-        (5, 3)
+        (0, 3)
         >>> ann_slice.to_dataframe()
            time  duration  value confidence
         0   0.0       1.0    two       None
@@ -1008,7 +1008,7 @@ class Annotation(JObject):
         2   2.0       1.0   four       None
         >>> ann_slice_strict = ann.slice(5, 8, strict=True)
         >>> print(ann_slice_strict.time, ann_slice_strict.duration)
-        (5, 3)
+        (0, 3)
         >>> ann_slice_strict.to_dataframe()
            time  duration  value confidence
         0   1.0       2.0  three       None
@@ -1043,6 +1043,9 @@ class Annotation(JObject):
             sliced_ann.sandbox.slice.append(
                 {'start_time': start_time, 'end_time': end_time,
                  'slice_start': slice_start, 'slice_end': slice_end})
+
+        # Update the timing for the sliced annotation
+        sliced_ann.time = max(0, ref_time - start_time)
 
         return sliced_ann
 
