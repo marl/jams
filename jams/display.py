@@ -140,6 +140,7 @@ VIZ_MAPPING['beat_position'] = beat_position
 VIZ_MAPPING['beat'] = event
 VIZ_MAPPING['onset'] = event
 VIZ_MAPPING['note_midi'] = piano_roll
+VIZ_MAPPING['tag_open'] = intervals
 
 
 def display(annotation, meta=True, **kwargs):
