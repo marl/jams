@@ -1,0 +1,20 @@
+{
+    "tag_urbansound": {
+        "description": "Urban sound classes as per UrbanSound, UrbanSound8K and URBAN-SED datasets",
+        "value": {
+            "enum": [
+                "air_conditioner", 
+                "car_horn", 
+                "children_playing", 
+                "dog_bark", 
+                "drilling", 
+                "engine_idling", 
+                "gun_shot", 
+                "jackhammer", 
+                "siren", 
+                "street_music"
+            ]
+        },
+        "dense": false
+    }
+}
