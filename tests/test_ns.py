@@ -784,3 +784,246 @@ def test_ns_tag_fma_subgenre(tag):
     ann = Annotation(namespace='tag_fma_subgenre')
     ann.append(time=0, duration=1, value=tag)
     ann.validate()
+
+
+@parametrize('tag',
+             ['air_conditioner', 'car_horn', 'children_playing', 'dog_bark',
+              'drilling', 'engine_idling', 'gun_shot', 'jackhammer', 'siren',
+              six.u('street_music'),
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError),
+              xfail('air conditioner', raises=SchemaError),
+              xfail('AIR_CONDITIONER', raises=SchemaError)])
+def test_ns_tag_urbansound(tag):
+
+    ann = Annotation(namespace='tag_urbansound')
+    ann.append(time=0, duration=1, value=tag)
+    ann.validate()
+
+
+@parametrize('source_time',
+             [0, 5, 1.0,
+              xfail(-1, raises=SchemaError),
+              xfail(-1.0, raises=SchemaError),
+              xfail('zero', raises=SchemaError),
+              xfail(None, raises=SchemaError)])
+def test_ns_scaper_source_time(source_time):
+
+    ann = Annotation(namespace='scaper')
+
+    value = {
+        "source_time": source_time,
+        "event_duration": 0.5310546236891855,
+        "event_time": 5.6543442662431795,
+        "time_stretch": 0.8455598669219283,
+        "pitch_shift": -1.2204911976305648,
+        "snr": 7.790682558359417,
+        "label": 'gun_shot',
+        "role": "foreground",
+        "source_file": "/audio/foreground/gun_shot/135544-6-17-0.wav"
+    }
+
+    ann.append(time=0, duration=1, value=value)
+    ann.validate()
+
+
+@parametrize('event_duration',
+             [0.5, 5, 1.0,
+              xfail(0, raises=SchemaError),
+              xfail(-1, raises=SchemaError),
+              xfail(-1.0, raises=SchemaError),
+              xfail('zero', raises=SchemaError),
+              xfail(None, raises=SchemaError)])
+def test_ns_scaper_event_duration(event_duration):
+
+    ann = Annotation(namespace='scaper')
+
+    value = {
+        "source_time": 0.0,
+        "event_duration": event_duration,
+        "event_time": 5.6543442662431795,
+        "time_stretch": 0.8455598669219283,
+        "pitch_shift": -1.2204911976305648,
+        "snr": 7.790682558359417,
+        "label": 'gun_shot',
+        "role": "foreground",
+        "source_file": "/audio/foreground/gun_shot/135544-6-17-0.wav"
+    }
+
+    ann.append(time=0, duration=1, value=value)
+    ann.validate()
+
+
+@parametrize('event_time',
+             [0, 5, 1.0,
+              xfail(-1, raises=SchemaError),
+              xfail(-1.0, raises=SchemaError),
+              xfail('zero', raises=SchemaError),
+              xfail(None, raises=SchemaError)])
+def test_ns_scaper_event_time(event_time):
+
+    ann = Annotation(namespace='scaper')
+
+    value = {
+        "source_time": 0.0,
+        "event_duration": 0.5310546236891855,
+        "event_time": event_time,
+        "time_stretch": 0.8455598669219283,
+        "pitch_shift": -1.2204911976305648,
+        "snr": 7.790682558359417,
+        "label": 'gun_shot',
+        "role": "foreground",
+        "source_file": "/audio/foreground/gun_shot/135544-6-17-0.wav"
+    }
+
+    ann.append(time=0, duration=1, value=value)
+    ann.validate()
+
+
+@parametrize('time_stretch',
+             [0.5, 5, 1.0, None,
+              xfail(0, raises=SchemaError),
+              xfail(-1, raises=SchemaError),
+              xfail(-1.0, raises=SchemaError),
+              xfail('zero', raises=SchemaError)])
+def test_ns_scaper_time_stretch(time_stretch):
+
+    ann = Annotation(namespace='scaper')
+
+    value = {
+        "source_time": 0.0,
+        "event_duration": 0.5310546236891855,
+        "event_time": 5.6543442662431795,
+        "time_stretch": time_stretch,
+        "pitch_shift": -1.2204911976305648,
+        "snr": 7.790682558359417,
+        "label": 'gun_shot',
+        "role": "foreground",
+        "source_file": "/audio/foreground/gun_shot/135544-6-17-0.wav"
+    }
+
+    ann.append(time=0, duration=1, value=value)
+    ann.validate()
+
+
+@parametrize('pitch_shift',
+             [0.5, 5, 1.0, -1, -3.5, 0, None,
+              xfail('zero', raises=SchemaError)])
+def test_ns_scaper_pitch_shift(pitch_shift):
+
+    ann = Annotation(namespace='scaper')
+
+    value = {
+        "source_time": 0.0,
+        "event_duration": 0.5310546236891855,
+        "event_time": 5.6543442662431795,
+        "time_stretch": 0.8455598669219283,
+        "pitch_shift": pitch_shift,
+        "snr": 7.790682558359417,
+        "label": 'gun_shot',
+        "role": "foreground",
+        "source_file": "/audio/foreground/gun_shot/135544-6-17-0.wav"
+    }
+
+    ann.append(time=0, duration=1, value=value)
+    ann.validate()
+
+
+@parametrize('snr',
+             [0.5, 5, 1.0, -1, -3.5, 0,
+              xfail(None, raises=SchemaError),
+              xfail('zero', raises=SchemaError)])
+def test_ns_scaper_snr(snr):
+
+    ann = Annotation(namespace='scaper')
+
+    value = {
+        "source_time": 0.0,
+        "event_duration": 0.5310546236891855,
+        "event_time": 5.6543442662431795,
+        "time_stretch": 0.8455598669219283,
+        "pitch_shift": -1.2204911976305648,
+        "snr": snr,
+        "label": 'gun_shot',
+        "role": "foreground",
+        "source_file": "/audio/foreground/gun_shot/135544-6-17-0.wav"
+    }
+
+    ann.append(time=0, duration=1, value=value)
+    ann.validate()
+
+
+@parametrize('label',
+             ['air_conditioner', 'car_horn', six.u('street_music'),
+              'any string',
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError)])
+def test_ns_scaper_label(label):
+
+    ann = Annotation(namespace='scaper')
+
+    value = {
+        "source_time": 0.0,
+        "event_duration": 0.5310546236891855,
+        "event_time": 5.6543442662431795,
+        "time_stretch": 0.8455598669219283,
+        "pitch_shift": -1.2204911976305648,
+        "snr": 7.790682558359417,
+        "label": label,
+        "role": "foreground",
+        "source_file": "/audio/foreground/gun_shot/135544-6-17-0.wav"
+    }
+
+    ann.append(time=0, duration=1, value=value)
+    ann.validate()
+
+
+@parametrize('role',
+             ['foreground', 'background', six.u('background'),
+              xfail('FOREGROUND', raises=SchemaError),
+              xfail('BACKGROUND', raises=SchemaError),
+              xfail('something', raises=SchemaError),
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError)])
+def test_ns_scaper_role(role):
+
+    ann = Annotation(namespace='scaper')
+
+    value = {
+        "source_time": 0.0,
+        "event_duration": 0.5310546236891855,
+        "event_time": 5.6543442662431795,
+        "time_stretch": 0.8455598669219283,
+        "pitch_shift": -1.2204911976305648,
+        "snr": 7.790682558359417,
+        "label": "gun_shot",
+        "role": role,
+        "source_file": "/audio/foreground/gun_shot/135544-6-17-0.wav"
+    }
+
+    ann.append(time=0, duration=1, value=value)
+    ann.validate()
+
+
+@parametrize('source_file',
+             ['filename', '/a/b/c.wav', six.u('filename.wav'),
+              xfail(23, raises=SchemaError),
+              xfail(None, raises=SchemaError)])
+def test_ns_scaper_source_file(source_file):
+
+    ann = Annotation(namespace='scaper')
+
+    value = {
+        "source_time": 0.0,
+        "event_duration": 0.5310546236891855,
+        "event_time": 5.6543442662431795,
+        "time_stretch": 0.8455598669219283,
+        "pitch_shift": -1.2204911976305648,
+        "snr": 7.790682558359417,
+        "label": "gun_shot",
+        "role": "foreground",
+        "source_file": source_file
+    }
+
+    ann.append(time=0, duration=1, value=value)
+    ann.validate()
