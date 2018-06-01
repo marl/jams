@@ -1026,8 +1026,8 @@ def test_annotation_slice():
                                         'end_time': 10,
                                         'slice_start': 8,
                                         'slice_end': 10}]
-    assert ann_slice.time == 0
-    assert ann_slice.duration == 2
+    assert ann_slice.time == expected_ann.time
+    assert ann_slice.duration == expected_ann.duration
 
     # Slice out range that's partially inside the time range spanned by the
     # annotation (starts BEFORE annotation starts)
@@ -1039,8 +1039,8 @@ def test_annotation_slice():
 
     expected_ann = jams.Annotation(namespace, data=expected_data, time=2.0,
                                    duration=5.0)
-    assert ann_slice.time == 2
-    assert ann_slice.duration == 5
+    assert ann_slice.time == expected_ann.time
+    assert ann_slice.duration == expected_ann.duration
 
     assert ann_slice.data == expected_ann.data
     assert ann_slice.sandbox.slice == [{'start_time': 3,
@@ -1057,13 +1057,13 @@ def test_annotation_slice():
                          confidence=[0.9, 0.9])
 
     expected_ann = jams.Annotation(namespace, data=expected_data, time=0,
-                                   duration=2.0)
+                                   duration=7.0)
 
     assert ann_slice.data == expected_ann.data
     assert ann_slice.sandbox.slice == (
         [{'start_time': 8, 'end_time': 20, 'slice_start': 8, 'slice_end': 15}])
-    assert ann_slice.time == 0
-    assert ann_slice.duration == 7
+    assert ann_slice.time == expected_ann.time
+    assert ann_slice.duration == expected_ann.duration
 
     # Multiple slices
     ann_slice = ann.slice(0, 10).slice(8, 10)
@@ -1079,8 +1079,8 @@ def test_annotation_slice():
     assert ann_slice.sandbox.slice == (
         [{'start_time': 0, 'end_time': 10, 'slice_start': 5, 'slice_end': 10},
          {'start_time': 8, 'end_time': 10, 'slice_start': 8, 'slice_end': 10}])
-    assert ann_slice.time == 0
-    assert ann_slice.duration == 2
+    assert ann_slice.time == expected_ann.time
+    assert ann_slice.duration == expected_ann.duration
 
 
 def test_jams_slice():
