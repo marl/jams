@@ -1,0 +1,38 @@
+{"scaper":
+    {
+        "value": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "source_file": {
+              "type": "string"
+            },
+            "source_time": {
+              "type": "number", "minimum": 0
+            },
+            "event_time": {
+              "type": "number", "minimum": 0
+            },
+            "event_duration": {
+              "type": "number", "minimum": 0, "exclusiveMinimum": true
+            },
+            "snr": {
+              "type": "number"
+            },
+            "time_stretch": {
+              "type": ["number", "null"], "minimum": 0, "exclusiveMinimum": true
+            },
+            "pitch_shift": {
+              "type": ["number", "null"]
+            },
+            "role": {
+              "enum": ["background", "foreground"]
+            }
+          }
+        },
+        "dense": false,
+        "description": "Sound event following the scaper format."
+    }
+}
