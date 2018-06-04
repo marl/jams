@@ -238,6 +238,20 @@ def tag_to_open(annotation):
     return annotation
 
 
+@_conversion('tag_open', 'scaper')
+def scaper_to_tag(annotation):
+    '''Convert scaper annotations to tag_open'''
+
+    annotation.namespace = 'tag_open'
+
+    data = annotation.pop_data()
+    for obs in data:
+        annotation.append(time=obs.time, duration=obs.duration,
+                          confidence=obs.confidence, value=obs.value['label'])
+
+    return annotation
+
+
 @_conversion('beat', 'beat_position')
 def beat_position(annotation):
     '''Convert beat_position to beat'''

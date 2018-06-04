@@ -253,6 +253,37 @@ def test_beat_position():
         assert obs1.confidence == obs2.confidence
 
 
+def test_scaper_tag_open():
+    ann = jams.Annotation(namespace='scaper')
+
+    value = {
+        "source_time": 5,
+        "event_duration": 0.5310546236891855,
+        "event_time": 5.6543442662431795,
+        "time_stretch": 0.8455598669219283,
+        "pitch_shift": -1.2204911976305648,
+        "snr": 7.790682558359417,
+        "label": 'gun_shot',
+        "role": "foreground",
+        "source_file": "/audio/foreground/gun_shot/135544-6-17-0.wav"
+    }
+
+    ann.append(time=0, duration=1, value=value)
+
+    ann2 = jams.convert(ann, 'tag_open')
+
+    ann.validate()
+    ann2.validate()
+    assert ann2.namespace == 'tag_open'
+
+    assert len(ann) == len(ann2)
+    for obs1, obs2 in zip(ann.data, ann2.data):
+        assert obs1.time == obs2.time
+        assert obs1.duration == obs2.duration
+        assert obs1.confidence == obs2.confidence
+        assert obs1.value['label'] == obs2.value
+
+
 def test_can_convert_equal():
 
     ann = jams.Annotation(namespace='chord')
