@@ -1,6 +1,14 @@
 Changes
 =======
 
+v0.3.2
+------
+
+- Added schemata for ``tag_urbansound`` and ``scaper`` (`PR #191 <https://github.com/marl/jams/pull/191>`_)
+- Fixed a timing bug in ``Annotation.slice`` (`PR #189 <https://github.com/marl/jams/pull/189>`_)
+- Added ``display`` mapping for ``tag_open`` namespaces (`PR #188 <https://github.com/marl/jams/pull/188>`_)
+- Updated `sortedcontainers` dependency to avoid deprecations (`PR #187 <https://github.com/marl/jams/pull/187>`_)
+
 v0.3.1
 ------
 

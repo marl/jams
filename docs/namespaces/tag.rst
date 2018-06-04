@@ -338,3 +338,37 @@ The ``value`` field is constrained to the 163 genres and sub-genres of the FMA_ 
     5.000 25.000   "Power-Pop"        null
     9.000 35.000   "Nerdcore"         null
     ===== ======== ================== ==========
+
+tag_urbansound
+~~~~~~~~~~~~~~
+Genre classes from the UrbanSound_ dataset.
+
+    ===== ======== ================== ==========
+    time  duration value              confidence
+    ===== ======== ================== ==========
+    [sec] [sec]    string             --
+    ===== ======== ================== ==========
+
+The ``value`` field is constrained to one of ten strings:
+
+    - ``air_conditioner``
+    - ``car_horn``
+    - ``children_playing``
+    - ``dog_bark``
+    - ``drilling``
+    - ``engine_idling``
+    - ``gun_shot``
+    - ``jackhammer``
+    - ``siren``
+    - ``street_music``
+
+.. _UrbanSound: https://serv.cusp.nyu.edu/projects/urbansounddataset/
+
+*Example*
+
+    ===== ======== ============== ==========
+    time  duration value          confidence
+    ===== ======== ============== ==========
+    0.000 30.000   "street_music" null
+    ===== ======== ============== ==========
+
