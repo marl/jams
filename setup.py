@@ -38,10 +38,11 @@ setup(
         'numpy>=1.8.0',
         'six',
         'decorator',
-        'mir_eval>=0.4',
+        'mir_eval>=0.5',
     ],
     extras_require={
-        'display': ['matplotlib>=1.5.0']
+        'display': ['matplotlib>=1.5.0'],
+        'tests': ['pytest', 'pytest-cov'],
     },
     scripts=['scripts/jams_to_lab.py']
 )

@@ -23,11 +23,10 @@ before_install:
 
 install:
     # install your own package into the environment
-    - pip install git+https://github.com/craffel/mir_eval
-    - pip install -e .[display]
+    - pip install -e .[display,tests]
 
 script:
-    - py.test
+    - pytest
 
 after_success:
     - coveralls
