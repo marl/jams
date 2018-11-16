@@ -1,65 +1,89 @@
 
+#!/usr/bin/env python
+'''Convert JAMS to MIREX pattern discovery format
+
+Example usage:
+
+./jams_to_mirex_pattern.py /path/to/file.jams outputname
+'''
+
 import csv
 import json
+import sys
+from argparse import ArgumentParser
+import os
+import jams
 
-x = open('/path/to/file.jams').read()
-x = json.loads(x)
 
-record = []
 
-for x in x["annotations"]:
-    # looping through the annotators
-    metadata = x["annotation_metadata"]
-    namespace = x["namespace"]
-    
-    # annotator names
-    anno = metadata["annotator"]
-    
-    # actual data of annotation
-    d = x["data"]
+def parse_arguments(args):
 
-    # open file to write to the MIREX pattern discovery format 
-    text_file = open("anno{0}.txt".format(anno), "w")
-    text_file.write("Pattern1"+"\n")
-    text_file.write("Occ1"+"\n")
-    pcount = 1 # keep pattern count
-    ocount = 1 # keep pattern occurrence count
+    parser = ArgumentParser(description='Parse JAMS annotations into the MIREX Pattern Discovery task format')
 
-    pastpid = 1 # initiatise the pattern count to compare for a change
-    pastoid = 1 # initiatise the occurrence count to compare for a change
-    
-    initpid = d[0]["value"]["pattern_id"]
+    parser.add_argument('infile', type=str, help='Input JAMS file')
+    parser.add_argument('output_prefix', type=str,
+                        help='Prefix for output lab files')
 
-    for y in d:
-        # lopping through the events given an annotator
-        time = y["time"]
-        dur = y["duration"]
+    return vars(parser.parse_args(args))
 
-        pid = y["value"]["pattern_id"]
+def run(infile='', output_prefix='annotation'):
+    with open(infile, 'r') as fdesc:
+        x = json.load(fdesc)
 
-        # update the pattern count when there is a change in the pattern id in the jams file
-        if pid != pastpid:
-            pcount += 1
-            ocount = 0
-            text_file.write("Pattern"+str(pcount)+"\n")
-            text_file.write("Occ1"+"\n")
+    record = []
+    for elem in x["annotations"]:
+        # looping through the annotators
 
-        midip = y["value"]["midi_pitch"]
-        morphp = y["value"]["morph_pitch"]
-        staff = y["value"]["staff"]
-        occid = y["value"]["occurrence_id"]
+        metadata = elem["annotation_metadata"]
+        namespace = elem["namespace"]
+        anno = metadata["annotator"]
+        d = elem["data"]
 
-        if occid != pastoid:
-            ocount += 1
-            text_file.write("Occ"+str(ocount)+"\n")
+        with open('{1}_{0}.txt'.format(anno, output_prefix), 'w') as text_file:
+            text_file.write("Pattern1" + "\n")
+            text_file.write("Occ1" + "\n")
 
-        c = y["confidence"]
+            pcount = 1
+            ocount = 1
 
-        # keep a record of the last pattern count to compare with for a change
-        pastpid = pid
-        pastoid = occid
+            initpid = d[0]["value"]["pattern_id"]
+            initocc = d[0]["value"]["occurrence_id"]
 
-        # write the actual (time, pitch) pairs
-        text_file.write(str(time)+", "+str(midip)+"\n")
+            pastpid = initpid
+            pastoid = initocc
 
-    text_file.close()
+            for y in d:
+                # lopping through the events given an annotator
+                time = y["time"]
+                dur = y["duration"]
+
+                pid = y["value"]["pattern_id"]
+
+                if pid != pastpid:
+                    pcount += 1
+                    ocount = 1
+                    text_file.write("Pattern"+str(pcount)+"\n")
+                    text_file.write("Occ"+str(ocount)+"\n")
+
+                midip = y["value"]["midi_pitch"]
+                morphp = y["value"]["morph_pitch"]
+                staff = y["value"]["staff"]
+                occid = y["value"]["occurrence_id"]
+
+                if occid != pastoid:
+                    ocount += 1
+                    text_file.write("Occ"+str(ocount)+"\n")
+
+                c = y["confidence"]
+
+                pastpid = pid
+                pastoid = occid
+
+                text_file.write(str(time)+", "+str(midip)+"\n")
+
+
+
+if __name__ == '__main__':
+    params = parse_arguments(sys.argv[1:])
+
+    run(**params)
