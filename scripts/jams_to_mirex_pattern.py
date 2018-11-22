@@ -7,14 +7,10 @@ Example usage:
 ./jams_to_mirex_pattern.py /path/to/file.jams outputname
 '''
 
-import csv
 import json
 import sys
 from argparse import ArgumentParser
-import os
 import jams
-
-
 
 def parse_arguments(args):
 
@@ -30,12 +26,10 @@ def run(infile='', output_prefix='annotation'):
     with open(infile, 'r') as fdesc:
         x = json.load(fdesc)
 
-    record = []
     for elem in x["annotations"]:
         # looping through the annotators
 
         metadata = elem["annotation_metadata"]
-        namespace = elem["namespace"]
         anno = metadata["annotator"]
         d = elem["data"]
 
@@ -55,7 +49,6 @@ def run(infile='', output_prefix='annotation'):
             for y in d:
                 # lopping through the events given an annotator
                 time = y["time"]
-                dur = y["duration"]
 
                 pid = y["value"]["pattern_id"]
 
@@ -66,15 +59,11 @@ def run(infile='', output_prefix='annotation'):
                     text_file.write("Occ"+str(ocount)+"\n")
 
                 midip = y["value"]["midi_pitch"]
-                morphp = y["value"]["morph_pitch"]
-                staff = y["value"]["staff"]
                 occid = y["value"]["occurrence_id"]
 
                 if occid != pastoid:
                     ocount += 1
                     text_file.write("Occ"+str(ocount)+"\n")
-
-                c = y["confidence"]
 
                 pastpid = pid
                 pastoid = occid
