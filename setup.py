@@ -42,7 +42,7 @@ setup(
     ],
     extras_require={
         'display': ['matplotlib>=1.5.0'],
-        'tests': ['pytest', 'pytest-cov'],
+        'tests': ['pytest < 4', 'pytest-cov'],
     },
     scripts=['scripts/jams_to_lab.py']
 )
