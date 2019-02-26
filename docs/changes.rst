@@ -1,6 +1,12 @@
 Changes
 =======
 
+v0.3.3
+------
+
+- Pinned jsonschema dependency to version 2.6 (`PR #200
+  <https://github.com/marl/jams/pull/200>`_)
+
 v0.3.2
 ------
 
