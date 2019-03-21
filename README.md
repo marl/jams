@@ -63,3 +63,7 @@ and Juan P. Bello, "[JAMS: A JSON Annotated Music Specification for Reproducible
 MIR Research](http://marl.smusic.nyu.edu/papers/humphrey_jams_ismir2014.pdf)",
 Proceedings of the 15th International Conference on Music Information Retrieval,
 2014.
+
+The JAMS schema and data representation used in the API were overhauled significantly between versions 0.1 (initial proposal) and 0.2 (overhauled), see the following technical report for details:
+
+B. McFee, E. J. Humphrey, O. Nieto, J. Salamon, R. Bittner, J. Forsyth, J. P. Bello, "[Pump Up The JAMS: V0.2 And Beyond](http://www.justinsalamon.com/uploads/4/3/9/4/4394963/mcfee_jams_ismir_lbd2015.pdf)", Technical report, October 2015.
