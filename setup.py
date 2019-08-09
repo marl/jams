@@ -34,7 +34,7 @@ setup(
     install_requires=[
         'pandas',
         'sortedcontainers>=2.0.0',
-        'jsonschema==2.6',
+        'jsonschema>=3.0.0',
         'numpy>=1.8.0',
         'six',
         'decorator',

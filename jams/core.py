@@ -581,7 +581,7 @@ class JObject(object):
         valid = True
 
         try:
-            jsonschema.validate(self.__json__, self.__schema__)
+            schema.VALIDATOR.validate(self.__json__, self.__schema__)
 
         except jsonschema.ValidationError as invalid:
             if strict:
@@ -766,12 +766,12 @@ class Annotation(JObject):
         valid = True
 
         try:
-            jsonschema.validate(self.__json_light__(data=False),
-                                schema.JAMS_SCHEMA)
+            schema.VALIDATOR.validate(self.__json_light__(data=False),
+                                                schema.JAMS_SCHEMA)
 
             # validate each record in the frame
             data_ser = [serialize_obj(obs) for obs in self.data]
-            jsonschema.validate(data_ser, ann_schema)
+            schema.VALIDATOR.validate(data_ser, ann_schema)
 
         except jsonschema.ValidationError as invalid:
             if strict:
@@ -1805,7 +1805,7 @@ class JAMS(JObject):
         '''
         valid = True
         try:
-            jsonschema.validate(self.__json_light__, schema.JAMS_SCHEMA)
+            schema.VALIDATOR.validate(self.__json_light__, schema.JAMS_SCHEMA)
 
             for ann in self.annotations:
                 if isinstance(ann, Annotation):
