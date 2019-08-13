@@ -24,10 +24,11 @@ import copy
 from pkg_resources import resource_filename
 
 import numpy as np
+import jsonschema
 
 from .exceptions import NamespaceError, JamsError
 
-__all__ = ['add_namespace', 'namespace', 'is_dense', 'values', 'get_dtypes']
+__all__ = ['add_namespace', 'namespace', 'is_dense', 'values', 'get_dtypes', 'VALIDATOR']
 
 __NAMESPACE__ = dict()
 
@@ -248,3 +249,4 @@ SCHEMA_DIR = 'schemata'
 NS_SCHEMA_DIR = os.path.join(SCHEMA_DIR, 'namespaces')
 
 JAMS_SCHEMA = __load_jams_schema()
+VALIDATOR = jsonschema.Draft4Validator(JAMS_SCHEMA)
