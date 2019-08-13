@@ -1,6 +1,15 @@
 Changes
 =======
 
+v0.3.4
+------
+
+- Added support for jsonschema version 3.0 (`PR #202
+  <https://github.com/marl/jams/pull/202>`_)
+
+- Added converter script `jams_to_mirex_pattern.py` (`PR #194 
+  <https://github.com/marl/jams/pull/194>`_)
+
 v0.3.3
 ------
 
