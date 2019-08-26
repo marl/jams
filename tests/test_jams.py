@@ -801,10 +801,10 @@ def test_annotation_trim_partial_overlap_beginning():
     # range: at the beginning
     # strict=False
     namespace = 'tag_open'
-    data = dict(time=[5.0, 5.0, 10.0],
-                duration=[2.0, 4.0, 4.0],
-                value=['one', 'two', 'three'],
-                confidence=[0.9, 0.9, 0.9])
+    data = dict(time=[5.0, 5.0, 5.0, 10.0],
+                duration=[0.0, 2.0, 4.0, 4.0],
+                value=['zero', 'one', 'two', 'three'],
+                confidence=[0.1, 0.9, 0.9, 0.9])
     ann = jams.Annotation(namespace, data=data, time=5.0, duration=10.0)
 
     ann_trim = ann.trim(0, 8, strict=False)
@@ -816,10 +816,10 @@ def test_annotation_trim_partial_overlap_beginning():
     assert ann_trim.namespace == ann.namespace
     assert ann_trim.annotation_metadata == ann.annotation_metadata
 
-    expected_data = dict(time=[5.0, 5.0],
-                         duration=[2.0, 3.0],
-                         value=['one', 'two'],
-                         confidence=[0.9, 0.9])
+    expected_data = dict(time=[5.0, 5.0, 5.0],
+                         duration=[0.0, 2.0, 3.0],
+                         value=['zero', 'one', 'two'],
+                         confidence=[0.1, 0.9, 0.9])
     expected_ann = jams.Annotation(namespace, data=expected_data, time=5.0,
                                    duration=3.0)
 
@@ -835,10 +835,10 @@ def test_annotation_trim_partial_overlap_beginning():
     assert ann_trim.namespace == ann.namespace
     assert ann_trim.annotation_metadata == ann.annotation_metadata
 
-    expected_data = dict(time=[5.0],
-                         duration=[2.0],
-                         value=['one'],
-                         confidence=[0.9])
+    expected_data = dict(time=[5.0, 5.0],
+                         duration=[0.0, 2.0],
+                         value=['zero', 'one'],
+                         confidence=[0.1, 0.9])
     expected_ann = jams.Annotation(namespace, data=expected_data, time=5.0,
                                    duration=3.0)
 
