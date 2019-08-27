@@ -916,7 +916,8 @@ class Annotation(JObject):
             obs_start = obs.time
             obs_end = obs_start + obs.duration
 
-            if obs_start < trim_end and obs_end >= trim_start:
+            # Special-case here handles duration=0 as a closed interval
+            if obs_start < trim_end and (obs_end > trim_start or obs_start == obs_end >= trim_start):
 
                 new_start = max(obs_start, trim_start)
                 new_end = min(obs_end, trim_end)
