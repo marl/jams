@@ -29,7 +29,7 @@ Annotation
 
 Each annotation object contains the following properties:
     * ``namespace`` : a string describing the type of this annotation;
-    * ``data`` : a list of observations, each containing:
+    * ``data`` : a list of *observations*, each containing:
         * ``time`` : non-negative number denoting the time of the observation (in seconds)
         * ``duration`` : non-negative number denoting the duration of the observation (in seconds)
         * ``value`` : actual annotation (e.g., chord, segment label)
@@ -41,6 +41,16 @@ Each annotation object contains the following properties:
       annotation.
 
 The permissible contents of the ``value`` and ``confidence`` fields are defined by the ``namespace``.
+
+The interpretation of the ``time`` and ``duration`` observation fields are as follows:
+
+   - if ``duration > 0``, the observation covers the half-open time interval ``[time, time + duration)``.
+   - if ``duration == 0``, the observation covers the closed interval ``[time, time]``, that is, the single time instant.
+
+The first case is the most widely used, and the half-open interval convention eliminates ambiguity of interval membership at the boundaries of adjacent intervals.
+
+The second case is primarily useful for instantaneous measurements (e.g., beat events) or uniformly sampled values of a temporally continuous signal (e.g., fundamental frequency
+curve).
 
 .. note:: The ``time`` and ``duration`` fields of ``annotation`` are considered optional.  If left blank,
           the annotation should be assumed to be valid for the entirety of the track.
