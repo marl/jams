@@ -34,6 +34,7 @@ setup(
     install_requires=[
         'pandas',
         'sortedcontainers>=2.0.0',
+        'pyrsistent<0.15; python_version=="3.4"',
         'jsonschema>=3.0.0',
         'numpy>=1.8.0',
         'six',

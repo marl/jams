@@ -30,6 +30,8 @@ if [ ! -d "$src" ]; then
         export PATH="$src/bin:$PATH"
         conda_create 
         source activate $ENV_NAME
+        # later versions than 5.2 do not support python 3.4 anymore
+        pip install PyYAML==5.2; python_version==3.4
         pip install python-coveralls
         source deactivate
     popd
