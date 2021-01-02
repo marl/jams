@@ -145,11 +145,12 @@ def pitch_hz_to_contour(annotation):
     data = annotation.pop_data()
 
     for obs in data:
-        annotation.append(time=obs.time, duration=obs.duration,
+        annotation.append(time=obs.time, 
+                          duration=obs.duration,
                           confidence=obs.confidence,
-                          value=dict(index=0,
-                                     frequency=np.abs(obs.value),
-                                     voiced=obs.value > 0))
+                          value=[dict(index=0,
+                                     frequency=np.abs(v),
+                                     voiced=v > 0) for v in obs.value])
     return annotation
 
 
@@ -200,9 +201,10 @@ def pitch_midi_to_hz(annotation):
     data = annotation.pop_data()
 
     for obs in data:
-        annotation.append(time=obs.time, duration=obs.duration,
+        annotation.append(time=obs.time, 
+                          duration=obs.duration,
                           confidence=obs.confidence,
-                          value=440 * (2.0**((obs.value - 69.0)/12.0)))
+                          value=[440 * (2.0**((v - 69.0)/12.0)) for v in obs.value])
 
     return annotation
 
@@ -218,7 +220,7 @@ def pitch_hz_to_midi(annotation):
     for obs in data:
         annotation.append(time=obs.time, duration=obs.duration,
                           confidence=obs.confidence,
-                          value=12 * (np.log2(obs.value) - np.log2(440.0)) + 69)
+                          value=[12 * (np.log2(v) - np.log2(440.0)) + 69 for v in obs.value])
     return annotation
 
 

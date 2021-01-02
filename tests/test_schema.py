@@ -18,57 +18,15 @@ def test_schema_namespace(ns_key):
 
     # Get the schema
     schema = jams.schema.namespace(ns_key)
+    obs_schema = jams.schema.OBSERVATIONS_SCHEMA["definitions"]
 
-    # Make sure it has the correct properties
-    valid_keys = set(['time', 'duration', 'value', 'confidence'])
-    for key in schema['properties']:
-        assert key in valid_keys
+    # Check that its fields match one of the observation types
+    matched = False
+    for _, obs in obs_schema.items():
+        obs_properties = obs['properties']
+        matched |= all( key in obs_properties for key in schema['properties']['data']['items']['properties'].keys() )
 
-    for key in ['time', 'duration']:
-        assert key in schema['properties']
-
-
-@pytest.mark.parametrize('ns, dense',
-                         [('pitch_hz', True),
-                          ('beat', False),
-                          pytest.mark.xfail(('DNE', False),
-                                            raises=NamespaceError)])
-def test_schema_is_dense(ns, dense):
-    assert dense == jams.schema.is_dense(ns)
-
-
-@pytest.fixture
-def local_namespace():
-
-    os.environ['JAMS_SCHEMA_DIR'] = os.path.join('tests', 'fixtures', 'schema')
-    reload_module(jams)
-
-    # This one should pass
-    yield 'testing_tag_upper', True
-
-    # Cleanup
-    del os.environ['JAMS_SCHEMA_DIR']
-    reload_module(jams)
-
-
-def test_schema_local(local_namespace):
-
-    ns_key, exists = local_namespace
-
-    # Get the schema
-    if exists:
-        schema = jams.schema.namespace(ns_key)
-
-        # Make sure it has the correct properties
-        valid_keys = set(['time', 'duration', 'value', 'confidence'])
-        for key in schema['properties']:
-            assert key in valid_keys
-
-        for key in ['time', 'duration']:
-            assert key in schema['properties']
-    else:
-        with pytest.raises(NamespaceError):
-            schema = jams.schema.namespace(ns_key)
+    assert matched
 
 
 def test_schema_values_pass():
@@ -92,7 +50,7 @@ def test_schema_values_notenum():
 
 def test_schema_dtypes():
 
-    for n in jams.schema.__NAMESPACE__:
+    for n, _ in jams.schema.NAMESPACES.items():
         jams.schema.get_dtypes(n)
 
 

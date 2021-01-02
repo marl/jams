@@ -1,16 +1,37 @@
-{"beat_position": {
-    "value": {
-        "type": "object",
-        "properties": {
-            "position": {"type": "number", "minimum": 1},
-            "measure": {"type": "integer", "minimum": 0},
-            "num_beats": { "type": "integer", "minimum": 1},
-            "beat_units": { "enum": [1, 2, 4, 8, 16, 32, 64, 128, 256]}
+{
+    "definitions": {
+        "value": {
+            "type": "object",
+            "properties": {
+                "position": {"type": "number", "minimum": 1},
+                "measure": {"type": "integer", "minimum": 0},
+                "num_beats": { "type": "integer", "minimum": 1},
+                "beat_units": { "enum": [1, 2, 4, 8, 16, 32, 64, 128, 256]}
+            },
+            "required": ["position", "measure", "num_beats", "beat_units"]
         },
-        "required": ["position", "measure", "num_beats", "beat_units"]
+        "confidence": {
+
+        },
+        "name": {
+            "const": "beat_position"
+        }
     },
-    "dense": false,
-    "description": "Tuples of (position, measure, beats per measure, beat units)"
+
+    "description": "Tuples of (position, measure, beats per measure, beat units)",
+
+    "properties": {
+        "namespace": { "$ref": "#/definitions/name" },
+        "data": {
+            "type": "array",
+            "description": "A list of sparse observation objects",
+            "$comment": "Because this needs to reference namespace dependent types, oneOf relationships cannot be indexed, and it must be matched to the namespace name constant, we must redefine the observation type here to match an observation in observations.json",
+            "items": {
+                "properties": {
+                    "value": { "$ref": "#/definitions/value" },
+                    "confidence": { "$ref": "#/definitions/confidence" }
+                }
+            }
+        }
     }
 }
-

@@ -1,10 +1,10 @@
-{"chord_roman":
-    {
+{
+    "definitions": {
         "value": {
             "type": "object",
             "properties": {
                 "tonic": { "type": "string",
-                           "pattern": "^[A-G][b#]?$" },
+                        "pattern": "^[A-G][b#]?$" },
                 "chord": { 
                     "type": "string",
                     "pattern": "^([b#]?(i|I|ii|II|iii|III|iv|IV|v|V|vi|VI|vii|VII))[osdhx+]?[0-9]?[0-9]?(/([b#]?(i|I|ii|II|iii|III|iv|IV|v|V|vi|VI|vii|VII)))?$"
@@ -12,7 +12,28 @@
             },
             "required": ["tonic", "chord"]
         },
-        "dense": false,
-        "description": "Roman numeral chords: (tonic, chord)"
+        "confidence": {
+
+        },
+        "name": {
+            "const": "chord_roman"
+        }
+    },
+
+    "description": "Roman numeral chords: (tonic, chord)",
+
+    "properties": {
+        "namespace": { "$ref": "#/definitions/name" },
+        "data": {
+            "type": "array",
+            "description": "A list of sparse observation objects",
+            "$comment": "Because this needs to reference namespace dependent types, oneOf relationships cannot be indexed, and it must be matched to the namespace name constant, we must redefine the observation type here to match an observation in observations.json",
+            "items": {
+                "properties": {
+                    "value": { "$ref": "#/definitions/value" },
+                    "confidence": { "$ref": "#/definitions/confidence" }
+                }
+            }
+        }
     }
 }

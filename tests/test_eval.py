@@ -23,8 +23,12 @@ def create_annotation(values, namespace='beat', offset=0.0, duration=1,
     if np.isscalar(confidence):
         confidence = [confidence] * len(time)
 
-    for t, d, v, c in zip(time, duration, values, confidence):
-        ann.append(time=t, duration=d, value=v, confidence=c)
+    # The pitch_hz namespace considers all values to be one observation
+    if namespace=='pitch_hz':
+        ann.append(time=time, duration=duration, value=values, confidence=confidence)
+    else:
+        for t, d, v, c in zip(time, duration, values, confidence):
+            ann.append(time=t, duration=d, value=v, confidence=c)
 
     return ann
 
@@ -213,7 +217,7 @@ def est_transcript():
 def est_badtranscript():
     est_jam = jams.load('tests/fixtures/transcription_est.jams', validate=False)
     ann = est_jam.annotations['pitch_hz', 0]
-    ann.append(time=2., duration=1., value=None, confidence=1)
+    ann.append(time=[2.], duration=[1.], value=[None], confidence=[1])
     return ann
 
 

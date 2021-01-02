@@ -1,6 +1,6 @@
-{"tag_gtzan":
-    {
-        "value": { 
+{
+    "definitions": {
+        "value": {
             "enum": [
                 "blues",
                 "classical",
@@ -14,7 +14,28 @@
                 "rock"
             ]
         },
-        "dense": false,
-        "description": "GTZAN 10-class genre annotation"
+        "confidence": {
+            
+        },
+        "name": {
+            "const": "tag_gtzan"
+        }
+    },
+
+    "description": "GTZAN 10-class genre annotation",
+
+    "properties": {
+        "namespace": { "$ref": "#/definitions/name" },
+        "data": {
+            "type": "array",
+            "description": "A list of sparse observation objects",
+            "$comment": "Because this needs to reference namespace dependent types, oneOf relationships cannot be indexed, and it must be matched to the namespace name constant, we must redefine the observation type here to match an observation in observations.json",
+            "items": {
+                "properties": {
+                    "value": { "$ref": "#/definitions/value" },
+                    "confidence": { "$ref": "#/definitions/confidence" }
+                }
+            }
+        }
     }
 }

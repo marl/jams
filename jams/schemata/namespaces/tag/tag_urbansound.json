@@ -1,6 +1,5 @@
 {
-    "tag_urbansound": {
-        "description": "Urban sound classes as per UrbanSound, UrbanSound8K and URBAN-SED datasets",
+    "definitions": {
         "value": {
             "enum": [
                 "air_conditioner", 
@@ -15,6 +14,28 @@
                 "street_music"
             ]
         },
-        "dense": false
+        "confidence": {
+
+        },
+        "name": {
+            "const": "tag_urbansound"
+        }
+    },
+
+    "description": "Urban sound classes as per UrbanSound, UrbanSound8K and URBAN-SED datasets",
+
+    "properties": {
+        "namespace": { "$ref": "#/definitions/name" },
+        "data": {
+            "type": "array",
+            "description": "A list of sparse observation objects",
+            "$comment": "Because this needs to reference namespace dependent types, oneOf relationships cannot be indexed, and it must be matched to the namespace name constant, we must redefine the observation type here to match an observation in observations.json",
+            "items": {
+                "properties": {
+                    "value": { "$ref": "#/definitions/value" },
+                    "confidence": { "$ref": "#/definitions/confidence" }
+                }
+            }
+        }
     }
 }
