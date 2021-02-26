@@ -1,8 +1,36 @@
-{"pitch_midi":
-    {
-        "value": { "type": "number" },
-        "dense": true,
-        "description": "[DEPRECATED] Pitch in (fractional) MIDI note numbers"
+{
+    "definitions": {
+        "value": {
+            "type": "number"
+        },
+        "confidence": {
+
+        },
+        "name": {
+            "const": "pitch_midi"
+        }
+    },
+
+    "description": "[DEPRECATED] Pitch in (fractional) MIDI note numbers",
+
+    "properties": {
+        "namespace": { "$ref": "#/definitions/name" },
+        "data": {
+            "type": "array",
+            "description": "A list of DenseObservation types",
+            "$comment": "Because this needs to reference namespace dependent types, oneOf relationships cannot be indexed, and it must be matched to the namespace name constant, we must redefine the observation type here to match an observation type in observations.json",
+            "items": {
+                "properties": {
+                    "value": { 
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/value" }
+                    },
+                    "confidence": {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/confidence" }
+                    }
+                }
+            }
+        }
     }
 }
-

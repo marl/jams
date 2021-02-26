@@ -51,40 +51,6 @@
             }
         },
 
-        "SparseObservation": {
-            "type": "object",
-            "title": "SparseObservation",
-            "description": "An observation that spans an interval of time",
-            "properties": {
-                "value": { },
-                "confidence": { },
-                "time": {"type": "number", "minimum": 0.0},
-                "duration": {"type": "number", "minimum": 0.0}
-            },
-            "required": ["value", "time", "duration", "confidence"]
-        },
-
-        "DenseObservation": {
-            "type": "object",
-            "title": "DenseObservation",
-            "description": "A dense series of observations",
-            "properties": {
-                "value": {"type": "array"}, 
-                "confidence": {"type": "array" },
-                "time": {"type": "array", "items": { "type": "number", "minimum": 0.0 }},
-                "duration": {"type": "array", "items": { "type": "number", "minimum": 0.0 }}
-            },
-            "required": ["value", "time", "duration", "confidence"]
-        },
-
-        "SparseObservationList": {
-            "type": "array",
-            "title": "Sparse Observation List",
-            "id": "#sparse-observation-list",
-            "description": "A list of sparse observation objects",
-            "items": { "$ref": "#/definitions/SparseObservation" }
-        },
-
         "Annotation": {
             "id": "#annotation",
             "type": "object",
@@ -95,8 +61,11 @@
                 "data": {
                     "title": "Data",
                     "description": "An array of observations",
-                    "oneOf": [  { "$ref": "#/definitions/DenseObservation" },
-                                { "$ref": "#/definitions/SparseObservationList" } ]
+                    "type": "array",
+                    "items": {
+                        "oneOf": [  { "$ref": "observations.json#/definitions/DenseObservation" },
+                                    { "$ref": "observations.json#/definitions/SparseObservation" } ]
+                    }
                 },
                 "namespace": {"type": "string"},
                 "sandbox": { "type": "object"},
@@ -109,7 +78,49 @@
                                {"type": "null"} ]
                 }
             },
-            "required": ["annotation_metadata", "data", "namespace"]
+            "required": ["annotation_metadata", "data", "namespace"],
+            "oneOf" : [
+                { "$ref" : "namespaces/beat/beat.json#" },
+                { "$ref" : "namespaces/beat/position.json#" },
+                { "$ref" : "namespaces/chord/chord.json#" },
+                { "$ref" : "namespaces/chord/harte.json#" },
+                { "$ref" : "namespaces/chord/roman.json#" },
+                { "$ref" : "namespaces/key/key_mode.json#" },
+                { "$ref" : "namespaces/lyrics/bow.json#" },
+                { "$ref" : "namespaces/lyrics/lyrics.json#" },
+                { "$ref" : "namespaces/misc/blob.json#" },
+                { "$ref" : "namespaces/misc/scaper.json#" },
+                { "$ref" : "namespaces/misc/vector.json#" },
+                { "$ref" : "namespaces/mood/thayer.json#" },
+                { "$ref" : "namespaces/onset/onset.json#" },
+                { "$ref" : "namespaces/pattern/jku.json#" },
+                { "$ref" : "namespaces/pitch/class.json#" },
+                { "$ref" : "namespaces/pitch/contour_hz.json#" },
+                { "$ref" : "namespaces/pitch/hz.json#" },
+                { "$ref" : "namespaces/pitch/midi.json#" },
+                { "$ref" : "namespaces/pitch/note_hz.json#" },
+                { "$ref" : "namespaces/pitch/note_midi.json#" },
+                { "$ref" : "namespaces/segment/multi.json#" },
+                { "$ref" : "namespaces/segment/open.json#" },
+                { "$ref" : "namespaces/segment/salami_function.json#" },
+                { "$ref" : "namespaces/segment/salami_lower.json#" },
+                { "$ref" : "namespaces/segment/salami_upper.json#" },
+                { "$ref" : "namespaces/segment/tut.json#" },
+                { "$ref" : "namespaces/tag/cal10k.json#" },
+                { "$ref" : "namespaces/tag/cal500.json#" },
+                { "$ref" : "namespaces/tag/gtzan.json#" },
+                { "$ref" : "namespaces/tag/medleydb_instruments.json#" },
+                { "$ref" : "namespaces/tag/msd_tagtraum_cd1.json#" },
+                { "$ref" : "namespaces/tag/msd_tagtraum_cd2.json#" },
+                { "$ref" : "namespaces/tag/open.json#" },
+                { "$ref" : "namespaces/tag/tag_audioset_genre.json#" },
+                { "$ref" : "namespaces/tag/tag_audioset_instruments.json#" },
+                { "$ref" : "namespaces/tag/tag_audioset.json#" },
+                { "$ref" : "namespaces/tag/tag_fma_genre.json#" },
+                { "$ref" : "namespaces/tag/tag_fma_subgenre.json#" },
+                { "$ref" : "namespaces/tag/tag_urbansound.json#" },
+                { "$ref" : "namespaces/tempo/tempo.json#" }
+            ]
         }
 
     },

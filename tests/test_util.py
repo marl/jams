@@ -18,40 +18,6 @@ def srand(seed=628318530):
     pass
 
 
-@pytest.mark.parametrize('ns, lab, ints, y, infer_duration',
-                         [('beat',
-                           "1.0 1\n3.0 2",
-                           np.array([[1.0, 3.0], [3.0, 3.0]]),
-                           [1, 2],
-                           True),
-                          ('beat',
-                           "1.0 1\n3.0 2",
-                           np.array([[1.0, 1.0], [3.0, 3.0]]),
-                           [1, 2],
-                           False),
-                          ('chord_harte',
-                           "1.0 2.0 a\n2.0 4.0 b",
-                           np.array([[1.0, 2.0], [2.0, 4.0]]),
-                           ['a', 'b'],
-                           True),
-                          ('chord',
-                           "1.0 1.0 c\n2.0 2.0 d",
-                           np.array([[1.0, 2.0], [2.0, 4.0]]),
-                           ['c', 'd'],
-                           False)])
-def test_import_lab(ns, lab, ints, y, infer_duration):
-    ann = util.import_lab(ns, six.StringIO(lab),
-                          infer_duration=infer_duration)
-
-    assert len(ints) == len(ann.data)
-    assert len(y) == len(ann.data)
-
-    for yi, ival, obs in zip(y, ints, ann):
-        assert obs.time == ival[0]
-        assert obs.duration == ival[1] - ival[0]
-        assert obs.value == yi
-
-
 @pytest.mark.parametrize('query, prefix, sep, target',
                          [('al.beta.gamma', 'al', '.', 'beta.gamma'),
                           ('al/beta/gamma', 'al', '/', 'beta/gamma'),

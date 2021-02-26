@@ -1,13 +1,41 @@
-{"pitch_contour":
-    {
-        "value": { "type": "object" },
-        "dense": true,
-        "properties": {
-            "index": {"type": "integer"},
-            "frequency": {"type": "number", "minimum": 0},
-            "voiced": {"type": "boolean"}
+{
+    "definitions": {
+        "value": {
+            "type": "object",
+            "properties": {
+                "index": {"type": "integer"},
+                "frequency": {"type": "number", "minimum": 0},
+                "voiced": {"type": "boolean"}
+            }            
         },
-        "description": "Pitch contours: (index, frequency, voicing)"
+        "confidence": {
+
+        },
+        "name": {
+            "const": "pitch_contour"
+        }
+    },
+
+    "description": "Pitch contours: (index, frequency, voicing)",
+
+    "properties": {
+        "namespace": { "$ref": "#/definitions/name" },
+        "data": {
+            "type": "array",
+            "description": "A list of DenseObservation types",
+            "$comment": "Because this needs to reference namespace dependent types, oneOf relationships cannot be indexed, and it must be matched to the namespace name constant, we must redefine the observation type here to match an observation type in observations.json",
+            "items": {
+                "properties": {
+                    "value": { 
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/value" }
+                    },
+                    "confidence": {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/confidence" }
+                    }
+                }
+            }
+        }
     }
 }
-

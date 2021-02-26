@@ -212,8 +212,7 @@ def test_ns_pitch_hz_valid():
     confidences = np.linspace(0, 1., seq_len)
     confidences[seq_len//2] = None  # throw in a None confidence value
 
-    for (t, d, v, c) in zip(times, durations, values, confidences):
-        ann.append(time=t, duration=d, value=v, confidence=c)
+    ann.append(time=times, duration=durations, value=values, confidence=confidences)
 
     ann.validate()
 
@@ -223,7 +222,7 @@ def test_ns_pitch_hz_valid():
 def test_ns_pitch_hz_invalid(value):
 
     ann = Annotation(namespace='pitch_hz')
-    ann.append(time=0, duration=0, value=value, confidence=0.5)
+    ann.append(time=[0], duration=[0], value=[value], confidence=[0.5])
     ann.validate()
 
 
@@ -264,8 +263,7 @@ def test_ns_pitch_midi_valid():
     confidences = np.linspace(0, 1., seq_len)
     confidences[seq_len//2] = None  # throw in a None confidence value
 
-    for (t, d, v, c) in zip(times, durations, values, confidences):
-        ann.append(time=t, duration=d, value=v, confidence=c)
+    ann.append(time=times, duration=durations, value=values, confidence=confidences)
 
     ann.validate()
 
@@ -275,7 +273,7 @@ def test_ns_pitch_midi_valid():
 def test_ns_pitch_midi_invalid(value):
 
     ann = Annotation(namespace='pitch_midi')
-    ann.append(time=0, duration=0, value=value, confidence=0.5)
+    ann.append(time=[0], duration=[0], value=[value], confidence=[0.5])
     ann.validate()
 
 
@@ -292,17 +290,17 @@ def test_ns_contour_valid():
     ids = np.arange(len(values)) // 4
     voicing = np.random.randn(len(ids)) > 0
 
-    confidences = np.linspace(0, 1., seq_len)
+    confidences = np.linspace(0, 1., seq_len).tolist()
     confidences[seq_len//2] = None  # throw in a None confidence value
 
-    for (t, d, v, c, i, b) in zip(times, durations, values,
-                                  confidences, ids, voicing):
-        ann.append(time=t, duration=d,
-                   value={'pitch': v, 'id': i, 'voiced': b}, confidence=c)
+    values = [{'frequency': v, 'index': i, 'voiced': b} for v, i, b in zip(values, ids, voicing)]
+
+    ann.append(time=times, duration=durations,
+                value=values, confidence=confidences)
 
     ann.validate()
 
-
+@xfail(raises=SchemaError)
 def test_ns_contour_invalid():
 
     srand()
@@ -319,10 +317,10 @@ def test_ns_contour_invalid():
     confidences = np.linspace(0, 1., seq_len)
     confidences[seq_len//2] = None  # throw in a None confidence value
 
-    for (t, d, v, c, i, b) in zip(times, durations, values,
-                                  confidences, ids, voicing):
-        ann.append(time=t, duration=d,
-                   value={'pitch': v, 'id': i, 'voiced': b}, confidence=c)
+    values = [{'frequency': v, 'index': i, 'voiced': b} for v, i, b in zip(values, ids, voicing)]
+
+    ann.append(time=times, duration=durations,
+                value=values, confidence=confidences)
 
     ann.validate()
 
@@ -435,7 +433,7 @@ def test_ns_chord_roman_missing(key):
 def test_ns_pitch_class_valid(value):
 
     ann = Annotation(namespace='pitch_class')
-    ann.append(time=0, duration=1.0, value=value)
+    ann.append(time=[0], duration=[1.0], value=[value])
     ann.validate()
 
 
@@ -452,7 +450,7 @@ def test_ns_pitch_class_invalid(key, value):
     data = dict(tonic='E', pitch=7)
     data[key] = value
     ann = Annotation(namespace='pitch_class')
-    ann.append(time=0, duration=1.0, value=data)
+    ann.append(time=[0], duration=[1.0], value=[data])
     ann.validate()
 
 
@@ -462,7 +460,7 @@ def test_ns_pitch_class_missing(key):
     data = dict(tonic='E', pitch=7)
     del data[key]
     ann = Annotation(namespace='pitch_class')
-    ann.append(time=0, duration=1.0, value=data)
+    ann.append(time=[0], duration=[1.0], value=[data])
     ann.validate()
 
 

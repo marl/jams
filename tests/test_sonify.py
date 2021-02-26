@@ -74,10 +74,12 @@ def ann_contour():
     rate = 5
     vibrato = 220 + 20 * np.sin(2 * np.pi * times * rate)
 
-    for t, v in zip(times, vibrato):
-        ann.append(time=t, duration=fs, value={'frequency': v,
-                                               'index': 0,
-                                               'voiced': (t < 3 or t > 4)})
+    values = [{'frequency': v, 'index': 0, 'voiced': (t < 3 or t > 4)} for t, v in zip(times, vibrato)]
+    ann.append(
+        time=times, 
+        duration=[fs]*len(times), 
+        value=values
+    )
 
     return ann
 

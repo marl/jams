@@ -1,6 +1,6 @@
-{"pitch_class":
-    {
-        "value": { 
+{
+    "definitions": {
+        "value": {
             "type": "object",
             "properties": {
                 "tonic": { "type": "string", "pattern": "^[A-G][b#]?$" },
@@ -8,8 +8,34 @@
             },
             "required": ["tonic", "pitch"]
         },
-        "dense": true,
-        "description": "Pitch class in (tonic, pitch class) format"
+        "confidence": {
+
+        },
+        "name": {
+            "const": "pitch_class"
+        }
+    },
+
+    "description": "Pitch class in (tonic, pitch class) format",
+
+    "properties": {
+        "namespace": { "$ref": "#/definitions/name" },
+        "data": {
+            "type": "array",
+            "description": "A list of DenseObservation types",
+            "$comment": "Because this needs to reference namespace dependent types, oneOf relationships cannot be indexed, and it must be matched to the namespace name constant, we must redefine the observation type here to match an observation type in observations.json",
+            "items": {
+                "properties": {
+                    "value": { 
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/value" }
+                    },
+                    "confidence": {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/confidence" }
+                    }
+                }
+            }
+        }
     }
 }
-

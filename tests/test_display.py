@@ -50,8 +50,7 @@ def test_display_pitch_contour():
     values = np.arange(100, 200)
     times = np.linspace(0, 2, num=len(values))
 
-    for t, v in zip(times, values):
-        ann.append(time=t, value=v, duration=0)
+    ann.append(time=times, value=values, duration=[0]*len(times))
 
     jams.display.display(ann)
 

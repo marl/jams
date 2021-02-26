@@ -1,7 +1,5 @@
 {
-    "tag_cal500": {
-        "dense": false, 
-        "description": "CAL500 tags", 
+    "definitions": {
         "value": {
             "enum": [
                 "Emotion-Angry_/_Aggressive", 
@@ -178,7 +176,30 @@
                 "Instrument_-_Piano-Solo", 
                 "Instrument_-_Saxophone-Solo", 
                 "Instrument_-_Trumpet-Solo"
-            ]
+            ]            
+        },
+        "confidence": {
+
+        },
+        "name": {
+            "const": "tag_cal500"
+        }
+    },
+
+    "description": "CAL500 tags",
+
+    "properties": {
+        "namespace": { "$ref": "#/definitions/name" },
+        "data": {
+            "type": "array",
+            "description": "A list of sparse observation objects",
+            "$comment": "Because this needs to reference namespace dependent types, oneOf relationships cannot be indexed, and it must be matched to the namespace name constant, we must redefine the observation type here to match an observation in observations.json",
+            "items": {
+                "properties": {
+                    "value": { "$ref": "#/definitions/value" },
+                    "confidence": { "$ref": "#/definitions/confidence" }
+                }
+            }
         }
     }
 }

@@ -1,38 +1,59 @@
-{"scaper":
-    {
+{
+    "definitions": {
         "value": {
-          "type": "object",
-          "properties": {
-            "label": {
-              "type": "string"
-            },
-            "source_file": {
-              "type": "string"
-            },
-            "source_time": {
-              "type": "number", "minimum": 0
-            },
-            "event_time": {
-              "type": "number", "minimum": 0
-            },
-            "event_duration": {
-              "type": "number", "minimum": 0, "exclusiveMinimum": true
-            },
-            "snr": {
-              "type": "number"
-            },
-            "time_stretch": {
-              "type": ["number", "null"], "minimum": 0, "exclusiveMinimum": true
-            },
-            "pitch_shift": {
-              "type": ["number", "null"]
-            },
-            "role": {
-              "enum": ["background", "foreground"]
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "source_file": {
+                    "type": "string"
+                },
+                "source_time": {
+                    "type": "number", "minimum": 0
+                },
+                "event_time": {
+                    "type": "number", "minimum": 0
+                },
+                "event_duration": {
+                    "type": "number", "exclusiveMinimum": 0
+                },
+                "snr": {
+                    "type": "number"
+                },
+                "time_stretch": {
+                    "type": ["number", "null"], "exclusiveMinimum": 0
+                },
+                "pitch_shift": {
+                    "type": ["number", "null"]
+                },
+                "role": {
+                    "enum": ["background", "foreground"]
+                }
             }
-          }
         },
-        "dense": false,
-        "description": "Sound event following the scaper format."
+        "confidence": {
+
+        },
+        "name": {
+            "const": "scaper"
+        }
+    },
+
+    "description": "Sound event following the scaper format.",
+
+    "properties": {
+        "namespace": { "$ref": "#/definitions/name" },
+        "data": {
+            "type": "array",
+            "description": "A list of sparse observation objects",
+            "$comment": "Because this needs to reference namespace dependent types, oneOf relationships cannot be indexed, and it must be matched to the namespace name constant, we must redefine the observation type here to match an observation in observations.json",
+            "items": {
+                "properties": {
+                    "value": { "$ref": "#/definitions/value" },
+                    "confidence": { "$ref": "#/definitions/confidence" }
+                }
+            }
+        }
     }
 }
