@@ -444,9 +444,10 @@ def input_jam():
     return jams.load('tests/fixtures/valid.jams')
 
 
-def test_jams_save(input_jam, output_path):
+@parametrize('indent', [None, 0, 1, 2])
+def test_jams_save(input_jam, output_path, indent):
 
-    input_jam.save(output_path)
+    input_jam.save(output_path, indent=indent)
     reload_jam = jams.load(output_path)
     assert input_jam == reload_jam
 
