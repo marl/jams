@@ -24,4 +24,6 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-  
+    - name: Install jams
+      run: pip install -e .
+      
