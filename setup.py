@@ -1,8 +1,16 @@
 from setuptools import setup, find_packages
 
-import imp
+import importlib.util
+import importlib.machinery
 
-version = imp.load_source('jams.version', 'jams/version.py')
+def load_source(modname, filename):
+    loader = importlib.machinery.SourceFileLoader(modname, filename)
+    spec = importlib.util.spec_from_file_location(modname, filename, loader=loader)
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+version = load_source('jams.version', 'jams/version.py')
 
 setup(
     name='jams',
