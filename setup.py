@@ -1,8 +1,15 @@
 from setuptools import setup, find_packages
 
-import imp
+from importlib.util import spec_from_file_location, module_from_spec
 
-version = imp.load_source('jams.version', 'jams/version.py')
+def load_source(module, file_path):
+    """ From https://docs.python.org/3/library/importlib.html#importing-a-source-file-directly """
+    spec = spec_from_file_location('jams.version', 'jams/version.py')
+    module = module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+version = load_source('jams.version', 'jams/version.py')
 
 setup(
     name='jams',
