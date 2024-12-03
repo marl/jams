@@ -21,7 +21,7 @@ from __future__ import print_function
 import json
 import os
 import copy
-from pkg_resources import resource_filename
+from pathlib import Path
 
 import numpy as np
 import jsonschema
@@ -190,11 +190,11 @@ def list_namespaces():
 # Mapping of js primitives to numpy types
 __TYPE_MAP__ = dict(integer=np.int_,
                     boolean=np.bool_,
-                    number=np.float_,
+                    number=np.float64,
                     object=np.object_,
                     array=np.object_,
                     string=np.object_,
-                    null=np.float_)
+                    null=np.float64)
 
 
 def __get_dtype(typespec):
@@ -231,11 +231,8 @@ def __get_dtype(typespec):
 
 def __load_jams_schema():
     '''Load the schema file from the package.'''
-
-    schema_file = os.path.join(SCHEMA_DIR, 'jams_schema.json')
-
-    jams_schema = None
-    with open(resource_filename(__name__, schema_file), mode='r') as fdesc:
+    schema_file = os.path.join(ABS_SCHEMA_DIR, 'jams_schema.json')
+    with open(schema_file, mode='r') as fdesc:
         jams_schema = json.load(fdesc)
 
     if jams_schema is None:
@@ -247,6 +244,7 @@ def __load_jams_schema():
 # Populate the schemata
 SCHEMA_DIR = 'schemata'
 NS_SCHEMA_DIR = os.path.join(SCHEMA_DIR, 'namespaces')
+ABS_SCHEMA_DIR = Path(__file__).parent / SCHEMA_DIR
 
 JAMS_SCHEMA = __load_jams_schema()
 VALIDATOR = jsonschema.Draft4Validator(JAMS_SCHEMA)
