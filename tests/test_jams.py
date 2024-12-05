@@ -496,6 +496,7 @@ def test_jams_add_conflict(on_conflict):
         assert jam.file_metadata == jam_orig.file_metadata
 
 
+@pytest.fixture(scope='module')
 def jam_search():
     jam = jams.load('tests/fixtures/valid.jams', validate=False)
     jam.annotations[0].sandbox.foo = None
