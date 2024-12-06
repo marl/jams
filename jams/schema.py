@@ -190,11 +190,11 @@ def list_namespaces():
 # Mapping of js primitives to numpy types
 __TYPE_MAP__ = dict(integer=np.int_,
                     boolean=np.bool_,
-                    number=np.float_,
+                    number=np.float64,
                     object=np.object_,
                     array=np.object_,
                     string=np.object_,
-                    null=np.float_)
+                    null=np.float64)
 
 
 def __get_dtype(typespec):
