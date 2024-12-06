@@ -289,8 +289,7 @@ def test_filemetadata():
         assert meta[k] == dict_fm[k]
 
 
-@parametrize('strict', [False, xfail(True, raises=jams.SchemaError)])
-def test_filemetadata_validation(strict):
+def test_filemetadata_validation_warning():
 
     # This should fail validation because null duration is not allowed
     fm = jams.FileMetadata(title='Test track',
@@ -306,6 +305,17 @@ def test_filemetadata_validation(strict):
         assert len(out) > 0
         assert out[0].category is UserWarning
         assert 'failed validating' in str(out[0].message).lower()
+def test_filemetadata_validation_strict():
+    # This should fail validation because null duration is not allowed
+    fm = jams.FileMetadata(title='Test track',
+                           artist='Test artist',
+                           release='Test release',
+                           duration=None)
+
+    clean_warning_registry()
+
+    with pytest.raises(jams.SchemaError):
+        fm.validate(strict=True)
 
 
 # AnnotationArray
@@ -473,9 +483,7 @@ def test_jams_add(tag_data):
 
 
 @parametrize('on_conflict',
-             ['overwrite', 'ignore',
-              xfail('fail', raises=jams.JamsError),
-              xfail('bad_fail_mdoe', raises=jams.ParameterError)])
+             ['overwrite', 'ignore'])
 def test_jams_add_conflict(on_conflict):
     fn = 'tests/fixtures/valid.jams'
 
@@ -495,6 +503,23 @@ def test_jams_add_conflict(on_conflict):
     elif on_conflict == 'ignore':
         assert jam.file_metadata == jam_orig.file_metadata
 
+
+@parametrize('on_conflict,exception', [
+    ('fail', jams.JamsError),
+    ('bad_fail_mdoe', jams.ParameterError)
+])
+def test_jams_add_conflict_exceptions(on_conflict, exception):
+    fn = 'tests/fixtures/valid.jams'
+
+    # The original jam
+    jam = jams.load(fn)
+
+    # The copy
+    jam2 = jams.load(fn)
+    jam2.file_metadata = jams.FileMetadata()
+
+    with pytest.raises(exception):
+        jam.add(jam2, on_conflict=on_conflict)
 
 
 jam = jams.load('tests/fixtures/valid.jams', validate=False)
@@ -529,18 +554,21 @@ def jam_validate():
     return j1
 
 
-@parametrize('strict', [False, xfail(True, raises=jams.SchemaError)])
-def test_jams_validate_bad(jam_validate, strict):
+def test_jams_validate_warning(jam_validate):
 
     clean_warning_registry()
 
     with warnings.catch_warnings(record=True) as out:
         jam_validate.validate(strict=strict)
+def test_jams_validate_exception(jam_validate):
 
     assert len(out) > 0
     assert out[0].category is UserWarning
     assert 'failed validating' in str(out[0].message).lower()
+    clean_warning_registry()
 
+    with pytest.raises(jams.SchemaError):
+        jam_validate.validate(strict=True)
 
 @xfail(raises=jams.SchemaError)
 def test_jams_bad_field():
@@ -549,8 +577,7 @@ def test_jams_bad_field():
     jam.out_of_schema = None
 
 
-@parametrize('strict', [False, xfail(True, raises=jams.SchemaError)])
-def test_jams_bad_annotation(strict):
+def test_jams_bad_annotation_warnings():
     jam = jams.JAMS()
     jam.file_metadata.duration = 10
 
@@ -560,14 +587,22 @@ def test_jams_bad_annotation(strict):
 
     with warnings.catch_warnings(record=True) as out:
         jam.validate(strict=strict)
+def test_jams_bad_annotation_exception():
+    jam = jams.JAMS()
+    jam.file_metadata.duration = 10
+
+    jam.annotations.append('not an annotation')
 
     assert len(out) > 0
     assert out[0].category is UserWarning
     assert 'is not a well-formed jams annotation' in str(out[0].message).lower()
+    clean_warning_registry()
+
+    with pytest.raises(jams.SchemaError):
+        jam.validate(strict=True)
 
 
-@parametrize('strict', [False, xfail(True, raises=jams.SchemaError)])
-def test_jams_bad_jam(strict):
+def test_jams_bad_jam_warning():
     jam = jams.JAMS()
 
     clean_warning_registry()
@@ -578,6 +613,13 @@ def test_jams_bad_jam(strict):
     assert len(out) > 0
     assert out[0].category is UserWarning
     assert 'failed validating' in str(out[0].message).lower()
+def test_jams_bad_jam_exception():
+    jam = jams.JAMS()
+
+    clean_warning_registry()
+
+    with pytest.raises(jams.SchemaError):
+        jam.validate(strict=True)
 
 
 def test_jams_repr(input_jam):

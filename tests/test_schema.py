@@ -11,9 +11,7 @@ from jams import NamespaceError
 import jams
 
 
-@pytest.mark.parametrize('ns_key',
-                         ['pitch_hz', 'beat',
-                          pytest.mark.xfail('DNE', raises=NamespaceError)])
+@pytest.mark.parametrize('ns_key', ['pitch_hz', 'beat'])
 def test_schema_namespace(ns_key):
 
     # Get the schema
@@ -27,14 +25,22 @@ def test_schema_namespace(ns_key):
     for key in ['time', 'duration']:
         assert key in schema['properties']
 
+@pytest.mark.parametrize('ns_key', ['DNE'])
+def test_schema_namespace_exception(ns_key):
+    with pytest.raises(NamespaceError):
+        jams.schema.namespace(ns_key)
+
 
 @pytest.mark.parametrize('ns, dense',
                          [('pitch_hz', True),
-                          ('beat', False),
-                          pytest.mark.xfail(('DNE', False),
-                                            raises=NamespaceError)])
+                          ('beat', False)])
 def test_schema_is_dense(ns, dense):
     assert dense == jams.schema.is_dense(ns)
+
+@pytest.mark.parametrize('ns', ['DNE'])
+def test_schema_is_dense_exception(ns):
+    with pytest.raises(NamespaceError):
+        jams.schema.is_dense(ns)
 
 
 @pytest.fixture

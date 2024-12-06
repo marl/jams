@@ -328,18 +328,21 @@ def test_ns_contour_invalid():
 
 
 @parametrize('value',
-             ['B#:locrian', six.u('A:minor'), 'N', 'E',
-              xfail('asdf', raises=SchemaError),
-              xfail('A&:phrygian', raises=SchemaError),
-              xfail(11, raises=SchemaError),
-              xfail('', raises=SchemaError),
-              xfail(':dorian', raises=SchemaError),
-              xfail(None, raises=SchemaError)])
+             ['B#:locrian', six.u('A:minor'), 'N', 'E'])
 def test_ns_key_mode(value):
 
     ann = Annotation(namespace='key_mode')
     ann.append(time=0, duration=0, value=value, confidence=None)
     ann.validate()
+
+@parametrize('value',
+             ['asdf', 'A&:phrygian', 11, '', ':dorian', None])
+def test_ns_key_mode_schema_error(value):
+
+    ann = Annotation(namespace='key_mode')
+    ann.append(time=0, duration=0, value=value, confidence=None)
+    with pytest.raises(jams.SchemaError):
+        ann.validate()
 
 
 @parametrize('value',

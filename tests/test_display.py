@@ -18,13 +18,19 @@ from jams import NamespaceError
 @pytest.mark.parametrize('namespace',
                          ['segment_open', 'chord', 'multi_segment',
                           'pitch_contour', 'beat_position', 'beat',
-                          'onset', 'note_midi', 'tag_open',
-                          pytest.mark.xfail('tempo', raises=NamespaceError)])
+                          'onset', 'note_midi', 'tag_open'])
 @pytest.mark.parametrize('meta', [False, True])
 def test_display(namespace, meta):
 
     ann = jams.Annotation(namespace=namespace)
     jams.display.display(ann, meta=meta)
+
+@pytest.mark.parametrize('namespace', ['tempo'])
+@pytest.mark.parametrize('meta', [False, True])
+def test_display_exception(namespace, meta):
+    with pytest.raises(NamespaceError):
+        ann = jams.Annotation(namespace=namespace)
+        jams.display.display(ann, meta=meta)
 
 
 def test_display_multi():
