@@ -30,6 +30,7 @@ Object reference
     Sandbox
     JObject
     Observation
+    import_lab
 """
 
 import json
@@ -41,6 +42,8 @@ import warnings
 import contextlib
 import gzip
 import six
+import math
+import itertools
 
 import numpy as np
 import pandas as pd
@@ -57,7 +60,7 @@ __all__ = ['load',
            'JObject', 'Sandbox',
            'Annotation', 'Curator', 'AnnotationMetadata',
            'FileMetadata', 'AnnotationArray', 'JAMS',
-           'Observation']
+           'Observation', 'import_lab']
 
 
 def deprecated(version, version_removed):
@@ -672,6 +675,27 @@ class Annotation(JObject):
                 ('data', 'Data'),
                 ('sandbox', 'Sandbox')]
 
+    def _combine_observations(self):
+        """
+        Combines all observations in the data to a single pair of arrays, one
+        containing all times, one containing all values.
+
+        Returns
+        -------
+        times: list(float)
+            A flat list of all times in all observations.
+        vals: list(...)
+            A flat list of all values in all observations.
+        """
+        try:
+            times = list(itertools.chain(*[obs.time for obs in self.data]))
+            # If the time was an iterable, it's okay combine all values in the same way.
+            vals = list(itertools.chain(*[obs.value for obs in self.data]))
+        except TypeError:
+            times = [obs.time for obs in self.data]
+            vals = [obs.value for obs in self.data]
+        return times, vals
+
     def append(self, time=None, duration=None, value=None, confidence=None):
         '''Append an observation to the data field
 
@@ -692,9 +716,35 @@ class Annotation(JObject):
         >>> ann = jams.Annotation(namespace='chord')
         >>> ann.append(time=3, duration=2, value='E#')
         '''
+        # NOTE [matthew.mccallum 01.02.21]: Currently we check if time and duration
+        #      are lists to determine if we need to handle them differently. This type
+        #      specific handling should not be required once we move on to phase 3 of
+        #      the issue here:
+        #           https://github.com/marl/jams/issues/208
+        #       That is, the different behaviour based on the type of observation should
+        #       be handled in the observation type that is assigned to each annotation,
+        #       rather than this being mixed in with the Annotation itself and it being
+        #       the Annotation's responsibility to know how to handle each observation type.
 
-        self.data.add(Observation(time=float(time),
-                                  duration=float(duration),
+        try:
+            # Convert any iterables into lists
+            time = [float(t) for t in time]
+            duration = [float(d) for d in duration]
+            if value is None:
+                value = [None]*len(time)
+            else:
+                value = [v for v in value]
+            if confidence is None:
+                confidence = [None]*len(time)
+            else:
+                confidence = [c for c in confidence]
+
+        except TypeError:
+            time = float(time)
+            duration = float(duration)
+
+        self.data.add(Observation(time=time,
+                                  duration=duration,
                                   value=value,
                                   confidence=confidence))
 
@@ -732,55 +782,6 @@ class Annotation(JObject):
                                               columns['duration'],
                                               columns['value'],
                                               columns['confidence'])])
-
-    def validate(self, strict=True):
-        '''Validate this annotation object against the JAMS schema,
-        and its data against the namespace schema.
-
-        Parameters
-        ----------
-        strict : bool
-            If `True`, then schema violations will cause an Exception.
-            If `False`, then schema violations will issue a warning.
-
-        Returns
-        -------
-        valid : bool
-            `True` if the object conforms to schema.
-            `False` if the object fails to conform to schema,
-            but `strict == False`.
-
-        Raises
-        ------
-        SchemaError
-            If `strict == True` and the object fails validation
-
-        See Also
-        --------
-        JObject.validate
-        '''
-
-        # Get the schema for this annotation
-        ann_schema = schema.namespace_array(self.namespace)
-
-        valid = True
-
-        try:
-            schema.VALIDATOR.validate(self.__json_light__(data=False),
-                                                schema.JAMS_SCHEMA)
-
-            # validate each record in the frame
-            data_ser = [serialize_obj(obs) for obs in self.data]
-            schema.VALIDATOR.validate(data_ser, ann_schema)
-
-        except jsonschema.ValidationError as invalid:
-            if strict:
-                raise SchemaError(str(invalid))
-            else:
-                warnings.warn(str(invalid))
-            valid = False
-
-        return valid
 
     def trim(self, start_time, end_time, strict=False):
         '''
@@ -1077,15 +1078,18 @@ class Annotation(JObject):
             List view of value field.
         '''
 
-        ints, vals = [], []
-        for obs in self.data:
-            ints.append([obs.time, obs.time + obs.duration])
-            vals.append(obs.value)
+        times, vals = self._combine_observations()
+        try:
+            durs = list(itertools.chain(*[obs.duration for obs in self.data]))
+        except TypeError:
+            durs = [obs.duration for obs in self.data]
 
-        if not ints:
+        intervals = [(t, t+d) for t, d in zip(times, durs)]
+
+        if not len(intervals):
             return np.empty(shape=(0, 2), dtype=float), []
 
-        return np.array(ints), vals
+        return np.array(intervals), vals
 
     def to_event_values(self):
         '''Extract observation data in a `mir_eval`-friendly format.
@@ -1098,12 +1102,8 @@ class Annotation(JObject):
         labels : list
             List view of value field.
         '''
-        ints, vals = [], []
-        for obs in self.data:
-            ints.append(obs.time)
-            vals.append(obs.value)
-
-        return np.array(ints), vals
+        times, vals = self._combine_observations()
+        return np.array(times), vals
 
     def to_dataframe(self):
         '''Convert this annotation to a pandas dataframe.
@@ -1288,19 +1288,7 @@ class Annotation(JObject):
     @property
     def __json_data__(self):
         r"""JSON-serialize the observation sequence."""
-        if schema.is_dense(self.namespace):
-            dense_records = dict()
-            for field in Observation._fields:
-                dense_records[field] = []
-
-            for obs in self.data:
-                for key, val in six.iteritems(obs._asdict()):
-                    dense_records[key].append(serialize_obj(val))
-
-            return dense_records
-
-        else:
-            return [serialize_obj(_) for _ in self.data]
+        return [serialize_obj(_) for _ in self.data]
 
     @classmethod
     def _key(cls, obs):
@@ -1806,7 +1794,7 @@ class JAMS(JObject):
         '''
         valid = True
         try:
-            schema.VALIDATOR.validate(self.__json_light__, schema.JAMS_SCHEMA)
+            schema.VALIDATOR.validate(self.__json_light__, self.__schema__)
 
             for ann in self.annotations:
                 if isinstance(ann, Annotation):
@@ -2087,6 +2075,9 @@ def serialize_obj(obj):
 
     '''
 
+    if isinstance(obj, np.bool_):
+        return bool(obj)
+
     if isinstance(obj, np.integer):
         return int(obj)
 
@@ -2094,10 +2085,13 @@ def serialize_obj(obj):
         return float(obj)
 
     elif isinstance(obj, np.ndarray):
-        return obj.tolist()
+        return [serialize_obj(x) for x in obj.tolist()]
 
     elif isinstance(obj, list):
         return [serialize_obj(x) for x in obj]
+
+    elif isinstance(obj, dict):
+        return {k: serialize_obj(v) for k, v in six.iteritems(obj)}
 
     elif isinstance(obj, Observation):
         return {k: serialize_obj(v) for k, v in six.iteritems(obj._asdict())}
@@ -2166,3 +2160,95 @@ def _get_divid(obj):
     global __DIVID_COUNT__
     __DIVID_COUNT__ += 1
     return '{}-{}'.format(id(obj), __DIVID_COUNT__)
+
+
+def import_lab(namespace, filename, infer_duration=True, **parse_options):
+    r'''Load a .lab file as an Annotation object.
+
+    .lab files are assumed to have the following format:
+
+        ``TIME_START\tTIME_END\tANNOTATION``
+
+    By default, .lab files are assumed to have columns separated by one
+    or more white-space characters, and have no header or index column
+    information.
+
+    If the .lab file contains only two columns, then an empty duration
+    field is inferred.
+
+    If the .lab file contains more than three columns, each row's
+    annotation value is assigned the contents of last non-empty column.
+
+
+    Parameters
+    ----------
+    namespace : str
+        The namespace for the new annotation
+
+    filename : str
+        Path to the .lab file
+
+    infer_duration : bool
+        If `True`, interval durations are inferred from `(start, end)` columns,
+        or difference between successive times.
+
+        If `False`, interval durations are assumed to be explicitly coded as
+        `(start, duration)` columns.  If only one time column is given, then
+        durations are set to 0.
+
+        For instantaneous event annotations (e.g., beats or onsets), this
+        should be set to `False`.
+
+    parse_options : additional keyword arguments
+        Passed to ``pandas.DataFrame.read_csv``
+
+    Returns
+    -------
+    annotation : Annotation
+        The newly constructed annotation object
+
+    See Also
+    --------
+    pandas.DataFrame.read_csv
+    '''
+
+    # Create a new annotation object
+    annotation = Annotation(namespace)
+
+    parse_options.setdefault('sep', r'\s+')
+    parse_options.setdefault('engine', 'python')
+    parse_options.setdefault('header', None)
+    parse_options.setdefault('index_col', False)
+
+    # This is a hack to handle potentially ragged .lab data
+    parse_options.setdefault('names', range(20))
+
+    data = pd.read_csv(filename, **parse_options)
+
+    # Drop all-nan columns
+    data = data.dropna(how='all', axis=1)
+
+    # Do we need to add a duration column?
+    # This only applies to event annotations
+    if len(data.columns) == 2:
+        # Insert a column of zeros after the timing
+        data.insert(1, 'duration', 0)
+        if infer_duration:
+            data['duration'][:-1] = data.loc[:, 0].diff()[1:].values
+
+    else:
+        # Convert from time to duration
+        if infer_duration:
+            data.loc[:, 1] -= data[0]
+
+    for row in data.itertuples():
+        time, duration = row[1:3]
+
+        value = [x for x in row[3:] if x is not None][-1]
+
+        annotation.append(time=time,
+                          duration=duration,
+                          confidence=1.0,
+                          value=value)
+
+    return annotation

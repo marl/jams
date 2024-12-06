@@ -1,6 +1,5 @@
 {
-    "tag_fma_subgenre": {
-        "description": "Free Music Archive genres and sub-genres",
+    "definitions": {
         "value": {
             "enum": [
                 "20th Century Classical",
@@ -168,6 +167,28 @@
                 "Wonky"
             ]
         },
-        "dense": false
+        "confidence": {
+
+        },
+        "name": {
+            "const": "tag_fma_subgenre"
+        }
+    },
+
+    "description": "Free Music Archive genres and sub-genres",
+
+    "properties": {
+        "namespace": { "$ref": "#/definitions/name" },
+        "data": {
+            "type": "array",
+            "description": "A list of sparse observation objects",
+            "$comment": "Because this needs to reference namespace dependent types, oneOf relationships cannot be indexed, and it must be matched to the namespace name constant, we must redefine the observation type here to match an observation in observations.json",
+            "items": {
+                "properties": {
+                    "value": { "$ref": "#/definitions/value" },
+                    "confidence": { "$ref": "#/definitions/confidence" }
+                }
+            }
+        }
     }
 }

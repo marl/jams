@@ -28,7 +28,7 @@ def test_bad_sources(target):
     jams.convert(ann, target)
 
 
-@pytest.mark.parametrize('namespace', list(jams.schema.__NAMESPACE__.keys()))
+@pytest.mark.parametrize('namespace', list(jams.schema.NAMESPACES.keys()))
 def test_noop(namespace):
 
     ann = jams.Annotation(namespace=namespace)
@@ -45,8 +45,7 @@ def test_pitch_hz_to_contour():
 
     times = np.linspace(0, 1, num=len(values))
 
-    for t, v in zip(times, values):
-        ann.append(time=t, value=v, duration=0)
+    ann.append(time=times, value=values, duration=[0]*len(values))
 
     ann2 = jams.convert(ann, 'pitch_contour')
     ann.validate()
@@ -54,16 +53,16 @@ def test_pitch_hz_to_contour():
     assert ann2.namespace == 'pitch_contour'
 
     # Check index values
-    assert ann2.data[0].value['index'] == 0
-    assert ann2.data[-1].value['index'] == 0
+    assert ann2.data[0].value[0]['index'] == 0
+    assert ann2.data[0].value[-1]['index'] == 0
 
     # Check frequency
-    assert np.abs(ann2.data[0].value['frequency'] == np.abs(values[0]))
-    assert np.abs(ann2.data[-1].value['frequency'] == np.abs(values[-1]))
+    assert np.abs(ann2.data[0].value[0]['frequency'] == np.abs(values[0]))
+    assert np.abs(ann2.data[0].value[-1]['frequency'] == np.abs(values[-1]))
 
     # Check voicings
-    assert not ann2.data[0].value['voiced']
-    assert ann2.data[-1].value['voiced']
+    assert not ann2.data[0].value[0]['voiced']
+    assert ann2.data[0].value[-1]['voiced']
 
 
 def test_pitch_midi_to_contour():
@@ -73,8 +72,7 @@ def test_pitch_midi_to_contour():
 
     times = np.linspace(0, 1, num=len(values))
 
-    for t, v in zip(times, values):
-        ann.append(time=t, value=v, duration=0)
+    ann.append(time=times, value=values, duration=[0]*len(times))
 
     ann2 = jams.convert(ann, 'pitch_contour')
     ann.validate()
@@ -82,17 +80,17 @@ def test_pitch_midi_to_contour():
     assert ann2.namespace == 'pitch_contour'
 
     # Check index values
-    assert ann2.data[0].value['index'] == 0
-    assert ann2.data[-1].value['index'] == 0
+    assert ann2.data[0].value[0]['index'] == 0
+    assert ann2.data[0].value[-1]['index'] == 0
 
     # Check voicings
-    assert ann2.data[-1].value['voiced']
+    assert ann2.data[0].value[-1]['voiced']
 
 
 def test_pitch_midi_to_hz():
 
     ann = jams.Annotation(namespace='pitch_midi')
-    ann.append(time=0, duration=1, value=69, confidence=0.5)
+    ann.append(time=[0], duration=[1], value=[69], confidence=[0.5])
     ann2 = jams.convert(ann, 'pitch_hz')
     ann.validate()
     ann2.validate()
@@ -100,7 +98,7 @@ def test_pitch_midi_to_hz():
     # Check the namespace
     assert ann2.namespace == 'pitch_hz'
     # midi 69 = 440.0 Hz
-    assert ann2.data[0].value == 440.0
+    assert ann2.data[0].value[0] == 440.0
 
     # Check all else is equal
     assert len(ann.data) == len(ann2.data)
@@ -114,7 +112,7 @@ def test_pitch_midi_to_hz():
 def test_pitch_hz_to_midi():
 
     ann = jams.Annotation(namespace='pitch_hz')
-    ann.append(time=0, duration=1, value=440.0, confidence=0.5)
+    ann.append(time=[0], duration=[1], value=[440.0], confidence=[0.5])
     ann2 = jams.convert(ann, 'pitch_midi')
     ann.validate()
     ann2.validate()
@@ -122,7 +120,7 @@ def test_pitch_hz_to_midi():
     # Check the namespace
     assert ann2.namespace == 'pitch_midi'
     # midi 69 = 440.0 Hz
-    assert ann2.data[0].value == 69
+    assert ann2.data[0].value[0] == 69
 
     # Check all else is equal
     assert len(ann.data) == len(ann2.data)

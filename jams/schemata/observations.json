@@ -1,0 +1,29 @@
+{
+    "definitions": {
+        "SparseObservation": {
+            "type": "object",
+            "title": "SparseObservation",
+            "description": "An observation that spans an interval of time",
+            "properties": {
+                "value": { },
+                "confidence": { },
+                "time": {"type": "number", "minimum": 0.0},
+                "duration": {"type": "number", "minimum": 0.0}
+            },
+            "required": ["value", "time", "duration", "confidence"]
+        },
+
+        "DenseObservation": {
+            "type": "object",
+            "title": "DenseObservation",
+            "description": "A dense series of observations",
+            "properties": {
+                "value": {"type": "array"}, 
+                "confidence": {"type": "array"},
+                "time": {"type": "array", "items": { "type": "number", "minimum": 0.0 }},
+                "duration": {"type": "array", "items": { "type": "number", "minimum": 0.0 }}
+            },
+            "required": ["value", "time", "duration", "confidence"]
+        }
+    }
+}

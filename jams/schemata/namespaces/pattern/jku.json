@@ -1,5 +1,5 @@
-{"pattern_jku":
-    {
+{
+    "definitions": {
         "value": {
             "type": "object",
             "properties": {
@@ -17,7 +17,28 @@
             },
             "required": ["midi_pitch", "morph_pitch", "staff", "pattern_id", "occurrence_id"]
         },
-        "dense": false,
-        "description": "Pattern (MIDI pitch), including staff height, voice number, occurrence id, and pattern id"
+        "confidence": {
+
+        },
+        "name": {
+            "const": "pattern_jku"
+        }
+    },
+
+    "description": "Pattern (MIDI pitch), including staff height, voice number, occurrence id, and pattern id",
+
+    "properties": {
+        "namespace": { "$ref": "#/definitions/name" },
+        "data": {
+            "type": "array",
+            "description": "A list of sparse observation objects",
+            "$comment": "Because this needs to reference namespace dependent types, oneOf relationships cannot be indexed, and it must be matched to the namespace name constant, we must redefine the observation type here to match an observation in observations.json",
+            "items": {
+                "properties": {
+                    "value": { "$ref": "#/definitions/value" },
+                    "confidence": { "$ref": "#/definitions/confidence" }
+                }
+            }
+        }
     }
 }

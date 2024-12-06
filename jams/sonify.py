@@ -133,9 +133,9 @@ def pitch_contour(annotation, sr=22050, length=None, **kwargs):
     freqs = defaultdict(list)
 
     for obs in annotation:
-        times[obs.value['index']].append(obs.time)
-        freqs[obs.value['index']].append(obs.value['frequency'] *
-                                         (-1)**(~obs.value['voiced']))
+        for t, v in zip(obs.time, obs.value):
+            times[v['index']].append(t)
+            freqs[v['index']].append(v['frequency'] * (-1)**(~v['voiced']))
 
     y_out = 0.0
     for ix in times:
