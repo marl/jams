@@ -503,17 +503,17 @@ def jam_search():
     return jam
 
 
-@parametrize('query, expected',
-             [(dict(corpus='SMC_MIREX'), jam_search().annotations),
-              (dict(), []),
-              (dict(namespace='beat'), jam_search().annotations[:1]),
-              (dict(namespace='tag_open'), jam_search().annotations[1:]),
-              (dict(namespace='segment_tut'), jams.AnnotationArray()),
-              (dict(foo='bar'), jams.AnnotationArray())])
-def test_jams_search(jam_search, query, expected):
-
+@pytest.mark.parametrize('query, expected_func', [
+    (dict(corpus='SMC_MIREX'), lambda jam_search: jam_search.annotations),
+    (dict(), lambda jam_search: []),
+    (dict(namespace='beat'), lambda jam_search: jam_search.annotations[:1]),
+    (dict(namespace='tag_open'), lambda jam_search: jam_search.annotations[1:]),
+    (dict(namespace='segment_tut'), lambda jam_search: jams.AnnotationArray()),
+    (dict(foo='bar'), lambda jam_search: jams.AnnotationArray())
+])
+def test_jams_search(jam_search, query, expected_func):
+    expected = expected_func(jam_search)
     result = jam_search.search(**query)
-
     assert result == expected
 
 

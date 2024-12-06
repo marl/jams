@@ -1,0 +1,10 @@
+pandas
+sortedcontainers>=2.0.0
+jsonschema>=3.0.0
+numpy>=1.26.4,<2.0.0
+six
+decorator
+# mir_eval>=0.8
+# because numpy 1.20+ broke mir_eval 0.7
+# https://github.com/craffel/mir_eval/issues/352
+mir_eval @ git+https://github.com/craffel/mir_eval@main 
