@@ -496,22 +496,19 @@ def test_jams_add_conflict(on_conflict):
         assert jam.file_metadata == jam_orig.file_metadata
 
 
-def jam_search():
-    jam = jams.load('tests/fixtures/valid.jams', validate=False)
-    jam.annotations[0].sandbox.foo = None
-    return jam
 
+jam = jams.load('tests/fixtures/valid.jams', validate=False)
+jam.annotations[0].sandbox.foo = None
 
 @parametrize('query, expected',
-             [(dict(corpus='SMC_MIREX'), jam_search().annotations),
+             [(dict(corpus='SMC_MIREX'), jam.annotations),
               (dict(), []),
-              (dict(namespace='beat'), jam_search().annotations[:1]),
-              (dict(namespace='tag_open'), jam_search().annotations[1:]),
+              (dict(namespace='beat'), jam.annotations[:1]),
+              (dict(namespace='tag_open'), jam.annotations[1:]),
               (dict(namespace='segment_tut'), jams.AnnotationArray()),
               (dict(foo='bar'), jams.AnnotationArray())])
-def test_jams_search(jam_search, query, expected):
-
-    result = jam_search.search(**query)
+def test_jams_search(query, expected):
+    result = jam.search(**query)
 
     assert result == expected
 
