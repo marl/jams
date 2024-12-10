@@ -86,14 +86,14 @@ def test_schema_values_pass():
                       'pop', 'reggae', 'rock']
 
 
-@pytest.mark.xfail(raises=NamespaceError)
 def test_schema_values_missing():
-    jams.schema.values('imaginary namespace')
+    with pytest.raises(NamespaceError):
+        jams.schema.values('imaginary namespace')
 
 
-@pytest.mark.xfail(raises=NamespaceError)
 def test_schema_values_notenum():
-    jams.schema.values('chord_harte')
+    with pytest.raises(NamespaceError):
+        jams.schema.values('chord_harte')
 
 
 def test_schema_dtypes():
@@ -102,9 +102,9 @@ def test_schema_dtypes():
         jams.schema.get_dtypes(n)
 
 
-@pytest.mark.xfail(raises=NamespaceError)
 def test_schema_dtypes_badns():
-    jams.schema.get_dtypes('unknown namespace')
+    with pytest.raises(NamespaceError):
+        jams.schema.get_dtypes('unknown namespace')
 
 
 def test_list_namespaces():

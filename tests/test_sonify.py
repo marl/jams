@@ -9,19 +9,19 @@ from test_eval import create_hierarchy
 import jams
 
 
-@pytest.mark.xfail(raises=jams.NamespaceError)
 def test_no_sonify():
 
     ann = jams.Annotation(namespace='vector')
-    jams.sonify.sonify(ann)
+    with pytest.raises(jams.NamespaceError):
+        jams.sonify.sonify(ann)
 
 
-@pytest.mark.xfail(raises=jams.SchemaError)
 def test_bad_sonify():
     ann = jams.Annotation(namespace='chord')
     ann.append(time=0, duration=1, value='not a chord')
 
-    jams.sonify.sonify(ann)
+    with pytest.raises(jams.SchemaError):
+        jams.sonify.sonify(ann)
 
 
 @pytest.mark.parametrize('ns', ['segment_open', 'chord'])

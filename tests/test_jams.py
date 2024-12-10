@@ -267,12 +267,13 @@ def test_annotation_interval_values(tag_data):
     assert values == ['one', 'two']
 
 
-@xfail(raises=jams.JamsError)
 def test_annotation_badtype():
 
     an = jams.Annotation(namespace='tag_open')
+
     # This should throw a jams error because NoneType can't be indexed
-    an.data.add(None)
+    with pytest.raises(jams.JamsError):
+        an.data.add(None)
 
 
 # FileMetadata
@@ -410,13 +411,14 @@ def test_annotation_array_composite():
     assert len(jam.annotations['beat', 2::2]) == 4
 
 
-@xfail(raises=IndexError)
 def test_annotation_array_index_error():
 
     jam = jams.JAMS()
     ann = jams.Annotation(namespace='beat')
     jam.annotations.append(ann)
-    jam.annotations[None]
+
+    with pytest.raises(IndexError):
+        _ = jam.annotations[None]
 
 
 # JAMS
@@ -570,11 +572,12 @@ def test_jams_validate_exception(jam_validate):
     with pytest.raises(jams.SchemaError):
         jam_validate.validate(strict=True)
 
-@xfail(raises=jams.SchemaError)
+
 def test_jams_bad_field():
     jam = jams.JAMS()
 
-    jam.out_of_schema = None
+    with pytest.raises(jams.SchemaError):
+        jam.out_of_schema = None
 
 
 def test_jams_bad_annotation_warnings():
@@ -716,12 +719,12 @@ def test_load_invalid():
     __test_warn(fn, True, False)
 
 
-@xfail(raises=jams.ParameterError)
 def test_annotation_trim_bad_params():
 
     # end_time must be greater than start_time
     ann = jams.Annotation('tag_open')
-    ann.trim(5, 3, strict=False)
+    with pytest.raises(jams.ParameterError):
+        ann.trim(5, 3, strict=False)
 
 
 def test_annotation_trim_no_duration():
@@ -979,12 +982,12 @@ def test_annotation_trim_multiple():
     assert ann_trim.data == expected_ann.data
 
 
-@xfail(raises=jams.JamsError)
 def test_jams_trim_no_duration():
 
     # Empty jam has no file metadata, can't trim!
     jam = jams.JAMS()
-    jam.trim(0, 1, strict=False)
+    with pytest.raises(jams.JamsError):
+        jam.trim(0, 1, strict=False)
 
 
 def test_jams_trim_bad_params():
@@ -1249,7 +1252,6 @@ def test_annotation_to_samples(confidence):
 
     assert values == [['one'], ['one', 'two'], ['two', 'three'], ['three'], ['four'], []]
 
-@pytest.mark.xfail(raises=jams.ParameterError)
 def test_annotation_to_samples_fail_neg():
 
     ann = jams.Annotation('tag_open')
@@ -1259,10 +1261,11 @@ def test_annotation_to_samples_fail_neg():
     ann.append(time=0.75, duration=0.5, value='three', confidence=0.3)
     ann.append(time=1.5, duration=0.5, value='four', confidence=0.4)
 
-    values = ann.to_samples([-0.2, 0.4, 0.75, 1.25, 1.75, 1.4])
+    with pytest.raises(jams.ParameterError):
+        values = ann.to_samples([-0.2, 0.4, 0.75, 1.25, 1.75, 1.4])
 
 
-@pytest.mark.xfail(raises=jams.ParameterError)
+
 def test_annotation_to_samples_fail_shape():
 
     ann = jams.Annotation('tag_open')
@@ -1272,5 +1275,6 @@ def test_annotation_to_samples_fail_shape():
     ann.append(time=0.75, duration=0.5, value='three', confidence=0.3)
     ann.append(time=1.5, duration=0.5, value='four', confidence=0.4)
 
-    values = ann.to_samples([[0.2, 0.4, 0.75, 1.25, 1.75, 1.4]])
+    with pytest.raises(jams.ParameterError):
+        values = ann.to_samples([[0.2, 0.4, 0.75, 1.25, 1.75, 1.4]])
 

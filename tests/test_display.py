@@ -75,8 +75,8 @@ def test_display_labeled_events():
     jams.display.display(ann)
 
 
-@pytest.mark.xfail(raises=jams.ParameterError)
 def test_display_multi_fail():
-
     anns = jams.AnnotationArray()
-    jams.display.display_multi(anns)
+
+    with pytest.raises(jams.ParameterError):
+        jams.display.display_multi(anns)
