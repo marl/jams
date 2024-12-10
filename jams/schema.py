@@ -21,7 +21,6 @@ from __future__ import print_function
 import json
 import os
 import copy
-from pkg_resources import resource_filename
 
 import numpy as np
 import jsonschema
@@ -231,11 +230,9 @@ def __get_dtype(typespec):
 
 def __load_jams_schema():
     '''Load the schema file from the package.'''
-
-    schema_file = os.path.join(SCHEMA_DIR, 'jams_schema.json')
-
-    jams_schema = None
-    with open(resource_filename(__name__, schema_file), mode='r') as fdesc:
+    abs_schema_dir = os.path.join(os.path.dirname(__file__), SCHEMA_DIR)
+    schema_file = os.path.join(abs_schema_dir, 'jams_schema.json')
+    with open(schema_file, mode='r') as fdesc:
         jams_schema = json.load(fdesc)
 
     if jams_schema is None:

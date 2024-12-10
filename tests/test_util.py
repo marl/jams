@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # CHANGED:2015-03-05 17:53:32 by Brian McFee <brian.mcfee@nyu.edu>
 """Test the util module"""
-
+import sys
 import tempfile
 import os
 import pytest
@@ -142,6 +142,7 @@ def test_find_with_extension(root_and_files, level, sort):
     assert sorted(results) == sorted(files[:level])
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="os.path.normpath does something different on windows")
 def test_expand_filepaths():
 
     targets = ['foo.bar', 'dir/file.txt', 'dir2///file2.txt', '/q.bin']

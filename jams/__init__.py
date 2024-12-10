@@ -2,7 +2,8 @@
 """Top-level module for JAMS"""
 
 import os
-from pkg_resources import resource_filename
+from importlib import resources
+from itertools import chain
 
 # Import the necessary modules
 from .exceptions import *
@@ -18,14 +19,11 @@ from .schema import list_namespaces
 
 
 # Populate the namespace mapping
-for _ in util.find_with_extension(resource_filename(__name__, schema.NS_SCHEMA_DIR),
-                                  'json'):
-    schema.add_namespace(_)
+for ns in chain(*map(lambda p: p.rglob('*.json'), resources.files('jams.schemata.namespaces').iterdir())):
+    schema.add_namespace(ns)
 
 # Populate local namespaces
 
-try:
-    for _ in util.find_with_extension(os.environ['JAMS_SCHEMA_DIR'], 'json'):
-        schema.add_namespace(_)
-except KeyError:
-    pass
+if 'JAMS_SCHEMA_DIR' in os.environ:
+    for ns in util.find_with_extension(os.environ['JAMS_SCHEMA_DIR'], 'json'):
+        schema.add_namespace(ns)

@@ -6,6 +6,7 @@
 import os
 import tempfile
 import json
+
 import six
 import sys
 import warnings
@@ -16,7 +17,6 @@ import numpy as np
 import jams
 
 
-xfail = pytest.mark.xfail
 parametrize = pytest.mark.parametrize
 
 
@@ -267,12 +267,13 @@ def test_annotation_interval_values(tag_data):
     assert values == ['one', 'two']
 
 
-@xfail(raises=jams.JamsError)
 def test_annotation_badtype():
 
     an = jams.Annotation(namespace='tag_open')
+
     # This should throw a jams error because NoneType can't be indexed
-    an.data.add(None)
+    with pytest.raises(jams.JamsError):
+        an.data.add(None)
 
 
 # FileMetadata
@@ -289,8 +290,7 @@ def test_filemetadata():
         assert meta[k] == dict_fm[k]
 
 
-@parametrize('strict', [False, xfail(True, raises=jams.SchemaError)])
-def test_filemetadata_validation(strict):
+def test_filemetadata_validation_warning():
 
     # This should fail validation because null duration is not allowed
     fm = jams.FileMetadata(title='Test track',
@@ -300,12 +300,21 @@ def test_filemetadata_validation(strict):
 
     clean_warning_registry()
 
-    with warnings.catch_warnings(record=True) as out:
-        fm.validate(strict=strict)
+    with pytest.warns(UserWarning, match='.*(Failed validating).*') as out:
+        fm.validate(strict=False)
 
-        assert len(out) > 0
-        assert out[0].category is UserWarning
-        assert 'failed validating' in str(out[0].message).lower()
+
+def test_filemetadata_validation_strict():
+    # This should fail validation because null duration is not allowed
+    fm = jams.FileMetadata(title='Test track',
+                           artist='Test artist',
+                           release='Test release',
+                           duration=None)
+
+    clean_warning_registry()
+
+    with pytest.raises(jams.SchemaError):
+        fm.validate(strict=True)
 
 
 # AnnotationArray
@@ -400,13 +409,14 @@ def test_annotation_array_composite():
     assert len(jam.annotations['beat', 2::2]) == 4
 
 
-@xfail(raises=IndexError)
 def test_annotation_array_index_error():
 
     jam = jams.JAMS()
     ann = jams.Annotation(namespace='beat')
     jam.annotations.append(ann)
-    jam.annotations[None]
+
+    with pytest.raises(IndexError):
+        _ = jam.annotations[None]
 
 
 # JAMS
@@ -473,9 +483,7 @@ def test_jams_add(tag_data):
 
 
 @parametrize('on_conflict',
-             ['overwrite', 'ignore',
-              xfail('fail', raises=jams.JamsError),
-              xfail('bad_fail_mdoe', raises=jams.ParameterError)])
+             ['overwrite', 'ignore'])
 def test_jams_add_conflict(on_conflict):
     fn = 'tests/fixtures/valid.jams'
 
@@ -496,23 +504,36 @@ def test_jams_add_conflict(on_conflict):
         assert jam.file_metadata == jam_orig.file_metadata
 
 
-@pytest.fixture(scope='module')
-def jam_search():
-    jam = jams.load('tests/fixtures/valid.jams', validate=False)
-    jam.annotations[0].sandbox.foo = None
-    return jam
+@parametrize('on_conflict,exception', [
+    ('fail', jams.JamsError),
+    ('bad_fail_mdoe', jams.ParameterError)
+])
+def test_jams_add_conflict_exceptions(on_conflict, exception):
+    fn = 'tests/fixtures/valid.jams'
 
+    # The original jam
+    jam = jams.load(fn)
+
+    # The copy
+    jam2 = jams.load(fn)
+    jam2.file_metadata = jams.FileMetadata()
+
+    with pytest.raises(exception):
+        jam.add(jam2, on_conflict=on_conflict)
+
+
+jam = jams.load('tests/fixtures/valid.jams', validate=False)
+jam.annotations[0].sandbox.foo = None
 
 @parametrize('query, expected',
-             [(dict(corpus='SMC_MIREX'), jam_search().annotations),
+             [(dict(corpus='SMC_MIREX'), jam.annotations),
               (dict(), []),
-              (dict(namespace='beat'), jam_search().annotations[:1]),
-              (dict(namespace='tag_open'), jam_search().annotations[1:]),
+              (dict(namespace='beat'), jam.annotations[:1]),
+              (dict(namespace='tag_open'), jam.annotations[1:]),
               (dict(namespace='segment_tut'), jams.AnnotationArray()),
               (dict(foo='bar'), jams.AnnotationArray())])
-def test_jams_search(jam_search, query, expected):
-
-    result = jam_search.search(**query)
+def test_jams_search(query, expected):
+    result = jam.search(**query)
 
     assert result == expected
 
@@ -533,28 +554,29 @@ def jam_validate():
     return j1
 
 
-@parametrize('strict', [False, xfail(True, raises=jams.SchemaError)])
-def test_jams_validate_bad(jam_validate, strict):
+def test_jams_validate_warning(jam_validate):
 
     clean_warning_registry()
 
-    with warnings.catch_warnings(record=True) as out:
-        jam_validate.validate(strict=strict)
+    with pytest.warns(UserWarning, match='.*(Failed validating).*') as out:
+        jam_validate.validate(strict=False)
 
-    assert len(out) > 0
-    assert out[0].category is UserWarning
-    assert 'failed validating' in str(out[0].message).lower()
+def test_jams_validate_exception(jam_validate):
+
+    clean_warning_registry()
+
+    with pytest.raises(jams.SchemaError):
+        jam_validate.validate(strict=True)
 
 
-@xfail(raises=jams.SchemaError)
 def test_jams_bad_field():
     jam = jams.JAMS()
 
-    jam.out_of_schema = None
+    with pytest.raises(jams.SchemaError):
+        jam.out_of_schema = None
 
 
-@parametrize('strict', [False, xfail(True, raises=jams.SchemaError)])
-def test_jams_bad_annotation(strict):
+def test_jams_bad_annotation_warnings():
     jam = jams.JAMS()
     jam.file_metadata.duration = 10
 
@@ -562,26 +584,38 @@ def test_jams_bad_annotation(strict):
 
     clean_warning_registry()
 
-    with warnings.catch_warnings(record=True) as out:
-        jam.validate(strict=strict)
-
-    assert len(out) > 0
-    assert out[0].category is UserWarning
-    assert 'is not a well-formed jams annotation' in str(out[0].message).lower()
+    with pytest.warns(UserWarning, match='.*(is not a well-formed JAMS Annotation).*') as out:
+        jam.validate(strict=False)
 
 
-@parametrize('strict', [False, xfail(True, raises=jams.SchemaError)])
-def test_jams_bad_jam(strict):
+def test_jams_bad_annotation_exception():
+    jam = jams.JAMS()
+    jam.file_metadata.duration = 10
+
+    jam.annotations.append('not an annotation')
+
+    clean_warning_registry()
+
+    with pytest.raises(jams.SchemaError):
+        jam.validate(strict=True)
+
+
+def test_jams_bad_jam_warning():
     jam = jams.JAMS()
 
     clean_warning_registry()
 
-    with warnings.catch_warnings(record=True) as out:
-        jam.validate(strict=strict)
+    with pytest.warns(UserWarning, match='.*(Failed validating).*') as out:
+        jam.validate(strict=False)
 
-    assert len(out) > 0
-    assert out[0].category is UserWarning
-    assert 'failed validating' in str(out[0].message).lower()
+
+def test_jams_bad_jam_exception():
+    jam = jams.JAMS()
+
+    clean_warning_registry()
+
+    with pytest.raises(jams.SchemaError):
+        jam.validate(strict=True)
 
 
 def test_jams_repr(input_jam):
@@ -657,12 +691,8 @@ def test_load_invalid():
     def __test_warn(filename, valid, strict):
         clean_warning_registry()
 
-        with warnings.catch_warnings(record=True) as out:
+        with pytest.warns(UserWarning, match='.*(Failed validating).*'):
             jams.load(filename, validate=valid, strict=strict)
-
-        assert len(out) > 0
-        assert out[0].category is UserWarning
-        assert 'failed validating' in str(out[0].message).lower()
 
     # 5. test bad jams file with strict validation
     # 6. test bad jams file without strict validation
@@ -678,12 +708,12 @@ def test_load_invalid():
     __test_warn(fn, True, False)
 
 
-@xfail(raises=jams.ParameterError)
 def test_annotation_trim_bad_params():
 
     # end_time must be greater than start_time
     ann = jams.Annotation('tag_open')
-    ann.trim(5, 3, strict=False)
+    with pytest.raises(jams.ParameterError):
+        ann.trim(5, 3, strict=False)
 
 
 def test_annotation_trim_no_duration():
@@ -941,12 +971,12 @@ def test_annotation_trim_multiple():
     assert ann_trim.data == expected_ann.data
 
 
-@xfail(raises=jams.JamsError)
 def test_jams_trim_no_duration():
 
     # Empty jam has no file metadata, can't trim!
     jam = jams.JAMS()
-    jam.trim(0, 1, strict=False)
+    with pytest.raises(jams.JamsError):
+        jam.trim(0, 1, strict=False)
 
 
 def test_jams_trim_bad_params():
@@ -1211,7 +1241,6 @@ def test_annotation_to_samples(confidence):
 
     assert values == [['one'], ['one', 'two'], ['two', 'three'], ['three'], ['four'], []]
 
-@pytest.mark.xfail(raises=jams.ParameterError)
 def test_annotation_to_samples_fail_neg():
 
     ann = jams.Annotation('tag_open')
@@ -1221,10 +1250,11 @@ def test_annotation_to_samples_fail_neg():
     ann.append(time=0.75, duration=0.5, value='three', confidence=0.3)
     ann.append(time=1.5, duration=0.5, value='four', confidence=0.4)
 
-    values = ann.to_samples([-0.2, 0.4, 0.75, 1.25, 1.75, 1.4])
+    with pytest.raises(jams.ParameterError):
+        values = ann.to_samples([-0.2, 0.4, 0.75, 1.25, 1.75, 1.4])
 
 
-@pytest.mark.xfail(raises=jams.ParameterError)
+
 def test_annotation_to_samples_fail_shape():
 
     ann = jams.Annotation('tag_open')
@@ -1234,5 +1264,6 @@ def test_annotation_to_samples_fail_shape():
     ann.append(time=0.75, duration=0.5, value='three', confidence=0.3)
     ann.append(time=1.5, duration=0.5, value='four', confidence=0.4)
 
-    values = ann.to_samples([[0.2, 0.4, 0.75, 1.25, 1.75, 1.4]])
+    with pytest.raises(jams.ParameterError):
+        values = ann.to_samples([[0.2, 0.4, 0.75, 1.25, 1.75, 1.4]])
 

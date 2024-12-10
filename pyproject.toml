@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+addopts = [
+    "-v",
+    "--cov-report=term-missing",
+    "--cov=jams",
+]
+testpaths = [
+    "tests"
+]
