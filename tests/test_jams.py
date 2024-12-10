@@ -6,6 +6,7 @@
 import os
 import tempfile
 import json
+
 import six
 import sys
 import warnings
@@ -16,7 +17,6 @@ import numpy as np
 import jams
 
 
-xfail = pytest.mark.xfail
 parametrize = pytest.mark.parametrize
 
 
@@ -300,12 +300,10 @@ def test_filemetadata_validation_warning():
 
     clean_warning_registry()
 
-    with warnings.catch_warnings(record=True) as out:
-        fm.validate(strict=strict)
+    with pytest.warns(UserWarning, match='.*(Failed validating).*') as out:
+        fm.validate(strict=False)
 
-        assert len(out) > 0
-        assert out[0].category is UserWarning
-        assert 'failed validating' in str(out[0].message).lower()
+
 def test_filemetadata_validation_strict():
     # This should fail validation because null duration is not allowed
     fm = jams.FileMetadata(title='Test track',
@@ -560,13 +558,11 @@ def test_jams_validate_warning(jam_validate):
 
     clean_warning_registry()
 
-    with warnings.catch_warnings(record=True) as out:
-        jam_validate.validate(strict=strict)
+    with pytest.warns(UserWarning, match='.*(Failed validating).*') as out:
+        jam_validate.validate(strict=False)
+
 def test_jams_validate_exception(jam_validate):
 
-    assert len(out) > 0
-    assert out[0].category is UserWarning
-    assert 'failed validating' in str(out[0].message).lower()
     clean_warning_registry()
 
     with pytest.raises(jams.SchemaError):
@@ -588,17 +584,16 @@ def test_jams_bad_annotation_warnings():
 
     clean_warning_registry()
 
-    with warnings.catch_warnings(record=True) as out:
-        jam.validate(strict=strict)
+    with pytest.warns(UserWarning, match='.*(is not a well-formed JAMS Annotation).*') as out:
+        jam.validate(strict=False)
+
+
 def test_jams_bad_annotation_exception():
     jam = jams.JAMS()
     jam.file_metadata.duration = 10
 
     jam.annotations.append('not an annotation')
 
-    assert len(out) > 0
-    assert out[0].category is UserWarning
-    assert 'is not a well-formed jams annotation' in str(out[0].message).lower()
     clean_warning_registry()
 
     with pytest.raises(jams.SchemaError):
@@ -610,12 +605,10 @@ def test_jams_bad_jam_warning():
 
     clean_warning_registry()
 
-    with warnings.catch_warnings(record=True) as out:
-        jam.validate(strict=strict)
+    with pytest.warns(UserWarning, match='.*(Failed validating).*') as out:
+        jam.validate(strict=False)
 
-    assert len(out) > 0
-    assert out[0].category is UserWarning
-    assert 'failed validating' in str(out[0].message).lower()
+
 def test_jams_bad_jam_exception():
     jam = jams.JAMS()
 
@@ -698,12 +691,8 @@ def test_load_invalid():
     def __test_warn(filename, valid, strict):
         clean_warning_registry()
 
-        with warnings.catch_warnings(record=True) as out:
+        with pytest.warns(UserWarning, match='.*(Failed validating).*'):
             jams.load(filename, validate=valid, strict=strict)
-
-        assert len(out) > 0
-        assert out[0].category is UserWarning
-        assert 'failed validating' in str(out[0].message).lower()
 
     # 5. test bad jams file with strict validation
     # 6. test bad jams file without strict validation
