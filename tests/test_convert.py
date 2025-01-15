@@ -9,23 +9,23 @@ import jams
 from jams import NamespaceError
 
 
-@pytest.mark.xfail(raises=NamespaceError)
 def test_bad_target():
 
     ann = jams.Annotation(namespace='tag_open')
     ann.append(time=0, duration=1, value='foo', confidence=1)
 
-    jams.convert(ann, 'bad namespace')
+    with pytest.raises(NamespaceError):
+        jams.convert(ann, 'bad namespace')
 
 
 @pytest.mark.parametrize('target',
                          ['pitch_hz', 'pitch_midi', 'segment_open',
                           'tag_open', 'beat', 'chord'])
-@pytest.mark.xfail(raises=NamespaceError)
 def test_bad_sources(target):
 
     ann = jams.Annotation(namespace='vector')
-    jams.convert(ann, target)
+    with pytest.raises(NamespaceError):
+        jams.convert(ann, target)
 
 
 @pytest.mark.parametrize('namespace', list(jams.schema.__NAMESPACE__.keys()))

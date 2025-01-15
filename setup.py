@@ -35,15 +35,28 @@ setup(
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Topic :: Multimedia :: Sound/Audio :: Analysis",
+        "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10"
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
     ],
+    python_requires=">=3.9",
     keywords='audio music json',
     license='ISC',
-    install_requires=requirements,
+    install_requires=[
+        'pandas',
+        'sortedcontainers>=2.0.0',
+        'jsonschema>=3.0.0',
+        'numpy>=1.8.0',
+        'six',
+        'decorator',
+        'mir_eval>0.7',
+    ],
     extras_require={
-        'display': ['matplotlib>=1.5.0,!=3.9.0'],
-        'tests': ['pytest', 'hypothesis', 'pytest-cov'],
+        'display': ['matplotlib>=1.5.0'],
+        'tests': ['pytest ~= 8.0', 'hypothesis', 'pytest-cov', 'matplotlib>=3'],
     },
     scripts=['scripts/jams_to_lab.py']
 )

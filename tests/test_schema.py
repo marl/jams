@@ -11,7 +11,7 @@ from jams import NamespaceError
 import jams
 
 
-@pytest.mark.parametrize('ns_key', ['pitch_hz', 'beat', 'DNE'])
+@pytest.mark.parametrize('ns_key', ['pitch_hz', 'beat'])
 def test_schema_namespace(ns_key):
     if ns_key == 'DNE':
         pytest.xfail(reason="Namespace 'DNE' does not exist")
@@ -25,6 +25,12 @@ def test_schema_namespace(ns_key):
         for key in ['time', 'duration']:
             assert key in schema['properties']
 
+@pytest.mark.parametrize('ns_key', ['DNE'])
+def test_schema_namespace_exception(ns_key):
+    with pytest.raises(NamespaceError):
+        jams.schema.namespace(ns_key)
+
+
 
 @pytest.mark.parametrize('ns, dense', [('pitch_hz', True), ('beat', False), ('DNE', False)])
 def test_schema_is_dense(ns, dense):
@@ -32,6 +38,11 @@ def test_schema_is_dense(ns, dense):
         pytest.xfail(reason="Namespace 'DNE' does not exist")
     else:
         assert dense == jams.schema.is_dense(ns)
+
+@pytest.mark.parametrize('ns', ['DNE'])
+def test_schema_is_dense_exception(ns):
+    with pytest.raises(NamespaceError):
+        jams.schema.is_dense(ns)
 
 
 @pytest.fixture
@@ -77,14 +88,14 @@ def test_schema_values_pass():
                       'pop', 'reggae', 'rock']
 
 
-@pytest.mark.xfail(raises=NamespaceError)
 def test_schema_values_missing():
-    jams.schema.values('imaginary namespace')
+    with pytest.raises(NamespaceError):
+        jams.schema.values('imaginary namespace')
 
 
-@pytest.mark.xfail(raises=NamespaceError)
 def test_schema_values_notenum():
-    jams.schema.values('chord_harte')
+    with pytest.raises(NamespaceError):
+        jams.schema.values('chord_harte')
 
 
 def test_schema_dtypes():
@@ -93,9 +104,9 @@ def test_schema_dtypes():
         jams.schema.get_dtypes(n)
 
 
-@pytest.mark.xfail(raises=NamespaceError)
 def test_schema_dtypes_badns():
-    jams.schema.get_dtypes('unknown namespace')
+    with pytest.raises(NamespaceError):
+        jams.schema.get_dtypes('unknown namespace')
 
 
 def test_list_namespaces():
