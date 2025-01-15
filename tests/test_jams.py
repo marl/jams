@@ -525,16 +525,18 @@ def test_jams_add_conflict_exceptions(on_conflict, exception):
 jam = jams.load('tests/fixtures/valid.jams', validate=False)
 jam.annotations[0].sandbox.foo = None
 
-@parametrize('query, expected',
-             [(dict(corpus='SMC_MIREX'), jam.annotations),
-              (dict(), []),
-              (dict(namespace='beat'), jam.annotations[:1]),
-              (dict(namespace='tag_open'), jam.annotations[1:]),
-              (dict(namespace='segment_tut'), jams.AnnotationArray()),
-              (dict(foo='bar'), jams.AnnotationArray())])
-def test_jams_search(query, expected):
-    result = jam.search(**query)
 
+@pytest.mark.parametrize('query, expected_func', [
+    (dict(corpus='SMC_MIREX'), lambda jam_search: jam_search.annotations),
+    (dict(), lambda jam_search: []),
+    (dict(namespace='beat'), lambda jam_search: jam_search.annotations[:1]),
+    (dict(namespace='tag_open'), lambda jam_search: jam_search.annotations[1:]),
+    (dict(namespace='segment_tut'), lambda jam_search: jams.AnnotationArray()),
+    (dict(foo='bar'), lambda jam_search: jams.AnnotationArray())
+])
+def test_jams_search(jam_search, query, expected_func):
+    expected = expected_func(jam_search)
+    result = jam_search.search(**query)
     assert result == expected
 
 

@@ -13,17 +13,17 @@ import jams
 
 @pytest.mark.parametrize('ns_key', ['pitch_hz', 'beat'])
 def test_schema_namespace(ns_key):
-
-    # Get the schema
-    schema = jams.schema.namespace(ns_key)
-
-    # Make sure it has the correct properties
-    valid_keys = set(['time', 'duration', 'value', 'confidence'])
-    for key in schema['properties']:
-        assert key in valid_keys
-
-    for key in ['time', 'duration']:
-        assert key in schema['properties']
+    if ns_key == 'DNE':
+        pytest.xfail(reason="Namespace 'DNE' does not exist")
+    else:
+        # Get the schema
+        schema = jams.schema.namespace(ns_key)
+        # Make sure it has the correct properties
+        valid_keys = set(['time', 'duration', 'value', 'confidence'])
+        for key in schema['properties']:
+            assert key in valid_keys
+        for key in ['time', 'duration']:
+            assert key in schema['properties']
 
 @pytest.mark.parametrize('ns_key', ['DNE'])
 def test_schema_namespace_exception(ns_key):
@@ -31,11 +31,13 @@ def test_schema_namespace_exception(ns_key):
         jams.schema.namespace(ns_key)
 
 
-@pytest.mark.parametrize('ns, dense',
-                         [('pitch_hz', True),
-                          ('beat', False)])
+
+@pytest.mark.parametrize('ns, dense', [('pitch_hz', True), ('beat', False), ('DNE', False)])
 def test_schema_is_dense(ns, dense):
-    assert dense == jams.schema.is_dense(ns)
+    if ns == 'DNE':
+        pytest.xfail(reason="Namespace 'DNE' does not exist")
+    else:
+        assert dense == jams.schema.is_dense(ns)
 
 @pytest.mark.parametrize('ns', ['DNE'])
 def test_schema_is_dense_exception(ns):
