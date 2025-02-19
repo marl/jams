@@ -3,6 +3,7 @@ from setuptools import setup, find_packages
 import importlib.util
 import importlib.machinery
 
+
 def load_source(modname, filename):
     loader = importlib.machinery.SourceFileLoader(modname, filename)
     spec = importlib.util.spec_from_file_location(modname, filename, loader=loader)
@@ -10,11 +11,8 @@ def load_source(modname, filename):
     loader.exec_module(module)
     return module
 
-version = load_source('jams.version', 'jams/version.py')
 
-# requirements
-with open('requirements.txt', 'r') as fh:
-    requirements = fh.read().splitlines()
+version = load_source('jams.version', 'jams/version.py')
 
 setup(
     name='jams',
@@ -28,7 +26,6 @@ setup(
                        'schemata/namespaces/*.json',
                        'schemata/namespaces/*/*.json']},
     long_description='A JSON Annotated Music Specification for Reproducible MIR Research',
-    python_requires='>=3.9',
     classifiers=[
         "License :: OSI Approved :: ISC License (ISCL)",
         "Programming Language :: Python",
@@ -42,7 +39,7 @@ setup(
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
     ],
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     keywords='audio music json',
     license='ISC',
     install_requires=[
@@ -52,11 +49,11 @@ setup(
         'numpy>=1.8.0',
         'six',
         'decorator',
-        'mir_eval>0.7',
+        'mir_eval>=0.8'
     ],
     extras_require={
         'display': ['matplotlib>=1.5.0'],
-        'tests': ['pytest ~= 8.0', 'hypothesis', 'pytest-cov', 'matplotlib>=3'],
+        'tests': ['pytest ~= 8.0', 'pytest-cov', 'matplotlib>=3'],
     },
     scripts=['scripts/jams_to_lab.py']
 )
