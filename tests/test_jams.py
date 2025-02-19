@@ -17,8 +17,6 @@ import numpy as np
 import jams
 
 
-parametrize = pytest.mark.parametrize
-
 
 # Borrowed from sklearn
 def clean_warning_registry():
@@ -73,8 +71,8 @@ def test_jobject_deserialize():
     assert J == jams.JObject.loads(json_jobject)
 
 
-@parametrize('d1', [dict(key1='value 1', key2='value 2')])
-@parametrize('d2, match',
+@pytest.mark.parametrize('d1', [dict(key1='value 1', key2='value 2')])
+@pytest.mark.parametrize('d2, match',
              [(dict(key1='value 1', key2='value 2'), True),
               (dict(key1='value 1', key2='value 3'), False)])
 def test_jobject_eq(d1, d2, match):
@@ -94,7 +92,7 @@ def test_jobject_eq(d1, d2, match):
     assert not J1 == J3
 
 
-@parametrize('data, value', [({'key': True}, True), ({}, False)])
+@pytest.mark.parametrize('data, value', [({'key': True}, True), ({}, False)])
 def test_jobject_nonzero(data, value):
 
     J = jams.JObject(**data)
@@ -155,9 +153,9 @@ def ann_meta_dummy():
                 data_source='null')
 
 
-@parametrize('curator', [None, jams.Curator(name='nobody',
+@pytest.mark.parametrize('curator', [None, jams.Curator(name='nobody',
                                             email='none@none.com')])
-@parametrize('annotator', [None, jams.Sandbox(description='desc')])
+@pytest.mark.parametrize('annotator', [None, jams.Sandbox(description='desc')])
 def test_annotation_metadata(ann_meta_dummy, curator, annotator):
 
     md = jams.AnnotationMetadata(curator=curator, annotator=annotator,
@@ -192,7 +190,7 @@ def ann_metadata():
     return jams.AnnotationMetadata(corpus='test collection')
 
 
-@parametrize('namespace', ['tag_open'])
+@pytest.mark.parametrize('namespace', ['tag_open'])
 def test_annotation(namespace, tag_data, ann_metadata, ann_sandbox):
     ann = jams.Annotation(namespace, data=tag_data,
                           annotation_metadata=ann_metadata,
@@ -482,7 +480,7 @@ def test_jams_add(tag_data):
     assert jam.annotations[-1] == jam2.annotations[0]
 
 
-@parametrize('on_conflict',
+@pytest.mark.parametrize('on_conflict',
              ['overwrite', 'ignore'])
 def test_jams_add_conflict(on_conflict):
     fn = 'tests/fixtures/valid.jams'
@@ -504,7 +502,7 @@ def test_jams_add_conflict(on_conflict):
         assert jam.file_metadata == jam_orig.file_metadata
 
 
-@parametrize('on_conflict,exception', [
+@pytest.mark.parametrize('on_conflict,exception', [
     ('fail', jams.JamsError),
     ('bad_fail_mdoe', jams.ParameterError)
 ])
@@ -526,18 +524,15 @@ jam = jams.load('tests/fixtures/valid.jams', validate=False)
 jam.annotations[0].sandbox.foo = None
 
 
-@pytest.mark.parametrize('query, expected_func', [
-    (dict(corpus='SMC_MIREX'), lambda jam_search: jam_search.annotations),
-    (dict(), lambda jam_search: []),
-    (dict(namespace='beat'), lambda jam_search: jam_search.annotations[:1]),
-    (dict(namespace='tag_open'), lambda jam_search: jam_search.annotations[1:]),
-    (dict(namespace='segment_tut'), lambda jam_search: jams.AnnotationArray()),
-    (dict(foo='bar'), lambda jam_search: jams.AnnotationArray())
-])
-def test_jams_search(jam_search, query, expected_func):
-    expected = expected_func(jam_search)
-    result = jam_search.search(**query)
-    assert result == expected
+@pytest.mark.parametrize('query, expected',
+             [(dict(corpus='SMC_MIREX'), jam.annotations),
+              (dict(), []),
+              (dict(namespace='beat'), jam.annotations[:1]),
+              (dict(namespace='tag_open'), jam.annotations[1:]),
+              (dict(namespace='segment_tut'), jams.AnnotationArray()),
+              (dict(foo='bar'), jams.AnnotationArray())])
+def test_jams_search(query, expected):
+    result = jam.search(**query)
 
 
 def test_jams_validate_good():
@@ -1268,4 +1263,3 @@ def test_annotation_to_samples_fail_shape():
 
     with pytest.raises(jams.ParameterError):
         values = ann.to_samples([[0.2, 0.4, 0.75, 1.25, 1.75, 1.4]])
-
