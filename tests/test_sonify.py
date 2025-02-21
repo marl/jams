@@ -24,7 +24,6 @@ def test_bad_sonify():
         jams.sonify.sonify(ann)
 
 
-@pytest.mark.xfail
 @pytest.mark.parametrize('ns', ['segment_open', 'chord'])
 @pytest.mark.parametrize('sr', [8000, 11025])
 @pytest.mark.parametrize('duration', [None, 5.0, 1.0])
@@ -94,7 +93,6 @@ def test_contour(ann_contour, duration, sr):
         assert len(y) == sr * duration
 
 
-@pytest.mark.xfail
 @pytest.mark.parametrize('namespace', ['chord', 'chord_harte'])
 @pytest.mark.parametrize('sr', [8000])
 @pytest.mark.parametrize('duration', [2.0])
