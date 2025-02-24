@@ -169,7 +169,7 @@ def piano_roll(annotation, sr=22050, length=None, **kwargs):
         gram[pitch_map[f], col] = 1
 
     return filter_kwargs(mir_eval.sonify.time_frequency,
-                         gram, pitches, intervals,
+                         gram, np.asarray(pitches), np.asarray(intervals),
                          sr, length=length, **kwargs)
 
 

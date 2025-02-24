@@ -38,7 +38,6 @@ def test_duration(ns, sr, duration):
         assert len(y) == int(sr * duration)
 
 
-@pytest.mark.xfail
 def test_note_hz():
     ann = jams.Annotation(namespace='note_hz')
     ann.append(time=0, duration=1, value=261.0)
@@ -57,7 +56,6 @@ def test_note_hz_nolength():
     assert np.any(y)
 
 
-@pytest.mark.xfail
 def test_note_midi():
     ann = jams.Annotation(namespace='note_midi')
     ann.append(time=0, duration=1, value=60)
