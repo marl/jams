@@ -49,7 +49,7 @@ setup(
         'numpy>=1.8.0',
         'six',
         'decorator',
-        'mir_eval>=0.8'
+        'mir_eval>=0.8.2'
     ],
     extras_require={
         'display': ['matplotlib>=1.5.0'],
