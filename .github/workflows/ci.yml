@@ -1,8 +1,6 @@
 name: JSON Annotated Music Specification for Reproducible MIR Research
 
 on: [push]
- push:
-   branches: [ master ]
  pull_request:
    branches: [ master ]
 
