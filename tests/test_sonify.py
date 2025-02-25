@@ -46,7 +46,6 @@ def test_note_hz():
     assert len(y) == 8000 * 2
 
 
-@pytest.mark.xfail
 def test_note_hz_nolength():
     ann = jams.Annotation(namespace='note_hz')
     ann.append(time=0, duration=1, value=261.0)
