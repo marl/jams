@@ -1741,7 +1741,7 @@ class JAMS(JObject):
 
         return self.annotations.search(**kwargs)
 
-    def save(self, path_or_file, strict=True, fmt='auto'):
+    def save(self, path_or_file, strict=True, fmt='auto', indent=2):
         """Serialize annotation as a JSON formatted stream to file.
 
         Parameters
@@ -1762,6 +1762,14 @@ class JAMS(JObject):
             If the input is an open file handle, `jams` encoding
             is used.
 
+        indent : int
+            If a non-negative integer, then JSON array elements and
+            object members will be pretty-printed with that indent level. An indent
+            level of 0 will only insert newlines. `None` is the most compact
+            representation.
+
+            By default, 2 is used.
+
 
         Raises
         ------
@@ -1777,7 +1785,7 @@ class JAMS(JObject):
         self.validate(strict=strict)
 
         with _open(path_or_file, mode='w', fmt=fmt) as fdesc:
-            json.dump(self.__json__, fdesc, indent=2)
+            json.dump(self.__json__, fdesc, indent=indent)
 
     def validate(self, strict=True):
         '''Validate a JAMS object against the schema.
