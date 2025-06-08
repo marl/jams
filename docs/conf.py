@@ -72,8 +72,11 @@ copyright = u'2015, JAMS development team'
 # built documents.
 #
 # The short X.Y version.
-import imp
-jams_version = imp.load_source('jams.version', '../jams/version.py')
+from importlib.util import spec_from_file_location, module_from_spec
+spec = spec_from_file_location('jams.version', '../jams/version.py')
+jams_version = module_from_spec(spec)
+spec.loader.exec_module(jams_version)
+
 version = jams_version.short_version
 # The full version, including alpha/beta/rc tags.
 release = jams_version.version
