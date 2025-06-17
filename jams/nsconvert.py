@@ -28,8 +28,8 @@ __all__ = ["convert", "can_convert"]
 def _conversion(target, source):
     """A decorator to register namespace conversions.
 
-    Usage
-    -----
+    Examples
+    --------
     >>> @conversion('tag_open', 'tag_.*')
     ... def tag_to_open(annotation):
     ...     annotation.namespace = 'tag_open'
@@ -51,7 +51,6 @@ def convert(annotation, target_namespace):
     ----------
     annotation : jams.Annotation
         An annotation object
-
     target_namespace : str
         The target namespace
 
@@ -68,7 +67,6 @@ def convert(annotation, target_namespace):
     ------
     SchemaError
         if the input annotation fails to validate
-
     NamespaceError
         if no conversion is possible
 
@@ -113,7 +111,6 @@ def can_convert(annotation, target_namespace):
     ----------
     annotation : jams.Annotation
         An annotation object
-
     target_namespace : str
         The target namespace
 
@@ -122,7 +119,6 @@ def can_convert(annotation, target_namespace):
     True
         if `annotation` can be automatically converted to
         `target_namespace`
-
     False
         otherwise
     """
