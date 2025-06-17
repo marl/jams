@@ -22,7 +22,7 @@ from . import core
 
 
 def import_lab(namespace, filename, infer_duration=True, **parse_options):
-    r'''Load a .lab file as an Annotation object.
+    r"""Load a .lab file as an Annotation object.
 
     .lab files are assumed to have the following format:
 
@@ -69,31 +69,31 @@ def import_lab(namespace, filename, infer_duration=True, **parse_options):
     See Also
     --------
     pandas.DataFrame.read_csv
-    '''
+    """
 
     # Create a new annotation object
     annotation = core.Annotation(namespace)
 
-    parse_options.setdefault('sep', r'\s+')
-    parse_options.setdefault('engine', 'python')
-    parse_options.setdefault('header', None)
-    parse_options.setdefault('index_col', False)
+    parse_options.setdefault("sep", r"\s+")
+    parse_options.setdefault("engine", "python")
+    parse_options.setdefault("header", None)
+    parse_options.setdefault("index_col", False)
 
     # This is a hack to handle potentially ragged .lab data
-    parse_options.setdefault('names', range(20))
+    parse_options.setdefault("names", range(20))
 
     data = pd.read_csv(filename, **parse_options)
 
     # Drop all-nan columns
-    data = data.dropna(how='all', axis=1)
+    data = data.dropna(how="all", axis=1)
 
     # Do we need to add a duration column?
     # This only applies to event annotations
     if len(data.columns) == 2:
         # Insert a column of zeros after the timing
-        data.insert(1, 'duration', 0)
+        data.insert(1, "duration", 0)
         if infer_duration:
-            data['duration'][:-1] = data.loc[:, 0].diff()[1:].values
+            data["duration"][:-1] = data.loc[:, 0].diff()[1:].values
 
     else:
         # Convert from time to duration
@@ -105,10 +105,7 @@ def import_lab(namespace, filename, infer_duration=True, **parse_options):
 
         value = [x for x in row[3:] if x is not None][-1]
 
-        annotation.append(time=time,
-                          duration=duration,
-                          confidence=1.0,
-                          value=value)
+        annotation.append(time=time, duration=duration, confidence=1.0, value=value)
 
     return annotation
 
@@ -213,8 +210,8 @@ def find_with_extension(in_dir, ext, depth=3, sort=True):
     assert depth >= 1
     ext = ext.strip(os.extsep)
     match = list()
-    for n in range(1, depth+1):
-        wildcard = os.path.sep.join(["*"]*n)
+    for n in range(1, depth + 1):
+        wildcard = os.path.sep.join(["*"] * n)
         search_path = os.path.join(in_dir, os.extsep.join([wildcard, ext]))
         match += glob.glob(search_path)
 

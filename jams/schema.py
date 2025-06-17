@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-r'''
+r"""
 Namespace management
 --------------------
 
@@ -14,7 +14,7 @@ Namespace management
     values
     get_dtypes
     list_namespaces
-'''
+"""
 
 from __future__ import print_function
 
@@ -27,13 +27,20 @@ import jsonschema
 
 from .exceptions import NamespaceError, JamsError
 
-__all__ = ['add_namespace', 'namespace', 'is_dense', 'values', 'get_dtypes', 'VALIDATOR']
+__all__ = [
+    "add_namespace",
+    "namespace",
+    "is_dense",
+    "values",
+    "get_dtypes",
+    "VALIDATOR",
+]
 
 __NAMESPACE__ = dict()
 
 
 def add_namespace(filename):
-    '''Add a namespace definition to our working set.
+    """Add a namespace definition to our working set.
 
     Namespace files consist of partial JSON schemas defining the behavior
     of the `value` and `confidence` fields of an Annotation.
@@ -42,13 +49,13 @@ def add_namespace(filename):
     ----------
     filename : str
         Path to json file defining the namespace object
-    '''
-    with open(filename, mode='r') as fileobj:
+    """
+    with open(filename, mode="r") as fileobj:
         __NAMESPACE__.update(json.load(fileobj))
 
 
 def namespace(ns_key):
-    '''Construct a validation schema for a given namespace.
+    """Construct a validation schema for a given namespace.
 
     Parameters
     ----------
@@ -59,16 +66,16 @@ def namespace(ns_key):
     -------
     schema : dict
         JSON schema of `namespace`
-    '''
+    """
 
     if ns_key not in __NAMESPACE__:
-        raise NamespaceError('Unknown namespace: {:s}'.format(ns_key))
+        raise NamespaceError("Unknown namespace: {:s}".format(ns_key))
 
-    sch = copy.deepcopy(JAMS_SCHEMA['definitions']['SparseObservation'])
+    sch = copy.deepcopy(JAMS_SCHEMA["definitions"]["SparseObservation"])
 
-    for key in ['value', 'confidence']:
+    for key in ["value", "confidence"]:
         try:
-            sch['properties'][key] = __NAMESPACE__[ns_key][key]
+            sch["properties"][key] = __NAMESPACE__[ns_key][key]
         except KeyError:
             pass
 
@@ -76,7 +83,7 @@ def namespace(ns_key):
 
 
 def namespace_array(ns_key):
-    '''Construct a validation schema for arrays of a given namespace.
+    """Construct a validation schema for arrays of a given namespace.
 
     Parameters
     ----------
@@ -87,18 +94,18 @@ def namespace_array(ns_key):
     -------
     schema : dict
         JSON schema of `namespace` observation arrays
-    '''
+    """
 
     obs_sch = namespace(ns_key)
-    obs_sch['title'] = 'Observation'
+    obs_sch["title"] = "Observation"
 
-    sch = copy.deepcopy(JAMS_SCHEMA['definitions']['SparseObservationList'])
-    sch['items'] = obs_sch
+    sch = copy.deepcopy(JAMS_SCHEMA["definitions"]["SparseObservationList"])
+    sch["items"] = obs_sch
     return sch
 
 
 def is_dense(ns_key):
-    '''Determine whether a namespace has dense formatting.
+    """Determine whether a namespace has dense formatting.
 
     Parameters
     ----------
@@ -110,16 +117,16 @@ def is_dense(ns_key):
     dense : bool
         True if `ns_key` has a dense packing
         False otherwise.
-    '''
+    """
 
     if ns_key not in __NAMESPACE__:
-        raise NamespaceError('Unknown namespace: {:s}'.format(ns_key))
+        raise NamespaceError("Unknown namespace: {:s}".format(ns_key))
 
-    return __NAMESPACE__[ns_key]['dense']
+    return __NAMESPACE__[ns_key]["dense"]
 
 
 def values(ns_key):
-    '''Return the allowed values for an enumerated namespace.
+    """Return the allowed values for an enumerated namespace.
 
     Parameters
     ----------
@@ -140,19 +147,19 @@ def values(ns_key):
     >>> jams.schema.values('tag_gtzan')
     ['blues', 'classical', 'country', 'disco', 'hip-hop', 'jazz',
      'metal', 'pop', 'reggae', 'rock']
-    '''
+    """
 
     if ns_key not in __NAMESPACE__:
-        raise NamespaceError('Unknown namespace: {:s}'.format(ns_key))
+        raise NamespaceError("Unknown namespace: {:s}".format(ns_key))
 
-    if 'enum' not in __NAMESPACE__[ns_key]['value']:
-        raise NamespaceError('Namespace {:s} is not enumerated'.format(ns_key))
+    if "enum" not in __NAMESPACE__[ns_key]["value"]:
+        raise NamespaceError("Namespace {:s} is not enumerated".format(ns_key))
 
-    return copy.copy(__NAMESPACE__[ns_key]['value']['enum'])
+    return copy.copy(__NAMESPACE__[ns_key]["value"]["enum"])
 
 
 def get_dtypes(ns_key):
-    '''Get the dtypes associated with the value and confidence fields
+    """Get the dtypes associated with the value and confidence fields
     for a given namespace.
 
     Parameters
@@ -164,40 +171,42 @@ def get_dtypes(ns_key):
     -------
     value_dtype, confidence_dtype : numpy.dtype
         Type identifiers for value and confidence fields.
-    '''
+    """
 
     # First, get the schema
     if ns_key not in __NAMESPACE__:
-        raise NamespaceError('Unknown namespace: {:s}'.format(ns_key))
+        raise NamespaceError("Unknown namespace: {:s}".format(ns_key))
 
-    value_dtype = __get_dtype(__NAMESPACE__[ns_key].get('value', {}))
-    confidence_dtype = __get_dtype(__NAMESPACE__[ns_key].get('confidence', {}))
+    value_dtype = __get_dtype(__NAMESPACE__[ns_key].get("value", {}))
+    confidence_dtype = __get_dtype(__NAMESPACE__[ns_key].get("confidence", {}))
 
     return value_dtype, confidence_dtype
 
 
 def list_namespaces():
-    '''Print out a listing of available namespaces'''
-    print('{:30s}\t{:40s}'.format('NAME', 'DESCRIPTION'))
-    print('-' * 78)
+    """Print out a listing of available namespaces"""
+    print("{:30s}\t{:40s}".format("NAME", "DESCRIPTION"))
+    print("-" * 78)
     for sch in sorted(__NAMESPACE__):
-        desc = __NAMESPACE__[sch]['description']
-        desc = (desc[:44] + '..') if len(desc) > 46 else desc
-        print('{:30s}\t{:40s}'.format(sch, desc))
+        desc = __NAMESPACE__[sch]["description"]
+        desc = (desc[:44] + "..") if len(desc) > 46 else desc
+        print("{:30s}\t{:40s}".format(sch, desc))
 
 
 # Mapping of js primitives to numpy types
-__TYPE_MAP__ = dict(integer=np.int_,
-                    boolean=np.bool_,
-                    number=np.float64,
-                    object=np.object_,
-                    array=np.object_,
-                    string=np.object_,
-                    null=np.float64)
+__TYPE_MAP__ = dict(
+    integer=np.int_,
+    boolean=np.bool_,
+    number=np.float64,
+    object=np.object_,
+    array=np.object_,
+    string=np.object_,
+    null=np.float64,
+)
 
 
 def __get_dtype(typespec):
-    '''Get the dtype associated with a jsonschema type definition
+    """Get the dtype associated with a jsonschema type definition
 
     Parameters
     ----------
@@ -208,18 +217,18 @@ def __get_dtype(typespec):
     -------
     dtype : numpy.dtype
         The associated dtype
-    '''
+    """
 
-    if 'type' in typespec:
-        return __TYPE_MAP__.get(typespec['type'], np.object_)
+    if "type" in typespec:
+        return __TYPE_MAP__.get(typespec["type"], np.object_)
 
-    elif 'enum' in typespec:
+    elif "enum" in typespec:
         # Enums map to objects
         return np.object_
 
-    elif 'oneOf' in typespec:
+    elif "oneOf" in typespec:
         # Recurse
-        types = [__get_dtype(v) for v in typespec['oneOf']]
+        types = [__get_dtype(v) for v in typespec["oneOf"]]
 
         # If they're not all equal, return object
         if all([t == types[0] for t in types]):
@@ -229,21 +238,21 @@ def __get_dtype(typespec):
 
 
 def __load_jams_schema():
-    '''Load the schema file from the package.'''
+    """Load the schema file from the package."""
     abs_schema_dir = os.path.join(os.path.dirname(__file__), SCHEMA_DIR)
-    schema_file = os.path.join(abs_schema_dir, 'jams_schema.json')
-    with open(schema_file, mode='r') as fdesc:
+    schema_file = os.path.join(abs_schema_dir, "jams_schema.json")
+    with open(schema_file, mode="r") as fdesc:
         jams_schema = json.load(fdesc)
 
     if jams_schema is None:
-        raise JamsError('Unable to load JAMS schema')
+        raise JamsError("Unable to load JAMS schema")
 
     return jams_schema
 
 
 # Populate the schemata
-SCHEMA_DIR = 'schemata'
-NS_SCHEMA_DIR = os.path.join(SCHEMA_DIR, 'namespaces')
+SCHEMA_DIR = "schemata"
+NS_SCHEMA_DIR = os.path.join(SCHEMA_DIR, "namespaces")
 
 JAMS_SCHEMA = __load_jams_schema()
 VALIDATOR = jsonschema.Draft4Validator(JAMS_SCHEMA)
