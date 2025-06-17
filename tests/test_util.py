@@ -147,7 +147,7 @@ def test_expand_filepaths():
 
     targets = ['foo.bar', 'dir/file.txt', 'dir2///file2.txt', '/q.bin']
 
-    target_dir = '/tmp'
+    target_dir = '/fake_directory'
 
     paths = util.expand_filepaths(target_dir, targets)
 
