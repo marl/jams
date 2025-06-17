@@ -37,11 +37,11 @@ def validate(schema_file=None, jams_files=None):
         try:
             jams = load_json(jams_file)
             jsonschema.validate(jams, schema)
-            print '{:s} was successfully validated'.format(jams_file)
+            print('{:s} was successfully validated'.format(jams_file))
         except jsonschema.ValidationError as exc:
-            print '{:s} was NOT successfully validated'.format(jams_file)
+            print('{:s} was NOT successfully validated'.format(jams_file))
 
-            print exc
+            print(exc)
 
 
 if __name__ == '__main__':

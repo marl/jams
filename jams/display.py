@@ -227,7 +227,7 @@ def display_multi(annotations, fig_kw=None, meta=True, **kwargs):
     fig_kw.setdefault('sharex', True)
     fig_kw.setdefault('squeeze', True)
 
-    # Filter down to coercable annotations first
+    # Filter down to coercible annotations first
     display_annotations = []
     for ann in annotations:
         for namespace in VIZ_MAPPING:

@@ -3,7 +3,7 @@ Core functionality
 ------------------
 
 This library provides an interface for reading JAMS into Python, or creating
-them programatically.
+them programmatically.
 
 .. currentmodule:: jams
 
@@ -1492,7 +1492,7 @@ class AnnotationArray(list):
         Parameters
         ----------
         annotations: list
-            List of Annotations, or appropriately formated dicts
+            List of Annotations, or appropriately formatted dicts
             is consistent with Annotation.
         """
         super(AnnotationArray, self).__init__()
