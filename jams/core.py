@@ -112,7 +112,6 @@ def _open(name_or_fdesc, mode="r", fmt="auto"):
 
         Otherwise, use the specified coding.
 
-
     See Also
     --------
     open
@@ -159,7 +158,6 @@ def _open(name_or_fdesc, mode="r", fmt="auto"):
 def load(path_or_file, validate=True, strict=True, fmt="auto"):
     r"""Load a JAMS Annotation from a file.
 
-
     Parameters
     ----------
     path_or_file : str or file-like
@@ -181,24 +179,20 @@ def load(path_or_file, validate=True, strict=True, fmt="auto"):
         If the input is an open file handle, `jams` encoding
         is used.
 
-
     Returns
     -------
     jam : JAMS
         The loaded JAMS object
-
 
     Raises
     ------
     SchemaError
         if `validate == True`, `strict==True`, and validation fails
 
-
-    See also
+    See Also
     --------
     JAMS.validate
     JAMS.save
-
 
     Examples
     --------
@@ -237,7 +231,7 @@ class JObject(object):
 
         Parameters
         ----------
-        kwargs
+        **kwargs
             Each keyword argument becomes an attribute with the specified value
 
         Examples
@@ -405,7 +399,7 @@ class JObject(object):
 
         Parameters
         ----------
-        kwargs
+        **kwargs
             Keyword arguments to json.dumps
 
         Returns
@@ -448,7 +442,7 @@ class JObject(object):
 
         Parameters
         ----------
-        kwargs
+        **kwargs
             Keyword arguments of the form `attribute=new_value`
 
         Examples
@@ -502,7 +496,7 @@ class JObject(object):
 
         Parameters
         ----------
-        kwargs
+        **kwargs
             Each `(key, value)` pair encodes a search field in `key`
             and a target value in `value`.
 
@@ -639,19 +633,14 @@ class Annotation(JObject):
         ----------
         namespace : str
             The namespace for this annotation
-
         data : dict of lists, list of dicts, or list of Observations
             Data for the new annotation
-
         annotation_metadata : AnnotationMetadata (or dict), default=None.
             Metadata corresponding to this Annotation.
-
         sandbox : Sandbox (dict), default=None
             Miscellaneous information; keep to native datatypes if possible.
-
         time : non-negative number
             The starting time for this annotation
-
         duration : non-negative number
             The duration of this annotation
         """
@@ -697,9 +686,12 @@ class Annotation(JObject):
         Parameters
         ----------
         time : float >= 0
+
         duration : float >= 0
             The time and duration of the new observation, in seconds
+
         value
+
         confidence
             The value and confidence of the new observations.
 
@@ -1132,7 +1124,6 @@ class Annotation(JObject):
             Start- and end-times of all valued intervals
 
             `intervals[i, :] = [time[i], time[i] + duration[i]]`
-
         labels : list
             List view of value field.
         """
@@ -1154,7 +1145,6 @@ class Annotation(JObject):
         -------
         times : np.ndarray [shape=(n,), dtype=float]
             Start-time of all observations
-
         labels : list
             List view of value field.
         """
@@ -1186,7 +1176,6 @@ class Annotation(JObject):
         ----------
         times : np.ndarray, non-negative, ndim=1
             The times (in seconds) to sample the annotation
-
         confidence : bool
             If `True`, return both values and confidences.
             If `False` (default) only return values.
@@ -1196,7 +1185,6 @@ class Annotation(JObject):
         values : list
             `values[i]` is a list of observation values for intervals
             that cover `times[i]`.
-
         confidence : list (optional)
             `confidence` values corresponding to `values`
         """
@@ -1394,10 +1382,9 @@ class Curator(JObject):
 
         Parameters
         ----------
-        name: str, default=''
+        name : str, default=''
             Common name of the curator.
-
-        email: str, default=''
+        email : str, default=''
             An email address corresponding to the curator.
         """
         super(Curator, self).__init__()
@@ -1429,30 +1416,23 @@ class AnnotationMetadata(JObject):
 
         Parameters
         ----------
-        curator: Curator, default=None
+        curator : Curator, default=None
             Object documenting a name and email address for the person of
             correspondence.
-
-        version: string, default=''
+        version : string, default=''
             Version of this annotation.
-
-        annotator: dict, default=None
+        annotator : dict, default=None
             Sandbox for information about the specific annotator, such as
             musical experience, skill level, principal instrument, etc.
-
-        corpus: str, default=''
+        corpus : str, default=''
             Collection assignment.
-
-        annotation_tools: str, default=''
+        annotation_tools : str, default=''
             Description of the tools used to create the annotation.
-
-        annotation_rules: str, default=''
+        annotation_rules : str, default=''
             Description of the rules provided to the annotator.
-
-        validation: str, default=''
+        validation : str, default=''
             Methods for validating the integrity of the data.
-
-        data_source: str, default=''
+        data_source : str, default=''
             Description of where the data originated, e.g. 'Manual Annotation'.
         """
         super(AnnotationMetadata, self).__init__()
@@ -1502,22 +1482,17 @@ class FileMetadata(JObject):
 
         Parameters
         ----------
-        title: str
+        title : str
             Name of the recording.
-
-        artist: str
+        artist : str
             Name of the artist / musician.
-
-        release: str
+        release : str
             Name of the release
-
-        duration: number >= 0
+        duration : number >= 0
             Time duration of the file, in seconds.
-
         identifiers : jams.Sandbox
             Sandbox of identifier keys (eg, musicbrainz ids)
-
-        jams_version: str
+        jams_version : str
             Version of the JAMS Schema.
         """
         super(FileMetadata, self).__init__()
@@ -1586,7 +1561,7 @@ class AnnotationArray(list):
 
         Parameters
         ----------
-        annotations: list
+        annotations : list
             List of Annotations, or appropriately formatted dicts
             is consistent with Annotation.
         """
@@ -1601,10 +1576,9 @@ class AnnotationArray(list):
         """Filter the annotation array down to only those Annotation
         objects matching the query.
 
-
         Parameters
         ----------
-        kwargs : search parameters
+        **kwargs : search parameters
             See JObject.search
 
         Returns
@@ -1648,7 +1622,6 @@ class AnnotationArray(list):
 
         See `Annotation.trim` for details about trimming. This function does
         not modify the annotations in the original annotation array.
-
 
         Parameters
         ----------
@@ -1736,13 +1709,10 @@ class JAMS(JObject):
         ----------
         annotations : list of Annotations
             Zero or more Annotation objects
-
         file_metadata : FileMetadata (or dict), default=None
             Metadata corresponding to the audio file.
-
         sandbox : Sandbox (or dict), default=None
             Unconstrained global sandbox for additional information.
-
         """
         super(JAMS, self).__init__()
 
@@ -1779,10 +1749,9 @@ class JAMS(JObject):
 
         Parameters
         ----------
-        jam: JAMS object
+        jam : JAMS object
             Object to add to this jam
-
-        on_conflict: str, default='fail'
+        on_conflict : str, default='fail'
             Strategy for resolving metadata conflicts; one of
                 ['fail', 'overwrite', or 'ignore'].
 
@@ -1790,7 +1759,6 @@ class JAMS(JObject):
         ------
         ParameterError
             if `on_conflict` is an unknown value
-
         JamsError
             If a conflict is detected and `on_conflict='fail'`
         """
@@ -1817,7 +1785,7 @@ class JAMS(JObject):
 
         Parameters
         ----------
-        kwargs : keyword arguments
+        **kwargs : keyword arguments
             Keyword query
 
         Returns
@@ -1829,7 +1797,6 @@ class JAMS(JObject):
         --------
         JObject.search
         AnnotationArray.search
-
 
         Examples
         --------
@@ -1862,14 +1829,13 @@ class JAMS(JObject):
             If the input is an open file handle, `jams` encoding
             is used.
 
-
         Raises
         ------
         SchemaError
             If `strict == True` and the JAMS object fails schema
             or namespace validation.
 
-        See also
+        See Also
         --------
         validate
         """
@@ -2121,15 +2087,12 @@ class JAMS(JObject):
 def query_pop(query, prefix, sep="."):
     """Pop a prefix from a query string.
 
-
     Parameters
     ----------
     query : str
         The query string
-
     prefix : str
         The prefix string to pop, if it exists
-
     sep : str
         The string to separate fields
 
@@ -2163,7 +2126,6 @@ def match_query(string, query):
     ----------
     string : str
         The string to test
-
     query : string, callable, or object
         Either a regular expression, callable function, or object.
 
@@ -2222,7 +2184,6 @@ def summary(obj, indent=0):
     ----------
     obj
         The object to repr
-
     indent : int >= 0
         indent each new line by `indent` spaces
 

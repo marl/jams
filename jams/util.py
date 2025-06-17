@@ -38,7 +38,6 @@ def import_lab(namespace, filename, infer_duration=True, **parse_options):
     If the .lab file contains more than three columns, each row's
     annotation value is assigned the contents of last non-empty column.
 
-
     Parameters
     ----------
     namespace : str
@@ -58,7 +57,7 @@ def import_lab(namespace, filename, infer_duration=True, **parse_options):
         For instantaneous event annotations (e.g., beats or onsets), this
         should be set to `False`.
 
-    parse_options : additional keyword arguments
+    **parse_options : additional keyword arguments
         Passed to ``pandas.DataFrame.read_csv``
 
     Returns
@@ -117,7 +116,6 @@ def expand_filepaths(base_dir, rel_paths):
     ----------
     base_dir : str
         The target base directory
-
     rel_paths : list (or list-like)
         Collection of relative path strings
 
@@ -142,11 +140,10 @@ def smkdirs(dpath, mode=0o777):
     ----------
     dpath : str
         Path of directory/directories to create
-
     mode : int [default=0777]
         Permissions for the new directories
 
-    See also
+    See Also
     --------
     os.makedirs
     """
