@@ -13,8 +13,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ubuntu-latest
-        channel-priority: strict
+        os: [ubuntu-latest]
+        channel-priority: [strict]
         python-version:
         - "3.9"
         - "3.10"
