@@ -72,6 +72,7 @@ def deprecated(version, version_removed):
 
     It will result in a warning being emitted when the function is used.
     """
+
     def __wrapper(func, *args, **kwargs):
         """Warn the user, and then proceed."""
         code = six.get_function_code(func)
