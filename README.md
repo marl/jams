@@ -2,7 +2,7 @@ jams
 ====
 [![PyPI](https://img.shields.io/pypi/v/jams.svg)](https://pypi.python.org/pypi/jams)
 [![License](https://img.shields.io/pypi/l/jams.svg)](https://github.com/marl/jams/blob/master/LICENSE.md)
-[![Build Status](https://travis-ci.org/marl/jams.svg?branch=master)](https://travis-ci.org/marl/jams)
+[![Tests](https://github.com/marl/jams/actions/workflows/ci.yml/badge.svg)](https://github.com/marl/jams/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/marl/jams/badge.svg?branch=master)](https://coveralls.io/r/marl/jams?branch=master)
 [![Dependency Status](https://dependencyci.com/github/marl/jams/badge)](https://dependencyci.com/github/marl/jams)
 
@@ -20,7 +20,7 @@ We provide:
 * The ability to store multiple annotations per file
 * Schema definitions for a wide range of annotation types (beats, chords, segments, tags, etc.)
 * Error detection and validation for annotations
-* A translation layer to interface with [mir eval](https://craffel.github.io/mir_eval)
+* A translation layer to interface with [mir eval](https://mir-eval.readthedocs.io/latest/)
     for evaluating annotations
 
 Why
