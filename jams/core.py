@@ -68,11 +68,10 @@ __all__ = [
 
 
 def deprecated(version, version_removed):
-    """This is a decorator which can be used to mark functions
-    as deprecated.
+    """Decorate a function to be marked as deprecated.
 
-    It will result in a warning being emitted when the function is used."""
-
+    It will result in a warning being emitted when the function is used.
+    """
     def __wrapper(func, *args, **kwargs):
         """Warn the user, and then proceed."""
         code = six.get_function_code(func)
@@ -92,7 +91,7 @@ def deprecated(version, version_removed):
 
 @contextlib.contextmanager
 def _open(name_or_fdesc, mode="r", fmt="auto"):
-    """An intelligent wrapper for ``open``.
+    """Provide intelligent wrapping for ``open``.
 
     Parameters
     ----------
@@ -117,7 +116,6 @@ def _open(name_or_fdesc, mode="r", fmt="auto"):
     open
     gzip.open
     """
-
     open_map = {"jams": open, "json": open, "jamz": gzip.open, "gz": gzip.open}
 
     # If we've been given an open descriptor, do the right thing
@@ -206,7 +204,6 @@ def load(path_or_file, validate=True, strict=True, fmt="auto"):
     >>> # No validation at all
     >>> J = jams.load('data.jams', validate=False)
     """
-
     with _open(path_or_file, mode="r", fmt=fmt) as fdesc:
         jam = JAMS(**json.load(fdesc))
 
@@ -282,9 +279,11 @@ class JObject(object):
         return cls(**kwargs)
 
     def __eq__(self, other):
+        """Equality operator for JObject"""
         return isinstance(other, self.__class__) and (self.__dict__ == other.__dict__)
 
     def __nonzero__(self):
+        """Return True if the JObject has any attributes"""
         return bool(self.__json__)
 
     def __getitem__(self, key):
@@ -292,6 +291,7 @@ class JObject(object):
         return self.__dict__[key]
 
     def __setattr__(self, name, value):
+        """Set an attribute on the JObject."""
         if self.__schema__ is not None:
             props = self.__schema__["properties"]
             if name not in props:
@@ -299,9 +299,11 @@ class JObject(object):
         self.__dict__[name] = value
 
     def __contains__(self, key):
+        """Dict-style interface"""
         return key in self.__dict__
 
     def __len__(self):
+        """Return the number of attributes in the JObject."""
         return len(self.keys())
 
     def __repr__(self):
@@ -317,9 +319,9 @@ class JObject(object):
         return "<{}({:})>".format(self.type, params)
 
     def _display_properties(self):
-        """Returns a list of tuples (key, display_name)
-        for properties of this object"""
-
+        """Return a list of tuples (key, display_name)
+        for properties of this object
+        """
         return sorted([(k, k) for k in self.__dict__])
 
     def _repr_html_(self):
@@ -389,9 +391,11 @@ class JObject(object):
         return out
 
     def __summary__(self):
+        """Return a summary of the JObject."""
         return "<{}(...)>".format(self.type)
 
     def __str__(self):
+        """Return a JSON string representation of the JObject."""
         return json.dumps(self.__json__, indent=2)
 
     def dumps(self, **kwargs):
@@ -533,7 +537,6 @@ class JObject(object):
         >>> J.search(foo=lambda x: x > 10)
         False
         """
-
         match = False
 
         r_query = {}
@@ -581,7 +584,6 @@ class JObject(object):
         SchemaError
             If `strict==True` and `jam` fails validation
         """
-
         valid = True
 
         try:
@@ -606,7 +608,8 @@ class Sandbox(JObject):
     """Sandbox (unconstrained)
 
     Functionally identical to JObjects, but the class hierarchy might be
-    confusing if all objects inherit from Sandboxes."""
+    confusing if all objects inherit from Sandboxes.
+    """
 
     pass
 
@@ -644,7 +647,6 @@ class Annotation(JObject):
         duration : non-negative number
             The duration of this annotation
         """
-
         super(Annotation, self).__init__()
 
         if annotation_metadata is None:
@@ -703,7 +705,6 @@ class Annotation(JObject):
         >>> ann = jams.Annotation(namespace='chord')
         >>> ann.append(time=3, duration=2, value='E#')
         """
-
         self.data.add(
             Observation(
                 time=float(time),
@@ -779,7 +780,6 @@ class Annotation(JObject):
         --------
         JObject.validate
         """
-
         # Get the schema for this annotation
         ann_schema = schema.namespace_array(self.namespace)
 
@@ -1110,7 +1110,6 @@ class Annotation(JObject):
         annotation_data : SortedKeyList
             The original annotation data container
         """
-
         data = self.data
         self.data = SortedKeyList(key=self._key)
         return data
@@ -1127,7 +1126,6 @@ class Annotation(JObject):
         labels : list
             List view of value field.
         """
-
         ints, vals = [], []
         for obs in self.data:
             ints.append([obs.time, obs.time + obs.duration])
@@ -1211,6 +1209,7 @@ class Annotation(JObject):
             return values
 
     def __iter__(self):
+        """Iterate over the observations in this annotation."""
         return iter(self.data)
 
     def to_html(self, max_rows=None):
@@ -1320,6 +1319,7 @@ class Annotation(JObject):
 
     @property
     def __json__(self):
+        """Return a JSON-serializable representation of this object."""
         return self.__json_light__(data=True)
 
     def __json_light__(self, data=True):
@@ -1364,7 +1364,7 @@ class Annotation(JObject):
 
     @classmethod
     def _key(cls, obs):
-        """Provides sorting index for Observation objects"""
+        """Provide sorting index for Observation objects"""
         if not isinstance(obs, Observation):
             raise JamsError("{} must be of type jams.Observation".format(obs))
 
@@ -1590,7 +1590,6 @@ class AnnotationArray(list):
         --------
         JObject.search
         """
-
         results = AnnotationArray()
 
         for annotation in self:
@@ -1601,7 +1600,6 @@ class AnnotationArray(list):
 
     def __getitem__(self, idx):
         """Overloaded getitem for syntactic search sugar"""
-
         # if we have only one argument, it can be an int, slice or query
         if isinstance(idx, (int, slice)):
             return list.__getitem__(self, idx)
@@ -1613,6 +1611,7 @@ class AnnotationArray(list):
 
     @property
     def __json__(self):
+        """Return a JSON-serializable representation of this object."""
         return [item.__json__ for item in self]
 
     def trim(self, start_time, end_time, strict=False):
@@ -1685,6 +1684,7 @@ class AnnotationArray(list):
         return sliced_array
 
     def __repr__(self):
+        """Return a string representation of this annotation array."""
         n = len(self)
 
         if n == 1:
@@ -1693,6 +1693,7 @@ class AnnotationArray(list):
             return "[{:d} annotations]".format(n)
 
     def _repr_html_(self):
+        """Render this annotation array as HTML."""
         out = ""
         for ann in self:
             out += '<div class="panel-group">{}</div>'.format(ann._repr_html_())
@@ -1737,6 +1738,7 @@ class JAMS(JObject):
 
     @property
     def __schema__(self):
+        """Return the JAMS schema for this object."""
         return schema.JAMS_SCHEMA
 
     def add(self, jam, on_conflict="fail"):
@@ -1762,7 +1764,6 @@ class JAMS(JObject):
         JamsError
             If a conflict is detected and `on_conflict='fail'`
         """
-
         if on_conflict not in ["overwrite", "fail", "ignore"]:
             raise ParameterError(
                 "on_conflict='{}' is not in ['fail', "
@@ -1805,7 +1806,6 @@ class JAMS(JObject):
         >>> beats = my_jams.search(namespace='beat')
 
         """
-
         return self.annotations.search(**kwargs)
 
     def save(self, path_or_file, strict=True, fmt="auto"):
@@ -1839,7 +1839,6 @@ class JAMS(JObject):
         --------
         validate
         """
-
         self.validate(strict=strict)
 
         with _open(path_or_file, mode="w", fmt=fmt) as fdesc:
@@ -2110,7 +2109,6 @@ def query_pop(query, prefix, sep="."):
     'namespace'
 
     """
-
     terms = query.split(sep)
 
     if terms[0] == prefix:
@@ -2140,7 +2138,6 @@ def match_query(string, query):
         `False` otherwise
 
     """
-
     if six.callable(query):
         return query(string)
 
@@ -2152,13 +2149,12 @@ def match_query(string, query):
 
 
 def serialize_obj(obj):
-    """Custom serialization functionality for working with advanced data types.
+    """Serialize advanced data types.
 
     - numpy arrays are converted to lists
     - lists are recursively serialized element-wise
 
     """
-
     if isinstance(obj, np.integer):
         return int(obj)
 
@@ -2178,7 +2174,7 @@ def serialize_obj(obj):
 
 
 def summary(obj, indent=0):
-    """Helper function to format repr strings for JObjects and friends.
+    """Format repr strings for JObjects and friends.
 
     Parameters
     ----------
@@ -2232,10 +2228,10 @@ __DIVID_COUNT__ = 0
 
 
 def _get_divid(obj):
-    """Static function to get a unique id for an object.
+    """Get a unique id for an object.
     This is used in HTML rendering to ensure unique div ids for each call
-    to display an object"""
-
+    to display an object
+    """
     global __DIVID_COUNT__
     __DIVID_COUNT__ += 1
     return "{}-{}".format(id(obj), __DIVID_COUNT__)

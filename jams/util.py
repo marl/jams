@@ -69,7 +69,6 @@ def import_lab(namespace, filename, infer_duration=True, **parse_options):
     --------
     pandas.DataFrame.read_csv
     """
-
     # Create a new annotation object
     annotation = core.Annotation(namespace)
 

@@ -26,7 +26,7 @@ __all__ = ["convert", "can_convert"]
 
 
 def _conversion(target, source):
-    """A decorator to register namespace conversions.
+    """Decorate a function to register namespace conversions.
 
     Examples
     --------
@@ -37,7 +37,7 @@ def _conversion(target, source):
     """
 
     def register(func):
-        """This decorator registers func as mapping source to target"""
+        """Register func as mapping source to target"""
         __CONVERSION__[target][source] = func
         return func
 
@@ -80,7 +80,6 @@ def convert(annotation, target_namespace):
 
     >>> ann_hz2 = jams.convert(ann_midi, 'note_hz')
     """
-
     # First, validate the input. If this fails, we can't auto-convert.
     annotation.validate(strict=True)
 
@@ -122,7 +121,6 @@ def can_convert(annotation, target_namespace):
     False
         otherwise
     """
-
     # If we're already in the target namespace, do nothing
     if annotation.namespace == target_namespace:
         return True
@@ -161,7 +159,6 @@ def pitch_midi_to_contour(annotation):
 @_conversion("note_hz", "note_midi")
 def note_midi_to_hz(annotation):
     """Convert a pitch_midi annotation to pitch_hz"""
-
     annotation.namespace = "note_hz"
     data = annotation.pop_data()
 
@@ -179,7 +176,6 @@ def note_midi_to_hz(annotation):
 @_conversion("note_midi", "note_hz")
 def note_hz_to_midi(annotation):
     """Convert a pitch_hz annotation to pitch_midi"""
-
     annotation.namespace = "note_midi"
 
     data = annotation.pop_data()
@@ -198,7 +194,6 @@ def note_hz_to_midi(annotation):
 @_conversion("pitch_hz", "pitch_midi")
 def pitch_midi_to_hz(annotation):
     """Convert a pitch_midi annotation to pitch_hz"""
-
     annotation.namespace = "pitch_hz"
 
     data = annotation.pop_data()
@@ -217,7 +212,6 @@ def pitch_midi_to_hz(annotation):
 @_conversion("pitch_midi", "pitch_hz")
 def pitch_hz_to_midi(annotation):
     """Convert a pitch_hz annotation to pitch_midi"""
-
     annotation.namespace = "pitch_midi"
 
     data = annotation.pop_data()
@@ -235,7 +229,6 @@ def pitch_hz_to_midi(annotation):
 @_conversion("segment_open", "segment_.*")
 def segment_to_open(annotation):
     """Convert any segmentation to open label space"""
-
     annotation.namespace = "segment_open"
     return annotation
 
@@ -243,7 +236,6 @@ def segment_to_open(annotation):
 @_conversion("tag_open", "tag_.*")
 def tag_to_open(annotation):
     """Convert any tag annotation to open label space"""
-
     annotation.namespace = "tag_open"
     return annotation
 
@@ -251,7 +243,6 @@ def tag_to_open(annotation):
 @_conversion("tag_open", "scaper")
 def scaper_to_tag(annotation):
     """Convert scaper annotations to tag_open"""
-
     annotation.namespace = "tag_open"
 
     data = annotation.pop_data()
@@ -269,7 +260,6 @@ def scaper_to_tag(annotation):
 @_conversion("beat", "beat_position")
 def beat_position(annotation):
     """Convert beat_position to beat"""
-
     annotation.namespace = "beat"
     data = annotation.pop_data()
     for obs in data:
@@ -286,6 +276,5 @@ def beat_position(annotation):
 @_conversion("chord", "chord_harte")
 def chordh_to_chord(annotation):
     """Convert Harte annotation to chord"""
-
     annotation.namespace = "chord"
     return annotation

@@ -67,7 +67,6 @@ def namespace(ns_key):
     schema : dict
         JSON schema of `namespace`
     """
-
     if ns_key not in __NAMESPACE__:
         raise NamespaceError("Unknown namespace: {:s}".format(ns_key))
 
@@ -95,7 +94,6 @@ def namespace_array(ns_key):
     schema : dict
         JSON schema of `namespace` observation arrays
     """
-
     obs_sch = namespace(ns_key)
     obs_sch["title"] = "Observation"
 
@@ -118,7 +116,6 @@ def is_dense(ns_key):
         True if `ns_key` has a dense packing
         False otherwise.
     """
-
     if ns_key not in __NAMESPACE__:
         raise NamespaceError("Unknown namespace: {:s}".format(ns_key))
 
@@ -148,7 +145,6 @@ def values(ns_key):
     ['blues', 'classical', 'country', 'disco', 'hip-hop', 'jazz',
      'metal', 'pop', 'reggae', 'rock']
     """
-
     if ns_key not in __NAMESPACE__:
         raise NamespaceError("Unknown namespace: {:s}".format(ns_key))
 
@@ -172,7 +168,6 @@ def get_dtypes(ns_key):
     value_dtype, confidence_dtype : numpy.dtype
         Type identifiers for value and confidence fields.
     """
-
     # First, get the schema
     if ns_key not in __NAMESPACE__:
         raise NamespaceError("Unknown namespace: {:s}".format(ns_key))
@@ -218,7 +213,6 @@ def __get_dtype(typespec):
     dtype : numpy.dtype
         The associated dtype
     """
-
     if "type" in typespec:
         return __TYPE_MAP__.get(typespec["type"], np.object_)
 

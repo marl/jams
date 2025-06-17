@@ -69,7 +69,6 @@ def coerce_annotation(ann, namespace):
     --------
     jams.nsconvert.convert
     """
-
     ann = convert(ann, namespace)
     ann.validate(strict=True)
 
@@ -108,7 +107,6 @@ def beat(ref, est, **kwargs):
     >>> est_ann = est_jam.search(namespace='beat')[0]
     >>> scores = jams.eval.beat(ref_ann, est_ann)
     """
-
     namespace = "beat"
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
@@ -193,7 +191,6 @@ def chord(ref, est, **kwargs):
     >>> est_ann = est_jam.search(namespace='chord')[0]
     >>> scores = jams.eval.chord(ref_ann, est_ann)
     """
-
     namespace = "chord"
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
@@ -263,7 +260,6 @@ def hierarchy_flatten(annotation):
     hier_labels : list
         A list of lists of labels, ordered by increasing specificity.
     """
-
     intervals, values = annotation.to_interval_values()
 
     ordering = dict()
@@ -358,7 +354,6 @@ def tempo(ref, est, **kwargs):
     >>> est_ann = est_jam.search(namespace='tempo')[0]
     >>> scores = jams.eval.tempo(ref_ann, est_ann)
     """
-
     ref = coerce_annotation(ref, "tempo")
     est = coerce_annotation(est, "tempo")
 
@@ -402,7 +397,6 @@ def melody(ref, est, **kwargs):
     >>> est_ann = est_jam.search(namespace='pitch_contour')[0]
     >>> scores = jams.eval.melody(ref_ann, est_ann)
     """
-
     namespace = "pitch_contour"
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
@@ -436,7 +430,6 @@ def pattern_to_mireval(ann):
         - `patterns[x][y][z]` contains a time-note tuple
           `(time, midi note)`
     """
-
     # It's easier to work with dictionaries, since we can't assume
     # sequential pattern or occurrence identifiers
 
@@ -489,7 +482,6 @@ def pattern(ref, est, **kwargs):
     >>> est_ann = est_jam.search(namespace='pattern_jku')[0]
     >>> scores = jams.eval.pattern(ref_ann, est_ann)
     """
-
     namespace = "pattern_jku"
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)
@@ -533,7 +525,6 @@ def transcription(ref, est, **kwargs):
     >>> est_ann = est_jam.search(namespace='note_hz')[0]
     >>> scores = jams.eval.transcription(ref_ann, est_ann)
     """
-
     namespace = "pitch_contour"
     ref = coerce_annotation(ref, namespace)
     est = coerce_annotation(est, namespace)

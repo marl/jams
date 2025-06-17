@@ -28,7 +28,6 @@ def mkclick(freq, sr=22050, duration=0.1):
     This replicates functionality from mir_eval.sonify.clicks,
     but exposes the target frequency and duration.
     """
-
     times = np.arange(int(sr * duration))
     click = np.sin(2 * np.pi * times * freq / float(sr))
     click *= np.exp(-times / (1e-2 * sr))
@@ -42,7 +41,6 @@ def clicks(annotation, sr=22050, length=None, **kwargs):
     This uses mir_eval.sonify.clicks, and is appropriate for instantaneous
     events such as beats or segment boundaries.
     """
-
     interval, _ = annotation.to_interval_values()
 
     return filter_kwargs(
@@ -52,7 +50,6 @@ def clicks(annotation, sr=22050, length=None, **kwargs):
 
 def downbeat(annotation, sr=22050, length=None, **kwargs):
     """Sonify beats and downbeats together."""
-
     beat_click = mkclick(440 * 2, sr=sr)
     downbeat_click = mkclick(440 * 3, sr=sr)
 
@@ -90,7 +87,6 @@ def downbeat(annotation, sr=22050, length=None, **kwargs):
 
 def multi_segment(annotation, sr=22050, length=None, **kwargs):
     """Sonify multi-level segmentations"""
-
     # Pentatonic scale, because why not
     PENT = [1, 32.0 / 27, 4.0 / 3, 3.0 / 2, 16.0 / 9]
     DURATION = 0.1
@@ -114,7 +110,6 @@ def chord(annotation, sr=22050, length=None, **kwargs):
 
     This uses mir_eval.sonify.chords.
     """
-
     intervals, chords = annotation.to_interval_values()
 
     return filter_kwargs(
@@ -131,7 +126,6 @@ def pitch_contour(annotation, sr=22050, length=None, **kwargs):
     Each contour is sonified independently, and the resulting waveforms
     are summed together.
     """
-
     # Map contours to lists of observations
 
     times = defaultdict(list)
@@ -166,7 +160,6 @@ def piano_roll(annotation, sr=22050, length=None, **kwargs):
     for sparse transcription data, e.g., annotations in the `note_midi`
     namespace.
     """
-
     intervals, pitches = annotation.to_interval_values()
 
     # Construct the pitchogram
@@ -223,7 +216,6 @@ def sonify(annotation, sr=22050, duration=None, **kwargs):
     NamespaceError
         If the annotation has an un-sonifiable namespace
     """
-
     length = None
 
     if duration is None:

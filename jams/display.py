@@ -43,7 +43,6 @@ def pprint_jobject(obj, **kwargs):
     string
         A simplified display of `obj` contents.
     """
-
     obj_simple = {k: v for k, v in six.iteritems(obj.__json__) if v}
 
     string = json.dumps(obj_simple, **kwargs)
@@ -61,14 +60,14 @@ def pprint_jobject(obj, **kwargs):
 
 
 def intervals(annotation, **kwargs):
-    """Plotting wrapper for labeled intervals"""
+    """Display annotation as labeled intervals"""
     times, labels = annotation.to_interval_values()
 
     return mir_eval.display.labeled_intervals(times, labels, **kwargs)
 
 
 def hierarchy(annotation, **kwargs):
-    """Plotting wrapper for hierarchical segmentations"""
+    """Display annotation as hierarchical segmentations"""
     htimes, hlabels = hierarchy_flatten(annotation)
 
     htimes = [np.asarray(_) for _ in htimes]
@@ -76,7 +75,7 @@ def hierarchy(annotation, **kwargs):
 
 
 def pitch_contour(annotation, **kwargs):
-    """Plotting wrapper for pitch contours"""
+    """Display annotation as pitch contours"""
     ax = kwargs.pop("ax", None)
 
     # If the annotation is empty, we need to construct a new axes
@@ -99,8 +98,7 @@ def pitch_contour(annotation, **kwargs):
 
 
 def event(annotation, **kwargs):
-    """Plotting wrapper for events"""
-
+    """Display annotation as events"""
     times, values = annotation.to_interval_values()
 
     if any(values):
@@ -112,8 +110,7 @@ def event(annotation, **kwargs):
 
 
 def beat_position(annotation, **kwargs):
-    """Plotting wrapper for beat-position data"""
-
+    """Display annotation as beat-position data"""
     times, values = annotation.to_interval_values()
 
     labels = [_["position"] for _ in values]
@@ -123,7 +120,7 @@ def beat_position(annotation, **kwargs):
 
 
 def piano_roll(annotation, **kwargs):
-    """Plotting wrapper for piano rolls"""
+    """Display annotation as piano rolls"""
     times, midi = annotation.to_interval_values()
 
     return mir_eval.display.piano_roll(times, midi=midi, **kwargs)
@@ -164,7 +161,6 @@ def display(annotation, meta=True, **kwargs):
     NamespaceError
         If the annotation cannot be visualized
     """
-
     for namespace, func in six.iteritems(VIZ_MAPPING):
         try:
             ann = coerce_annotation(annotation, namespace)
