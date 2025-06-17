@@ -10,16 +10,25 @@ on:
 
 jobs:
   install:
-    runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
+        os: ubuntu-latest
+        channel-priority: strict
         python-version:
         - "3.9"
         - "3.10"
         - "3.11"
         - "3.12"
         - "3.13"
-    timeout-minutes: 5
+        include:
+          - python-version: "3.13"
+            os: macos-latest
+          - python-version: "3.13"
+            os: windows-latest
+          - python-version: "3.13"
+            os: ubuntu-latest
+            channel-priority: flexible
     steps:
     - uses: actions/checkout@v4
     - name: Setup Python ${{ matrix.python-version }}
