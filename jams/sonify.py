@@ -206,14 +206,11 @@ def sonify(annotation, sr=22050, duration=None, **kwargs):
     ----------
     annotation : jams.Annotation
         The annotation to sonify
-
-    sr = : positive number
+    sr : positive number
         The sampling rate of the output waveform
-
     duration : float (optional)
         Optional length (in seconds) of the output waveform
-
-    kwargs
+    **kwargs
         Additional keyword arguments to mir_eval.sonify functions
 
     Returns

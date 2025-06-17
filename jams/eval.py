@@ -50,7 +50,6 @@ def coerce_annotation(ann, namespace):
     ----------
     ann : jams.Annotation
         The annotation object in question
-
     namespace : str
         The namespace pattern to match `ann` against
 
@@ -63,7 +62,6 @@ def coerce_annotation(ann, namespace):
     ------
     NamespaceError
         If `ann` does not match the proper namespace
-
     SchemaError
         If `ann` fails schema validation
 
@@ -87,7 +85,7 @@ def beat(ref, est, **kwargs):
         Reference annotation object
     est : jams.Annotation
         Estimated annotation object
-    kwargs
+    **kwargs
         Additional keyword arguments
 
     Returns
@@ -130,7 +128,7 @@ def onset(ref, est, **kwargs):
         Reference annotation object
     est : jams.Annotation
         Estimated annotation object
-    kwargs
+    **kwargs
         Additional keyword arguments
 
     Returns
@@ -172,7 +170,7 @@ def chord(ref, est, **kwargs):
         Reference annotation object
     est : jams.Annotation
         Estimated annotation object
-    kwargs
+    **kwargs
         Additional keyword arguments
 
     Returns
@@ -216,7 +214,7 @@ def segment(ref, est, **kwargs):
         Reference annotation object
     est : jams.Annotation
         Estimated annotation object
-    kwargs
+    **kwargs
         Additional keyword arguments
 
     Returns
@@ -262,7 +260,6 @@ def hierarchy_flatten(annotation):
     -------
     hier_intervalss : list
         A list of lists of intervals, ordered by increasing specificity.
-
     hier_labels : list
         A list of lists of labels, ordered by increasing specificity.
     """
@@ -295,7 +292,7 @@ def hierarchy(ref, est, **kwargs):
         Reference annotation object
     est : jams.Annotation
         Estimated annotation object
-    kwargs
+    **kwargs
         Additional keyword arguments
 
     Returns
@@ -338,7 +335,7 @@ def tempo(ref, est, **kwargs):
         Reference annotation object
     est : jams.Annotation
         Estimated annotation object
-    kwargs
+    **kwargs
         Additional keyword arguments
 
     Returns
@@ -382,7 +379,7 @@ def melody(ref, est, **kwargs):
         Reference annotation object
     est : jams.Annotation
         Estimated annotation object
-    kwargs
+    **kwargs
         Additional keyword arguments
 
     Returns
@@ -469,7 +466,7 @@ def pattern(ref, est, **kwargs):
         Reference annotation object
     est : jams.Annotation
         Estimated annotation object
-    kwargs
+    **kwargs
         Additional keyword arguments
 
     Returns
@@ -512,7 +509,7 @@ def transcription(ref, est, **kwargs):
         Reference annotation object
     est : jams.Annotation
         Estimated annotation object
-    kwargs
+    **kwargs
         Additional keyword arguments
 
     Returns

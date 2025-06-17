@@ -35,8 +35,7 @@ def pprint_jobject(obj, **kwargs):
     Parameters
     ----------
     obj : jams.JObject
-
-    kwargs
+    **kwargs
         additional parameters to `json.dumps`
 
     Returns
@@ -150,11 +149,9 @@ def display(annotation, meta=True, **kwargs):
     ----------
     annotation : jams.Annotation
         The annotation to display
-
     meta : bool
         If `True`, include annotation metadata in the figure
-
-    kwargs
+    **kwargs
         Additional keyword arguments to mir_eval.display functions
 
     Returns
@@ -209,14 +206,11 @@ def display_multi(annotations, fig_kw=None, meta=True, **kwargs):
     ----------
     annotations : jams.AnnotationArray
         A collection of annotations to display
-
     fig_kw : dict
         Keyword arguments to `plt.figure`
-
     meta : bool
         If `True`, display annotation metadata for each annotation
-
-    kwargs
+    **kwargs
         Additional keyword arguments to the `mir_eval.display` routines
 
     Returns
