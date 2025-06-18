@@ -12,7 +12,6 @@ Sonification
 
 from itertools import product
 from collections import OrderedDict, defaultdict
-import six
 import numpy as np
 import mir_eval.sonify
 from mir_eval.util import filter_kwargs
@@ -229,7 +228,7 @@ def sonify(annotation, sr=22050, duration=None, **kwargs):
         ann = coerce_annotation(annotation, annotation.namespace)
         return SONIFY_MAPPING[annotation.namespace](ann, sr=sr, length=length, **kwargs)
 
-    for namespace, func in six.iteritems(SONIFY_MAPPING):
+    for namespace, func in SONIFY_MAPPING.items():
         try:
             ann = coerce_annotation(annotation, namespace)
             return func(ann, sr=sr, length=length, **kwargs)
