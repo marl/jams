@@ -41,48 +41,6 @@ review. This will send an email to the committers.
 (If any of the above seems like magic to you, then look up the 
 [Git documentation](http://git-scm.com/documentation) on the web.)
 
-It is recommended to check that your contribution complies with the
-following rules before submitting a pull request:
-
--  All public methods should have informative docstrings with sample
-   usage presented.
-
-You can also check for common programming errors with the following
-tools:
-
--  Code with good unittest coverage (at least 80%), check with:
-
-          $ pip install nose coverage
-          $ nosetests --with-coverage --cover-package=jams -w jams/tests/
-
--  No pyflakes warnings, check with:
-
-           $ pip install pyflakes
-           $ pyflakes path/to/module.py
-
--  No PEP8 warnings, check with:
-
-           $ pip install pep8
-           $ pep8 path/to/module.py
-
--  AutoPEP8 can help you fix some of the easy redundant errors:
-
-           $ pip install autopep8
-           $ autopep8 path/to/pep8.py
-
-
-Documentation
--------------
-
-You can edit the documentation using any text editor and then generate
-the HTML output by typing ``make html`` from the docs/ directory.
-The resulting HTML files will be placed in _build/html/ and are viewable 
-in a web browser. See the README file in the doc/ directory for more information.
-
-For building the documentation, you will need
-[sphinx](http://sphinx.pocoo.org/),
-[matplotlib](http://matplotlib.sourceforge.net/), and [scikit-learn](http://scikit-learn.org/).
-
 
 Note
 ----

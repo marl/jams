@@ -3,7 +3,7 @@ Core functionality
 ------------------
 
 This library provides an interface for reading JAMS into Python, or creating
-them programatically.
+them programmatically.
 
 .. currentmodule:: jams
 
@@ -53,30 +53,37 @@ from . import schema
 from .exceptions import JamsError, SchemaError, ParameterError
 
 
-__all__ = ['load',
-           'JObject', 'Sandbox',
-           'Annotation', 'Curator', 'AnnotationMetadata',
-           'FileMetadata', 'AnnotationArray', 'JAMS',
-           'Observation']
+__all__ = [
+    "load",
+    "JObject",
+    "Sandbox",
+    "Annotation",
+    "Curator",
+    "AnnotationMetadata",
+    "FileMetadata",
+    "AnnotationArray",
+    "JAMS",
+    "Observation",
+]
 
 
 def deprecated(version, version_removed):
-    '''This is a decorator which can be used to mark functions
-    as deprecated.
+    """Decorate a function to be marked as deprecated.
 
-    It will result in a warning being emitted when the function is used.'''
+    It will result in a warning being emitted when the function is used.
+    """
 
     def __wrapper(func, *args, **kwargs):
-        '''Warn the user, and then proceed.'''
+        """Warn the user, and then proceed."""
         code = six.get_function_code(func)
         warnings.warn_explicit(
             "{:s}.{:s}\n\tDeprecated as of JAMS version {:s}."
-            "\n\tIt will be removed in JAMS version {:s}."
-            .format(func.__module__, func.__name__,
-                    version, version_removed),
+            "\n\tIt will be removed in JAMS version {:s}.".format(
+                func.__module__, func.__name__, version, version_removed
+            ),
             category=DeprecationWarning,
             filename=code.co_filename,
-            lineno=code.co_firstlineno + 1
+            lineno=code.co_firstlineno + 1,
         )
         return func(*args, **kwargs)
 
@@ -84,8 +91,8 @@ def deprecated(version, version_removed):
 
 
 @contextlib.contextmanager
-def _open(name_or_fdesc, mode='r', fmt='auto'):
-    '''An intelligent wrapper for ``open``.
+def _open(name_or_fdesc, mode="r", fmt="auto"):
+    """Provide intelligent wrapping for ``open``.
 
     Parameters
     ----------
@@ -105,26 +112,21 @@ def _open(name_or_fdesc, mode='r', fmt='auto'):
 
         Otherwise, use the specified coding.
 
-
     See Also
     --------
     open
     gzip.open
-    '''
-
-    open_map = {'jams': open,
-                'json': open,
-                'jamz': gzip.open,
-                'gz': gzip.open}
+    """
+    open_map = {"jams": open, "json": open, "jamz": gzip.open, "gz": gzip.open}
 
     # If we've been given an open descriptor, do the right thing
-    if hasattr(name_or_fdesc, 'read') or hasattr(name_or_fdesc, 'write'):
+    if hasattr(name_or_fdesc, "read") or hasattr(name_or_fdesc, "write"):
         yield name_or_fdesc
 
     elif isinstance(name_or_fdesc, six.string_types):
         # Infer the opener from the extension
 
-        if fmt == 'auto':
+        if fmt == "auto":
             _, ext = os.path.splitext(name_or_fdesc)
 
             # Pull off the extension separator
@@ -136,25 +138,24 @@ def _open(name_or_fdesc, mode='r', fmt='auto'):
             ext = ext.lower()
 
             # Force text mode if we're using gzip
-            if ext in ['jamz', 'gz'] and 't' not in mode:
-                mode = '{:s}t'.format(mode)
+            if ext in ["jamz", "gz"] and "t" not in mode:
+                mode = "{:s}t".format(mode)
 
             with open_map[ext](name_or_fdesc, mode=mode) as fdesc:
                 yield fdesc
 
         except KeyError:
-            raise ParameterError('Unknown JAMS extension '
-                                 'format: "{:s}"'.format(ext))
+            raise ParameterError("Unknown JAMS extension " 'format: "{:s}"'.format(ext))
 
     else:
         # Don't know how to handle this. Raise a parameter error
-        raise ParameterError('Invalid filename or '
-                             'descriptor: {}'.format(name_or_fdesc))
+        raise ParameterError(
+            "Invalid filename or " "descriptor: {}".format(name_or_fdesc)
+        )
 
 
-def load(path_or_file, validate=True, strict=True, fmt='auto'):
+def load(path_or_file, validate=True, strict=True, fmt="auto"):
     r"""Load a JAMS Annotation from a file.
-
 
     Parameters
     ----------
@@ -177,24 +178,20 @@ def load(path_or_file, validate=True, strict=True, fmt='auto'):
         If the input is an open file handle, `jams` encoding
         is used.
 
-
     Returns
     -------
     jam : JAMS
         The loaded JAMS object
-
 
     Raises
     ------
     SchemaError
         if `validate == True`, `strict==True`, and validation fails
 
-
-    See also
+    See Also
     --------
     JAMS.validate
     JAMS.save
-
 
     Examples
     --------
@@ -208,8 +205,7 @@ def load(path_or_file, validate=True, strict=True, fmt='auto'):
     >>> # No validation at all
     >>> J = jams.load('data.jams', validate=False)
     """
-
-    with _open(path_or_file, mode='r', fmt=fmt) as fdesc:
+    with _open(path_or_file, mode="r", fmt=fmt) as fdesc:
         jam = JAMS(**json.load(fdesc))
 
     if validate:
@@ -227,12 +223,13 @@ class JObject(object):
     By setting the `type` attribute to a defined schema entry, only the fields
     allowed by the schema are permitted as attributes.
     """
+
     def __init__(self, **kwargs):
-        '''Construct a new JObject
+        """Construct a new JObject
 
         Parameters
         ----------
-        kwargs
+        **kwargs
             Each keyword argument becomes an attribute with the specified value
 
         Examples
@@ -242,7 +239,7 @@ class JObject(object):
         5
         >>> dict(J)
         {'foo': 5}
-        '''
+        """
         super(JObject, self).__init__()
 
         for name, value in six.iteritems(kwargs):
@@ -250,13 +247,13 @@ class JObject(object):
 
     @property
     def __schema__(self):
-        '''The schema definition for this JObject, if it exists.
+        """The schema definition for this JObject, if it exists.
 
         Returns
         -------
         schema : dict or None
-        '''
-        return schema.JAMS_SCHEMA['definitions'].get(self.type, None)
+        """
+        return schema.JAMS_SCHEMA["definitions"].get(self.type, None)
 
     @property
     def __json__(self):
@@ -267,10 +264,10 @@ class JObject(object):
         filtered_dict = dict()
 
         for k, item in six.iteritems(self.__dict__):
-            if k.startswith('_'):
+            if k.startswith("_"):
                 continue
 
-            if hasattr(item, '__json__'):
+            if hasattr(item, "__json__"):
                 filtered_dict[k] = item.__json__
             else:
                 filtered_dict[k] = serialize_obj(item)
@@ -283,10 +280,11 @@ class JObject(object):
         return cls(**kwargs)
 
     def __eq__(self, other):
-        return (isinstance(other, self.__class__) and
-                (self.__dict__ == other.__dict__))
+        """Equality operator for JObject"""
+        return isinstance(other, self.__class__) and (self.__dict__ == other.__dict__)
 
     def __nonzero__(self):
+        """Return True if the JObject has any attributes"""
         return bool(self.__json__)
 
     def __getitem__(self, key):
@@ -294,35 +292,37 @@ class JObject(object):
         return self.__dict__[key]
 
     def __setattr__(self, name, value):
+        """Set an attribute on the JObject."""
         if self.__schema__ is not None:
-            props = self.__schema__['properties']
+            props = self.__schema__["properties"]
             if name not in props:
-                raise SchemaError("Attribute {} not in {}"
-                                  .format(name, props.keys()))
+                raise SchemaError("Attribute {} not in {}".format(name, props.keys()))
         self.__dict__[name] = value
 
     def __contains__(self, key):
+        """Dict-style interface"""
         return key in self.__dict__
 
     def __len__(self):
+        """Return the number of attributes in the JObject."""
         return len(self.keys())
 
     def __repr__(self):
         """Render the object alongside its attributes."""
         indent = len(self.type) + 2
-        jstr = ',\n' + ' ' * indent
+        jstr = ",\n" + " " * indent
 
         props = self._display_properties()
 
-        params = jstr.join('{:}={:}'.format(p, summary(self[p],
-                                                       indent=indent))
-                           for (p, dp) in props)
-        return '<{}({:})>'.format(self.type, params)
+        params = jstr.join(
+            "{:}={:}".format(p, summary(self[p], indent=indent)) for (p, dp) in props
+        )
+        return "<{}({:})>".format(self.type, params)
 
     def _display_properties(self):
-        '''Returns a list of tuples (key, display_name)
-        for properties of this object'''
-
+        """Return a list of tuples (key, display_name)
+        for properties of this object
+        """
         return sorted([(k, k) for k in self.__dict__])
 
     def _repr_html_(self):
@@ -330,24 +330,23 @@ class JObject(object):
         props = self._display_properties()
 
         if not props:
-            return ''
+            return ""
 
         out = '<div class="panel-group">'
-        for (prop, dprop) in props:
+        for prop, dprop in props:
             content = summary_html(self[prop])
 
-            prop_class = 'default'
+            prop_class = "default"
             if not content:
-                prop_class = 'danger'
+                prop_class = "danger"
 
             out += '<div class="panel panel-{}">'.format(prop_class)
 
-            if (isinstance(self[prop], (JObject, AnnotationArray, dict))
-               and content):
+            if isinstance(self[prop], (JObject, AnnotationArray, dict)) and content:
                 # These classes should have collapses
                 div_id = _get_divid(self[prop])
 
-                out += r'''<div class="panel-heading" role="tab" id="heading-{0}">
+                out += r"""<div class="panel-heading" role="tab" id="heading-{0}">
                             <button
                                 type="button"
                                 data-toggle="collapse"
@@ -356,46 +355,56 @@ class JObject(object):
                                 aria-expanded="false"
                                 class="collapsed btn btn-block btn-primary"
                                 aria-controls="{0}">
-                                {1:s}'''.format(div_id, dprop)
+                                {1:s}""".format(
+                    div_id, dprop
+                )
 
                 if isinstance(self[prop], AnnotationArray):
-                    out += r'''<span class="badge pull-right">
+                    out += r"""<span class="badge pull-right">
                                     {:d}
-                               </span>'''.format(len(self[prop]))
+                               </span>""".format(
+                        len(self[prop])
+                    )
 
-                out += r''' </button></div>'''
+                out += r""" </button></div>"""
 
                 if content:
-                    out += r'''<div class="panel-collapse collapse"
+                    out += r"""<div class="panel-collapse collapse"
                                     id="{0}"
                                     role="tabpanel"
                                     aria-labelledby="hading{0}">
                                     <div class="panel-body">
                                         {1}
                                     </div>
-                                </div>'''.format(div_id, content)
+                                </div>""".format(
+                        div_id, content
+                    )
             else:
-                out += r'''<div class="panel-heading">
+                out += r"""<div class="panel-heading">
                                 {}&nbsp;
                                 <span class="pull-right"><em>{}</em></span>
-                           </div>'''.format(dprop, content)
-            out += '</div>'
-        out += '</div>'
+                           </div>""".format(
+                    dprop, content
+                )
+            out += "</div>"
+        out += "</div>"
 
         return out
 
     def __summary__(self):
-        return '<{}(...)>'.format(self.type)
+        """Return a summary of the JObject."""
+        return "<{}(...)>".format(self.type)
 
     def __str__(self):
+        """Return a JSON string representation of the JObject."""
         return json.dumps(self.__json__, indent=2)
 
     def dumps(self, **kwargs):
-        '''Serialize the JObject to a string.
+        """Serialize the JObject to a string.
 
         Parameters
         ----------
-        kwargs
+        **kwargs
             Keyword arguments to json.dumps
 
         Returns
@@ -414,7 +423,7 @@ class JObject(object):
         >>> J.dumps()
         '{"foo": 5, "bar": "baz"}'
 
-        '''
+        """
         return json.dumps(self.__json__, **kwargs)
 
     def keys(self):
@@ -434,11 +443,11 @@ class JObject(object):
         return self.__dict__.keys()
 
     def update(self, **kwargs):
-        '''Update the attributes of a JObject.
+        """Update the attributes of a JObject.
 
         Parameters
         ----------
-        kwargs
+        **kwargs
             Keyword arguments of the form `attribute=new_value`
 
         Examples
@@ -449,18 +458,18 @@ class JObject(object):
         >>> J.update(bar='baz')
         >>> J.dumps()
         '{"foo": 5, "bar": "baz"}'
-        '''
+        """
         for name, value in six.iteritems(kwargs):
             setattr(self, name, value)
 
     @property
     def type(self):
-        '''The type (class name) of a derived JObject type'''
+        """The type (class name) of a derived JObject type"""
         return self.__class__.__name__
 
     @classmethod
     def loads(cls, string):
-        '''De-serialize a JObject
+        """De-serialize a JObject
 
         Parameters
         ----------
@@ -484,15 +493,15 @@ class JObject(object):
         '{"foo": 5, "bar": "baz"}'
         >>> jams.JObject.loads(J.dumps())
         <JObject foo, bar>
-        '''
+        """
         return cls.__json_init__(**json.loads(string))
 
     def search(self, **kwargs):
-        '''Query this object (and its descendants).
+        """Query this object (and its descendants).
 
         Parameters
         ----------
-        kwargs
+        **kwargs
             Each `(key, value)` pair encodes a search field in `key`
             and a target value in `value`.
 
@@ -528,8 +537,7 @@ class JObject(object):
         True
         >>> J.search(foo=lambda x: x > 10)
         False
-        '''
-
+        """
         match = False
 
         r_query = {}
@@ -559,7 +567,7 @@ class JObject(object):
         return match
 
     def validate(self, strict=True):
-        '''Validate a JObject against its schema
+        """Validate a JObject against its schema
 
         Parameters
         ----------
@@ -576,8 +584,7 @@ class JObject(object):
         ------
         SchemaError
             If `strict==True` and `jam` fails validation
-        '''
-
+        """
         valid = True
 
         try:
@@ -594,24 +601,32 @@ class JObject(object):
         return valid
 
 
-Observation = namedtuple('Observation',
-                         ['time', 'duration', 'value', 'confidence'])
-'''Core observation type: (time, duration, value, confidence).'''
+Observation = namedtuple("Observation", ["time", "duration", "value", "confidence"])
+"""Core observation type: (time, duration, value, confidence)."""
 
 
 class Sandbox(JObject):
     """Sandbox (unconstrained)
 
     Functionally identical to JObjects, but the class hierarchy might be
-    confusing if all objects inherit from Sandboxes."""
+    confusing if all objects inherit from Sandboxes.
+    """
+
     pass
 
 
 class Annotation(JObject):
     """Annotation base class."""
 
-    def __init__(self, namespace, data=None, annotation_metadata=None,
-                 sandbox=None, time=0, duration=None):
+    def __init__(
+        self,
+        namespace,
+        data=None,
+        annotation_metadata=None,
+        sandbox=None,
+        time=0,
+        duration=None,
+    ):
         """Create an Annotation.
 
         Note that, if an argument is None, an empty Annotation is created in
@@ -622,23 +637,17 @@ class Annotation(JObject):
         ----------
         namespace : str
             The namespace for this annotation
-
         data : dict of lists, list of dicts, or list of Observations
             Data for the new annotation
-
         annotation_metadata : AnnotationMetadata (or dict), default=None.
             Metadata corresponding to this Annotation.
-
         sandbox : Sandbox (dict), default=None
             Miscellaneous information; keep to native datatypes if possible.
-
         time : non-negative number
             The starting time for this annotation
-
         duration : non-negative number
             The duration of this annotation
         """
-
         super(Annotation, self).__init__()
 
         if annotation_metadata is None:
@@ -665,22 +674,27 @@ class Annotation(JObject):
         self.duration = duration
 
     def _display_properties(self):
-        return [('namespace', 'Namespace'),
-                ('time', 'Time'),
-                ('duration', 'Duration'),
-                ('annotation_metadata', 'Annotation metadata'),
-                ('data', 'Data'),
-                ('sandbox', 'Sandbox')]
+        return [
+            ("namespace", "Namespace"),
+            ("time", "Time"),
+            ("duration", "Duration"),
+            ("annotation_metadata", "Annotation metadata"),
+            ("data", "Data"),
+            ("sandbox", "Sandbox"),
+        ]
 
     def append(self, time=None, duration=None, value=None, confidence=None):
-        '''Append an observation to the data field
+        """Append an observation to the data field
 
         Parameters
         ----------
         time : float >= 0
+
         duration : float >= 0
             The time and duration of the new observation, in seconds
+
         value
+
         confidence
             The value and confidence of the new observations.
 
@@ -691,15 +705,18 @@ class Annotation(JObject):
         --------
         >>> ann = jams.Annotation(namespace='chord')
         >>> ann.append(time=3, duration=2, value='E#')
-        '''
-
-        self.data.add(Observation(time=float(time),
-                                  duration=float(duration),
-                                  value=value,
-                                  confidence=confidence))
+        """
+        self.data.add(
+            Observation(
+                time=float(time),
+                duration=float(duration),
+                value=value,
+                confidence=confidence,
+            )
+        )
 
     def append_records(self, records):
-        '''Add observations from row-major storage.
+        """Add observations from row-major storage.
 
         This is primarily useful for deserializing sparsely packed data.
 
@@ -707,7 +724,7 @@ class Annotation(JObject):
         ----------
         records : iterable of dicts or Observations
             Each element of `records` corresponds to one observation.
-        '''
+        """
         for obs in records:
             if isinstance(obs, Observation):
                 self.append(**obs._asdict())
@@ -715,7 +732,7 @@ class Annotation(JObject):
                 self.append(**obs)
 
     def append_columns(self, columns):
-        '''Add observations from column-major storage.
+        """Add observations from column-major storage.
 
         This is primarily used for deserializing densely packed data.
 
@@ -725,16 +742,21 @@ class Annotation(JObject):
             Keys must be `time, duration, value, confidence`,
             and each much be a list of equal length.
 
-        '''
-        self.append_records([dict(time=t, duration=d, value=v, confidence=c)
-                             for (t, d, v, c)
-                             in six.moves.zip(columns['time'],
-                                              columns['duration'],
-                                              columns['value'],
-                                              columns['confidence'])])
+        """
+        self.append_records(
+            [
+                dict(time=t, duration=d, value=v, confidence=c)
+                for (t, d, v, c) in six.moves.zip(
+                    columns["time"],
+                    columns["duration"],
+                    columns["value"],
+                    columns["confidence"],
+                )
+            ]
+        )
 
     def validate(self, strict=True):
-        '''Validate this annotation object against the JAMS schema,
+        """Validate this annotation object against the JAMS schema,
         and its data against the namespace schema.
 
         Parameters
@@ -758,16 +780,16 @@ class Annotation(JObject):
         See Also
         --------
         JObject.validate
-        '''
-
+        """
         # Get the schema for this annotation
         ann_schema = schema.namespace_array(self.namespace)
 
         valid = True
 
         try:
-            schema.VALIDATOR.validate(self.__json_light__(data=False),
-                                                schema.JAMS_SCHEMA)
+            schema.VALIDATOR.validate(
+                self.__json_light__(data=False), schema.JAMS_SCHEMA
+            )
 
             # validate each record in the frame
             data_ser = [serialize_obj(obs) for obs in self.data]
@@ -783,7 +805,7 @@ class Annotation(JObject):
         return valid
 
     def trim(self, start_time, end_time, strict=False):
-        '''
+        """
         Trim the annotation and return as a new `Annotation` object.
 
         Trimming will result in the new annotation only containing observations
@@ -864,11 +886,10 @@ class Annotation(JObject):
         >>> ann_trim_strict.to_dataframe()
            time  duration  value confidence
         0     6         2  three       None
-        '''
+        """
         # Check for basic start_time and end_time validity
         if end_time <= start_time:
-            raise ParameterError(
-                'end_time must be greater than start_time.')
+            raise ParameterError("end_time must be greater than start_time.")
 
         # If the annotation does not have a set duration value, we'll assume
         # trimming is possible (up to the user to ensure this is valid).
@@ -878,7 +899,8 @@ class Annotation(JObject):
             warnings.warn(
                 "Annotation.duration is not defined, cannot check "
                 "for temporal intersection, assuming the annotation "
-                "is valid between start_time and end_time.")
+                "is valid between start_time and end_time."
+            )
         else:
             orig_time = self.time
             orig_duration = self.duration
@@ -888,9 +910,10 @@ class Annotation(JObject):
         # appropriately.
         if start_time > (orig_time + orig_duration) or (end_time < orig_time):
             warnings.warn(
-                'Time range defined by [start_time,end_time] does not '
-                'intersect with the time range spanned by this annotation, '
-                'the trimmed annotation will be empty.')
+                "Time range defined by [start_time,end_time] does not "
+                "intersect with the time range spanned by this annotation, "
+                "the trimmed annotation will be empty."
+            )
             trim_start = self.time
             trim_end = trim_start
         else:
@@ -905,7 +928,8 @@ class Annotation(JObject):
             annotation_metadata=self.annotation_metadata,
             sandbox=self.sandbox,
             time=trim_start,
-            duration=trim_end - trim_start)
+            duration=trim_end - trim_start,
+        )
 
         # Selectively add observations based on their start time / duration
         # We do this rather than copying and directly manipulating the
@@ -917,32 +941,47 @@ class Annotation(JObject):
             obs_end = obs_start + obs.duration
 
             # Special-case here handles duration=0 as a closed interval
-            if obs_start < trim_end and (obs_end > trim_start or obs_start == obs_end >= trim_start):
+            if obs_start < trim_end and (
+                obs_end > trim_start or obs_start == obs_end >= trim_start
+            ):
 
                 new_start = max(obs_start, trim_start)
                 new_end = min(obs_end, trim_end)
                 new_duration = new_end - new_start
 
-                if ((not strict) or
-                        (new_start == obs_start and new_end == obs_end)):
-                    ann_trimmed.append(time=new_start,
-                                       duration=new_duration,
-                                       value=obs.value,
-                                       confidence=obs.confidence)
+                if (not strict) or (new_start == obs_start and new_end == obs_end):
+                    ann_trimmed.append(
+                        time=new_start,
+                        duration=new_duration,
+                        value=obs.value,
+                        confidence=obs.confidence,
+                    )
 
-        if 'trim' not in ann_trimmed.sandbox.keys():
+        if "trim" not in ann_trimmed.sandbox.keys():
             ann_trimmed.sandbox.update(
-                trim=[{'start_time': start_time, 'end_time': end_time,
-                       'trim_start': trim_start, 'trim_end': trim_end}])
+                trim=[
+                    {
+                        "start_time": start_time,
+                        "end_time": end_time,
+                        "trim_start": trim_start,
+                        "trim_end": trim_end,
+                    }
+                ]
+            )
         else:
             ann_trimmed.sandbox.trim.append(
-                {'start_time': start_time, 'end_time': end_time,
-                 'trim_start': trim_start, 'trim_end': trim_end})
+                {
+                    "start_time": start_time,
+                    "end_time": end_time,
+                    "trim_start": trim_start,
+                    "trim_end": trim_end,
+                }
+            )
 
         return ann_trimmed
 
     def slice(self, start_time, end_time, strict=False):
-        '''
+        """
         Slice the annotation and return as a new `Annotation` object.
 
         Slicing has the same effect as trimming (see `Annotation.trim`) except
@@ -1013,7 +1052,7 @@ class Annotation(JObject):
         >>> ann_slice_strict.to_dataframe()
            time  duration  value confidence
         0   1.0       2.0  three       None
-        '''
+        """
         # start by trimming the annotation
         sliced_ann = self.trim(start_time, end_time, strict=strict)
         raw_data = sliced_ann.pop_data()
@@ -1027,23 +1066,37 @@ class Annotation(JObject):
             #   duration doesn't change
             # if obs.time < start_time,
             #   duration shrinks by start_time - obs.time
-            sliced_ann.append(time=new_time,
-                              duration=obs.duration,
-                              value=obs.value,
-                              confidence=obs.confidence)
+            sliced_ann.append(
+                time=new_time,
+                duration=obs.duration,
+                value=obs.value,
+                confidence=obs.confidence,
+            )
 
         ref_time = sliced_ann.time
         slice_start = ref_time
         slice_end = ref_time + sliced_ann.duration
 
-        if 'slice' not in sliced_ann.sandbox.keys():
+        if "slice" not in sliced_ann.sandbox.keys():
             sliced_ann.sandbox.update(
-                slice=[{'start_time': start_time, 'end_time': end_time,
-                        'slice_start': slice_start, 'slice_end': slice_end}])
+                slice=[
+                    {
+                        "start_time": start_time,
+                        "end_time": end_time,
+                        "slice_start": slice_start,
+                        "slice_end": slice_end,
+                    }
+                ]
+            )
         else:
             sliced_ann.sandbox.slice.append(
-                {'start_time': start_time, 'end_time': end_time,
-                 'slice_start': slice_start, 'slice_end': slice_end})
+                {
+                    "start_time": start_time,
+                    "end_time": end_time,
+                    "slice_start": slice_start,
+                    "slice_end": slice_end,
+                }
+            )
 
         # Update the timing for the sliced annotation
         sliced_ann.time = max(0, ref_time - start_time)
@@ -1051,20 +1104,19 @@ class Annotation(JObject):
         return sliced_ann
 
     def pop_data(self):
-        '''Replace this observation's data with a fresh container.
+        """Replace this observation's data with a fresh container.
 
         Returns
         -------
         annotation_data : SortedKeyList
             The original annotation data container
-        '''
-
+        """
         data = self.data
         self.data = SortedKeyList(key=self._key)
         return data
 
     def to_interval_values(self):
-        '''Extract observation data in a `mir_eval`-friendly format.
+        """Extract observation data in a `mir_eval`-friendly format.
 
         Returns
         -------
@@ -1072,11 +1124,9 @@ class Annotation(JObject):
             Start- and end-times of all valued intervals
 
             `intervals[i, :] = [time[i], time[i] + duration[i]]`
-
         labels : list
             List view of value field.
-        '''
-
+        """
         ints, vals = [], []
         for obs in self.data:
             ints.append([obs.time, obs.time + obs.duration])
@@ -1088,16 +1138,15 @@ class Annotation(JObject):
         return np.array(ints), vals
 
     def to_event_values(self):
-        '''Extract observation data in a `mir_eval`-friendly format.
+        """Extract observation data in a `mir_eval`-friendly format.
 
         Returns
         -------
         times : np.ndarray [shape=(n,), dtype=float]
             Start-time of all observations
-
         labels : list
             List view of value field.
-        '''
+        """
         ints, vals = [], []
         for obs in self.data:
             ints.append(obs.time)
@@ -1106,7 +1155,7 @@ class Annotation(JObject):
         return np.array(ints), vals
 
     def to_dataframe(self):
-        '''Convert this annotation to a pandas dataframe.
+        """Convert this annotation to a pandas dataframe.
 
         Returns
         -------
@@ -1114,19 +1163,18 @@ class Annotation(JObject):
             Columns are `time, duration, value, confidence`.
             Each row is an observation, and rows are sorted by
             ascending `time`.
-        '''
-        return pd.DataFrame.from_records(list(self.data),
-                                         columns=['time', 'duration',
-                                                  'value', 'confidence'])
+        """
+        return pd.DataFrame.from_records(
+            list(self.data), columns=["time", "duration", "value", "confidence"]
+        )
 
     def to_samples(self, times, confidence=False):
-        '''Sample the annotation at specified times.
+        """Sample the annotation at specified times.
 
         Parameters
         ----------
         times : np.ndarray, non-negative, ndim=1
             The times (in seconds) to sample the annotation
-
         confidence : bool
             If `True`, return both values and confidences.
             If `False` (default) only return values.
@@ -1136,13 +1184,12 @@ class Annotation(JObject):
         values : list
             `values[i]` is a list of observation values for intervals
             that cover `times[i]`.
-
         confidence : list (optional)
             `confidence` values corresponding to `values`
-        '''
+        """
         times = np.asarray(times)
         if times.ndim != 1 or np.any(times < 0):
-            raise ParameterError('times must be 1-dimensional and non-negative')
+            raise ParameterError("times must be 1-dimensional and non-negative")
 
         idx = np.argsort(times)
         samples = times[idx]
@@ -1152,7 +1199,7 @@ class Annotation(JObject):
 
         for obs in self.data:
             start = np.searchsorted(samples, obs.time)
-            end = np.searchsorted(samples, obs.time + obs.duration, side='right')
+            end = np.searchsorted(samples, obs.time + obs.duration, side="right")
             for i in range(start, end):
                 values[idx[i]].append(obs.value)
                 confidences[idx[i]].append(obs.confidence)
@@ -1163,21 +1210,22 @@ class Annotation(JObject):
             return values
 
     def __iter__(self):
+        """Iterate over the observations in this annotation."""
         return iter(self.data)
 
     def to_html(self, max_rows=None):
-        '''Render this annotation list in HTML
+        """Render this annotation list in HTML
 
         Returns
         -------
         rendered : str
             An HTML table containing this annotation's data.
-        '''
+        """
         n = len(self.data)
 
         div_id = _get_divid(self)
 
-        out = r'''  <div class="panel panel-default">
+        out = r"""  <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="heading-{0}">
                             <button
                                 type="button"
@@ -1190,21 +1238,29 @@ class Annotation(JObject):
                                 {1:s}
                                 <span class="badge pull-right">{2:d}</span>
                             </button>
-                        </div>'''.format(div_id, self.namespace, n)
+                        </div>""".format(
+            div_id, self.namespace, n
+        )
 
-        out += r'''     <div id="{0}" class="panel-collapse collapse"
+        out += r"""     <div id="{0}" class="panel-collapse collapse"
                              role="tabpanel" aria-labelledby="heading-{0}">
-                            <div class="panel-body">'''.format(div_id)
+                            <div class="panel-body">""".format(
+            div_id
+        )
 
-        out += r'''<div class="pull-right">
+        out += r"""<div class="pull-right">
                         {}
-                    </div>'''.format(self.annotation_metadata._repr_html_())
-        out += r'''<div class="pull-right clearfix">
+                    </div>""".format(
+            self.annotation_metadata._repr_html_()
+        )
+        out += r"""<div class="pull-right clearfix">
                         {}
-                    </div>'''.format(self.sandbox._repr_html_())
+                    </div>""".format(
+            self.sandbox._repr_html_()
+        )
 
         # -- Annotation content starts here
-        out += r'''<div><table border="1" class="dataframe">
+        out += r"""<div><table border="1" class="dataframe">
                     <thead>
                         <tr style="text-align: right;">
                             <th></th>
@@ -1213,53 +1269,58 @@ class Annotation(JObject):
                             <th>value</th>
                             <th>confidence</th>
                         </tr>
-                    </thead>'''.format(self.namespace, n)
+                    </thead>""".format(
+            self.namespace, n
+        )
 
-        out += r'''<tbody>'''
+        out += r"""<tbody>"""
 
         if max_rows is None or n <= max_rows:
             out += self._fmt_rows(0, n)
         else:
-            out += self._fmt_rows(0, max_rows//2)
-            out += r'''<tr>
+            out += self._fmt_rows(0, max_rows // 2)
+            out += r"""<tr>
                             <th>...</th>
                             <td>...</td>
                             <td>...</td>
                             <td>...</td>
                             <td>...</td>
-                        </tr>'''
-            out += self._fmt_rows(n-max_rows//2, n)
+                        </tr>"""
+            out += self._fmt_rows(n - max_rows // 2, n)
 
-        out += r'''</tbody>'''
+        out += r"""</tbody>"""
 
-        out += r'''</table></div>'''
+        out += r"""</table></div>"""
 
-        out += r'''</div></div></div>'''
+        out += r"""</div></div></div>"""
         return out
 
     def _fmt_rows(self, start, end):
-        out = ''
+        out = ""
         for i, obs in enumerate(self.data[start:end], start):
-            out += r'''<tr>
+            out += r"""<tr>
                             <th>{:d}</th>
                             <td>{:0.3f}</td>
                             <td>{:0.3f}</td>
                             <td>{:}</td>
                             <td>{:}</td>
-                        </tr>'''.format(i,
-                                        obs.time,
-                                        obs.duration,
-                                        summary_html(obs.value),
-                                        summary_html(obs.confidence))
+                        </tr>""".format(
+                i,
+                obs.time,
+                obs.duration,
+                summary_html(obs.value),
+                summary_html(obs.confidence),
+            )
 
         return out
 
     def _repr_html_(self, max_rows=25):
-        '''Render annotation as HTML.  See also: `to_html()`'''
+        """Render annotation as HTML.  See also: `to_html()`"""
         return self.to_html(max_rows=max_rows)
 
     @property
     def __json__(self):
+        """Return a JSON-serializable representation of this object."""
         return self.__json_light__(data=True)
 
     def __json_light__(self, data=True):
@@ -1270,15 +1331,15 @@ class Annotation(JObject):
         filtered_dict = dict()
 
         for k, item in six.iteritems(self.__dict__):
-            if k.startswith('_'):
+            if k.startswith("_"):
                 continue
-            elif k == 'data':
+            elif k == "data":
                 if data:
                     filtered_dict[k] = self.__json_data__
                 else:
                     filtered_dict[k] = []
 
-            elif hasattr(item, '__json__'):
+            elif hasattr(item, "__json__"):
                 filtered_dict[k] = item.__json__
             else:
                 filtered_dict[k] = item
@@ -1304,9 +1365,9 @@ class Annotation(JObject):
 
     @classmethod
     def _key(cls, obs):
-        '''Provides sorting index for Observation objects'''
+        """Provide sorting index for Observation objects"""
         if not isinstance(obs, Observation):
-            raise JamsError('{} must be of type jams.Observation'.format(obs))
+            raise JamsError("{} must be of type jams.Observation".format(obs))
 
         return obs.time
 
@@ -1316,15 +1377,15 @@ class Curator(JObject):
 
     Container object for curator metadata.
     """
-    def __init__(self, name='', email=''):
+
+    def __init__(self, name="", email=""):
         """Create a Curator.
 
         Parameters
         ----------
-        name: str, default=''
+        name : str, default=''
             Common name of the curator.
-
-        email: str, default=''
+        email : str, default=''
             An email address corresponding to the curator.
         """
         super(Curator, self).__init__()
@@ -1332,7 +1393,7 @@ class Curator(JObject):
         self.email = email
 
     def _display_properties(self):
-        return [('name', 'Name'), ('email', 'Email')]
+        return [("name", "Name"), ("email", "Email")]
 
 
 class AnnotationMetadata(JObject):
@@ -1340,37 +1401,39 @@ class AnnotationMetadata(JObject):
 
     Data structure for metadata corresponding to a specific annotation.
     """
-    def __init__(self, curator=None, version='', corpus='', annotator=None,
-                 annotation_tools='', annotation_rules='', validation='',
-                 data_source=''):
+
+    def __init__(
+        self,
+        curator=None,
+        version="",
+        corpus="",
+        annotator=None,
+        annotation_tools="",
+        annotation_rules="",
+        validation="",
+        data_source="",
+    ):
         """Create an AnnotationMetadata object.
 
         Parameters
         ----------
-        curator: Curator, default=None
+        curator : Curator, default=None
             Object documenting a name and email address for the person of
             correspondence.
-
-        version: string, default=''
+        version : string, default=''
             Version of this annotation.
-
-        annotator: dict, default=None
+        annotator : dict, default=None
             Sandbox for information about the specific annotator, such as
             musical experience, skill level, principal instrument, etc.
-
-        corpus: str, default=''
+        corpus : str, default=''
             Collection assignment.
-
-        annotation_tools: str, default=''
+        annotation_tools : str, default=''
             Description of the tools used to create the annotation.
-
-        annotation_rules: str, default=''
+        annotation_rules : str, default=''
             Description of the rules provided to the annotator.
-
-        validation: str, default=''
+        validation : str, default=''
             Methods for validating the integrity of the data.
-
-        data_source: str, default=''
+        data_source : str, default=''
             Description of where the data originated, e.g. 'Manual Annotation'.
         """
         super(AnnotationMetadata, self).__init__()
@@ -1392,40 +1455,45 @@ class AnnotationMetadata(JObject):
         self.data_source = data_source
 
     def _display_properties(self):
-        return [('annotator', 'Annotator'),
-                ('version', 'Version'),
-                ('corpus', 'Corpus'),
-                ('curator', 'Curator'),
-                ('annotation_tools', 'Annotation tools'),
-                ('annotation_rules', 'Annotation rules'),
-                ('data_source', 'Data source'),
-                ('validation', 'Validation')]
+        return [
+            ("annotator", "Annotator"),
+            ("version", "Version"),
+            ("corpus", "Corpus"),
+            ("curator", "Curator"),
+            ("annotation_tools", "Annotation tools"),
+            ("annotation_rules", "Annotation rules"),
+            ("data_source", "Data source"),
+            ("validation", "Validation"),
+        ]
 
 
 class FileMetadata(JObject):
     """Metadata for a given audio file."""
-    def __init__(self, title='', artist='', release='', duration=None,
-                 identifiers=None, jams_version=None):
+
+    def __init__(
+        self,
+        title="",
+        artist="",
+        release="",
+        duration=None,
+        identifiers=None,
+        jams_version=None,
+    ):
         """Create a file-level Metadata object.
 
         Parameters
         ----------
-        title: str
+        title : str
             Name of the recording.
-
-        artist: str
+        artist : str
             Name of the artist / musician.
-
-        release: str
+        release : str
             Name of the release
-
-        duration: number >= 0
+        duration : number >= 0
             Time duration of the file, in seconds.
-
         identifiers : jams.Sandbox
             Sandbox of identifier keys (eg, musicbrainz ids)
-
-        jams_version: str
+        jams_version : str
             Version of the JAMS Schema.
         """
         super(FileMetadata, self).__init__()
@@ -1444,12 +1512,14 @@ class FileMetadata(JObject):
         self.jams_version = jams_version
 
     def _display_properties(self):
-        return [('artist', 'Artist'),
-                ('title', 'Title'),
-                ('release', 'Release'),
-                ('duration', 'Duration (s)'),
-                ('jams_version', 'JAMS version'),
-                ('identifiers', 'Identifiers')]
+        return [
+            ("artist", "Artist"),
+            ("title", "Title"),
+            ("release", "Release"),
+            ("duration", "Duration (s)"),
+            ("jams_version", "JAMS version"),
+            ("identifiers", "Identifiers"),
+        ]
 
 
 class AnnotationArray(list):
@@ -1486,13 +1556,14 @@ class AnnotationArray(list):
     >>> # Retrieve everything after the second salami annotation
     >>> seg_anns = jam.annotations['segment_salami_.*', 2:]
     """
+
     def __init__(self, annotations=None):
         """Create an AnnotationArray.
 
         Parameters
         ----------
-        annotations: list
-            List of Annotations, or appropriately formated dicts
+        annotations : list
+            List of Annotations, or appropriately formatted dicts
             is consistent with Annotation.
         """
         super(AnnotationArray, self).__init__()
@@ -1503,13 +1574,12 @@ class AnnotationArray(list):
         self.extend([Annotation(**obj) for obj in annotations])
 
     def search(self, **kwargs):
-        '''Filter the annotation array down to only those Annotation
+        """Filter the annotation array down to only those Annotation
         objects matching the query.
-
 
         Parameters
         ----------
-        kwargs : search parameters
+        **kwargs : search parameters
             See JObject.search
 
         Returns
@@ -1520,8 +1590,7 @@ class AnnotationArray(list):
         See Also
         --------
         JObject.search
-        '''
-
+        """
         results = AnnotationArray()
 
         for annotation in self:
@@ -1531,8 +1600,7 @@ class AnnotationArray(list):
         return results
 
     def __getitem__(self, idx):
-        '''Overloaded getitem for syntactic search sugar'''
-
+        """Overloaded getitem for syntactic search sugar"""
         # if we have only one argument, it can be an int, slice or query
         if isinstance(idx, (int, slice)):
             return list.__getitem__(self, idx)
@@ -1540,20 +1608,20 @@ class AnnotationArray(list):
             return self.search(namespace=idx)
         elif isinstance(idx, tuple):
             return self.search(namespace=idx[0])[idx[1]]
-        raise IndexError('Invalid index: {}'.format(idx))
+        raise IndexError("Invalid index: {}".format(idx))
 
     @property
     def __json__(self):
+        """Return a JSON-serializable representation of this object."""
         return [item.__json__ for item in self]
 
     def trim(self, start_time, end_time, strict=False):
-        '''
+        """
         Trim every annotation contained in the annotation array using
         `Annotation.trim` and return as a new `AnnotationArray`.
 
         See `Annotation.trim` for details about trimming. This function does
         not modify the annotations in the original annotation array.
-
 
         Parameters
         ----------
@@ -1574,7 +1642,7 @@ class AnnotationArray(list):
         -------
         trimmed_array : AnnotationArray
             An annotation array where every annotation has been trimmed.
-        '''
+        """
         trimmed_array = AnnotationArray()
         for ann in self:
             trimmed_array.append(ann.trim(start_time, end_time, strict=strict))
@@ -1582,7 +1650,7 @@ class AnnotationArray(list):
         return trimmed_array
 
     def slice(self, start_time, end_time, strict=False):
-        '''
+        """
         Slice every annotation contained in the annotation array using
         `Annotation.slice`
         and return as a new AnnotationArray
@@ -1609,7 +1677,7 @@ class AnnotationArray(list):
         -------
         sliced_array : AnnotationArray
             An annotation array where every annotation has been sliced.
-        '''
+        """
         sliced_array = AnnotationArray()
         for ann in self:
             sliced_array.append(ann.slice(start_time, end_time, strict=strict))
@@ -1617,15 +1685,17 @@ class AnnotationArray(list):
         return sliced_array
 
     def __repr__(self):
+        """Return a string representation of this annotation array."""
         n = len(self)
 
         if n == 1:
-            return '[1 annotation]'
+            return "[1 annotation]"
         else:
-            return '[{:d} annotations]'.format(n)
+            return "[{:d} annotations]".format(n)
 
     def _repr_html_(self):
-        out = ''
+        """Render this annotation array as HTML."""
+        out = ""
         for ann in self:
             out += '<div class="panel-group">{}</div>'.format(ann._repr_html_())
         return out
@@ -1641,13 +1711,10 @@ class JAMS(JObject):
         ----------
         annotations : list of Annotations
             Zero or more Annotation objects
-
         file_metadata : FileMetadata (or dict), default=None
             Metadata corresponding to the audio file.
-
         sandbox : Sandbox (or dict), default=None
             Unconstrained global sandbox for additional information.
-
         """
         super(JAMS, self).__init__()
 
@@ -1664,15 +1731,18 @@ class JAMS(JObject):
         self.sandbox = Sandbox(**sandbox)
 
     def _display_properties(self):
-        return [('file_metadata', 'File Metadata'),
-                ('annotations', 'Annotations'),
-                ('sandbox', 'Sandbox')]
+        return [
+            ("file_metadata", "File Metadata"),
+            ("annotations", "Annotations"),
+            ("sandbox", "Sandbox"),
+        ]
 
     @property
     def __schema__(self):
+        """Return the JAMS schema for this object."""
         return schema.JAMS_SCHEMA
 
-    def add(self, jam, on_conflict='fail'):
+    def add(self, jam, on_conflict="fail"):
         """Add the contents of another jam to this object.
 
         Note that, by default, this method fails if file_metadata is not
@@ -1682,10 +1752,9 @@ class JAMS(JObject):
 
         Parameters
         ----------
-        jam: JAMS object
+        jam : JAMS object
             Object to add to this jam
-
-        on_conflict: str, default='fail'
+        on_conflict : str, default='fail'
             Strategy for resolving metadata conflicts; one of
                 ['fail', 'overwrite', or 'ignore'].
 
@@ -1693,31 +1762,32 @@ class JAMS(JObject):
         ------
         ParameterError
             if `on_conflict` is an unknown value
-
         JamsError
             If a conflict is detected and `on_conflict='fail'`
         """
-
-        if on_conflict not in ['overwrite', 'fail', 'ignore']:
-            raise ParameterError("on_conflict='{}' is not in ['fail', "
-                                 "'overwrite', 'ignore'].".format(on_conflict))
+        if on_conflict not in ["overwrite", "fail", "ignore"]:
+            raise ParameterError(
+                "on_conflict='{}' is not in ['fail', "
+                "'overwrite', 'ignore'].".format(on_conflict)
+            )
 
         if not self.file_metadata == jam.file_metadata:
-            if on_conflict == 'overwrite':
+            if on_conflict == "overwrite":
                 self.file_metadata = jam.file_metadata
-            elif on_conflict == 'fail':
-                raise JamsError("Metadata conflict! "
-                                "Resolve manually or force-overwrite it.")
+            elif on_conflict == "fail":
+                raise JamsError(
+                    "Metadata conflict! " "Resolve manually or force-overwrite it."
+                )
 
         self.annotations.extend(jam.annotations)
         self.sandbox.update(**jam.sandbox)
 
     def search(self, **kwargs):
-        '''Search a JAMS object for matching objects.
+        """Search a JAMS object for matching objects.
 
         Parameters
         ----------
-        kwargs : keyword arguments
+        **kwargs : keyword arguments
             Keyword query
 
         Returns
@@ -1730,18 +1800,16 @@ class JAMS(JObject):
         JObject.search
         AnnotationArray.search
 
-
         Examples
         --------
         A simple query to get all beat annotations
 
         >>> beats = my_jams.search(namespace='beat')
 
-        '''
-
+        """
         return self.annotations.search(**kwargs)
 
-    def save(self, path_or_file, strict=True, fmt='auto'):
+    def save(self, path_or_file, strict=True, fmt="auto"):
         """Serialize annotation as a JSON formatted stream to file.
 
         Parameters
@@ -1762,25 +1830,23 @@ class JAMS(JObject):
             If the input is an open file handle, `jams` encoding
             is used.
 
-
         Raises
         ------
         SchemaError
             If `strict == True` and the JAMS object fails schema
             or namespace validation.
 
-        See also
+        See Also
         --------
         validate
         """
-
         self.validate(strict=strict)
 
-        with _open(path_or_file, mode='w', fmt=fmt) as fdesc:
+        with _open(path_or_file, mode="w", fmt=fmt) as fdesc:
             json.dump(self.__json__, fdesc, indent=2)
 
     def validate(self, strict=True):
-        '''Validate a JAMS object against the schema.
+        """Validate a JAMS object against the schema.
 
         Parameters
         ----------
@@ -1803,7 +1869,7 @@ class JAMS(JObject):
         --------
         jsonschema.validate
 
-        '''
+        """
         valid = True
         try:
             schema.VALIDATOR.validate(self.__json_light__, schema.JAMS_SCHEMA)
@@ -1812,7 +1878,7 @@ class JAMS(JObject):
                 if isinstance(ann, Annotation):
                     valid &= ann.validate(strict=strict)
                 else:
-                    msg = '{} is not a well-formed JAMS Annotation'.format(ann)
+                    msg = "{} is not a well-formed JAMS Annotation".format(ann)
                     valid = False
                     if strict:
                         raise SchemaError(msg)
@@ -1830,7 +1896,7 @@ class JAMS(JObject):
         return valid
 
     def trim(self, start_time, end_time, strict=False):
-        '''
+        """
         Trim all the annotations inside the jam and return as a new `JAMS`
         object.
 
@@ -1869,42 +1935,46 @@ class JAMS(JObject):
             The trimmed jam with trimmed annotations, returned as a new JAMS
             object.
 
-        '''
+        """
         # Make sure duration is set in file metadata
         if self.file_metadata.duration is None:
             raise JamsError(
-                'Duration must be set (jam.file_metadata.duration) before '
-                'trimming can be performed.')
+                "Duration must be set (jam.file_metadata.duration) before "
+                "trimming can be performed."
+            )
 
         # Make sure start and end times are within the file start/end times
-        if not (0 <= start_time <= end_time <= float(
-                self.file_metadata.duration)):
+        if not (0 <= start_time <= end_time <= float(self.file_metadata.duration)):
             raise ParameterError(
-                'start_time and end_time must be within the original file '
-                'duration ({:f}) and end_time cannot be smaller than '
-                'start_time.'.format(float(self.file_metadata.duration)))
+                "start_time and end_time must be within the original file "
+                "duration ({:f}) and end_time cannot be smaller than "
+                "start_time.".format(float(self.file_metadata.duration))
+            )
 
         # Create a new jams
-        jam_trimmed = JAMS(annotations=None,
-                           file_metadata=self.file_metadata,
-                           sandbox=self.sandbox)
+        jam_trimmed = JAMS(
+            annotations=None, file_metadata=self.file_metadata, sandbox=self.sandbox
+        )
 
         # trim annotations
         jam_trimmed.annotations = self.annotations.trim(
-            start_time, end_time, strict=strict)
+            start_time, end_time, strict=strict
+        )
 
         # Document jam-level trim in top level sandbox
-        if 'trim' not in jam_trimmed.sandbox.keys():
+        if "trim" not in jam_trimmed.sandbox.keys():
             jam_trimmed.sandbox.update(
-                trim=[{'start_time': start_time, 'end_time': end_time}])
+                trim=[{"start_time": start_time, "end_time": end_time}]
+            )
         else:
             jam_trimmed.sandbox.trim.append(
-                {'start_time': start_time, 'end_time': end_time})
+                {"start_time": start_time, "end_time": end_time}
+            )
 
         return jam_trimmed
 
     def slice(self, start_time, end_time, strict=False):
-        '''
+        """
         Slice all the annotations inside the jam and return as a new `JAMS`
         object.
 
@@ -1945,42 +2015,49 @@ class JAMS(JObject):
             The sliced jam with sliced annotations, returned as a new
             JAMS object.
 
-        '''
+        """
         # Make sure duration is set in file metadata
         if self.file_metadata.duration is None:
             raise JamsError(
-                'Duration must be set (jam.file_metadata.duration) before '
-                'slicing can be performed.')
+                "Duration must be set (jam.file_metadata.duration) before "
+                "slicing can be performed."
+            )
 
         # Make sure start and end times are within the file start/end times
-        if (start_time < 0 or
-                start_time > float(self.file_metadata.duration) or
-                end_time < start_time or
-                end_time > float(self.file_metadata.duration)):
+        if (
+            start_time < 0
+            or start_time > float(self.file_metadata.duration)
+            or end_time < start_time
+            or end_time > float(self.file_metadata.duration)
+        ):
             raise ParameterError(
-                'start_time and end_time must be within the original file '
-                'duration ({:f}) and end_time cannot be smaller than '
-                'start_time.'.format(float(self.file_metadata.duration)))
+                "start_time and end_time must be within the original file "
+                "duration ({:f}) and end_time cannot be smaller than "
+                "start_time.".format(float(self.file_metadata.duration))
+            )
 
         # Create a new jams
-        jam_sliced = JAMS(annotations=None,
-                          file_metadata=self.file_metadata,
-                          sandbox=self.sandbox)
+        jam_sliced = JAMS(
+            annotations=None, file_metadata=self.file_metadata, sandbox=self.sandbox
+        )
 
         # trim annotations
         jam_sliced.annotations = self.annotations.slice(
-            start_time, end_time, strict=strict)
+            start_time, end_time, strict=strict
+        )
 
         # adjust dutation
         jam_sliced.file_metadata.duration = end_time - start_time
 
         # Document jam-level trim in top level sandbox
-        if 'slice' not in jam_sliced.sandbox.keys():
+        if "slice" not in jam_sliced.sandbox.keys():
             jam_sliced.sandbox.update(
-                slice=[{'start_time': start_time, 'end_time': end_time}])
+                slice=[{"start_time": start_time, "end_time": end_time}]
+            )
         else:
             jam_sliced.sandbox.slice.append(
-                {'start_time': start_time, 'end_time': end_time})
+                {"start_time": start_time, "end_time": end_time}
+            )
 
         return jam_sliced
 
@@ -1995,10 +2072,10 @@ class JAMS(JObject):
         filtered_dict = dict()
 
         for k, item in six.iteritems(self.__dict__):
-            if k.startswith('_') or k == 'annotations':
+            if k.startswith("_") or k == "annotations":
                 continue
 
-            if hasattr(item, '__json__'):
+            if hasattr(item, "__json__"):
                 filtered_dict[k] = item.__json__
             else:
                 filtered_dict[k] = serialize_obj(item)
@@ -2007,18 +2084,15 @@ class JAMS(JObject):
 
 
 # -- Helper functions -- #
-def query_pop(query, prefix, sep='.'):
-    '''Pop a prefix from a query string.
-
+def query_pop(query, prefix, sep="."):
+    """Pop a prefix from a query string.
 
     Parameters
     ----------
     query : str
         The query string
-
     prefix : str
         The prefix string to pop, if it exists
-
     sep : str
         The string to separate fields
 
@@ -2035,8 +2109,7 @@ def query_pop(query, prefix, sep='.'):
     >>> query_pop('namespace', 'Annotation')
     'namespace'
 
-    '''
-
+    """
     terms = query.split(sep)
 
     if terms[0] == prefix:
@@ -2046,13 +2119,12 @@ def query_pop(query, prefix, sep='.'):
 
 
 def match_query(string, query):
-    '''Test if a string matches a query.
+    """Test if a string matches a query.
 
     Parameters
     ----------
     string : str
         The string to test
-
     query : string, callable, or object
         Either a regular expression, callable function, or object.
 
@@ -2066,13 +2138,11 @@ def match_query(string, query):
 
         `False` otherwise
 
-    '''
-
+    """
     if six.callable(query):
         return query(string)
 
-    elif (isinstance(query, six.string_types) and
-          isinstance(string, six.string_types)):
+    elif isinstance(query, six.string_types) and isinstance(string, six.string_types):
         return re.match(query, string) is not None
 
     else:
@@ -2080,13 +2150,12 @@ def match_query(string, query):
 
 
 def serialize_obj(obj):
-    '''Custom serialization functionality for working with advanced data types.
+    """Serialize advanced data types.
 
     - numpy arrays are converted to lists
     - lists are recursively serialized element-wise
 
-    '''
-
+    """
     if isinstance(obj, np.integer):
         return int(obj)
 
@@ -2106,13 +2175,12 @@ def serialize_obj(obj):
 
 
 def summary(obj, indent=0):
-    '''Helper function to format repr strings for JObjects and friends.
+    """Format repr strings for JObjects and friends.
 
     Parameters
     ----------
     obj
         The object to repr
-
     indent : int >= 0
         indent each new line by `indent` spaces
 
@@ -2125,32 +2193,34 @@ def summary(obj, indent=0):
         of the length of the list.
 
         Otherwise, `repr(obj)`.
-    '''
-    if hasattr(obj, '__summary__'):
+    """
+    if hasattr(obj, "__summary__"):
         rep = obj.__summary__()
     elif isinstance(obj, SortedKeyList):
-        rep = '<{:d} observations>'.format(len(obj))
+        rep = "<{:d} observations>".format(len(obj))
     else:
         rep = repr(obj)
 
-    return rep.replace('\n', '\n' + ' ' * indent)
+    return rep.replace("\n", "\n" + " " * indent)
 
 
 def summary_html(obj):
 
-    if hasattr(obj, '_repr_html_'):
+    if hasattr(obj, "_repr_html_"):
         return obj._repr_html_()
     elif isinstance(obj, dict):
         out = '<table class="table"><tbody>'
         for key in obj:
-            out += r''' <tr>
+            out += r""" <tr>
                             <th scope="row">{0}</th>
                             <td>{1}</td>
-                        </tr>'''.format(key, summary_html(obj[key]))
-        out += '</tbody></table>'
+                        </tr>""".format(
+                key, summary_html(obj[key])
+            )
+        out += "</tbody></table>"
         return out
     elif isinstance(obj, list):
-        return ''.join([summary_html(x) for x in obj])
+        return "".join([summary_html(x) for x in obj])
     else:
         return str(obj)
 
@@ -2159,10 +2229,10 @@ __DIVID_COUNT__ = 0
 
 
 def _get_divid(obj):
-    '''Static function to get a unique id for an object.
+    """Get a unique id for an object.
     This is used in HTML rendering to ensure unique div ids for each call
-    to display an object'''
-
+    to display an object
+    """
     global __DIVID_COUNT__
     __DIVID_COUNT__ += 1
-    return '{}-{}'.format(id(obj), __DIVID_COUNT__)
+    return "{}-{}".format(id(obj), __DIVID_COUNT__)

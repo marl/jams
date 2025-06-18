@@ -4,7 +4,8 @@
 import numpy as np
 
 import matplotlib
-matplotlib.use('Agg')
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 import pytest
@@ -15,18 +16,29 @@ from jams import NamespaceError
 
 
 # A simple run-without-fail test for plotting
-@pytest.mark.parametrize('namespace',
-                         ['segment_open', 'chord', 'multi_segment',
-                          'pitch_contour', 'beat_position', 'beat',
-                          'onset', 'note_midi', 'tag_open'])
-@pytest.mark.parametrize('meta', [False, True])
+@pytest.mark.parametrize(
+    "namespace",
+    [
+        "segment_open",
+        "chord",
+        "multi_segment",
+        "pitch_contour",
+        "beat_position",
+        "beat",
+        "onset",
+        "note_midi",
+        "tag_open",
+    ],
+)
+@pytest.mark.parametrize("meta", [False, True])
 def test_display(namespace, meta):
 
     ann = jams.Annotation(namespace=namespace)
     jams.display.display(ann, meta=meta)
 
-@pytest.mark.parametrize('namespace', ['tempo'])
-@pytest.mark.parametrize('meta', [False, True])
+
+@pytest.mark.parametrize("namespace", ["tempo"])
+@pytest.mark.parametrize("meta", [False, True])
 def test_display_exception(namespace, meta):
     with pytest.raises(NamespaceError):
         ann = jams.Annotation(namespace=namespace)
@@ -36,22 +48,22 @@ def test_display_exception(namespace, meta):
 def test_display_multi():
 
     jam = jams.JAMS()
-    jam.annotations.append(jams.Annotation(namespace='beat'))
+    jam.annotations.append(jams.Annotation(namespace="beat"))
     jams.display.display_multi(jam.annotations)
 
 
 def test_display_multi_multi():
 
     jam = jams.JAMS()
-    jam.annotations.append(jams.Annotation(namespace='beat'))
-    jam.annotations.append(jams.Annotation(namespace='chord'))
+    jam.annotations.append(jams.Annotation(namespace="beat"))
+    jam.annotations.append(jams.Annotation(namespace="chord"))
 
     jams.display.display_multi(jam.annotations)
 
 
 def test_display_pitch_contour():
 
-    ann = jams.Annotation(namespace='pitch_hz', duration=5)
+    ann = jams.Annotation(namespace="pitch_hz", duration=5)
 
     values = np.arange(100, 200)
     times = np.linspace(0, 2, num=len(values))
@@ -67,7 +79,7 @@ def test_display_labeled_events():
     times = np.arange(40)
     values = times % 4
 
-    ann = jams.Annotation(namespace='beat', duration=60)
+    ann = jams.Annotation(namespace="beat", duration=60)
 
     for t, v in zip(times, values):
         ann.append(time=t, value=v, duration=0)
