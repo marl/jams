@@ -17,6 +17,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         channel-priority: [strict]
+        envfile: [".github/environment.yml"]
         python-version:
         - "3.9"
         - "3.10"
@@ -31,6 +32,12 @@ jobs:
           - python-version: "3.13"
             os: ubuntu-latest
             channel-priority: flexible
+          - os: ubuntu-latest
+            python-version: "3.7"
+            envfile: ".github/environment-minimal.yml"
+            channel-priority: "flexible"
+            name: "Minimal dependencies"
+
     steps:
     - uses: actions/checkout@v4
     - name: Setup Python ${{ matrix.python-version }}
@@ -38,10 +45,16 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install jams
-      run: pip install -e .[display,tests]
+      run: python -m pip install --upgrade-strategy=only-if-needed -e .[display,tests]
+    - name: Log installed packages for debugging
+      run: |
+        python -c "import sys; print(sys.version)"
+        conda info -a
+
     - name: Run tests
       run: |
         pytest -v --cov-report term-missing --cov jams
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
@@ -52,5 +65,3 @@ jobs:
         name: codecov-umbrella
         fail_ci_if_error: true
         verbose: true
-
-
