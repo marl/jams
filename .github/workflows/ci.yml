@@ -48,11 +48,11 @@ jobs:
           - python-version: "3.13"
             os: macos-latest
             channel-priority: "strict"
-            envfile: [".github/environment-ci.yml"]
+            envfile: ".github/environment-ci.yml"
 
           - python-version: "3.13"
             os: windows-latest
-            envfile: [".github/environment-ci.yml"]
+            envfile: ".github/environment-ci.yml"
 
           - os: ubuntu-latest
             python-version: "3.9"
