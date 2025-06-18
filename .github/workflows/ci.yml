@@ -8,8 +8,12 @@ on:
     branches:
       - master
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: True
+
 jobs:
-  install:
+  test:
     name: "Python ${{ matrix.python-version }} on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     strategy:
@@ -45,13 +49,16 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install jams
+      shell: bash -l {0}
       run: python -m pip install --upgrade-strategy=only-if-needed -e .[display,tests]
     - name: Log installed packages for debugging
+      shell: bash -l {0}
       run: |
         python -c "import sys; print(sys.version)"
         conda info -a
 
     - name: Run tests
+      shell: bash -l {0}
       run: |
         pytest -v --cov-report term-missing --cov jams
 
