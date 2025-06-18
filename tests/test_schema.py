@@ -2,7 +2,7 @@
 # CREATED:2015-07-15 10:21:30 by Brian McFee <brian.mcfee@nyu.edu>
 """Namespace management tests"""
 
-from six.moves import reload_module
+import importlib
 
 import pytest
 import os
@@ -44,14 +44,14 @@ def test_schema_is_dense_exception(ns):
 def local_namespace():
 
     os.environ["JAMS_SCHEMA_DIR"] = os.path.join("tests", "fixtures", "schema")
-    reload_module(jams)
+    importlib.reload(jams)
 
     # This one should pass
     yield "testing_tag_upper", True
 
     # Cleanup
     del os.environ["JAMS_SCHEMA_DIR"]
-    reload_module(jams)
+    importlib.reload(jams)
 
 
 def test_schema_local(local_namespace):

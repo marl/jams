@@ -4,13 +4,11 @@
 import sys
 import tempfile
 import os
+import io
 import pytest
 import numpy as np
 
 from jams import core, util
-
-
-import six
 
 
 def srand(seed=628318530):
@@ -40,7 +38,7 @@ def srand(seed=628318530):
     ],
 )
 def test_import_lab(ns, lab, ints, y, infer_duration):
-    ann = util.import_lab(ns, six.StringIO(lab), infer_duration=infer_duration)
+    ann = util.import_lab(ns, io.StringIO(lab), infer_duration=infer_duration)
 
     assert len(ints) == len(ann.data)
     assert len(y) == len(ann.data)
