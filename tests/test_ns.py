@@ -1025,9 +1025,7 @@ def test_ns_scraper_snr_invalid(scraper_value, snr):
         ann.validate()
 
 
-@parametrize(
-    "label", ["air_conditioner", "car_horn", ("street_music"), "any string"]
-)
+@parametrize("label", ["air_conditioner", "car_horn", ("street_music"), "any string"])
 def test_ns_scaper_label(label):
 
     ann = Annotation(namespace="scaper")
