@@ -447,13 +447,13 @@ def test_jams(tag_data, file_metadata, ann_sandbox):
 
 
 @pytest.fixture(params=["jams", "jamz"])
-def output_path(request):
-
-    _, jam_out = tempfile.mkstemp(suffix=".{:s}".format(request.param))
-
-    yield jam_out
-
-    os.unlink(jam_out)
+def output_path(tmp_path, request):
+    # tmp_path is a pathlib.Path unique to this test‐invocation (including each param)
+    # build your filename with the desired extension
+    path = tmp_path / f"output.{request.param}"
+    # (optional) if you really need an existing file, you could touch it:
+    # path.write_bytes(b"")
+    return str(path)
 
 
 @pytest.fixture(scope="module")
