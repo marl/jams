@@ -19,20 +19,41 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        channel-priority: [strict]
-        envfile: [".github/environment-ci.yml"]
-        python-version:
-        - "3.9"
-        - "3.10"
-        - "3.11"
-        - "3.12"
-        - "3.13"
         include:
+          - os: ubuntu-latest
+            python-version: "3.9"
+            channel-priority: "strict"
+            envfile: ".github/environment-ci.yml"
+
+          - os: ubuntu-latest
+            python-version: "3.10"
+            channel-priority: "strict"
+            envfile: ".github/environment-ci.yml"
+
+          - os: ubuntu-latest
+            python-version: "3.11"
+            channel-priority: "strict"
+            envfile: ".github/environment-ci.yml"
+
+          - os: ubuntu-latest
+            python-version: "3.12"
+            channel-priority: "strict"
+            envfile: ".github/environment-ci.yml"
+
+          - os: ubuntu-latest
+            python-version: "3.13"
+            channel-priority: "strict"
+            envfile: ".github/environment-ci.yml"
+
           - python-version: "3.13"
             os: macos-latest
+            channel-priority: "strict"
+            envfile: [".github/environment-ci.yml"]
+
           - python-version: "3.13"
             os: windows-latest
+            envfile: [".github/environment-ci.yml"]
+
           - os: ubuntu-latest
             python-version: "3.9"
             envfile: ".github/environment-minimal.yml"
