@@ -5,7 +5,7 @@ channels:
 dependencies:
   - pip
   - numpy ==1.20.0
-  - jsonschema ==3.0.0
+  - jsonschema ==4.0.1
   - pandas ==1.2.0
   - mir_eval ==0.8.2
   - matplotlib-base ==3.3.0
