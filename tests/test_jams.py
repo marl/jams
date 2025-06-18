@@ -7,7 +7,6 @@ import os
 import tempfile
 import json
 
-import six
 import sys
 import warnings
 
@@ -18,13 +17,12 @@ import jams
 
 
 # Borrowed from sklearn
+# FIXME: use pytest warning capture instead of this hack
 def clean_warning_registry():
     """Safe way to reset warnings"""
     warnings.resetwarnings()
     reg = "__warningregistry__"
     for mod_name, mod in list(sys.modules.items()):
-        if "six.moves" in mod_name:
-            continue
         if hasattr(mod, reg):
             getattr(mod, reg).clear()
 
@@ -124,7 +122,7 @@ def test_sandbox():
 
     J = jams.Sandbox(**data)
 
-    for key, value in six.iteritems(data):
+    for key, value in data.items():
         assert value == J[key]
 
 

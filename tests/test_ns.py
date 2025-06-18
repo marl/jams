@@ -2,7 +2,6 @@
 # CREATED:2015-05-26 12:47:35 by Brian McFee <brian.mcfee@nyu.edu>
 """Namespace schema tests"""
 
-import six
 import numpy as np
 
 import pytest
@@ -156,7 +155,7 @@ def test_ns_onset():
     ann.validate()
 
 
-@parametrize("lyric", ["Check yourself", six.u("before you wreck yourself")])
+@parametrize("lyric", ["Check yourself", ("before you wreck yourself")])
 def test_ns_lyrics(lyric):
 
     ann = Annotation(namespace="lyrics")
@@ -358,7 +357,7 @@ def test_ns_contour_invalid():
     ann.validate()
 
 
-@parametrize("value", ["B#:locrian", six.u("A:minor"), "N", "E"])
+@parametrize("value", ["B#:locrian", ("A:minor"), "N", "E"])
 def test_ns_key_mode(value):
 
     ann = Annotation(namespace="key_mode")
@@ -423,7 +422,7 @@ def test_ns_chord_harte_invalid(value):
 
 @parametrize(
     "value",
-    [dict(tonic="B", chord="bII7"), dict(tonic=six.u("Gb"), chord=six.u("ii7/#V"))],
+    [dict(tonic="B", chord="bII7"), dict(tonic=("Gb"), chord=("ii7/#V"))],
 )
 def test_ns_chord_roman_valid(value):
 
@@ -472,7 +471,7 @@ def test_ns_chord_roman_missing(key):
         ann.validate()
 
 
-@parametrize("value", [dict(tonic="B", pitch=0), dict(tonic=six.u("Gb"), pitch=11)])
+@parametrize("value", [dict(tonic="B", pitch=0), dict(tonic=("Gb"), pitch=11)])
 def test_ns_pitch_class_valid(value):
 
     ann = Annotation(namespace="pitch_class")
@@ -521,10 +520,10 @@ def test_ns_pitch_class_missing(key):
     [
         ("tag_cal500", "Emotion-Angry_/_Aggressive"),
         ("tag_cal500", "Genre--_Metal/Hard_Rock"),
-        ("tag_cal500", six.u("Genre-Best-Jazz")),
+        ("tag_cal500", ("Genre-Best-Jazz")),
         ("tag_cal10k", "a dub production"),
         ("tag_cal10k", "boomin' kick drum"),
-        ("tag_cal10k", six.u("rock & roll ? roots")),
+        ("tag_cal10k", ("rock & roll ? roots")),
         ("tag_gtzan", "blues"),
         ("tag_gtzan", "classical"),
         ("tag_gtzan", "country"),
@@ -534,7 +533,7 @@ def test_ns_pitch_class_missing(key):
         ("tag_gtzan", "metal"),
         ("tag_gtzan", "pop"),
         ("tag_gtzan", "reggae"),
-        ("tag_gtzan", six.u("rock")),
+        ("tag_gtzan", ("rock")),
         ("tag_msd_tagtraum_cd1", "reggae"),
         ("tag_msd_tagtraum_cd1", "pop/rock"),
         ("tag_msd_tagtraum_cd1", "rnb"),
@@ -547,10 +546,10 @@ def test_ns_pitch_class_missing(key):
         ("tag_msd_tagtraum_cd1", "international"),
         ("tag_msd_tagtraum_cd1", "blues"),
         ("tag_msd_tagtraum_cd1", "electronic"),
-        ("tag_msd_tagtraum_cd1", six.u("folk")),
+        ("tag_msd_tagtraum_cd1", ("folk")),
         ("tag_medleydb_instruments", "accordion"),
         ("tag_medleydb_instruments", "alto saxophone"),
-        ("tag_medleydb_instruments", six.u("fx/processed sound")),
+        ("tag_medleydb_instruments", ("fx/processed sound")),
         ("tag_open", "a tag"),
         ("segment_open", "a segment"),
         ("segment_salami_lower", "a"),
@@ -558,7 +557,7 @@ def test_ns_pitch_class_missing(key):
         ("segment_salami_lower", "a'''"),
         ("segment_salami_lower", "silence"),
         ("segment_salami_lower", "Silence"),
-        ("segment_salami_lower", six.u("a")),
+        ("segment_salami_lower", ("a")),
         ("segment_salami_lower", "aa"),
         ("segment_salami_lower", "aa'"),
         ("segment_salami_lower", "ab"),
@@ -567,25 +566,25 @@ def test_ns_pitch_class_missing(key):
         ("segment_salami_upper", "A'''"),
         ("segment_salami_upper", "silence"),
         ("segment_salami_upper", "Silence"),
-        ("segment_salami_upper", six.u("A")),
+        ("segment_salami_upper", ("A")),
         ("segment_salami_function", "verse"),
         ("segment_salami_function", "chorus"),
         ("segment_salami_function", "theme"),
         ("segment_salami_function", "voice"),
         ("segment_salami_function", "silence"),
-        ("segment_salami_function", six.u("verse")),
+        ("segment_salami_function", ("verse")),
         ("segment_tut", "verse"),
         ("segment_tut", "refrain"),
         ("segment_tut", "Si"),
         ("segment_tut", "bridge"),
         ("segment_tut", "Bridge"),
-        ("segment_tut", six.u("verse")),
+        ("segment_tut", ("verse")),
         ("vector", [1]),
         ("vector", [1, 2]),
         ("vector", np.asarray([1])),
         ("vector", np.asarray([1, 2])),
         ("blob", "a tag"),
-        ("blob", six.u("a unicode tag")),
+        ("blob", ("a unicode tag")),
         ("blob", 23),
         ("blob", None),
         ("blob", dict()),
@@ -605,19 +604,19 @@ def test_ns_pitch_class_missing(key):
         ("lyrics_bow", []),
         ("tag_audioset", "Accordion"),
         ("tag_audioset", "Afrobeat"),
-        ("tag_audioset", six.u("Cacophony")),
+        ("tag_audioset", ("Cacophony")),
         ("tag_audioset_genre", "Afrobeat"),
         ("tag_audioset_genre", "Disco"),
-        ("tag_audioset_genre", six.u("Opera")),
+        ("tag_audioset_genre", ("Opera")),
         ("tag_audioset_instruments", "Organ"),
         ("tag_audioset_instruments", "Harmonica"),
-        ("tag_audioset_instruments", six.u("Zither")),
+        ("tag_audioset_instruments", ("Zither")),
         ("tag_fma_genre", "Blues"),
         ("tag_fma_genre", "Classical"),
-        ("tag_fma_genre", six.u("Soul-RnB")),
+        ("tag_fma_genre", ("Soul-RnB")),
         ("tag_fma_subgenre", "Blues"),
         ("tag_fma_subgenre", "British Folk"),
-        ("tag_fma_subgenre", six.u("Klezmer")),
+        ("tag_fma_subgenre", ("Klezmer")),
         ("tag_urbansound", "air_conditioner"),
         ("tag_urbansound", "car_horn"),
         ("tag_urbansound", "children_playing"),
@@ -627,7 +626,7 @@ def test_ns_pitch_class_missing(key):
         ("tag_urbansound", "gun_shot"),
         ("tag_urbansound", "jackhammer"),
         ("tag_urbansound", "siren"),
-        ("tag_urbansound", six.u("street_music")),
+        ("tag_urbansound", ("street_music")),
     ],
 )
 def test_ns_tag(namespace, tag):
@@ -701,7 +700,7 @@ def test_ns_tag_invalid_type(namespace, value):
         ("segment_tut", "  Silence  23"),
         ("segment_tut", "Some Garbage"),
         ("vector", "a tag"),
-        ("vector", six.u("a unicode tag")),
+        ("vector", ("a unicode tag")),
         ("vector", 23),
         ("vector", None),
         ("vector", dict()),
@@ -781,7 +780,7 @@ def test_ns_pattern_invalid_bounded(key, value):
         ann.validate()
 
 
-@parametrize("label", ["a segment", six.u("a unicode segment")])
+@parametrize("label", ["a segment", ("a unicode segment")])
 @parametrize("level", [0, 2])
 def test_ns_multi_segment_label(label, level):
 
@@ -1026,9 +1025,7 @@ def test_ns_scraper_snr_invalid(scraper_value, snr):
         ann.validate()
 
 
-@parametrize(
-    "label", ["air_conditioner", "car_horn", six.u("street_music"), "any string"]
-)
+@parametrize("label", ["air_conditioner", "car_horn", ("street_music"), "any string"])
 def test_ns_scaper_label(label):
 
     ann = Annotation(namespace="scaper")
@@ -1065,7 +1062,7 @@ def test_ns_scraper_label_invalid(scraper_value, label):
     [
         "foreground",
         "background",
-        six.u("background"),
+        ("background"),
     ],
 )
 def test_ns_scaper_role(role):
@@ -1099,7 +1096,7 @@ def test_ns_scraper_role_invalid(scraper_value, role):
         ann.validate()
 
 
-@parametrize("source_file", ["filename", "/a/b/c.wav", six.u("filename.wav")])
+@parametrize("source_file", ["filename", "/a/b/c.wav", ("filename.wav")])
 def test_ns_scaper_source_file(source_file):
 
     ann = Annotation(namespace="scaper")

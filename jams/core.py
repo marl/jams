@@ -40,7 +40,6 @@ import re
 import warnings
 import contextlib
 import gzip
-import six
 
 import numpy as np
 import pandas as pd
@@ -75,7 +74,8 @@ def deprecated(version, version_removed):
 
     def __wrapper(func, *args, **kwargs):
         """Warn the user, and then proceed."""
-        code = six.get_function_code(func)
+        # replace this with a purely python 3 implementation
+        code = func.__code__
         warnings.warn_explicit(
             "{:s}.{:s}\n\tDeprecated as of JAMS version {:s}."
             "\n\tIt will be removed in JAMS version {:s}.".format(
@@ -123,7 +123,7 @@ def _open(name_or_fdesc, mode="r", fmt="auto"):
     if hasattr(name_or_fdesc, "read") or hasattr(name_or_fdesc, "write"):
         yield name_or_fdesc
 
-    elif isinstance(name_or_fdesc, six.string_types):
+    elif isinstance(name_or_fdesc, str):
         # Infer the opener from the extension
 
         if fmt == "auto":
@@ -242,7 +242,7 @@ class JObject(object):
         """
         super(JObject, self).__init__()
 
-        for name, value in six.iteritems(kwargs):
+        for name, value in kwargs.items():
             setattr(self, name, value)
 
     @property
@@ -263,7 +263,7 @@ class JObject(object):
         """
         filtered_dict = dict()
 
-        for k, item in six.iteritems(self.__dict__):
+        for k, item in self.__dict__.items():
             if k.startswith("_"):
                 continue
 
@@ -459,7 +459,7 @@ class JObject(object):
         >>> J.dumps()
         '{"foo": 5, "bar": "baz"}'
         """
-        for name, value in six.iteritems(kwargs):
+        for name, value in kwargs.items():
             setattr(self, name, value)
 
     @property
@@ -544,7 +544,7 @@ class JObject(object):
         myself = self.__class__.__name__
 
         # Pop this object name off the query
-        for k, value in six.iteritems(kwargs):
+        for k, value in kwargs.items():
             k_pop = query_pop(k, myself)
 
             if k_pop:
@@ -746,7 +746,7 @@ class Annotation(JObject):
         self.append_records(
             [
                 dict(time=t, duration=d, value=v, confidence=c)
-                for (t, d, v, c) in six.moves.zip(
+                for (t, d, v, c) in zip(
                     columns["time"],
                     columns["duration"],
                     columns["value"],
@@ -1330,7 +1330,7 @@ class Annotation(JObject):
         """
         filtered_dict = dict()
 
-        for k, item in six.iteritems(self.__dict__):
+        for k, item in self.__dict__.items():
             if k.startswith("_"):
                 continue
             elif k == "data":
@@ -1355,7 +1355,7 @@ class Annotation(JObject):
                 dense_records[field] = []
 
             for obs in self.data:
-                for key, val in six.iteritems(obs._asdict()):
+                for key, val in obs._asdict().items():
                     dense_records[key].append(serialize_obj(val))
 
             return dense_records
@@ -1604,7 +1604,7 @@ class AnnotationArray(list):
         # if we have only one argument, it can be an int, slice or query
         if isinstance(idx, (int, slice)):
             return list.__getitem__(self, idx)
-        elif isinstance(idx, six.string_types) or six.callable(idx):
+        elif isinstance(idx, str) or callable(idx):
             return self.search(namespace=idx)
         elif isinstance(idx, tuple):
             return self.search(namespace=idx[0])[idx[1]]
@@ -2071,7 +2071,7 @@ class JAMS(JObject):
         """
         filtered_dict = dict()
 
-        for k, item in six.iteritems(self.__dict__):
+        for k, item in self.__dict__.items():
             if k.startswith("_") or k == "annotations":
                 continue
 
@@ -2139,10 +2139,10 @@ def match_query(string, query):
         `False` otherwise
 
     """
-    if six.callable(query):
+    if callable(query):
         return query(string)
 
-    elif isinstance(query, six.string_types) and isinstance(string, six.string_types):
+    elif isinstance(query, str) and isinstance(string, str):
         return re.match(query, string) is not None
 
     else:
@@ -2169,7 +2169,7 @@ def serialize_obj(obj):
         return [serialize_obj(x) for x in obj]
 
     elif isinstance(obj, Observation):
-        return {k: serialize_obj(v) for k, v in six.iteritems(obj._asdict())}
+        return {k: serialize_obj(v) for k, v in obj._asdict().items()}
 
     return obj
 

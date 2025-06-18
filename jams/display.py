@@ -14,7 +14,6 @@ from collections import OrderedDict
 
 import json
 import re
-import six
 
 import numpy as np
 
@@ -43,7 +42,7 @@ def pprint_jobject(obj, **kwargs):
     string
         A simplified display of `obj` contents.
     """
-    obj_simple = {k: v for k, v in six.iteritems(obj.__json__) if v}
+    obj_simple = {k: v for k, v in obj.__json__.items() if v}
 
     string = json.dumps(obj_simple, **kwargs)
 
@@ -161,7 +160,7 @@ def display(annotation, meta=True, **kwargs):
     NamespaceError
         If the annotation cannot be visualized
     """
-    for namespace, func in six.iteritems(VIZ_MAPPING):
+    for namespace, func in VIZ_MAPPING.items():
         try:
             ann = coerce_annotation(annotation, namespace)
 
