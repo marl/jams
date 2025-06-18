@@ -44,11 +44,11 @@ autosummary_generate = glob.glob('*.rst')
 
 numpydoc_show_class_members = False
 
-intersphinx_mapping = {'numpy': ('https://docs.scipy.org/doc/numpy/', None),
-                       'np': ('https://docs.scipy.org/doc/numpy/', None),
+intersphinx_mapping = {'numpy': ('https://numpy.org/doc/stable/', None),
+                       'np': ('https://numpy.org/doc/stable/', None),
                        'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
                        'pd': ('http://pandas.pydata.org/pandas-docs/stable/', None),
-                       'mir_eval': ('https://craffel.github.io/mir_eval/', None),
+                       'mir_eval': ('https://mir-eval.readthedocs.io/latest/', None),
                        'json': ('https://docs.python.org/2/', None),
                        'jsonschema': ('https://python-jsonschema.readthedocs.io/en/latest/', None)}
 
@@ -128,7 +128,6 @@ if on_rtd:
 #    sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 else:
     html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -157,7 +156,7 @@ else:
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# html_static_path = ['_static']
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
