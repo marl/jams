@@ -45,9 +45,7 @@ autosummary_generate = glob.glob('*.rst')
 numpydoc_show_class_members = False
 
 intersphinx_mapping = {'numpy': ('https://numpy.org/doc/stable/', None),
-                       'np': ('https://numpy.org/doc/stable/', None),
                        'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
-                       'pd': ('http://pandas.pydata.org/pandas-docs/stable/', None),
                        'mir_eval': ('https://mir-eval.readthedocs.io/latest/', None),
                        'json': ('https://docs.python.org/2/', None),
                        'jsonschema': ('https://python-jsonschema.readthedocs.io/en/latest/', None)}
