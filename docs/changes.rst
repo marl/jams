@@ -1,6 +1,12 @@
 Changes
 =======
 
+v0.3.5
+------
+This is a maintenance release to support recent changes in our upstream dependencies.
+
+There are no major functionality changes in this release.
+
 v0.3.4
 ------
 
