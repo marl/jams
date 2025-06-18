@@ -63,8 +63,7 @@ jobs:
 
     - name: Run tests
       shell: bash -l {0}
-      run: |
-        pytest -v --cov-report term-missing --cov jams
+      run: pytest
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
