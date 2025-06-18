@@ -33,7 +33,7 @@ jobs:
             os: ubuntu-latest
             channel-priority: flexible
           - os: ubuntu-latest
-            python-version: "3.7"
+            python-version: "3.9"
             envfile: ".github/environment-minimal.yml"
             channel-priority: "flexible"
             name: "Minimal dependencies"
