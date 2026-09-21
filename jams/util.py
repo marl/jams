@@ -91,7 +91,7 @@ def import_lab(namespace, filename, infer_duration=True, **parse_options):
         # Insert a column of zeros after the timing
         data.insert(1, "duration", 0)
         if infer_duration:
-            data["duration"][:-1] = data.loc[:, 0].diff()[1:].values
+            data.loc[:-1, "duration"] = data.loc[:, 0].diff()[1:].values
 
     else:
         # Convert from time to duration
