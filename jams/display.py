@@ -98,7 +98,7 @@ def pitch_contour(annotation, **kwargs):
 
 def event(annotation, **kwargs):
     """Display annotation as events"""
-    times, values = annotation.to_interval_values()
+    times, values = annotation.to_event_values()
 
     if any(values):
         labels = values
@@ -110,7 +110,7 @@ def event(annotation, **kwargs):
 
 def beat_position(annotation, **kwargs):
     """Display annotation as beat-position data"""
-    times, values = annotation.to_interval_values()
+    times, values = annotation.to_event_values()
 
     labels = [_["position"] for _ in values]
 

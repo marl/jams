@@ -74,17 +74,31 @@ def test_display_pitch_contour():
     jams.display.display(ann)
 
 
-def test_display_labeled_events():
+@pytest.mark.parametrize("namespace", ["onset", "beat", "beat_position"])
+def test_display_labeled_events(namespace):
+    times = [0.25, 0.75, 1.5]
+    labels = ["kick", "snare", "hat"] if namespace == "onset" else [1, 2, 3]
+    values = labels
+    if namespace == "beat_position":
+        values = [
+            dict(position=label, measure=1, num_beats=4, beat_units=4)
+            for label in labels
+        ]
 
-    times = np.arange(40)
-    values = times % 4
-
-    ann = jams.Annotation(namespace="beat", duration=60)
-
+    ann = jams.Annotation(namespace=namespace)
     for t, v in zip(times, values):
         ann.append(time=t, value=v, duration=0)
 
-    jams.display.display(ann)
+    fig, ax = plt.subplots()
+    try:
+        jams.display.display(ann, ax=ax, meta=False)
+        segments = ax.collections[0].get_segments()
+        assert [segment[0, 0] for segment in segments] == times
+        assert [(text.get_text(), text.xy[0]) for text in ax.texts] == [
+            (str(label), time) for label, time in zip(labels, times)
+        ]
+    finally:
+        plt.close(fig)
 
 
 def test_display_multi_fail():
